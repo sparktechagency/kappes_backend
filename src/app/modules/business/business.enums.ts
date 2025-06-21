@@ -1,0 +1,4 @@
+export enum BUSINESS_TYPES {
+    CLOTHING = "CLOTHING",
+    REALSTATE = "REALSTATE"
+}

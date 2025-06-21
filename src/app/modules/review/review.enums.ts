@@ -1,0 +1,4 @@
+export enum REVIEW_TYPES {
+    PRODUCT = "PRODUCT",
+    BUSINESS = "BUSINESS"
+}
