@@ -27,6 +27,10 @@ router
 router.route('/').post(validateRequest(UserValidation.createUserZodSchema), UserController.createUser);
 router.delete('/delete', auth(USER_ROLES.USER), UserController.deleteProfile);
 
+// make user admin, user to shop admin, user to vendor
+// router.patch('/make-admin/:userId', auth(USER_ROLES.SUPER_ADMIN), UserController.makeAdmin);
+// router.patch('/make-shop-admin/:userId', auth(USER_ROLES.SUPER_ADMIN), UserController.makeShopAdmin);
+
 // // shop related routes
 // // Get followed shops by user
 // router.get('/shop/:userId', UserController.getShopsByFollower);

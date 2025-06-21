@@ -57,8 +57,8 @@ const updateShopById = async (id: string, payload: Partial<IShop>) => {
     }
     return shop;
 }
-const deconsteShopById = async (id: string) => {
-    const shop = await Shop.findByIdAndDeconste(id);
+const deleteShopById = async (id: string) => {
+    const shop = await Shop.findByIdAndDelete(id);
     if (!shop) {
         throw new AppError(404, 'Shop not found');
     }
@@ -232,7 +232,7 @@ export const ShopService = {
     getAllShops,
     getShopById,
     updateShopById,
-    deconsteShopById,
+    deleteShopById,
     getShopsByOwner,
     getShopsByLocation,
     getShopsByType,

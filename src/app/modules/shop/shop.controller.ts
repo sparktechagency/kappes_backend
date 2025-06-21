@@ -244,6 +244,6 @@ export const ShopController = {
     getShopByEmail,
     getShopByName,
     getShopByOwnerId,
-    getShopsByShopCategory,
+    getShopsByShopCategory, toggleFollowUnfollowShop,
 }
 

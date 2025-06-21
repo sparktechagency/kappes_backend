@@ -94,13 +94,3 @@ shopSchema.pre('aggregate', function (next) {
 
 
 export const Shop = model<IShop>("Shop", shopSchema);
-
-
-
-
-
-// make all the  ShopController Following this structutre const CONTROLLER_NAME = catchAsync(async (req, res) => {// ...const result = await ShopService.SERCIE_NAMEsendResponse(res, {statusCode: StatusCodes.OK,success: true,message: 'Comments retrieved successfully',data: result,});});
-
-
-
-// make services following structure const getAllShopCategory = async (query: Record<string, unknown>) => {const SERVICE_NAME = new QueryBuilder(MODEL.find(), query).search(['name']).filter().sort().paginate().fields();const result = await MODEL.modelQuery;const meta = await MODEL.countTotal();return {meta,result,};};
