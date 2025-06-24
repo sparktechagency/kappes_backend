@@ -24,8 +24,8 @@ router
      .put(auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), validateRequest(CategoryValidation.updateCategoryStatusZodSchema), CategoryController.updateCategoryStatus)
      .delete(auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN,USER_ROLES.VENDOR,USER_ROLES.SHOP_ADMIN), CategoryController.deleteCategory);
 
-router.get('/', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.USER), CategoryController.getCategories);
+router.get('/', CategoryController.getCategories);
 router.get('/subcategory/:id',CategoryController.getSubcategorisByCategoris);
-router.get('/popular/:id', auth(USER_ROLES.USER), CategoryController.getPopularCategoris);
+router.get('/popular/:id', CategoryController.getPopularCategoris);
 
 export const CategoryRoutes = router;

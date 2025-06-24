@@ -50,3 +50,8 @@ export type UserModel = {
      hasActiveSubscription(userId: string): Promise<boolean>;
      hasTrialExpired(userId: string): Promise<boolean>;
 } & Model<IUser>;
+
+export type ISellerUser = IUser & {
+     store_name: string;
+     store_category: string;
+};

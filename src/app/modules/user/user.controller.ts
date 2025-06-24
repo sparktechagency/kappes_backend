@@ -16,6 +16,18 @@ const createUser = catchAsync(async (req, res) => {
      });
 });
 
+const createSellerUser = catchAsync(async (req, res) => {
+     const { ...userData } = req.body;
+     const result = await UserService.createSellerUserToDB(userData);
+
+     sendResponse(res, {
+          success: true,
+          statusCode: StatusCodes.OK,
+          message: 'Seller User created successfully',
+          data: result,
+     });
+});
+
 const getUserProfile = catchAsync(async (req, res) => {
      const user: any = req.user;
      const result = await UserService.getUserProfileFromDB(user);
@@ -73,6 +85,7 @@ const deleteProfile = catchAsync(async (req, res) => {
 
 export const UserController = {
      createUser,
+     createSellerUser,
      getUserProfile,
      updateProfile,
      deleteProfile,

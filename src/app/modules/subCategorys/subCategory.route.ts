@@ -17,13 +17,13 @@ router.post(
      validateRequest(CategoryValidation.createSubCategoryZodSchema),
      CategoryController.createSubCategory,
 );
-router.get('/:id', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN, USER_ROLES.USER), CategoryController.getSubCategoryReletedToCategory);
-router.get('/single/:id', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN, USER_ROLES.USER), CategoryController.getSubcategorisById);
+router.get('/:id', CategoryController.getSubCategoryReletedToCategory);
+router.get('/single/:id', CategoryController.getSubcategorisById);
 router
      .route('/:id')
-     .patch(auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), fileUploadHandler(), parseFileData(FOLDER_NAMES.THUMBNAIL), CategoryController.updateSubCategory)
-     .delete(auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), CategoryController.deleteSubCategory);
+     .patch(auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), fileUploadHandler(), parseFileData(FOLDER_NAMES.THUMBNAIL), CategoryController.updateSubCategory)
+     .delete(auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), CategoryController.deleteSubCategory);
 
-router.get('/', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.USER), CategoryController.getSubCategories);
+router.get('/',CategoryController.getSubCategories);
 
 export const SubCategoryRoutes = router;

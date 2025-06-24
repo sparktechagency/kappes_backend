@@ -130,8 +130,8 @@ const updateSubCategoryStatusToDB = async (id: string, payload: string) => {
 };
 const getSubCategoryReletedToCategory = async (id: string) => {
      const result = await SubCategory.find({ categoryId: id }).populate("categoryId", "name");
-     if (!result) {
-          return [];
+     if (!result || result.length === 0) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'No subcategory found for this category!');
      }
      return result;
 };

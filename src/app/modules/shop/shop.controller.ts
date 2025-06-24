@@ -4,13 +4,26 @@ import { StatusCodes } from 'http-status-codes';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { ShopService } from './shop.service';
+import { IJwtPayload } from '../auth/auth.interface';
 
 const createShop = catchAsync(async (req: Request, res: Response) => {
-    const result = await ShopService.createShop(req.body);
+    const result = await ShopService.createShop(req.body,req.user as IJwtPayload);
     sendResponse(res, {
         statusCode: StatusCodes.CREATED,
         success: true,
         message: 'Shop created successfully',
+        data: result,
+    });
+});
+
+const makeShopAdmin = catchAsync(async (req: Request, res: Response) => {
+    const { shopId } = req.params;  
+    const { userId } = req.body;
+    const result = await ShopService.makeShopAdmin(shopId,userId,req.user as IJwtPayload);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: 'Shop admin made successfully',
         data: result,
     });
 });
@@ -38,7 +51,7 @@ const getShopById = catchAsync(async (req: Request, res: Response) => {
 
 const updateShopById = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const result = await ShopService.updateShopById(id, req.body);
+    const result = await ShopService.updateShopById(id, req.body,req.user as IJwtPayload);
     sendResponse(res, {
         statusCode: StatusCodes.OK,
         success: true,
@@ -143,33 +156,33 @@ const getFollowersByShop = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-const addAdminToShop = catchAsync(async (req: Request, res: Response) => {
-    const { shopId } = req.params;
-    const { adminId } = req.body;
-    const result = await ShopService.addAdminToShop(shopId, adminId);
-    sendResponse(res, {
-        statusCode: StatusCodes.OK,
-        success: true,
-        message: 'Admin added to shop successfully',
-        data: result,
-    });
-});
+// const addAdminToShop = catchAsync(async (req: Request, res: Response) => {
+//     const { shopId } = req.params;
+//     const { adminId } = req.body;
+//     const result = await ShopService.addAdminToShop(shopId, adminId);
+//     sendResponse(res, {
+//         statusCode: StatusCodes.OK,
+//         success: true,
+//         message: 'Admin added to shop successfully',
+//         data: result,
+//     });
+// });
 
-const removeAdminFromShop = catchAsync(async (req: Request, res: Response) => {
-    const { shopId, adminId } = req.params;
-    const result = await ShopService.removeAdminFromShop(shopId, adminId);
-    sendResponse(res, {
-        statusCode: StatusCodes.OK,
-        success: true,
-        message: 'Admin removed from shop successfully',
-        data: result,
-    });
-});
+// const removeAdminFromShop = catchAsync(async (req: Request, res: Response) => {
+//     const { shopId, adminId } = req.params;
+//     const result = await ShopService.removeAdminFromShop(shopId, adminId);
+//     sendResponse(res, {
+//         statusCode: StatusCodes.OK,
+//         success: true,
+//         message: 'Admin removed from shop successfully',
+//         data: result,
+//     });
+// });
 
 const toggleFollowUnfollowShop = catchAsync(async (req: Request, res: Response) => {
     const { shopId } = req.params;
     const { userId } = req.body;
-    const result = await ShopService.toggleFollowUnfollowShop(shopId, userId);
+    const result = await ShopService.toggleFollowUnfollowShop(shopId, userId as string);
     sendResponse(res, {
         statusCode: StatusCodes.OK,
         success: true,
@@ -178,27 +191,27 @@ const toggleFollowUnfollowShop = catchAsync(async (req: Request, res: Response) 
     });
 });
 
-const getShopByEmail = catchAsync(async (req: Request, res: Response) => {
-    const { email } = req.query;
-    const result = await ShopService.getShopByEmail(email as string);
-    sendResponse(res, {
-        statusCode: StatusCodes.OK,
-        success: true,
-        message: 'Shop retrieved successfully',
-        data: result,
-    });
-});
+// const getShopByEmail = catchAsync(async (req: Request, res: Response) => {
+//     const { email } = req.query;
+//     const result = await ShopService.getShopByEmail(email as string);
+//     sendResponse(res, {
+//         statusCode: StatusCodes.OK,
+//         success: true,
+//         message: 'Shop retrieved successfully',
+//         data: result,
+//     });
+// });
 
-const getShopByName = catchAsync(async (req: Request, res: Response) => {
-    const { name } = req.query;
-    const result = await ShopService.getShopByName(name as string);
-    sendResponse(res, {
-        statusCode: StatusCodes.OK,
-        success: true,
-        message: 'Shop retrieved successfully',
-        data: result,
-    });
-});
+// const getShopByName = catchAsync(async (req: Request, res: Response) => {
+//     const { name } = req.query;
+//     const result = await ShopService.getShopByName(name as string);
+//     sendResponse(res, {
+//         statusCode: StatusCodes.OK,
+//         success: true,
+//         message: 'Shop retrieved successfully',
+//         data: result,
+//     });
+// });
 
 const getShopByOwnerId = catchAsync(async (req: Request, res: Response) => {
     const { ownerId } = req.params;
@@ -227,6 +240,7 @@ const getShopsByShopCategory = catchAsync(async (req: Request, res: Response) =>
 
 export const ShopController = {
     createShop,
+    makeShopAdmin,
     getAllShops,
     getShopById,
     updateShopById,
@@ -239,11 +253,12 @@ export const ShopController = {
     getCouponsByShop,
     getAdminsByShop,
     getFollowersByShop,
-    addAdminToShop,
-    removeAdminFromShop,
-    getShopByEmail,
-    getShopByName,
+    // addAdminToShop,
+    // removeAdminFromShop,
+    // getShopByEmail,
+    // getShopByName,
     getShopByOwnerId,
-    getShopsByShopCategory, toggleFollowUnfollowShop,
+    getShopsByShopCategory, 
+    toggleFollowUnfollowShop,
 }
 

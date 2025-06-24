@@ -31,5 +31,5 @@ export interface IVariant {
     dimensions?: string;// Single, Queen, King for beds
     capacity?: string; // 1L, 2L
     options?: VARIANT_OPTIONS;
-    isDeleted:boolean;
+    isDeleted?:boolean;
 }

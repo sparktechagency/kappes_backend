@@ -27,7 +27,7 @@ const createVariant = async (payload: IVariant, user: IJwtPayload) => {
         }
 
         // Validate SubCategory
-        const isExistSubCategory = await SubCategory.findById(payload.subCategoryId).session(session);  // Use session for transaction
+        const isExistSubCategory = await SubCategory.findOne({ _id: payload.subCategoryId, categoryId: payload.categoryId }).session(session);  // Use session for transaction
         if (!isExistSubCategory) {
             throw new AppError(StatusCodes.NOT_FOUND, 'SubCategory not found!');
         }
@@ -129,51 +129,34 @@ export const getSingleVariantBySlugFromDB = async (slug: string) => {
 
 // Update Variant
 export const updateVariant = async (id: string, data: Partial<IVariant>, user: IJwtPayload) => {
-    const isExistCategory = await Category.findById(data.categoryId);
-    if (!isExistCategory) {
-        throw new AppError(StatusCodes.NOT_FOUND, 'Category not found!');
-    }
-    const isExistSubCategory = await SubCategory.findById(data.subCategoryId);
-    if (!isExistSubCategory) {
-        throw new AppError(StatusCodes.NOT_FOUND, 'SubCategory not found!');
-    }
     // Find and update the variant
-    const updatedVariant = await Variant.findOne({ _id: id, categoryId: data.categoryId, subCategoryId: data.subCategoryId })
+    const toBeUpdatedVariant = await Variant.findOne({ _id: id, categoryId: data.categoryId, subCategoryId: data.subCategoryId })
         .populate({ path: "categoryId", select: "name" })  // Populate categoryId's name field
         .populate({ path: "subCategoryId", select: "name" }); // Populate subCategoryId's name field
     // If no variant was found, throw an error
-    if (!updatedVariant) {
+    if (!toBeUpdatedVariant) {
         throw new AppError(StatusCodes.NOT_FOUND, 'Variant not found');
     }
-
-    if (
-        user.role === USER_ROLES.SHOP_ADMIN || user.role === USER_ROLES.VENDOR &&
-        updatedVariant.createdBy.toString() !== user.id
-    ) {
-        throw new AppError(
-            StatusCodes.BAD_REQUEST,
-            'You are not able to delete the Variant!'
-        );
-    }
+    
 
     // Update the variant with the new slug and the provided data
-    updatedVariant.set({
+    toBeUpdatedVariant.set({
         ...data,  // Apply the incoming data
     });
-    const variantSlug = generateSlug(isExistCategory.name, isExistSubCategory.name, updatedVariant)
+    const variantSlug = generateSlug(toBeUpdatedVariant.categoryId.name, toBeUpdatedVariant.subCategoryId.name, toBeUpdatedVariant)
 
     const isVariantExistSlug = await Variant.findOne({ slug: variantSlug });
     if (isVariantExistSlug) {
-        throw new AppError(StatusCodes.NOT_ACCEPTABLE, `This Variant Already Exists under ${isExistSubCategory.name} subcategory`);
-    }
-    updatedVariant.set({
+        throw new AppError(StatusCodes.NOT_ACCEPTABLE, `This Variant Already Exists under ${toBeUpdatedVariant.subCategoryId.name} subcategory`);
+       }
+    toBeUpdatedVariant.set({
         slug: variantSlug
     });
     // Save the updated variant
-    await updatedVariant.save();
+    await toBeUpdatedVariant.save();
 
 
-    return updatedVariant;
+    return toBeUpdatedVariant;
 };
 
 // Delete Variant
@@ -184,16 +167,7 @@ export const deleteVariant = async (id: string, user: IJwtPayload) => {
     if (!deletedVariant) {
         throw new AppError(StatusCodes.NOT_FOUND, 'Variant not found');
     }
-
-    if (
-        user.role === USER_ROLES.SHOP_ADMIN || user.role === USER_ROLES.VENDOR &&
-        deletedVariant.createdBy.toString() !== user.id
-    ) {
-        throw new AppError(
-            StatusCodes.BAD_REQUEST,
-            'You are not able to delete the brand!'
-        );
-    }
+    
     // Check if the variant is related to any product by variantId
     const product = await Product.findOne({ "product_variant_Details.variantId": id });
     if (product) {

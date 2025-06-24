@@ -12,4 +12,5 @@ export enum FOLDER_NAMES {
      DOCUMENT = 'document',
      THUMBNAIL = 'thumbnail',
      OTHERS = 'others',
+     COVER_PHOTO = 'coverPhoto',
 }

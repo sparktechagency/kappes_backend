@@ -13,7 +13,7 @@ router.get("/single/:id", variantController.getSingleVariantById); // Create a n
 router.get("/subcategory/:id", variantController.getVariantsBySubCategoryId); // Create a new variant
 router.get("/variant-subcategory/:id", variantController.getVariantFieldsBySubCategoryId); // Create a new variant
 router.get("/slug/:slug", variantController.getSingleVariantBySlug); // Create a new variant
-router.patch("/:id", auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN,USER_ROLES.VENDOR,USER_ROLES.SHOP_ADMIN), validateRequest(variantValidation.updateVariantSchema), variantController.updateVariantController); // Update variant
-router.delete("/:id", auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN,USER_ROLES.VENDOR,USER_ROLES.SHOP_ADMIN),variantController.deleteVariantController); // Delete variant
+router.patch("/:id", auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), validateRequest(variantValidation.updateVariantSchema), variantController.updateVariantController); // Update variant
+router.delete("/:id", auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),variantController.deleteVariantController); // Delete variant
 
 export const VariantRoutes = router;

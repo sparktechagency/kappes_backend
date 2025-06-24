@@ -45,6 +45,9 @@ const fileUploadHandler = () => {
                     case 'logo':
                          uploadDir = path.join(baseUploadDir, 'logo');
                          break;
+                    case 'coverPhoto':
+                         uploadDir = path.join(baseUploadDir, 'coverPhoto');
+                         break;
                     case 'audio':
                          uploadDir = path.join(baseUploadDir, 'audio');
                          break;
@@ -75,6 +78,7 @@ const fileUploadHandler = () => {
                file.fieldname === 'thumbnail' || // Added the 'thumbnail' field here
                file.fieldname === 'logo' ||
                file.fieldname === 'banner' ||
+               file.fieldname === 'coverPhoto' ||
                file.fieldname === 'permits' ||
                file.fieldname === 'insurance' ||
                file.fieldname === 'driverLicense'
@@ -151,6 +155,7 @@ const fileUploadHandler = () => {
           { name: 'thumbnail', maxCount: 5 }, // Added this line for thumbnail
           { name: 'logo', maxCount: 5 },
           { name: 'banner', maxCount: 5 },
+          { name: 'coverPhoto', maxCount: 5 },
           { name: 'audio', maxCount: 5 },
           { name: 'video', maxCount: 5 },
           { name: 'document', maxCount: 10 },

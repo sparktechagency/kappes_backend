@@ -12,14 +12,12 @@ export interface IProductSingleVariantByFieldName extends Partial<IVariant> {
     variantPrice: number;
 }
 
-export interface IProduct {
+export interface IProduct extends mongoose.Document {
     name: string;
     description: string;
     basePrice: number;
-    images: string[];
-    shopId: mongoose.Types.ObjectId;
     totalStock: number;
-    isActive: boolean;
+    images: string[];
     isFeatured: boolean;
     weight?: number;
     tags: string[];
@@ -28,18 +26,30 @@ export interface IProduct {
     purchaseCount: number;
     viewCount: number;
     categoryId: mongoose.Types.ObjectId;
+    shopId: mongoose.Types.ObjectId;
     subcategoryId: mongoose.Types.ObjectId;
-    comments: mongoose.Types.ObjectId[];
+    brandId: mongoose.Types.ObjectId;
+    createdBy: mongoose.Types.ObjectId;
+    reviews: mongoose.Types.ObjectId[];
     totalReviews: number;
     product_variant_Details: IProductSingleVariant[];
+    isDeleted: boolean;
+    deletedAt: Date;
+    isRecommended: boolean;
+
+    calculateOfferPrice(): Promise<number | null>;
 }
 
 
 export interface ICreateProductRequest {
     name: string;
     description: string;
-    price: number;
+    basePrice: number;
+    weight?: number;
+    tags: string[];
     categoryId: mongoose.Types.ObjectId;
     subcategoryId: mongoose.Types.ObjectId;
+    shopId: mongoose.Types.ObjectId;
+    brandId: mongoose.Types.ObjectId;
     product_variant_Details: IProductSingleVariant[] | IProductSingleVariantByFieldName[];
 }

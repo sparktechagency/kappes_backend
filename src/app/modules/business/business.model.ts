@@ -55,7 +55,10 @@ const BusinessSchema = new Schema({
             type: [TimeSlotSchema],
             default: []
         }
-    }
+    },
+    isDeleted: { type: Boolean, default: false },
+    isActive: { type: Boolean, default: true },
+    isVerified: { type: Boolean, default: false },
 });
 
 const Business = mongoose.model('Business', BusinessSchema);

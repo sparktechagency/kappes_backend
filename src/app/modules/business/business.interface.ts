@@ -43,12 +43,19 @@ export interface IBusiness {
     };
     location: IGeoLocation;
     service: string;
-    working_hours: IBusinessHours;
+    working_hours: {
+        day: string;
+        start: string;
+        end: string;
+    }[];
     logo: string;
-    cover_photo: string;
-    promot_banner: string;
+    coverPhoto: string;
+    banner: string;
     reviews: Schema.Types.ObjectId[];
     owner: mongoose.Types.ObjectId;
+    isDeleted: boolean;
+    isActive: boolean;
+    isVerified: boolean;
 }
 
 

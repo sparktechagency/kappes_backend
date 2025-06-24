@@ -5,8 +5,8 @@ import { CategoryService } from './subCategory.service';
 import { IJwtPayload } from '../auth/auth.interface';
 
 const createSubCategory = catchAsync(async (req, res) => {
-     const serviceData = req.body;
-     const result = await CategoryService.createSubCategoryToDB(serviceData,req.user as IJwtPayload);
+     const subCtgData = req.body;
+     const result = await CategoryService.createSubCategoryToDB(subCtgData,req.user as IJwtPayload);
      sendResponse(res, {
           success: true,
           statusCode: StatusCodes.OK,
