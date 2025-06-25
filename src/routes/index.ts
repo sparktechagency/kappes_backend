@@ -30,6 +30,8 @@ import { ShopCategoryRoutes } from '../app/modules/shopCategory/shopCategory.rou
 import { ShopRoutes } from '../app/modules/shop/shop.route';
 import { ProductRoutes } from '../app/modules/product/product.route';
 import { CartRoutes } from '../app/modules/cart/cart.routes';
+import { CouponRoutes } from '../app/modules/coupon/coupon.route';
+import { OfferedRoutes } from '../app/modules/offered/offered.route';
 
 const router = express.Router();
 const routes = [
@@ -208,6 +210,14 @@ const routes = [
      {
           path: '/cart',
           route: CartRoutes,
+     },
+     {
+          path: '/coupon',
+          route: CouponRoutes,
+     },
+     {
+          path: '/offered',
+          route: OfferedRoutes,
      },
 ];
 

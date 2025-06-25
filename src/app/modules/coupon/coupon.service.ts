@@ -22,7 +22,8 @@ const createCoupon = async (couponData: Partial<ICoupon>, user: IJwtPayload) => 
 
     const coupon = new Coupon({
         ...couponData,
-        shop: shop._id
+        shop: shop._id,
+        createdBy: user.id,
     });
     return await coupon.save();
 };
@@ -137,10 +138,28 @@ const deleteCoupon = async (couponId: string, user: IJwtPayload) => {
     return { message: 'Coupon deleted successfully.' };
 };
 
+const getAllCouponByShopId = async (shopId: string, user: IJwtPayload) => {
+    const shop = await Shop.findById(shopId);
+    if (!shop) {
+        throw new AppError(StatusCodes.NOT_FOUND, 'Shop not found');
+    }
+
+    if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
+        if (shop.owner.toString() !== user.id && !shop.admins?.some(admin => admin.toString() === user.id)) {
+            throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to delete this product');
+        }
+    }
+
+    const coupon = await Coupon.find({ shopId });
+
+    return coupon;
+};
+
 export const CouponService = {
     createCoupon,
     getAllCoupon,
     updateCoupon,
     getCouponByCode,
     deleteCoupon,
+    getAllCouponByShopId,
 };

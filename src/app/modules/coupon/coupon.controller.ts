@@ -65,10 +65,24 @@ const deleteCoupon = catchAsync(async (req: Request, res: Response) => {
    });
 });
 
+const getAllCouponByShopId = catchAsync(async (req: Request, res: Response) => {
+   const { shopId } = req.params;
+
+   const result = await CouponService.getAllCouponByShopId(shopId, req.user as IJwtPayload);
+
+   sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: 'Coupon fetched successfully',
+      data: result,
+   });
+});
+
 export const CouponController = {
    createCoupon,
    getAllCoupon,
    updateCoupon,
    getCouponByCode,
    deleteCoupon,
+   getAllCouponByShopId,
 };

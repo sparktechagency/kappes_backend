@@ -236,6 +236,15 @@ const getShopsByShopCategory = catchAsync(async (req: Request, res: Response) =>
     });
 });
 
+const getShopsByOwnerOrAdmin = catchAsync(async (req: Request, res: Response) => {
+    const result = await ShopService.getShopsByOwnerOrAdmin(req.user as IJwtPayload);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: 'Shops by owner or admin retrieved successfully',
+        data: result,
+    });
+});
 
 
 export const ShopController = {
@@ -260,5 +269,6 @@ export const ShopController = {
     getShopByOwnerId,
     getShopsByShopCategory, 
     toggleFollowUnfollowShop,
+    getShopsByOwnerOrAdmin,
 }
 

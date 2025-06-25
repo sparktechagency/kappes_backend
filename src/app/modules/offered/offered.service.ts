@@ -5,16 +5,35 @@ import QueryBuilder from "../../builder/QueryBuilder";
 import AppError from "../../../errors/AppError";
 import { Shop } from "../shop/shop.model";
 import { ICreateOfferedInput } from "./offered.interface";
-
+import { USER_ROLES } from "../user/user.enums";
+import { Product } from "../product/product.model";
 
 const createOffered = async (offerProductsData: ICreateOfferedInput, user: IJwtPayload) => {
-  const shopIsActive = await Shop.findOne({
-    owner: user.id,
-    isActive: true
-  }).select("isActive");
+  const isExistsProducts = await Product.find({
+    _id: { $in: offerProductsData.products },
+  }).populate('shopId', 'owner admins').select("shopId");
 
-  if (!shopIsActive) throw new AppError(StatusCodes.BAD_REQUEST, "Shop is not active!");
+  if (isExistsProducts.length !== offerProductsData.products.length) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      `Some products not found ${offerProductsData.products.join(", ")} in db`
+    );
+  }
 
+  const isProductOwner = isExistsProducts.every(
+    (product: any) => product.shopId.owner.toString() === user.id.toString()
+  );
+
+  const isProductAdmin = isExistsProducts.every(
+    (product: any) => product.shopId.admins?.some((admin: any) => admin.toString() === user.id.toString())
+  );
+
+  if (!isProductOwner && !isProductAdmin) {
+    throw new AppError(
+      StatusCodes.FORBIDDEN,
+      `You have no permission to create offered for this product`
+    );
+  }
   const { products, discountPercentage } = offerProductsData;
   const createdBy = user.id;
 
@@ -36,15 +55,16 @@ const createOffered = async (offerProductsData: ICreateOfferedInput, user: IJwtP
   return result;
 };
 
+
+
+
+
 const getActiveOfferedService = async (query: Record<string, unknown>) => {
   const { minPrice, maxPrice, ...pQuery } = query;
 
   const offeredQuery = new QueryBuilder(
     Offered.find()
-      .populate('product', 'name')
-      .populate('product.categoryId', 'name')
-      .populate('product.shopId', 'name')
-      .populate('product.brandId', 'name'),
+      .populate('product', 'name basePrice'),
     query
   )
     .paginate();
@@ -58,13 +78,14 @@ const getActiveOfferedService = async (query: Record<string, unknown>) => {
   }, {});
 
   const productsWithOfferPrice = offered.map((offered: any) => {
+
     const product = offered.product;
     //@ts-ignore
     const discountPercentage = offeredMap[product._id.toString()];
 
     if (discountPercentage) {
-      const discount = (discountPercentage / 100) * product.price;
-      product.offerPrice = product.price - discount;
+      const discount = (discountPercentage / 100) * product.basePrice;
+      product.offerPrice = product.basePrice - discount;
     } else {
       product.offerPrice = null;
     }
@@ -80,9 +101,30 @@ const getActiveOfferedService = async (query: Record<string, unknown>) => {
   };
 };
 
+const getAllOffered = async (query: Record<string, unknown>) => {
+  const offeredQuery = new QueryBuilder(
+    Offered.find().populate('product', 'name basePrice'),
+    query
+  )
+    .paginate()
+    .filter()
+    .sort();
+
+  const offered = await offeredQuery.modelQuery.lean();
+
+  const meta = await offeredQuery.countTotal();
+
+  return {
+    meta,
+    result: offered,
+  };
+};
+
+
 
 
 export const OfferedService = {
   createOffered,
+  getAllOffered,
   getActiveOfferedService
 }

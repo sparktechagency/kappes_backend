@@ -8,11 +8,11 @@ import { CouponController } from './coupon.controller';
 const router = Router();
 
 // Define routes
-router.post('/', auth(USER_ROLES.VENDOR,USER_ROLES.SHOP_ADMIN),
+router.post('/create', auth(USER_ROLES.VENDOR,USER_ROLES.SHOP_ADMIN),
     validateRequest(createCouponValidation.createCouponValidationSchema), CouponController.createCoupon);
 
-router.get('/', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), CouponController.getAllCoupon);
-// router.get('/shop/:shopId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), CouponController.getAllCouponByShopId);
+router.get('/super-admin', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), CouponController.getAllCoupon);
+router.get('/shop/:shopId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), CouponController.getAllCouponByShopId);
 
 router.patch(
     '/:couponCode/update-coupon',

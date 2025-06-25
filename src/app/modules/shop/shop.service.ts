@@ -304,8 +304,26 @@ const getShopsByShopCategory = async (category: string) => {
     return shops;
 }
 
-// Export the ShopService
+const getShopsByOwnerOrAdmin = async (user: IJwtPayload) => {
+    const asOwnerShops = await Shop.find({ owner: user.id })
+        .populate('owner', 'name email');
+    const asAdminShops = await Shop.find({ admins: user.id })
+        .populate('owner', 'name email');
+    const shops = {
+        meta: {
+            asOwnerShopsCount: asOwnerShops.length,
+            asAdminShopsCount: asAdminShops.length,
+        },
+        asOwnerShops,
+        asAdminShops,
+    };
+    if (!shops || (shops.asOwnerShops.length === 0 && shops.asAdminShops.length === 0)) {
+        throw new AppError(404, 'No shops found for this owner or admin');
+    }
+    return shops;
+}
 
+// Export the ShopService
 export const ShopService = {
     createShop,
     makeShopAdmin,
@@ -328,5 +346,6 @@ export const ShopService = {
     // getShopByName,
     getShopByPhone,
     getShopByOwnerId,
-    getShopsByShopCategory
+    getShopsByShopCategory,
+    getShopsByOwnerOrAdmin,
 }

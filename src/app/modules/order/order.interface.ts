@@ -1,5 +1,6 @@
 import { Types, Document } from 'mongoose';
 import { IPayment } from '../payment/payment.interface';
+import { ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS } from './order.enums';
 
 export interface IOrderProduct {
   product: Types.ObjectId;
@@ -17,10 +18,10 @@ export interface IOrder extends Document {
   discount: number;
   deliveryCharge: number;
   finalAmount: number;
-  status: 'Pending' | 'Processing' | 'Completed' | 'Cancelled';
+  status: ORDER_STATUS;
   shippingAddress: string;
-  paymentMethod: 'Cash' | 'Card' | 'Online';
-  paymentStatus: 'Pending' | 'Paid' | 'Failed';
+  paymentMethod: PAYMENT_METHOD;
+  paymentStatus: PAYMENT_STATUS;
   createdAt?: Date;
   updatedAt?: Date;
   payment?: IPayment | null;

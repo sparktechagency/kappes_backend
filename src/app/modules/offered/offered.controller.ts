@@ -32,7 +32,21 @@ const getActiveOfferedService = catchAsync(async (req: Request, res: Response) =
   });
 });
 
+const getAllOffered = catchAsync(async (req: Request, res: Response) => {
+  const result = await OfferedService.getAllOffered(
+    req.query
+  );
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Offered fetched succesfully',
+    data: result
+  });
+});
+
 export const OfferedController = {
   createOffered,
+  getAllOffered,
   getActiveOfferedService
 }

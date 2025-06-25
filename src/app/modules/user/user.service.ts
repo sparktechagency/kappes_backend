@@ -257,6 +257,26 @@ const deleteUser = async (id: string) => {
      return true;
 };
 
+const getAllRoleBasedUser = async () => {
+     const result = await User.find({}, { _id: 1, role: 1, name: 1, email: 1 }).lean();
+
+     const users = result.reduce<Record<USER_ROLES, { data: typeof result[0][], count: number }>>((acc, curr) => {
+          const { role } = curr;
+
+          // Ensure TypeScript understands the structure of acc
+          if (acc[role]) {
+               acc[role].data.push(curr);
+               acc[role].count += 1;
+          } else {
+               acc[role] = { count: 1, data: [curr], };
+          }
+
+          return acc;
+     }, {} as Record<USER_ROLES, { data: typeof result[0][], count: number }>);
+
+     return users;
+};
+
 export const UserService = {
      createUserToDB,
      createSellerUserToDB,
@@ -265,4 +285,5 @@ export const UserService = {
      createVendorToDB,
      deleteUser,
      verifyUserPassword,
+     getAllRoleBasedUser
 };

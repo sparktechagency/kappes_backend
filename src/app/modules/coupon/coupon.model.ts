@@ -16,6 +16,11 @@ const couponSchema = new Schema<ICoupon>(
          ref: 'Shop',
          required: true,
       },
+      createdBy: {
+         type: Schema.Types.ObjectId,
+         ref: 'User',
+         required: true,
+      },
       discountType: {
          type: String,
          enum: COUPON_DISCOUNT_TYPE,

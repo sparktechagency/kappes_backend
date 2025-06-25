@@ -83,10 +83,22 @@ const deleteProfile = catchAsync(async (req, res) => {
      });
 });
 
+const getAllRoleBasedUser = catchAsync(async (req, res) => {
+     const result = await UserService.getAllRoleBasedUser();
+
+     sendResponse(res, {
+          success: true,
+          statusCode: StatusCodes.OK,
+          message: 'User retrieved successfully',
+          data: result,
+     });
+});
+
 export const UserController = {
      createUser,
      createSellerUser,
      getUserProfile,
      updateProfile,
      deleteProfile,
+     getAllRoleBasedUser,
 };

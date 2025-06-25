@@ -4,6 +4,8 @@ import { Product } from "../product/product.model";
 import { Coupon } from "../coupon/coupon.model";
 import { StatusCodes } from "http-status-codes";
 import AppError from "../../../errors/AppError";
+import { CENTRAL_SHIPPING_AREA, COUNTRY_SHIPPING_AREA, FREE_SHIPPING_CHARGE_AREA, ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS, SHIPPING_COST } from "./order.enums";
+import { COUPON_DISCOUNT_TYPE } from "../coupon/coupon.enums";
 
 const orderSchema = new Schema<IOrder>(
     {
@@ -66,8 +68,8 @@ const orderSchema = new Schema<IOrder>(
         },
         status: {
             type: String,
-            enum: ["Pending", "Processing", "Completed", "Cancelled"],
-            default: "Pending",
+            enum: ORDER_STATUS,
+            default: ORDER_STATUS.PENDING,
         },
         shippingAddress: {
             type: String,
@@ -75,13 +77,13 @@ const orderSchema = new Schema<IOrder>(
         },
         paymentMethod: {
             type: String,
-            enum: ["COD", "Online"],
-            default: "Online",
+            enum: PAYMENT_METHOD,
+            default: PAYMENT_METHOD.ONLINE,
         },
         paymentStatus: {
             type: String,
-            enum: ["Pending", "Paid", "Failed"],
-            default: "Pending",
+            enum: PAYMENT_STATUS,
+            default: PAYMENT_STATUS.PENDING,
         },
     },
     {
@@ -150,22 +152,31 @@ orderSchema.pre("validate", async function (next) {
         }
         if (couponDetails && couponDetails.isActive) {
             if (couponDetails?.minOrderAmount && totalAmount >= couponDetails?.minOrderAmount) {
-                if (couponDetails.discountType === "Percentage") {
+                if (couponDetails.discountType === COUPON_DISCOUNT_TYPE.PERCENTAGE) {
                     finalDiscount = Math.min(
                         (couponDetails.discountValue / 100) * totalAmount,
                         couponDetails.maxDiscountAmount
                             ? couponDetails.maxDiscountAmount
                             : Infinity
                     );
-                } else if (couponDetails.discountType === "Flat") {
+                } else if (couponDetails.discountType === COUPON_DISCOUNT_TYPE.FLAT) {
                     finalDiscount = Math.min(couponDetails.discountValue, totalAmount);
                 }
             }
         }
     }
 
-    const isDhaka = order?.shippingAddress?.toLowerCase()?.includes("dhaka");
-    const deliveryCharge = isDhaka ? 60 : 120;
+    // const isDhaka = order?.shippingAddress?.toLowerCase()?.includes("dhaka");
+    // const deliveryCharge = isDhaka ? 60 : 120;
+    const shippingAdressLowerCased = order?.shippingAddress?.toLowerCase();
+    let deliveryCharge = SHIPPING_COST.WORLD_WIDE;
+    if (FREE_SHIPPING_CHARGE_AREA.some((area) => shippingAdressLowerCased?.includes(area))) {
+        deliveryCharge = SHIPPING_COST.FREE;
+    } else if (CENTRAL_SHIPPING_AREA.some((area) => shippingAdressLowerCased?.includes(area))) {
+        deliveryCharge = SHIPPING_COST.CENTRAL;
+    } else if (COUNTRY_SHIPPING_AREA.some((area) => shippingAdressLowerCased?.includes(area))) {
+        deliveryCharge = SHIPPING_COST.COUNTRY;
+    }
 
     order.totalAmount = totalAmount;
     order.discount = finalDiscount;

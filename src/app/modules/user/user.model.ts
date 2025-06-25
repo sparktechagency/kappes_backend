@@ -118,6 +118,7 @@ const userSchema = new Schema<IUser, UserModel>(
                select: false,
           },
           recentSearchLocations: [RecentSearchLocationSchema], 
+          balance: { type: Number, default: 0 },
      },
      { timestamps: true },
 );

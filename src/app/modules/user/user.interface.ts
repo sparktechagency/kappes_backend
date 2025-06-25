@@ -39,6 +39,7 @@ export type IUser = {
           expireAt: Date;
      };
      recentSearchLocations?: IRecentSearchLocation[];
+     balance: number;
 };
 
 export type UserModel = {

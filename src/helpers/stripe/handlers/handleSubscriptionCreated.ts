@@ -6,6 +6,7 @@ import { Package } from '../../../app/modules/package/package.model';
 import { User } from '../../../app/modules/user/user.model';
 import { Subscription } from '../../../app/modules/subscription/subscription.model';
 import { sendNotifications } from '../../notificationsHelper';
+import { USER_ROLES } from '../../../app/modules/user/user.enums';
 
 const formatUnixToIsoUtc = (timestamp: number): string => {
      const date = new Date(timestamp * 1000);
@@ -14,7 +15,7 @@ const formatUnixToIsoUtc = (timestamp: number): string => {
 
 export const handleSubscriptionCreated = async (data: Stripe.Subscription) => {
      try {
-          const getAdmin = await User.findOne({ role: 'SUPER_ADMIN' });
+          const getAdmin = await User.findOne({ role: USER_ROLES.SUPER_ADMIN });
           if (!getAdmin) {
                throw new AppError(StatusCodes.NOT_FOUND, 'Admin not found!');
           }

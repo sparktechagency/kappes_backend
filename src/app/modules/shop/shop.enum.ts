@@ -1,0 +1,1 @@
+export const DEFAULT_SHOP_REVENUE:number = 10;

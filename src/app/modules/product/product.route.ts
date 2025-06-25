@@ -76,6 +76,10 @@ router.patch('/:id',
     ProductController.updateProduct
 );
 
+// get product by shop
+router.get('/shop/:shopId',
+    ProductController.getProductsByShop
+);
 
 // Get product by ID (public endpoint)
 router.get('/:id',

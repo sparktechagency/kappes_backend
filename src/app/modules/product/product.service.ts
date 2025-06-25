@@ -333,6 +333,23 @@ const getRecommendedProducts = async (query: Record<string, unknown>) => {
     };
 };
 
+const getProductsByShop = async (shopId: string, query: Record<string, unknown>) => {
+    const productQuery = new QueryBuilder(Product.find({ shopId }).populate('shopId', 'name').populate('categoryId', 'name').populate('subcategoryId', 'name').populate('brandId', 'name').populate('product_variant_Details.variantId', 'slug'), query)
+        .search(['name', 'description', 'tags'])
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+
+    const result = await productQuery.modelQuery;
+    const meta = await productQuery.countTotal();
+
+    return {
+        meta,
+        result
+    };
+};
+
 export const ProductService = {
     createProduct,
     getProducts,
@@ -341,5 +358,6 @@ export const ProductService = {
     deleteProduct,
     getProductsByCategory,
     updateToggleProductIsRecommended,
-    getRecommendedProducts
+    getRecommendedProducts,
+    getProductsByShop
 };

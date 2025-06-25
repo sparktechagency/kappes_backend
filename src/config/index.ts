@@ -61,7 +61,8 @@ export default {
      },
      stripe: {
           stripe_secret_key: process.env.STRIPE_SECRET_KYE,
-          paymentSuccess_url: process.env.FRONTEND_URL,
+          success_url: process.env.STRIPE_SUCCESS_URL,
+          cancel_url: process.env.STRIPE_CANCLE_URL,
           stripe_webhook_secret: process.env.STRIPE_WEBHOOK_SECRET,
           stripe_webhook_url: process.env.STRIPE_WEBHOOK_URL,
           stripe_product_id: process.env.STRIPE_PRODUCT_ID,

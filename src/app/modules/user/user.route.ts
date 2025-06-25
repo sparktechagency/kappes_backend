@@ -27,6 +27,7 @@ router
 router.route('/').post(validateRequest(UserValidation.createUserZodSchema), UserController.createUser);
 router.route('/seller').post(validateRequest(UserValidation.createUserZodSchema), UserController.createSellerUser);
 router.delete('/delete', auth(USER_ROLES.USER), UserController.deleteProfile);
+router.get('/get-all', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), UserController.getAllRoleBasedUser);
 
 // make user admin, user to shop admin, user to vendor
 // router.patch('/make-admin/:userId', auth(USER_ROLES.SUPER_ADMIN), UserController.makeAdmin);

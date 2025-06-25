@@ -2,6 +2,7 @@ import { model, Schema } from "mongoose";
 import { IShop } from "./shop.interface";
 import { BUSINESS_TYPES } from "../business/business.enums";
 import { IReview } from "../review/review.interface";
+import { DEFAULT_SHOP_REVENUE } from "./shop.enum";
 
 
 // mongoose schema for shop
@@ -39,7 +40,7 @@ export const shopSchema = new Schema<IShop>({
     rating: { type: Number, default: 0 },
     totalReviews: { type: Number, default: 0 },
     totalFollowers: { type: Number, default: 0 },
-    revenue: { type: Number, default: 10 },
+    revenue: { type: Number, default: DEFAULT_SHOP_REVENUE },
     settings: {
         allowChat: { type: Boolean, default: true },
         autoAcceptOrders: { type: Boolean, default: false },

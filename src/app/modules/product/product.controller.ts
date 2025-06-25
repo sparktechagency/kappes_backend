@@ -91,6 +91,17 @@ const getRecommendedProducts = catchAsync(async (req: Request, res: Response) =>
     });
 });
 
+const getProductsByShop = catchAsync(async (req: Request, res: Response) => {
+    const { shopId } = req.params;
+    const result = await ProductService.getProductsByShop(shopId as string,req.query);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: 'Products retrieved successfully',
+        data: result
+    });
+});
+
 export const ProductController = {
     createProduct,
     getProducts,
@@ -99,5 +110,6 @@ export const ProductController = {
     deleteProduct,
     getProductsByCategory,
     updateToggleProductIsRecommended,
-    getRecommendedProducts
+    getRecommendedProducts,
+    getProductsByShop
 }

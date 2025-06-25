@@ -8,10 +8,11 @@ import { OfferedValidation } from './offered.validation';
 const router = Router();
 
 router.get('/', OfferedController.getActiveOfferedService)
+router.get('/all', OfferedController.getAllOffered)
 
 router.post(
     '/',
-    auth(USER_ROLES.VENDOR),
+    auth(USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN),
     validateRequest(OfferedValidation.createOfferSchema),
     OfferedController.createOffered
 )
