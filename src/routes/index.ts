@@ -6,12 +6,7 @@ import { CommunityRouter } from '../app/modules/community/community.router';
 import { ContactRoutes } from '../app/modules/contcatus/contactus.route';
 import { CategoryRoutes } from '../app/modules/category/category.route';
 import { SubCategoryRoutes } from '../app/modules/subCategorys/subCategory.route';
-import { userManagementRouter } from '../app/modules/admin/userManagement/userManagement.route';
-import { quotationManagementRouter } from '../app/modules/admin/quotationManagement/quotationManagement.route';
-import { videoManagementRoute } from '../app/modules/admin/videosManagement/videoManagement.router';
-import { PackageRoutes } from '../app/modules/package/package.routes';
-import { SubscriptionRuleRoute } from '../app/modules/admin/subscriptionRule/subscriptionRule.route';
-import { SubscriptionRoutes } from '../app/modules/subscription/subscription.routes';
+import { userManagementRouter } from '../app/modules/admin/userManagement/userManagement.route'; 
 import { ComingSoonRoutes } from '../app/modules/admin/comeingSoon/comeingSoon.router';
 import { DashboardRoutes } from '../app/modules/admin/dashboard/dashboard.route';
 import { FavouritdRouter } from '../app/modules/favourit/favourit.router';
@@ -19,11 +14,8 @@ import { CreatePostRoutes } from '../app/modules/admin/creaetPost/creaetPost.rou
 import SettingsRouter from '../app/modules/sattings/sattings.route';
 import { ExploreRoutes } from '../app/modules/explore/explore.route';
 import { AdminRoutes } from '../app/modules/admin/admin.route';
-import { NotificationRoutes } from '../app/modules/notification/notification.routes';
-import { TodayVideoRoutes } from '../app/modules/todayVideo/today.route';
-import { DailyInspirationRoutes } from '../app/modules/admin/dailyInspiration/dailyInspiration.router';
+import { NotificationRoutes } from '../app/modules/notification/notification.routes'; 
 import { ChallengeRoutes } from '../app/modules/admin/challanges/challanges.router';
-import { VideoCommentRouter } from '../app/modules/vidoeComments/vidoeComments.router';
 import { VariantRoutes } from '../app/modules/variant/variant.routes';
 import { BrandRoutes } from '../app/modules/brand/brand.routes';
 import { ShopCategoryRoutes } from '../app/modules/shopCategory/shopCategory.routes';
@@ -32,6 +24,8 @@ import { ProductRoutes } from '../app/modules/product/product.route';
 import { CartRoutes } from '../app/modules/cart/cart.routes';
 import { CouponRoutes } from '../app/modules/coupon/coupon.route';
 import { OfferedRoutes } from '../app/modules/offered/offered.route';
+import stripeAccountRoutes from '../app/modules/stripeAccount/stripeAccount.route';
+import { OrderRoutes } from '../app/modules/order/order.route';
 
 const router = express.Router();
 const routes = [
@@ -70,15 +64,7 @@ const routes = [
      {
           path: '/category',
           route: CategoryRoutes,
-     },
-     {
-          path: '/admin/dailyInspiration',
-          route: DailyInspirationRoutes,
-     },
-     {
-          path: '/dailyInspiration',
-          route: DailyInspirationRoutes,
-     },
+     }, 
      {
           path: '/admin/subcategory',
           route: SubCategoryRoutes,
@@ -90,23 +76,7 @@ const routes = [
      {
           path: '/admin/user/managment',
           route: userManagementRouter,
-     },
-     {
-          path: '/admin/quotation/managment',
-          route: quotationManagementRouter,
-     },
-     {
-          path: '/quotation',
-          route: quotationManagementRouter,
-     },
-     {
-          path: '/today',
-          route: TodayVideoRoutes,
-     },
-     {
-          path: '/admin/videos/managment',
-          route: videoManagementRoute,
-     },
+     }, 
      {
           path: '/admin/post/managment',
           route: CreatePostRoutes,
@@ -114,27 +84,7 @@ const routes = [
      {
           path: '/post',
           route: CreatePostRoutes,
-     },
-     {
-          path: '/videos',
-          route: videoManagementRoute,
-     },
-     {
-          path: '/videos/comments',
-          route: VideoCommentRouter,
-     },
-     {
-          path: '/admin/package/managment',
-          route: PackageRoutes,
-     },
-     {
-          path: '/package',
-          route: PackageRoutes,
-     },
-     {
-          path: '/admin/subscription/rules',
-          route: SubscriptionRuleRoute,
-     },
+     }, 
      {
           path: '/admin/notifications',
           route: NotificationRoutes,
@@ -142,18 +92,6 @@ const routes = [
      {
           path: '/notifications',
           route: NotificationRoutes,
-     },
-     {
-          path: '/subscription',
-          route: SubscriptionRuleRoute,
-     },
-     {
-          path: '/admin/subscription',
-          route: SubscriptionRoutes,
-     },
-     {
-          path: '/subscription',
-          route: SubscriptionRoutes,
      },
      {
           path: '/admin/comingSoon',
@@ -218,6 +156,14 @@ const routes = [
      {
           path: '/offered',
           route: OfferedRoutes,
+     },
+     {
+       path: '/stripe',
+       route: stripeAccountRoutes,
+     },
+     {
+       path: '/order',
+       route: OrderRoutes,
      },
 ];
 

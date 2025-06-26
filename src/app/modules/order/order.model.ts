@@ -102,30 +102,30 @@ orderSchema.pre("validate", async function (next) {
 
     // Step 2: Calculate total amount for products
     for (let item of order.products) {
-        const product = await Product.findById(item.product).populate("shop");
+        const product = await Product.findById(item.product).populate("shopId");
 
         if (!product) {
             return next(new Error(`Product not found!.`));
         }
-        const variant = await Product.findById(item.variant).populate("shop");
+        // const variant = await Variant.findById(item.variant).populate("shopId");
 
-        if (!variant) {
-            return next(new Error(`variant not found!.`));
-        }
+        // if (!variant) {
+        //     return next(new Error(`variant not found!.`));
+        // }
 
 
-        // check if ths vairant is in the product.product_variant_Details array if present then check variantQuantity of that item in product.product_variant_Details array
-        const variantIndex = product.product_variant_Details.findIndex(
-            itm => itm.variantId.toString() === item.variant.toString()
-        );
+        // // check if ths vairant is in the product.product_variant_Details array if present then check variantQuantity of that item in product.product_variant_Details array
+        // const variantIndex = product.product_variant_Details.findIndex(
+        //     itm => itm.variantId.toString() === item.variant.toString()
+        // );
 
-        if (variantIndex === -1) {
-            return next(new Error(`Variant not found in product with ID: ${item.product}`));
-        }
+        // if (variantIndex === -1) {
+        //     return next(new Error(`Variant not found in product with ID: ${item.product}`));
+        // }
 
-        if (product.product_variant_Details[variantIndex].variantQuantity < item.quantity) {
-            return next(new Error(`Variant quantity is not available in product with ID: ${item.product}`));
-        }
+        // if (product.product_variant_Details[variantIndex].variantQuantity < item.quantity) {
+        //     return next(new Error(`Variant quantity is not available in product with ID: ${item.product}`));
+        // }
 
         if (shopId && String(shopId) !== String(product.shopId._id)) {
             return next(new Error("Products must be from the same shop."));
@@ -145,9 +145,10 @@ orderSchema.pre("validate", async function (next) {
         totalAmount += price;
     }
 
+
     if (order.coupon) {
         const couponDetails = await Coupon.findById(order.coupon);
-        if (String(shopId) === couponDetails?.shopId.toString()) {
+        if (String(shopId) !== couponDetails?.shopId.toString()) {
             throw new AppError(StatusCodes.BAD_REQUEST, "The coupon is not applicable for your selected products")
         }
         if (couponDetails && couponDetails.isActive) {
@@ -165,6 +166,7 @@ orderSchema.pre("validate", async function (next) {
             }
         }
     }
+
 
     // const isDhaka = order?.shippingAddress?.toLowerCase()?.includes("dhaka");
     // const deliveryCharge = isDhaka ? 60 : 120;
@@ -184,7 +186,6 @@ orderSchema.pre("validate", async function (next) {
     order.finalAmount = totalAmount - finalDiscount + deliveryCharge;
     //@ts-ignore
     order.shop = shopId;
-
     next();
 });
 

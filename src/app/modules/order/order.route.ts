@@ -27,7 +27,7 @@ router.get(
 );
 
 router.post(
-    '/',
+    '/create',
     validateRequest(OrderValidation.createOrderSchema),
     auth(USER_ROLES.USER),
     OrderController.createOrder

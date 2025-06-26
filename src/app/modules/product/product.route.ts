@@ -61,6 +61,17 @@ router.patch('/recommended/:id',
     ProductController.updateToggleProductIsRecommended
 );
 
+// get product by shop
+router.get('/shop/:shopId',
+    ProductController.getProductsByShop
+);
+
+// get product by shop
+// router.patch('/variant/:id',
+//     validateRequest(ProductValidation.upateProductsVarinatsPriceOrQuantityZodSchema),
+//     ProductController.updateProductsVarinatsPriceOrQuantity
+// );
+
 // Delete product (only vendor who owns the product)
 router.delete('/:id',
     auth(USER_ROLES.VENDOR,USER_ROLES.SUPER_ADMIN,USER_ROLES.ADMIN),
@@ -74,11 +85,6 @@ router.patch('/:id',
     auth(USER_ROLES.VENDOR,USER_ROLES.SUPER_ADMIN,USER_ROLES.ADMIN),
     validateRequest(ProductValidation.updateProductZodSchema),
     ProductController.updateProduct
-);
-
-// get product by shop
-router.get('/shop/:shopId',
-    ProductController.getProductsByShop
 );
 
 // Get product by ID (public endpoint)

@@ -1,0 +1,40 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 1
+    },
+    "auditLog": "C:\\Users\\Asif Abdul Owadud\\Desktop\\everything_asif\\everything_office\\everything_sparktech\\kappes_backend\\winston\\error\\.9693c46064b47537d25a75149f68832ed4e6ba76-audit.json",
+    "files": [
+        {
+            "date": 1750900457606,
+            "name": "C:\\Users\\Asif Abdul Owadud\\Desktop\\everything_asif\\everything_office\\everything_sparktech\\kappes_backend\\winston\\error\\26-06-2025-07-error.log",
+            "hash": "f91cfe155e7c4d266f5a8ece59f479f55443028a449e6d9c28b3f8f31a90790b"
+        },
+        {
+            "date": 1750903230366,
+            "name": "C:\\Users\\Asif Abdul Owadud\\Desktop\\everything_asif\\everything_office\\everything_sparktech\\kappes_backend\\winston\\error\\26-06-2025-08-error.log",
+            "hash": "985f695d00c187ce784b2f1ba70c114a38ddd129fb72efc0e0eaa852ec6b3c67"
+        },
+        {
+            "date": 1750907643529,
+            "name": "C:\\Users\\Asif Abdul Owadud\\Desktop\\everything_asif\\everything_office\\everything_sparktech\\kappes_backend\\winston\\error\\26-06-2025-09-error.log",
+            "hash": "692e5be5f197fe62c65927dadbdc7ef701c4ee16bf8e559fd7acdc9568f7fe64"
+        },
+        {
+            "date": 1750910454710,
+            "name": "C:\\Users\\Asif Abdul Owadud\\Desktop\\everything_asif\\everything_office\\everything_sparktech\\kappes_backend\\winston\\error\\26-06-2025-10-error.log",
+            "hash": "9f9e365d5c98704732419a43e24deb68b77110d83dd7346fb848efb61f0c23e5"
+        },
+        {
+            "date": 1750914161264,
+            "name": "C:\\Users\\Asif Abdul Owadud\\Desktop\\everything_asif\\everything_office\\everything_sparktech\\kappes_backend\\winston\\error\\26-06-2025-11-error.log",
+            "hash": "90ce038f33c81c582b595763c9791c725f7df0c2739c30cb4a34486ccf1b0df4"
+        },
+        {
+            "date": 1750917770441,
+            "name": "C:\\Users\\Asif Abdul Owadud\\Desktop\\everything_asif\\everything_office\\everything_sparktech\\kappes_backend\\winston\\error\\26-06-2025-12-error.log",
+            "hash": "f3c7a7fc7163521cae7cb20444fddd4f7a0ec0655b60b14f3dbc72cd96acc1f9"
+        }
+    ],
+    "hashType": "sha256"
+}

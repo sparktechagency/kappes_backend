@@ -6,7 +6,7 @@ export enum ORDER_STATUS {
 }
 
 export enum PAYMENT_METHOD {
-    CASH = 'Cash',
+    COD = 'Cod',
     CARD = 'Card',
     ONLINE = 'Online',
 }
@@ -15,6 +15,9 @@ export enum PAYMENT_STATUS {
     PENDING = 'Pending',
     PAID = 'Paid',
     FAILED = 'Failed',
+    CANCELLED = 'Cancelled',
+    REFUNDED = 'Refunded',
+    
 }
 
 export const FREE_SHIPPING_CHARGE_AREA = ["dhaka"];

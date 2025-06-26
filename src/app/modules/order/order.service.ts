@@ -17,38 +17,270 @@ import Variant from "../variant/variant.model";
 import { PAYMENT_METHOD } from "./order.enums";
 import { USER_ROLES } from "../user/user.enums";
 import { DEFAULT_SHOP_REVENUE } from "../shop/shop.enum";
-import stripe from "../../../config/stripe";
+// import stripe from "../../../config/stripe";
 import config from "../../../config";
+import stripe from "../../config/stripe.config";
+
+// const createOrder = async (
+//     orderData: Partial<IOrder>,
+//     user: IJwtPayload
+// ) => {
+//     const session = await mongoose.startSession();
+//     session.startTransaction();
+
+//     try {
+//         const thisCustomer = await User.findById(user.id);
+//         if (!thisCustomer || !thisCustomer.stripeCustomerId) {
+//             throw new AppError(StatusCodes.NOT_FOUND, 'User or Stripe Customer ID not found');
+//         }
+//         if (orderData.products) {
+//             for (const item of orderData.products) {
+//                 // Validate product and variant
+//                 const [isExistProduct, isExistVariant] = await Promise.all([
+//                     Product.findOne({ _id: item.product, shopId: orderData.shop }).session(session),
+//                     Variant.findById(item.variant).session(session)
+//                 ]);
+
+//                 if (!isExistProduct) {
+//                     throw new AppError(StatusCodes.NOT_FOUND, `Product not found with ID: ${item.product}`);
+//                 }
+
+//                 if (!isExistVariant) {
+//                     throw new AppError(StatusCodes.NOT_FOUND, `Variant not found with ID: ${item.variant}`);
+//                 }
+
+//                 // check if ths vairant is in the product.product_variant_Details array if present then check variantQuantity of that item in product.product_variant_Details array
+//                 const variantIndex = isExistProduct.product_variant_Details.findIndex(
+//                     itm => itm.variantId.toString() === item.variant.toString()
+//                 );
+
+//                 if (variantIndex === -1) {
+//                     throw new AppError(StatusCodes.NOT_FOUND, `Variant not found in product with ID: ${item.product}`);
+//                 }
+
+//                 if (isExistProduct.product_variant_Details[variantIndex].variantQuantity < item.quantity) {
+//                     throw new AppError(StatusCodes.BAD_REQUEST, `Variant quantity is not available in product with ID: ${item.product}`);
+//                 }
+
+//                 // set the variantPrice in the order products
+//                 orderData.products[variantIndex].unitPrice = isExistProduct.product_variant_Details[variantIndex].variantPrice;
+
+//                 isExistProduct.product_variant_Details[variantIndex].variantQuantity -= item.quantity;
+//                 await isExistProduct.save({ session });
+//             }
+
+//             console.log({ orderData: orderData.products });
+//         }
+
+//         // Handle coupon and update orderData
+//         if (orderData.coupon) {
+//             const coupon = await Coupon.findOne({ code: orderData.coupon }).session(
+//                 session
+//             );
+//             if (coupon) {
+//                 const currentDate = new Date();
+
+//                 // Check if the coupon is within the valid date range
+//                 if (currentDate < coupon.startDate) {
+//                     throw new Error(`Coupon ${coupon.code} has not started yet.`);
+//                 }
+
+//                 if (currentDate > coupon.endDate) {
+//                     throw new Error(`Coupon ${coupon.code} has expired.`);
+//                 }
+
+//                 orderData.coupon = coupon._id as Types.ObjectId;
+//             } else {
+//                 throw new Error("Invalid coupon code.");
+//             }
+//         }
+
+//         // Create the order
+//         const order = new Order({
+//             ...orderData, // products,coupon,shippingAddress,paymentMethod,user,shop
+//             user: user.id,
+//         });
+
+//         await order.validate();
+//         console.log(order);
+//         let createdOrder;
+//         if (orderData.paymentMethod === PAYMENT_METHOD.COD) {
+//             createdOrder = await order.save({ session });
+//             await createdOrder.populate("user products.product");
+
+//             const transactionId = generateTransactionId();
+
+//             const payment = new Payment({
+//                 user: user.id,
+//                 shop: createdOrder.shop,
+//                 order: createdOrder._id,
+//                 method: orderData.paymentMethod,
+//                 transactionId,
+//                 amount: createdOrder.finalAmount,
+//             });
+
+//             await payment.save({ session });
+
+
+//             // Commit the transaction
+//             await session.commitTransaction();
+//             session.endSession();
+
+
+//             // // invoice generationand mail sending and notificationing
+//             // const pdfBuffer = await generateOrderInvoicePDF(createdOrder);
+//             // const emailContent = await emailHelper.createEmailContent(
+//             //     //@ts-ignore
+//             //     { userName: createdOrder.user.name || "" },
+//             //     "orderInvoice"
+//             // );
+
+//             // const attachment = {
+//             //     filename: `Invoice_${createdOrder._id}.pdf`,
+//             //     content: pdfBuffer,
+//             //     encoding: "base64", // if necessary
+//             // };
+
+//             // await emailHelper.sendEmail(
+//             //     //@ts-ignore
+//             //     createdOrder.user.email,
+//             //     emailContent,
+//             //     "Order confirmed!",
+//             //     attachment
+//         }
+
+//         let result;
+
+//         if (orderData.paymentMethod !== PAYMENT_METHOD.COD) {
+//             // need to implement the stripe here if payment method is online/card
+//             // need to hanlde the stripe like (shop এর যে revenue আছে সেই হিসেবে কিছু টাকা যাবে super admin এর কাছে আর বাকী টাকা যাবে shop owner এর কাছে)
+
+//             let stripeCustomerId = thisCustomer?.stripeCustomerId;
+//             const stripeCustomer = await stripe.customers.retrieve(stripeCustomerId);
+
+
+
+//             try {
+//                 const session = await stripe.checkout.sessions.create({
+//                     mode: 'payment',
+//                     customer: stripeCustomer.id,
+//                     line_items: [
+//                         {
+//                             price_data: {
+//                                 currency: 'usd',
+//                                 product_data: {
+//                                     name: 'Amount',
+//                                 },
+//                                 unit_amount: orderData.finalAmount! * 100,
+//                             },
+//                             quantity: 1,
+//                         },
+//                     ],
+//                     metadata: {
+//                         products: orderData.products,
+//                         coupon: orderData.coupon || null,
+//                         shippingAddress: orderData.shippingAddress,
+//                         paymentMethod: orderData.paymentMethod,
+//                         user: user.id,
+//                         shop: orderData.shop,
+//                         amount: order.finalAmount,
+//                         // extra field for payments gatewayResponse,transactionId,status,order
+//                     },
+//                     success_url: config.stripe.success_url,
+//                     cancel_url: config.stripe.cancel_url,
+//                 });
+//                 console.log({
+//                     url: session.url,
+//                 });
+//                 return {
+//                     url: session.url,
+//                 };
+//             } catch (error) {
+//                 console.log(error);
+//             }
+
+
+
+
+
+//             // const shop = await Shop.findById(orderData.shop);
+//             // const superAdmin = await User.findOne({ role: USER_ROLES.SUPER_ADMIN });
+//             // const shopOwner = await User.findById(shop?.owner);
+//             // if (!superAdmin || !shopOwner) {
+//             //     throw new AppError(StatusCodes.BAD_REQUEST, "Super admin or shop owner not found!");
+//             // }
+//             // const shopRevenue = shop?.revenue || DEFAULT_SHOP_REVENUE;
+//             // const superAdminRevenue = createdOrder.finalAmount * (shopRevenue / 100);
+//             // const shopOwnerRevenue = createdOrder.finalAmount - superAdminRevenue;
+//             // await User.findByIdAndUpdate(superAdmin._id, { balance: superAdmin.balance + superAdminRevenue });
+//             // await User.findByIdAndUpdate(shopOwner._id, { balance: shopOwner.balance + shopOwnerRevenue });
+
+//         } else {
+//             result = order;
+//         }
+
+//         // Commit the transaction
+//         await session.commitTransaction();
+//         session.endSession();
+
+//         // invoice generationand mail sending
+//         // const pdfBuffer = await generateOrderInvoicePDF(createdOrder);
+//         // const emailContent = await emailHelper.createEmailContent(
+//         //     //@ts-ignore
+//         //     { userName: createdOrder.user.name || "" },
+//         //     "orderInvoice"
+//         // );
+
+//         // const attachment = {
+//         //     filename: `Invoice_${createdOrder._id}.pdf`,
+//         //     content: pdfBuffer,
+//         //     encoding: "base64", // if necessary
+//         // };
+
+//         // await emailHelper.sendEmail(
+//         //     //@ts-ignore
+//         //     createdOrder.user.email,
+//         //     emailContent,
+//         //     "Order confirmed!",
+//         //     attachment
+//         // );
+//         return result;
+//     } catch (error) {
+//         console.log(error);
+//         // Rollback the transaction in case of error
+//         await session.abortTransaction();
+//         session.endSession();
+//         throw error;
+//     }
+// };
 
 const createOrder = async (
     orderData: Partial<IOrder>,
     user: IJwtPayload
 ) => {
-    const session = await mongoose.startSession();
-    session.startTransaction();
-
     try {
         const thisCustomer = await User.findById(user.id);
         if (!thisCustomer || !thisCustomer.stripeCustomerId) {
             throw new AppError(StatusCodes.NOT_FOUND, 'User or Stripe Customer ID not found');
         }
+
         if (orderData.products) {
             for (const item of orderData.products) {
                 // Validate product and variant
                 const [isExistProduct, isExistVariant] = await Promise.all([
-                    Product.findOne({ _id: item.product, shopId: orderData.shop }).session(session),
-                    Variant.findById(item.variant).session(session)
+                    Product.findOne({ _id: item.product, shopId: orderData.shop }),
+                    Variant.findById(item.variant)
                 ]);
 
                 if (!isExistProduct) {
-                    throw new AppError(StatusCodes.NOT_FOUND, `Product not found with ID: ${item.product}`);
+                    throw new AppError(StatusCodes.NOT_FOUND, `Product not found with ID: ${item.product} | products must be from the same shop`);
                 }
 
                 if (!isExistVariant) {
                     throw new AppError(StatusCodes.NOT_FOUND, `Variant not found with ID: ${item.variant}`);
                 }
 
-                // check if ths vairant is in the product.product_variant_Details array if present then check variantQuantity of that item in product.product_variant_Details array
+                // Check if the variant exists in the product's variants array and validate quantity
                 const variantIndex = isExistProduct.product_variant_Details.findIndex(
                     itm => itm.variantId.toString() === item.variant.toString()
                 );
@@ -61,16 +293,17 @@ const createOrder = async (
                     throw new AppError(StatusCodes.BAD_REQUEST, `Variant quantity is not available in product with ID: ${item.product}`);
                 }
 
+                // Set the unit price for the order item
+                item.unitPrice = isExistProduct.product_variant_Details[variantIndex].variantPrice;
+                // Decrease the product's variant quantity
                 isExistProduct.product_variant_Details[variantIndex].variantQuantity -= item.quantity;
-                await isExistProduct.save({ session });
+                await isExistProduct.save();  // No session required here anymore
             }
         }
 
         // Handle coupon and update orderData
         if (orderData.coupon) {
-            const coupon = await Coupon.findOne({ code: orderData.coupon }).session(
-                session
-            );
+            const coupon = await Coupon.findOne({ code: orderData.coupon, shopId: orderData.shop });
             if (coupon) {
                 const currentDate = new Date();
 
@@ -85,9 +318,11 @@ const createOrder = async (
 
                 orderData.coupon = coupon._id as Types.ObjectId;
             } else {
-                throw new Error("Invalid coupon code.");
+                throw new Error("Invalid coupon code. and coupon is not available for this shop");
             }
         }
+
+
 
         // Create the order
         const order = new Order({
@@ -95,11 +330,12 @@ const createOrder = async (
             user: user.id,
         });
 
+        // Validate the order data
         await order.validate();
+
         let createdOrder;
-        if (orderData.paymentMethod === PAYMENT_METHOD.CASH) {
-            createdOrder = await order.save({ session });
-            await createdOrder.populate("user products.product");
+        if (orderData.paymentMethod === PAYMENT_METHOD.COD) {
+            createdOrder = await order.save();
 
             const transactionId = generateTransactionId();
 
@@ -112,84 +348,72 @@ const createOrder = async (
                 amount: createdOrder.finalAmount,
             });
 
-            await payment.save({ session });
+            await payment.save();
 
+            // Proceed with generating invoice, sending email, etc.
+            // Commit logic is not required anymore as no session is being used
 
-            // Commit the transaction
-            await session.commitTransaction();
-            session.endSession();
         }
 
         let result;
 
-        if (orderData.paymentMethod !== PAYMENT_METHOD.CASH) {
-            // need to implement the stripe here if payment method is online/card
-            // need to hanlde the stripe like (shop এর যে revenue আছে সেই হিসেবে কিছু টাকা যাবে super admin এর কাছে আর বাকী টাকা যাবে shop owner এর কাছে)
-
+        if (orderData.paymentMethod !== PAYMENT_METHOD.COD) {
             let stripeCustomerId = thisCustomer?.stripeCustomerId;
-            const stripeCustomer = await stripe.customers.retrieve(stripeCustomerId);
+            // const stripeCustomer = await stripe.customers.retrieve(stripeCustomerId);
 
+            console.log("at create order",stripeCustomerId,order);
+            try {
+                const session = await stripe.checkout.sessions.create({
+                    mode: 'payment',
+                    customer: stripeCustomerId,
+                    line_items: [
+                        {
+                            price_data: {
+                                currency: 'usd',
+                                product_data: {
+                                    name: 'Amount',
+                                },
+                                unit_amount: orderData.finalAmount! * 100,  // Convert to cents
+                            },
+                            quantity: 1,
+                        },
+                    ],
+                    metadata: {
+                        products: orderData.products,
+                        coupon: orderData.coupon,
+                        shippingAddress: orderData.shippingAddress,
+                        paymentMethod: orderData.paymentMethod,
+                        user: user.id,
+                        shop: orderData.shop,
+                        amount: order.finalAmount,
+                    },
+                    success_url: config.stripe.success_url,
+                    cancel_url: config.stripe.cancel_url,
+                });
+                console.log({
+                    url: session.url,
+                });
+                result = { url: session.url };
 
-
-
-
-
-
-            await session.commitTransaction();
-            session.endSession();
-            return {
-                url: stripeSession.url,
-            };
-            // const shop = await Shop.findById(orderData.shop);
-            // const superAdmin = await User.findOne({ role: USER_ROLES.SUPER_ADMIN });
-            // const shopOwner = await User.findById(shop?.owner);
-            // if (!superAdmin || !shopOwner) {
-            //     throw new AppError(StatusCodes.BAD_REQUEST, "Super admin or shop owner not found!");
-            // }
-            // const shopRevenue = shop?.revenue || DEFAULT_SHOP_REVENUE;
-            // const superAdminRevenue = createdOrder.finalAmount * (shopRevenue / 100);
-            // const shopOwnerRevenue = createdOrder.finalAmount - superAdminRevenue;
-            // await User.findByIdAndUpdate(superAdmin._id, { balance: superAdmin.balance + superAdminRevenue });
-            // await User.findByIdAndUpdate(shopOwner._id, { balance: shopOwner.balance + shopOwnerRevenue });
+            } catch (error) {
+                console.log(error);
+            }
 
         } else {
             result = order;
         }
 
-        // Commit the transaction
-        await session.commitTransaction();
-        session.endSession();
-
-        // invoice generationand mail sending
-        const pdfBuffer = await generateOrderInvoicePDF(createdOrder);
-        const emailContent = await emailHelper.createEmailContent(
-            //@ts-ignore
-            { userName: createdOrder.user.name || "" },
-            "orderInvoice"
-        );
-
-        const attachment = {
-            filename: `Invoice_${createdOrder._id}.pdf`,
-            content: pdfBuffer,
-            encoding: "base64", // if necessary
-        };
-
-        await emailHelper.sendEmail(
-            //@ts-ignore
-            createdOrder.user.email,
-            emailContent,
-            "Order confirmed!",
-            attachment
-        );
+        // No transaction commit needed anymore
+        // Return the result
         return result;
+
     } catch (error) {
         console.log(error);
-        // Rollback the transaction in case of error
-        await session.abortTransaction();
-        session.endSession();
+        // Handle any errors without a session rollback
         throw error;
     }
 };
+
 
 const getMyShopOrders = async (
     query: Record<string, unknown>,

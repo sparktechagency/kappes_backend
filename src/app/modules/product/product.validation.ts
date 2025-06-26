@@ -74,6 +74,14 @@ const getProductByIdZodSchema = z.object({
     })
 });
 
+const upateProductsVarinatsPriceOrQuantityZodSchema = z.object({
+    body: z.object({
+        variantId: objectIdSchema,
+        variantQuantity: z.number().min(0, 'Variant quantity must be non-negative'),
+        variantPrice: z.number().min(0, 'Variant price must be non-negative')
+    })
+});
+
 const deleteProductZodSchema = getProductByIdZodSchema;
 
 export const ProductValidation = {
@@ -82,4 +90,5 @@ export const ProductValidation = {
     getProductsByCategoryZodSchema,
     getProductByIdZodSchema,
     deleteProductZodSchema,
+    upateProductsVarinatsPriceOrQuantityZodSchema,
 };

@@ -31,6 +31,7 @@ export type IUser = {
      tokenVersion: number;
      loginCount: number;
      stripeCustomerId: string;
+     stripeConnectedAcount?: string;
      status: 'active' | 'blocked';
      verified: boolean;
      authentication?: {

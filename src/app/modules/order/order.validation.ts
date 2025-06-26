@@ -10,8 +10,7 @@ const orderProductSchema = z.object({
   variant: z.string().refine((val) => Types.ObjectId.isValid(val), {
     message: 'Invalid variant ID',
   }),
-  quantity: z.number().int().positive('Quantity must be a positive number'),
-  unitPrice: z.number().nonnegative('Unit price cannot be negative'),
+  quantity: z.number().int().positive('Quantity must be a positive number')
 });
 
 // Validation schema for creating an order
@@ -25,9 +24,6 @@ export const createOrderSchema = z.object({
       .min(1, 'At least one product is required'),
     coupon: z
       .string()
-      .refine((val) => !val || Types.ObjectId.isValid(val), {
-        message: 'Invalid coupon ID',
-      })
       .optional()
       .nullable(),
     shippingAddress: z

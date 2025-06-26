@@ -9,8 +9,10 @@ import QueryBuilder from "../../builder/QueryBuilder";
 import { USER_ROLES } from "../user/user.enums";
 import { StatusCodes } from "http-status-codes";
 import unlinkFile from "../../../shared/unlinkFile";
+import { stripeAccountService } from "../stripeAccount/stripeAccount.service";
+import { Product } from "../product/product.model";
 
-const createShop = async (payload: IShop, user: IJwtPayload) => {
+const createShop = async (payload: IShop, user: IJwtPayload, host: string, protocol: string) => {
     const { name, email } = payload;
 
     // Check if shop with the same name or email already exists
@@ -45,7 +47,8 @@ const createShop = async (payload: IShop, user: IJwtPayload) => {
     });
 
     const createdShop = await newShop.save();
-    return createdShop;
+    const stripe_account_onboarding_url = await stripeAccountService.createStripeAccount(user, host, protocol);
+    return { stripe_account_onboarding_url, createdShop };
 }
 
 const makeShopAdmin = async (shopId: string, tobeAdminId: string, user: IJwtPayload) => {
@@ -323,6 +326,43 @@ const getShopsByOwnerOrAdmin = async (user: IJwtPayload) => {
     return shops;
 }
 
+
+const isShopExist = async (shopId: string) => {
+    const result: any = await Shop.findOne({
+        _id: new mongoose.Types.ObjectId(shopId),
+    }).populate({
+        path: 'owner',
+        select: '_id stripeCustomerId stripeConnectedAcount',
+    });
+
+    return result;
+};
+
+const getProductsByShopId = async (shopId: string, query: Record<string, unknown>) => {
+    const productQuery = new QueryBuilder(
+        Product.find({ shopId })
+            .populate('shopId', 'name email owner'),
+        query,
+    )
+        .search(['name', 'description', 'tags'])
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+
+    const products = await productQuery.modelQuery;
+    const meta = await productQuery.countTotal();
+
+    if (!products || products.length === 0) {
+        throw new AppError(404, 'No products found for this shop');
+    }
+
+    return {
+        meta,
+        products,
+    };
+}
+
 // Export the ShopService
 export const ShopService = {
     createShop,
@@ -348,4 +388,6 @@ export const ShopService = {
     getShopByOwnerId,
     getShopsByShopCategory,
     getShopsByOwnerOrAdmin,
+    isShopExist,
+    getProductsByShopId
 }

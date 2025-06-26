@@ -7,7 +7,7 @@ import { ShopService } from './shop.service';
 import { IJwtPayload } from '../auth/auth.interface';
 
 const createShop = catchAsync(async (req: Request, res: Response) => {
-    const result = await ShopService.createShop(req.body,req.user as IJwtPayload);
+    const result = await ShopService.createShop(req.body,req.user as IJwtPayload,req.get('host') || '', req.protocol);
     sendResponse(res, {
         statusCode: StatusCodes.CREATED,
         success: true,
@@ -246,6 +246,17 @@ const getShopsByOwnerOrAdmin = catchAsync(async (req: Request, res: Response) =>
     });
 });
 
+const getProductsByShopId = catchAsync(async (req: Request, res: Response) => {
+    const { shopId } = req.params;
+    const result = await ShopService.getProductsByShopId(shopId,req.query);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: 'Products by shop ID retrieved successfully',
+        data: result,
+    });
+});
+
 
 export const ShopController = {
     createShop,
@@ -270,5 +281,6 @@ export const ShopController = {
     getShopsByShopCategory, 
     toggleFollowUnfollowShop,
     getShopsByOwnerOrAdmin,
+    getProductsByShopId
 }
 

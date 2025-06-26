@@ -12,6 +12,7 @@ import stripe from '../../../config/stripe';
 import mongoose, { Schema } from 'mongoose';
 import config from '../../../config';
 import { Shop } from '../shop/shop.model';
+import { stripeAccountService } from '../stripeAccount/stripeAccount.service';
 // create user
 const createUserToDB = async (payload: IUser): Promise<IUser> => {
      //set role
@@ -57,7 +58,7 @@ const createUserToDB = async (payload: IUser): Promise<IUser> => {
      return createUser;
 };
 
-const createSellerUserToDB = async (payload: ISellerUser) => {
+const createSellerUserToDB = async (payload: ISellerUser, host: string, protocol: string) => {
      const session = await mongoose.startSession();
      session.startTransaction();
 
@@ -132,7 +133,9 @@ const createSellerUserToDB = async (payload: ISellerUser) => {
           await session.commitTransaction();
           session.endSession();
 
-          return { createUser: createUser[0], shop };
+          const stripe_account_onboarding_url = await stripeAccountService.createStripeAccount(user, host, protocol);
+
+          return { createUser: createUser[0], shop, stripe_account_onboarding_url };
 
      } catch (error) {
           // If any operation fails, abort the transaction
@@ -276,6 +279,9 @@ const getAllRoleBasedUser = async () => {
 
      return users;
 };
+
+
+
 
 export const UserService = {
      createUserToDB,

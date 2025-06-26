@@ -42,15 +42,14 @@ const cartSchema = new Schema<ICart>({
     timestamps: true
 });
 
-// Add index for better query performance
-cartSchema.index({ userId: 1 });
+
 
 // Add middleware to calculate total price
-// cartSchema.pre('save', function (next) {
-//     this.items.forEach(item => {
-//         item.totalPrice = item.variantPrice * item.variantQuantity;
-//     });
-//     next();
-// });
+cartSchema.pre('save', function (next) {
+    this.items.forEach(item => {
+        item.totalPrice = item.variantPrice * item.variantQuantity;
+    });
+    next();
+});
 
 export const Cart = model<ICart>('Cart', cartSchema);

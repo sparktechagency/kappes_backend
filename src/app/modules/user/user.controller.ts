@@ -18,7 +18,7 @@ const createUser = catchAsync(async (req, res) => {
 
 const createSellerUser = catchAsync(async (req, res) => {
      const { ...userData } = req.body;
-     const result = await UserService.createSellerUserToDB(userData);
+     const result = await UserService.createSellerUserToDB(userData, req.get('host') || '', req.protocol);
 
      sendResponse(res, {
           success: true,

@@ -2,8 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import AppError from '../../../errors/AppError';
 import mongoose from 'mongoose';
 import QueryBuilder from '../../builder/QueryBuilder';
-import { Favourite } from './favourit.model';
-import { Video } from '../admin/videosManagement/videoManagement.model';
+import { Favourite } from './favourit.model'; 
 import { User } from '../user/user.model';
 
 const likedVideos = async (userId: string, videoId: string) => {
@@ -54,18 +53,13 @@ const getAllFavouritList = async (userId: string, query: Record<string, unknown>
      const meta = await queryBuilder.countTotal();
      return { favouritList, meta };
 };
-const getSingleVideoUrl = async (id: string, userId: string) => {
-     const result = await Video.findById(id);
-     if (!result) {
-          throw new AppError(StatusCodes.NOT_FOUND, 'Video not found');
-     }
+const getSingleVideoUrl = async (id: string, userId: string) => { 
 
      const hasSubscription = await User.hasActiveSubscription(userId);
 
      if (hasSubscription) {
           // If the user has an active subscription or the video is free
-          const data = {
-               ...result.toObject(),
+          const data = { 
           };
           return data;
      }
