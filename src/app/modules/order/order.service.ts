@@ -358,45 +358,49 @@ const createOrder = async (
         let result;
 
         if (orderData.paymentMethod !== PAYMENT_METHOD.COD) {
-            let stripeCustomerId = thisCustomer?.stripeCustomerId;
-            // const stripeCustomer = await stripe.customers.retrieve(stripeCustomerId);
-
-            console.log("at create order",stripeCustomerId,order);
-            try {
-                const session = await stripe.checkout.sessions.create({
-                    mode: 'payment',
-                    customer: stripeCustomerId,
-                    line_items: [
-                        {
-                            price_data: {
-                                currency: 'usd',
-                                product_data: {
-                                    name: 'Amount',
-                                },
-                                unit_amount: orderData.finalAmount! * 100,  // Convert to cents
+            let stripeCustomer = await stripe.customers.create({
+                name: thisCustomer?.full_name,
+                email: thisCustomer?.email,
+            });
+            // findbyid and update the user
+            await User.findByIdAndUpdate(thisCustomer?.id, { $set: { stripeCustomerId: stripeCustomer.id } });
+            const stripeSessionData:any = {
+                payment_method_types: ['card'],
+                mode: 'payment',
+                customer: stripeCustomer.id,
+                line_items: [
+                    {
+                        price_data: {
+                            currency: 'usd',
+                            product_data: {
+                                name: 'Amount',
                             },
-                            quantity: 1,
+                            unit_amount: order.finalAmount! * 100,  // Convert to cents
                         },
-                    ],
-                    metadata: {
-                        products: orderData.products,
-                        coupon: orderData.coupon,
-                        shippingAddress: orderData.shippingAddress,
-                        paymentMethod: orderData.paymentMethod,
-                        user: user.id,
-                        shop: orderData.shop,
-                        amount: order.finalAmount,
+                        quantity: 1,
                     },
-                    success_url: config.stripe.success_url,
-                    cancel_url: config.stripe.cancel_url,
-                });
+                ],
+                metadata: {
+                    products: JSON.stringify(orderData.products), // only array are allowed TO PASS as metadata
+                    coupon: orderData.coupon?.toString(),
+                    shippingAddress: orderData.shippingAddress,
+                    paymentMethod: orderData.paymentMethod,
+                    user: user.id,
+                    shop: orderData.shop,
+                    amount: order.finalAmount,
+                },
+                success_url: config.stripe.success_url,
+                cancel_url: config.stripe.cancel_url,
+            }
+            try {
+                const session = await stripe.checkout.sessions.create(stripeSessionData);
                 console.log({
                     url: session.url,
                 });
                 result = { url: session.url };
 
             } catch (error) {
-                console.log(error);
+                console.log({ error });
             }
 
         } else {

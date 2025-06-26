@@ -26,6 +26,7 @@ import { CouponRoutes } from '../app/modules/coupon/coupon.route';
 import { OfferedRoutes } from '../app/modules/offered/offered.route';
 import stripeAccountRoutes from '../app/modules/stripeAccount/stripeAccount.route';
 import { OrderRoutes } from '../app/modules/order/order.route';
+import { paymentRoutes } from '../app/modules/payment/payment.route';
 
 const router = express.Router();
 const routes = [
@@ -164,6 +165,10 @@ const routes = [
      {
        path: '/order',
        route: OrderRoutes,
+     },
+     {
+       path: '/payment',
+       route: paymentRoutes,
      },
 ];
 

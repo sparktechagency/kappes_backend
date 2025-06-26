@@ -35,6 +35,7 @@ const webhookHandler = async (req: Request, res: Response): Promise<void> => {
         return;
     }
 
+    console.log("event.type", event.type);
     try {
         switch (event.type) {
             case 'checkout.session.completed':
@@ -72,7 +73,10 @@ const handlePaymentSucceeded = async (session: Stripe.Checkout.Session) => {
             // extra field for payments gatewayResponse,transactionId,status,order
         }: any = session.metadata;
 
-        console.log('1');
+        // Parsing the 'products' metadata, as it was previously stringified before sending to Stripe
+        const productsParsed = JSON.parse(products);
+
+        console.log('1', 'productsParsed:', productsParsed);
 
         const paymentIntent = session.payment_intent as string;
 
@@ -176,7 +180,7 @@ const handlePaymentSucceeded = async (session: Stripe.Checkout.Session) => {
 
         console.log('payouts : 9');
         const newOrder = await Order.create({
-            products,
+            products: productsParsed,
             coupon,
             shippingAddress,
             paymentMethod,
@@ -187,15 +191,15 @@ const handlePaymentSucceeded = async (session: Stripe.Checkout.Session) => {
         console.log('newBooking : 10');
 
         const newPayment = await Payment.create({
-            user,   
-            order: newOrder._id,       
+            user,
+            order: newOrder._id,
             shop,
-            method:paymentMethod,
-            status:PAYMENT_STATUS.PAID,
-            transactionId:session.id,
+            method: paymentMethod,
+            status: PAYMENT_STATUS.PAID,
+            transactionId: session.id,
             paymentIntent,
             amount,
-            gatewayResponse:session,
+            gatewayResponse: session,
             // extra field for payments gatewayResponse,transactionId,status,order
         });
 

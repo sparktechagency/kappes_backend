@@ -1,4 +1,5 @@
 import stripe from "../../config/stripe.config";
+import { User } from "../user/user.model";
 import { StripeAccount } from "./stripeAccount.model";
 
 
@@ -47,6 +48,8 @@ const createStripeAccount = async (
     // console.log('stripe account', account);
 
     await StripeAccount.create({ accountId: account.id, userId: user.userId });
+    // save stripe account id in user
+    await User.findByIdAndUpdate(user.userId, { $set: { stripeConnectedAcount: account.id } });
 
     const onboardingLink = await stripe.accountLinks.create({
         account: account.id,
@@ -54,7 +57,7 @@ const createStripeAccount = async (
         return_url: `${protocol}://${host}/api/v1/stripe/success-account/${account.id}`,
         type: 'account_onboarding',
     });
-    // console.log('onboardingLink-2', onboardingLink);
+    console.log('onboardingLink-2', onboardingLink);
 
     return onboardingLink.url;
 };
