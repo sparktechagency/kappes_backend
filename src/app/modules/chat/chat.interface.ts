@@ -1,7 +1,7 @@
 import { Model, Types } from 'mongoose';
 
 export type IChat = {
-     participants: [Types.ObjectId];
+     participants: [Types.ObjectId]; // rabby use all shop id field for all chats, allow shop specific admins and owner to chat with users
      status: boolean;
 };
 

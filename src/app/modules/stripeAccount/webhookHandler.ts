@@ -206,7 +206,14 @@ const handlePaymentSucceeded = async (session: Stripe.Checkout.Session) => {
         });
 
         console.log('newPayment : 11');
-
+        // send email to user, notification to shop woner or admins socket
+        /** rabby
+         * find shop
+         * make array for specific this shop's owner and admins
+         * send notification to them using socket
+         * 
+         * send email to user if poosible send order invoice pdf
+         */
         return newPayment;
     } catch (error) {
         console.error('Error in handlePaymentSucceeded:', error);

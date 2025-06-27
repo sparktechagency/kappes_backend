@@ -125,9 +125,15 @@ const createOrder = async (
             );
             console.log(updatePurchaseCount);
 
-            // Proceed with generating invoice, sending email, etc.
-            // Commit logic is not required anymore as no session is being used
 
+            // send email to user, notification to shop woner or admins socket
+            /** rabby
+             * find shop
+             * make array for specific this shop's owner and admins
+             * send notification to them using socket
+             * 
+             * send email to user if poosible send order invoice pdf
+             */
         }
 
         let result;
@@ -336,5 +342,5 @@ export const OrderService = {
     getMyOrders,
     changeOrderStatus,
     cancelOrder,
-    refundOrderRequest 
+    refundOrderRequest
 };
