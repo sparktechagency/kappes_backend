@@ -12,6 +12,7 @@ enum NotificationType {
      ORDER = 'ORDER',
      DELIVERY = 'DELIVERY',
      CANCELLED = 'CANCELLED',
+     order = 'order',
 }
 
 enum NotificationScreen {
@@ -48,7 +49,7 @@ const notificationSchema = new Schema<INotification>(
           },
           referenceModel: {
                type: String,
-               enum: ['PAYMENT', 'ORDER', 'MESSAGE', 'REFUND', 'ALERT', 'DELIVERY', 'CANCELLED'],
+               enum: ['PAYMENT', 'ORDER', 'MESSAGE', 'REFUND', 'ALERT', 'DELIVERY', 'CANCELLED', 'order'],
                required: false,
           },
           screen: {

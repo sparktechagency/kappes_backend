@@ -8,44 +8,17 @@ import { OrderValidation } from './order.validation';
 const router = Router();
 
 // Define routes
-router.get(
-    '/my-shop-orders',
-    auth(USER_ROLES.USER),
-    OrderController.getMyShopOrders
-);
+router.get('/my-shop-orders', auth(USER_ROLES.USER), OrderController.getMyShopOrders);
 
-router.get(
-    '/my-orders',
-    auth(USER_ROLES.USER),
-    OrderController.getMyOrders
-);
+router.get('/my-orders', auth(USER_ROLES.USER), OrderController.getMyOrders);
 
-router.get(
-    '/:orderId',
-    auth(USER_ROLES.USER),
-    OrderController.getOrderDetails
-);
+router.get('/:orderId', auth(USER_ROLES.USER), OrderController.getOrderDetails);
 
-router.post(
-    '/create',
-    validateRequest(OrderValidation.createOrderSchema),
-    auth(USER_ROLES.USER),
-    OrderController.createOrder
-)
+router.post('/create', validateRequest(OrderValidation.createOrderSchema), auth(USER_ROLES.USER, USER_ROLES.VENDOR), OrderController.createOrder);
 
-router.patch(
-    '/:orderId/status',
-    auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR),
-    validateRequest(OrderValidation.updateOrderStatusSchema),
-    OrderController.changeOrderStatus
-)
-
+router.patch('/:orderId/status', auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR), validateRequest(OrderValidation.updateOrderStatusSchema), OrderController.changeOrderStatus);
 
 // Cancel order
-router.delete(
-    '/:id/cancel',
-    auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR),
-    OrderController.cancelOrder
-);
+router.delete('/:id/cancel', auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR), OrderController.cancelOrder);
 
 export const OrderRoutes = router;

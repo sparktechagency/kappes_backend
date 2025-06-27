@@ -5,9 +5,9 @@ export interface INotification {
      receiver: Types.ObjectId;
      postId: Types.ObjectId;
      reference?: string;
-     referenceModel?: 'Payment' | 'Order' | 'Message';
+     referenceModel?: 'Payment' | 'Order' | 'Message' | 'order';
      screen?: 'DASHBOARD' | 'PAYMENT_HISTORY' | 'PROFILE';
      read: boolean;
-     type?: 'ADMIN' | 'SYSTEM' | 'PAYMENT' | 'MESSAGE' | 'ALERT';
+     type?: 'ADMIN' | 'SYSTEM' | 'PAYMENT' | 'MESSAGE' | 'ALERT' | 'order';
      title?: string;
 }
