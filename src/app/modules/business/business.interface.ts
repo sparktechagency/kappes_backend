@@ -42,12 +42,8 @@ export interface IBusiness {
         detail_address?: string;
     };
     location: IGeoLocation;
-    service: string;
-    working_hours: {
-        day: string;
-        start: string;
-        end: string;
-    }[];
+    service: string;    
+    working_hours?: { day: string; start: string; end: string }[];
     logo: string;
     coverPhoto: string;
     banner: string;
@@ -56,6 +52,8 @@ export interface IBusiness {
     isDeleted: boolean;
     isActive: boolean;
     isVerified: boolean;
+    totalReviews: number;
+    avg_rating: number;
 }
 
 

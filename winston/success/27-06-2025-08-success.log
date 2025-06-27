@@ -1,0 +1,125 @@
+Fri Jun 27 2025 8:2:0 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/stripe/webhook 200 - 9.018 ms
+Fri Jun 27 2025 8:2:36 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:2:37 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:2:37 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:2:37 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:2:44 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/stripe/create-connected-account 200 - 3546.448 ms
+Fri Jun 27 2025 8:5:49 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:5:50 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:5:50 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:5:50 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:7:49 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:7:50 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:7:50 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:7:50 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:8:13 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:8:14 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:8:14 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:8:14 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:8:23 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:8:24 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:8:24 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:8:24 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:8:52 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:8:53 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:8:53 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:8:53 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:9:48 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:9:49 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:9:49 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:9:49 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:9:51 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:9:52 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:9:52 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:9:52 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:10:3 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:10:4 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:10:4 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:10:4 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:11:6 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:11:7 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:11:7 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:11:7 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:11:41 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/stripe/create-connected-account 200 - 4207.889 ms
+Fri Jun 27 2025 8:11:44 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/users/profile 200 - 180.502 ms
+Fri Jun 27 2025 8:20:38 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:20:39 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:20:39 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:20:39 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:20:45 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:20:46 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:20:46 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:20:46 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:20:58 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:20:58 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:20:58 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:20:58 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:21:2 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:21:3 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:21:3 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:21:3 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:21:31 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:21:32 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:21:32 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:21:32 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:21:53 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/stripe/success-account/acct_1ReRckCBLzNPBsLq 302 - 1702.324 ms
+Fri Jun 27 2025 8:21:54 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/stripe/refreshAccountConnect/acct_1ReRckCBLzNPBsLq 302 - 480.095 ms
+Fri Jun 27 2025 8:24:23 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/stripe/success-account/acct_1ReRckCBLzNPBsLq 302 - 1434.809 ms
+Fri Jun 27 2025 8:24:23 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/stripe/refreshAccountConnect/acct_1ReRckCBLzNPBsLq 302 - 394.030 ms
+Fri Jun 27 2025 8:24:28 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/stripe/success-account/acct_1ReRckCBLzNPBsLq 302 - 1601.651 ms
+Fri Jun 27 2025 8:24:28 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/stripe/refreshAccountConnect/acct_1ReRckCBLzNPBsLq 302 - 388.116 ms
+Fri Jun 27 2025 8:26:22 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:26:23 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:26:23 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:26:23 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:28:19 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/stripe/success-account/acct_1ReRckCBLzNPBsLq 302 - 1458.899 ms
+Fri Jun 27 2025 8:28:19 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/stripe/refreshAccountConnect/acct_1ReRckCBLzNPBsLq 302 - 396.411 ms
+Fri Jun 27 2025 8:29:50 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/stripe/success-account/acct_1ReRckCBLzNPBsLq 302 - 1386.575 ms
+Fri Jun 27 2025 8:29:50 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/stripe/refreshAccountConnect/acct_1ReRckCBLzNPBsLq 302 - 451.996 ms
+Fri Jun 27 2025 8:30:16 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/stripe/success-account/acct_1ReRckCBLzNPBsLq 200 - 1332.960 ms
+Fri Jun 27 2025 8:32:29 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop/user 200 - 463.234 ms
+Fri Jun 27 2025 8:33:40 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/auth/login 200 - 810.508 ms
+Fri Jun 27 2025 8:33:47 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/stripe/webhook 200 - 1.668 ms
+Fri Jun 27 2025 8:33:48 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/order/create 201 - 2362.144 ms
+Fri Jun 27 2025 8:34:11 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/stripe/webhook 200 - 6.308 ms
+Fri Jun 27 2025 8:34:12 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/stripe/webhook 200 - 2.351 ms
+Fri Jun 27 2025 8:34:12 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/stripe/webhook 200 - 1.575 ms
+Fri Jun 27 2025 8:34:12 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/stripe/webhook 200 - 256.147 ms
+Fri Jun 27 2025 8:34:14 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/stripe/webhook 200 - 1.576 ms
+Fri Jun 27 2025 8:34:23 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/payment/success 200 - 2.829 ms
+Fri Jun 27 2025 8:37:14 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:37:15 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:37:15 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:37:15 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:38:55 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:38:56 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:38:56 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:38:56 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:39:24 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/stripe/success-account/acct_1ReRckCBLzNPBsLq 304 - 1527.139 ms
+Fri Jun 27 2025 8:40:34 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:40:35 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:40:35 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:40:35 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:40:42 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/stripe/success-account/acct_1ReRckCBLzNPBsLq 304 - 1484.751 ms
+Fri Jun 27 2025 8:41:2 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:41:3 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:41:3 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:41:3 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:41:5 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/stripe/success-account/acct_1ReRckCBLzNPBsLq 200 - 2126.373 ms
+Fri Jun 27 2025 8:41:22 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/stripe/success-account/acct_1ReRckCBLzNPBsLq 200 - 1215.102 ms
+Fri Jun 27 2025 8:41:54 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/stripe/success-account/acct_1ReRckCBLzNPBsLq 200 - 2023.153 ms
+Fri Jun 27 2025 8:45:37 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:45:38 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:45:38 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:45:38 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:45:42 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/stripe/success-account/acct_1ReRckCBLzNPBsLq 200 - 1483.379 ms
+Fri Jun 27 2025 8:46:7 [SERVER-NAME] info: [34mSIGINT received. Shutting down gracefully...[39m
+Fri Jun 27 2025 8:46:11 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:46:12 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:46:12 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:46:12 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Fri Jun 27 2025 8:46:32 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/stripe/success-account/acct_1ReRckCBLzNPBsLq 200 - 1611.731 ms
+Fri Jun 27 2025 8:47:17 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 8:47:17 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 8:47:17 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Fri Jun 27 2025 8:47:17 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m

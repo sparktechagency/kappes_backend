@@ -91,8 +91,9 @@ const handlePaymentSucceeded = async (session: Stripe.Checkout.Session) => {
         console.log('isPaymentExist : 3');
 
         const { owner, revenue } = await ShopService.isShopExist(shop);
+        console.log('owner : ', owner);
 
-        const stripeAccountId = owner?.stripeConnectedAcount;
+        const stripeAccountId = owner?.stripeConnectedAccount;
 
         if (!stripeAccountId) {
             throw new AppError(StatusCodes.NOT_FOUND, 'Stripe account not found');
@@ -184,6 +185,7 @@ const handlePaymentSucceeded = async (session: Stripe.Checkout.Session) => {
             coupon,
             shippingAddress,
             paymentMethod,
+            paymentStatus: PAYMENT_STATUS.PAID,
             shop,
             user,
         });

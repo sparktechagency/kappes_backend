@@ -13,10 +13,15 @@ stripeAccountRoutes
         auth(USER_ROLES.VENDOR),
         stripeAccountController.createStripeAccount,
     )
-    .get('/success-account/:id', stripeAccountController.successPageAccount)
+    // .get('/success-account/:id', stripeAccountController.successPageAccount)
     .get(
         '/refreshAccountConnect/:id',
         stripeAccountController.refreshAccountConnect,
     );
+
+stripeAccountRoutes.get(
+    '/success-account/:accountId',
+    stripeAccountController.onConnectedStripeAccountSuccess,
+);
 
 export default stripeAccountRoutes;

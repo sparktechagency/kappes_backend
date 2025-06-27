@@ -332,7 +332,7 @@ const isShopExist = async (shopId: string) => {
         _id: new mongoose.Types.ObjectId(shopId),
     }).populate({
         path: 'owner',
-        select: '_id stripeCustomerId stripeConnectedAcount',
+        select: '_id stripeCustomerId stripeConnectedAccount',
     });
 
     return result;

@@ -1,7 +1,7 @@
 import { Model, Types } from 'mongoose';
 import { IBusiness } from '../business/business.interface';
 import { REVIEW_TYPES } from './review.enums';
-import { IProduct } from '../../product/product.interface';
+import { IProduct } from '../product/product.interface';
 
 export type IReview = {
      customer: Types.ObjectId;

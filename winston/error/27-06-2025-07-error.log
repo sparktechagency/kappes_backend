@@ -1,0 +1,4 @@
+Fri Jun 27 2025 7:36:21 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/stripe/create-connected-account 400 - 713.439 ms
+Fri Jun 27 2025 7:37:29 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/stripe/create-connected-account 400 - 499.037 ms
+Fri Jun 27 2025 7:52:30 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/stripe/create-connected-account 400 - 102.638 ms
+Fri Jun 27 2025 7:54:14 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/stripe/create-connected-account 400 - 714.851 ms

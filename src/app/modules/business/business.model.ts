@@ -1,4 +1,6 @@
-const mongoose = require('mongoose');
+import mongoose, { model } from "mongoose";
+import { IBusiness } from "./business.interface";
+
 const Schema = mongoose.Schema;
 
 const TimeSlotSchema = new Schema({
@@ -26,41 +28,25 @@ const BusinessSchema = new Schema({
         type: { type: String, enum: ['Point'], required: true },
         coordinates: { type: [Number], required: true, index: '2dsphere' }, // [longitude, latitude]
     },
-    businessHours: {
-        monday: {
-            type: [TimeSlotSchema], // An array of TimeSlotSchema documents
-            default: [] // Default to an empty array if no hours are specified for the day (meaning closed)
-        },
-        tuesday: {
-            type: [TimeSlotSchema],
-            default: []
-        },
-        wednesday: {
-            type: [TimeSlotSchema],
-            default: []
-        },
-        thursday: {
-            type: [TimeSlotSchema],
-            default: []
-        },
-        friday: {
-            type: [TimeSlotSchema],
-            default: []
-        },
-        saturday: {
-            type: [TimeSlotSchema],
-            default: []
-        },
-        sunday: {
-            type: [TimeSlotSchema],
-            default: []
-        }
+    working_hours: { type: [{ day: String, start: String, end: String }, { _id: false }], required: false },
+    reviews: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Review'
+    }],
+    totalReviews: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+    avg_rating: {
+        type: Number,
+        default: 0,
+        min: 0,
+        max: 5
     },
     isDeleted: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
     isVerified: { type: Boolean, default: false },
 });
 
-const Business = mongoose.model('Business', BusinessSchema);
-
-module.exports = Business;
+export const Business = model<IBusiness>("Business", BusinessSchema);

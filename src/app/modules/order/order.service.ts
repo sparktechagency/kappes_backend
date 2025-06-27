@@ -21,238 +21,6 @@ import { DEFAULT_SHOP_REVENUE } from "../shop/shop.enum";
 import config from "../../../config";
 import stripe from "../../config/stripe.config";
 
-// const createOrder = async (
-//     orderData: Partial<IOrder>,
-//     user: IJwtPayload
-// ) => {
-//     const session = await mongoose.startSession();
-//     session.startTransaction();
-
-//     try {
-//         const thisCustomer = await User.findById(user.id);
-//         if (!thisCustomer || !thisCustomer.stripeCustomerId) {
-//             throw new AppError(StatusCodes.NOT_FOUND, 'User or Stripe Customer ID not found');
-//         }
-//         if (orderData.products) {
-//             for (const item of orderData.products) {
-//                 // Validate product and variant
-//                 const [isExistProduct, isExistVariant] = await Promise.all([
-//                     Product.findOne({ _id: item.product, shopId: orderData.shop }).session(session),
-//                     Variant.findById(item.variant).session(session)
-//                 ]);
-
-//                 if (!isExistProduct) {
-//                     throw new AppError(StatusCodes.NOT_FOUND, `Product not found with ID: ${item.product}`);
-//                 }
-
-//                 if (!isExistVariant) {
-//                     throw new AppError(StatusCodes.NOT_FOUND, `Variant not found with ID: ${item.variant}`);
-//                 }
-
-//                 // check if ths vairant is in the product.product_variant_Details array if present then check variantQuantity of that item in product.product_variant_Details array
-//                 const variantIndex = isExistProduct.product_variant_Details.findIndex(
-//                     itm => itm.variantId.toString() === item.variant.toString()
-//                 );
-
-//                 if (variantIndex === -1) {
-//                     throw new AppError(StatusCodes.NOT_FOUND, `Variant not found in product with ID: ${item.product}`);
-//                 }
-
-//                 if (isExistProduct.product_variant_Details[variantIndex].variantQuantity < item.quantity) {
-//                     throw new AppError(StatusCodes.BAD_REQUEST, `Variant quantity is not available in product with ID: ${item.product}`);
-//                 }
-
-//                 // set the variantPrice in the order products
-//                 orderData.products[variantIndex].unitPrice = isExistProduct.product_variant_Details[variantIndex].variantPrice;
-
-//                 isExistProduct.product_variant_Details[variantIndex].variantQuantity -= item.quantity;
-//                 await isExistProduct.save({ session });
-//             }
-
-//             console.log({ orderData: orderData.products });
-//         }
-
-//         // Handle coupon and update orderData
-//         if (orderData.coupon) {
-//             const coupon = await Coupon.findOne({ code: orderData.coupon }).session(
-//                 session
-//             );
-//             if (coupon) {
-//                 const currentDate = new Date();
-
-//                 // Check if the coupon is within the valid date range
-//                 if (currentDate < coupon.startDate) {
-//                     throw new Error(`Coupon ${coupon.code} has not started yet.`);
-//                 }
-
-//                 if (currentDate > coupon.endDate) {
-//                     throw new Error(`Coupon ${coupon.code} has expired.`);
-//                 }
-
-//                 orderData.coupon = coupon._id as Types.ObjectId;
-//             } else {
-//                 throw new Error("Invalid coupon code.");
-//             }
-//         }
-
-//         // Create the order
-//         const order = new Order({
-//             ...orderData, // products,coupon,shippingAddress,paymentMethod,user,shop
-//             user: user.id,
-//         });
-
-//         await order.validate();
-//         console.log(order);
-//         let createdOrder;
-//         if (orderData.paymentMethod === PAYMENT_METHOD.COD) {
-//             createdOrder = await order.save({ session });
-//             await createdOrder.populate("user products.product");
-
-//             const transactionId = generateTransactionId();
-
-//             const payment = new Payment({
-//                 user: user.id,
-//                 shop: createdOrder.shop,
-//                 order: createdOrder._id,
-//                 method: orderData.paymentMethod,
-//                 transactionId,
-//                 amount: createdOrder.finalAmount,
-//             });
-
-//             await payment.save({ session });
-
-
-//             // Commit the transaction
-//             await session.commitTransaction();
-//             session.endSession();
-
-
-//             // // invoice generationand mail sending and notificationing
-//             // const pdfBuffer = await generateOrderInvoicePDF(createdOrder);
-//             // const emailContent = await emailHelper.createEmailContent(
-//             //     //@ts-ignore
-//             //     { userName: createdOrder.user.name || "" },
-//             //     "orderInvoice"
-//             // );
-
-//             // const attachment = {
-//             //     filename: `Invoice_${createdOrder._id}.pdf`,
-//             //     content: pdfBuffer,
-//             //     encoding: "base64", // if necessary
-//             // };
-
-//             // await emailHelper.sendEmail(
-//             //     //@ts-ignore
-//             //     createdOrder.user.email,
-//             //     emailContent,
-//             //     "Order confirmed!",
-//             //     attachment
-//         }
-
-//         let result;
-
-//         if (orderData.paymentMethod !== PAYMENT_METHOD.COD) {
-//             // need to implement the stripe here if payment method is online/card
-//             // need to hanlde the stripe like (shop এর যে revenue আছে সেই হিসেবে কিছু টাকা যাবে super admin এর কাছে আর বাকী টাকা যাবে shop owner এর কাছে)
-
-//             let stripeCustomerId = thisCustomer?.stripeCustomerId;
-//             const stripeCustomer = await stripe.customers.retrieve(stripeCustomerId);
-
-
-
-//             try {
-//                 const session = await stripe.checkout.sessions.create({
-//                     mode: 'payment',
-//                     customer: stripeCustomer.id,
-//                     line_items: [
-//                         {
-//                             price_data: {
-//                                 currency: 'usd',
-//                                 product_data: {
-//                                     name: 'Amount',
-//                                 },
-//                                 unit_amount: orderData.finalAmount! * 100,
-//                             },
-//                             quantity: 1,
-//                         },
-//                     ],
-//                     metadata: {
-//                         products: orderData.products,
-//                         coupon: orderData.coupon || null,
-//                         shippingAddress: orderData.shippingAddress,
-//                         paymentMethod: orderData.paymentMethod,
-//                         user: user.id,
-//                         shop: orderData.shop,
-//                         amount: order.finalAmount,
-//                         // extra field for payments gatewayResponse,transactionId,status,order
-//                     },
-//                     success_url: config.stripe.success_url,
-//                     cancel_url: config.stripe.cancel_url,
-//                 });
-//                 console.log({
-//                     url: session.url,
-//                 });
-//                 return {
-//                     url: session.url,
-//                 };
-//             } catch (error) {
-//                 console.log(error);
-//             }
-
-
-
-
-
-//             // const shop = await Shop.findById(orderData.shop);
-//             // const superAdmin = await User.findOne({ role: USER_ROLES.SUPER_ADMIN });
-//             // const shopOwner = await User.findById(shop?.owner);
-//             // if (!superAdmin || !shopOwner) {
-//             //     throw new AppError(StatusCodes.BAD_REQUEST, "Super admin or shop owner not found!");
-//             // }
-//             // const shopRevenue = shop?.revenue || DEFAULT_SHOP_REVENUE;
-//             // const superAdminRevenue = createdOrder.finalAmount * (shopRevenue / 100);
-//             // const shopOwnerRevenue = createdOrder.finalAmount - superAdminRevenue;
-//             // await User.findByIdAndUpdate(superAdmin._id, { balance: superAdmin.balance + superAdminRevenue });
-//             // await User.findByIdAndUpdate(shopOwner._id, { balance: shopOwner.balance + shopOwnerRevenue });
-
-//         } else {
-//             result = order;
-//         }
-
-//         // Commit the transaction
-//         await session.commitTransaction();
-//         session.endSession();
-
-//         // invoice generationand mail sending
-//         // const pdfBuffer = await generateOrderInvoicePDF(createdOrder);
-//         // const emailContent = await emailHelper.createEmailContent(
-//         //     //@ts-ignore
-//         //     { userName: createdOrder.user.name || "" },
-//         //     "orderInvoice"
-//         // );
-
-//         // const attachment = {
-//         //     filename: `Invoice_${createdOrder._id}.pdf`,
-//         //     content: pdfBuffer,
-//         //     encoding: "base64", // if necessary
-//         // };
-
-//         // await emailHelper.sendEmail(
-//         //     //@ts-ignore
-//         //     createdOrder.user.email,
-//         //     emailContent,
-//         //     "Order confirmed!",
-//         //     attachment
-//         // );
-//         return result;
-//     } catch (error) {
-//         console.log(error);
-//         // Rollback the transaction in case of error
-//         await session.abortTransaction();
-//         session.endSession();
-//         throw error;
-//     }
-// };
 
 const createOrder = async (
     orderData: Partial<IOrder>,
@@ -350,6 +118,13 @@ const createOrder = async (
 
             await payment.save();
 
+            // increase the purchase count of the all the proudcts use operatros
+            const updatePurchaseCount = await Product.updateMany(
+                { _id: { $in: createdOrder.products.map((item) => item.product) } },
+                { $inc: { purchaseCount: 1 } }
+            );
+            console.log(updatePurchaseCount);    
+
             // Proceed with generating invoice, sending email, etc.
             // Commit logic is not required anymore as no session is being used
 
@@ -364,7 +139,7 @@ const createOrder = async (
             });
             // findbyid and update the user
             await User.findByIdAndUpdate(thisCustomer?.id, { $set: { stripeCustomerId: stripeCustomer.id } });
-            const stripeSessionData:any = {
+            const stripeSessionData: any = {
                 payment_method_types: ['card'],
                 mode: 'payment',
                 customer: stripeCustomer.id,

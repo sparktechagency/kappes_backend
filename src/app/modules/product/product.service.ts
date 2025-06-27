@@ -191,6 +191,18 @@ const getProductById = async (id: string) => {
         throw new AppError(StatusCodes.NOT_FOUND, 'Product not found');
     }
 
+    // increase the product view count
+    product.viewCount += 1;
+    await product.save();
+
+    // increaset he ctgViewCount of the category
+    const category = await Category.findById(product.categoryId);
+    if (category) {
+        category.ctgViewCount += 1;
+        await category.save();
+    }
+
+
     return product;
 };
 

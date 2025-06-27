@@ -4,11 +4,12 @@ import sendResponse from "../../../shared/sendResponse";
 import stripe from "../../config/stripe.config";
 import { stripeAccountService } from "./stripeAccount.service";
 import { StripeAccount } from "./stripeAccount.model";
+import { IJwtPayload } from "../auth/auth.interface";
 
 
 const createStripeAccount = catchAsync(async (req: Request, res: Response) => {
   const result = await stripeAccountService.createStripeAccount(
-    req.user,
+    req.user as IJwtPayload,
     req.get('host') || '',
     req.protocol,
   );
@@ -78,8 +79,16 @@ const refreshAccountConnect = catchAsync(async (req: Request, res: Response) => 
   res.redirect(url);
 });
 
+const onConnectedStripeAccountSuccess = catchAsync(async (req: Request, res: Response) => {
+  const result = await stripeAccountService.onConnectedStripeAccountSuccess(
+    req.params.accountId,
+  );
+  res.send(result);
+});
+
 export const stripeAccountController = {
   createStripeAccount,
   successPageAccount,
   refreshAccountConnect,
+  onConnectedStripeAccountSuccess
 };
