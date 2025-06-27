@@ -1,8 +1,0 @@
-Thu Jun 26 2025 14:9:44 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/payment/success 404 - 29.122 ms
-Thu Jun 26 2025 14:9:44 [SERVER-NAME] error: 10.0.60.110 - GET /favicon.ico 404 - 0.943 ms
-Thu Jun 26 2025 14:41:28 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/stripe/create-connected-account 403 - 85.470 ms
-Thu Jun 26 2025 14:41:59 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/stripe/create-connected-account 400 - 934.189 ms
-Thu Jun 26 2025 14:44:51 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/stripe/create-connected-account 400 - 666.328 ms
-Thu Jun 26 2025 14:46:34 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/stripe/create-connected-account 400 - 1345.087 ms
-Thu Jun 26 2025 14:46:47 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/stripe/create-connected-account 400 - 505.639 ms
-Thu Jun 26 2025 14:50:50 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/stripe/create-connected-account 400 - 873.003 ms

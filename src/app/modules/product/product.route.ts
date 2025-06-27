@@ -80,7 +80,7 @@ router.delete('/:id',
 );
 
 
-// Update product (only vendor who owns the product)
+// Update product if 'payload.product_variant_Details' is provided must be include all old varinat info otherwise it will be replaced
 router.patch('/:id',
     auth(USER_ROLES.VENDOR, USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), fileUploadHandler(), (req: Request, res: Response, next: NextFunction) => {
         try {

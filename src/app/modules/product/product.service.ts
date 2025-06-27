@@ -209,147 +209,7 @@ const getProductById = async (id: string) => {
 };
 
 
-
-// const updateProduct = async (id: string, payload: Partial<IProduct | ICreateProductRequest | any>, user: IJwtPayload) => {
-
-//     /**
-//      * যদি payload এ product_variant_Details কিংবা images না include করা থাকে তাহলে সিমপ্লি product আপডেট হবে।
-//      * যদি payload এ images include করা থাকে তাহলে শুধুমাত্র req.files এর মাধ্যমে পাঠানো images দিয়ে product আপডেট হবে।
-//      * যদি payload এ product_variant_Details include করা থাকে তাহলে কয়েক step এ আপডেট হবে,
-//      * 1. যদি payload.product_variant_Details এ variantId থাকে তাহলে একরকম (i)
-//      * 2. যদি payload.product_variant_Details এ variantField থাকে তাহলে একরকম (ii)
-//      *  (i) এর জন্য যদি variantId exist করে product.product_variant_Details+Variant Model তাহলে শুদু পাঠানো variantQuantity+variantPrice এ সেটা আপডেট করবো আর exist না করলে eror throw করব
-//      *  (ii) এর জন্য যদি variantField গুলো দিয়ে আগে slug বানাবো আর তারপরে getVariantBySlug করে যদি কোন variant পাই তাহলে আবারো product.product_variant_Details এ check করব সেটা existed কিনা যদি থাকে তাহলে শুদু পাঠানো variantQuantity+variantPrice এ সেটা আপডেট করবো আর না থাকলে নতুন variant create করব আর তারপরে payload.product_variant_Details এ পাঠানো variantQuantity+variantPrice দিয়ে product.product_variant_Details এ add করে product আপডেট করব
-//      */
-//     // Get existing product with shop owner and admins populated
-//     const product = await Product.findById(id).populate('shopId', 'owner admins').populate('categoryId', 'name').populate('subcategoryId', 'name');
-//     if (!product) {
-//         throw new AppError(StatusCodes.NOT_FOUND, 'Product not found');
-//     }
-
-//     const shop = await Shop.findById(product.shopId);
-//     if (!shop) {
-//         throw new AppError(StatusCodes.NOT_FOUND, 'Shop not found');
-//     }
-
-//     // Check if user has permission to update the product
-//     if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
-//         if (shop.owner.toString() !== user.id && !shop.admins?.some(admin => admin.toString() === user.id)) {
-//             throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to update this product');
-//         }
-//     }
-
-//     // Handle variant updates if payload contains product_variant_Details
-//     if (payload.product_variant_Details && Array.isArray(payload.product_variant_Details)) {
-//         const variantsToUpdate: IProductSingleVariant[] = [];
-//         let totalStock = 0;
-
-//         for (const variant of payload.product_variant_Details) {
-//             // Case (i): If variantId is provided
-//             const isVariantId = 'variantID' in variant;
-//             if (isVariantId) {
-//                 // Check if variant exists in the product
-//                 const existingVariant = product.product_variant_Details.find(
-//                     v => v.variantId.toString() === variant.variantId.toString()
-//                 );
-
-//                 if (!existingVariant) {
-//                     throw new AppError(StatusCodes.BAD_REQUEST, `Variant with ID ${variant.variantId} not found in product`);
-//                 }
-
-//                 // Update existing variant
-//                 existingVariant.variantQuantity = variant.variantQuantity;
-//                 existingVariant.variantPrice = variant.variantPrice;
-//                 variantsToUpdate.push(existingVariant);
-//                 totalStock += variant.variantQuantity;
-//             }
-//             // Case (ii): If variant fields are provided
-//             else if (isVariantId === false) {
-//                 // Create slug from variant fields
-//                 const variantFields = { ...variant };
-//                 // delete variantFields.variantQuantity;
-//                 // delete variantFields.variantPrice;
-
-//                 // Create a new Variant if variantId is not provided
-//                 const newVariant = new Variant({
-//                     ...variant,
-//                     createdBy: user.id,
-//                     categoryId: product.categoryId,
-//                     subCategoryId: product.subcategoryId,
-//                 });
-
-//                 const slug = generateSlug(
-//                     product.categoryId.name,
-//                     product.subcategoryId.name,
-//                     variant as IProductSingleVariantByFieldName
-//                 );
-
-
-//                 // Find variant by slug
-//                 let foundVariant = await Variant.findOne({ slug }) as IVariant;
-
-//                 if (!foundVariant) {
-//                     newVariant.slug = slug;
-//                     foundVariant = await newVariant.save();
-//                 }
-
-//                 // Check if variant already exists in product
-//                 const existingVariantInProductIndex = product.product_variant_Details.findIndex(
-//                     v => v.variantId.toString() === foundVariant._id!.toString()
-//                 );
-
-//                 if (existingVariantInProductIndex !== -1) {
-//                     // Update existing variant
-//                     product.product_variant_Details[existingVariantInProductIndex].variantQuantity = variant.variantQuantity;
-//                     product.product_variant_Details[existingVariantInProductIndex].variantPrice = variant.variantPrice;
-//                     variantsToUpdate.push(product.product_variant_Details[existingVariantInProductIndex]);
-//                 } else {
-//                     // Add new variant
-//                     const newVariant: IProductSingleVariant = {
-//                         variantId: foundVariant._id as unknown as ObjectId,
-//                         variantQuantity: variant.variantQuantity,
-//                         variantPrice: variant.variantPrice
-//                     };
-//                     variantsToUpdate.push(newVariant);
-//                 }
-//                 totalStock += variant.variantQuantity;
-//             }
-//         }
-
-//         // Update product's variant details and total stock
-//         product.product_variant_Details = variantsToUpdate;
-//         payload.totalStock = totalStock;
-//     }
-
-//     // Update product by sunig save
-//     // const updatedProduct = await product.save();
-
-
-//     // Update product
-//     const updatedProduct = await Product.findByIdAndUpdate(
-//         id,
-//         {
-//             ...payload,
-//             ...(payload.product_variant_Details && {
-//                 product_variant_Details: product.product_variant_Details
-//             })
-//         },
-//         { new: true }
-//     ).populate('product_variant_Details.variantId');
-
-//     if (!updatedProduct) {
-//         throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to update product');
-//     }
-
-//     // Handle image cleanup if product was not updated successfully
-//     if (payload.images && !updatedProduct) {
-//         payload.images.forEach((image: any) => unlinkFile(image));
-//     }
-
-//     return updatedProduct;
-// };
-
-
+/* v1 */
 const updateProduct = async (
     id: string,
     payload: Partial<IProduct | ICreateProductRequest | any>,
@@ -382,57 +242,82 @@ const updateProduct = async (
         let totalStock = 0;
 
         for (const variant of payload.product_variant_Details) {
-            // Check if variant has variant fields and create the slug
-            const variantFields = { ...variant };
-            const slug = generateSlug(
-                product.categoryId.name,
-                product.subcategoryId.name,
-                variant as IProductSingleVariantByFieldName
-            );
+            // Case (i): If variantId is provided
+            const isVariantId = 'variantId' in variant;
 
-            // Find variant by slug
-            let foundVariant = await Variant.findOne({ slug }) as IVariant;
+            if (isVariantId) {
+                // Check if variant exists in the product
+                const existingVariant = product.product_variant_Details.find(
+                    v => v.variantId.toString() === variant.variantId.toString()
+                );
 
-            if (!foundVariant) {
-                // If variant doesn't exist, create a new variant
-                const newVariant = new Variant({
-                    ...variant,
-                    createdBy: user.id,
-                    categoryId: product.categoryId,
-                    subCategoryId: product.subcategoryId,
-                    slug,
-                });
+                if (!existingVariant) {
+                    throw new AppError(StatusCodes.BAD_REQUEST, `Variant with ID ${variant.variantId} not found in product`);
+                }
 
-                foundVariant = await newVariant.save();
+                // Update existing variant
+                existingVariant.variantQuantity = variant.variantQuantity;
+                existingVariant.variantPrice = variant.variantPrice;
+                variantsToUpdate.push(existingVariant);
+                totalStock += variant.variantQuantity;
             }
+            // Case (ii): If variant fields are provided (without variantId)
+            else {
+                // Create slug from variant fields
+                const variantFields = { ...variant };
+                const slug = generateSlug(
+                    product.categoryId.name,
+                    product.subcategoryId.name,
+                    variant as IProductSingleVariantByFieldName
+                );
 
-            // Check if the variant already exists in the product's variants array
-            const existingVariantIndex = product.product_variant_Details.findIndex(
-                v => v.variantId.toString() === foundVariant._id!.toString()
-            );
+                // Find variant by slug
+                let foundVariant = await Variant.findOne({ slug }) as IVariant;
 
-            if (existingVariantIndex !== -1) {
-                // If the variant exists, only update the quantity and price
-                product.product_variant_Details[existingVariantIndex].variantQuantity = variant.variantQuantity;
-                product.product_variant_Details[existingVariantIndex].variantPrice = variant.variantPrice;
-                variantsToUpdate.push(product.product_variant_Details[existingVariantIndex]);
-            } else {
-                // If the variant doesn't exist, add the new variant
-                const newVariantData: IProductSingleVariant = {
-                    variantId: foundVariant._id as unknown as ObjectId,
-                    variantQuantity: variant.variantQuantity,
-                    variantPrice: variant.variantPrice
-                };
-                variantsToUpdate.push(newVariantData);
+                if (!foundVariant) {
+                    // If variant doesn't exist, create a new variant
+                    const newVariant = new Variant({
+                        ...variant,
+                        createdBy: user.id,
+                        categoryId: product.categoryId,
+                        subCategoryId: product.subcategoryId,
+                        slug,
+                    });
+
+                    foundVariant = await newVariant.save();
+                }
+
+                // Check if the variant already exists in the product's variants array
+                const existingVariantIndex = product.product_variant_Details.findIndex(
+                    v => v.variantId.toString() === foundVariant._id!.toString()
+                );
+
+                if (existingVariantIndex !== -1) {
+                    // If the variant exists, only update the quantity and price
+                    product.product_variant_Details[existingVariantIndex].variantQuantity = variant.variantQuantity;
+                    product.product_variant_Details[existingVariantIndex].variantPrice = variant.variantPrice;
+                    variantsToUpdate.push(product.product_variant_Details[existingVariantIndex]);
+                } else {
+                    // If the variant doesn't exist, add the new variant
+                    const newVariantData: IProductSingleVariant = {
+                        variantId: foundVariant._id as unknown as ObjectId,
+                        variantQuantity: variant.variantQuantity,
+                        variantPrice: variant.variantPrice
+                    };
+                    variantsToUpdate.push(newVariantData);
+                }
+                totalStock += variant.variantQuantity;
             }
-
-            totalStock += variant.variantQuantity;
         }
 
         // Update product's variant details and total stock
         product.product_variant_Details = variantsToUpdate;
-        console.log(product.product_variant_Details);
         payload.totalStock = totalStock;
+    }
+
+    // Handle image updates if images are provided in the payload
+    if (payload.images) {
+        product.images = payload.images;
     }
 
     // Update the product in the database
@@ -446,7 +331,7 @@ const updateProduct = async (
         },
         { new: true }
     )
-        .populate('product_variant_Details.variantId');
+    // .populate('product_variant_Details.variantId');
 
     if (!updatedProduct) {
         throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to update product');
@@ -459,6 +344,9 @@ const updateProduct = async (
 
     return updatedProduct;
 };
+
+
+
 
 
 const deleteProduct = async (id: string, user: IJwtPayload) => {
