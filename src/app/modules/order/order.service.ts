@@ -22,76 +22,247 @@ import config from '../../../config';
 import stripe from '../../config/stripe.config';
 import { sendNotifications } from '../../../helpers/notificationsHelper';
 
+// const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
+//      try {
+//           const thisCustomer = await User.findById(user.id);
+//           if (!thisCustomer || !thisCustomer.stripeCustomerId) {
+//                throw new AppError(StatusCodes.NOT_FOUND, 'User or Stripe Customer ID not found');
+//           }
+
+//           if (orderData.products) {
+//                for (const item of orderData.products) {
+//                     // Validate product and variant
+//                     const [isExistProduct, isExistVariant] = await Promise.all([Product.findOne({ _id: item.product, shopId: orderData.shop }), Variant.findById(item.variant)]);
+
+//                     if (!isExistProduct) {
+//                          throw new AppError(StatusCodes.NOT_FOUND, `Product not found with ID: ${item.product} | products must be from the same shop`);
+//                     }
+
+//                     if (!isExistVariant) {
+//                          throw new AppError(StatusCodes.NOT_FOUND, `Variant not found with ID: ${item.variant}`);
+//                     }
+
+//                     // Check if the variant exists in the product's variants array and validate quantity
+//                     const variantIndex = isExistProduct.product_variant_Details.findIndex((itm) => itm.variantId.toString() === item.variant.toString());
+
+//                     if (variantIndex === -1) {
+//                          throw new AppError(StatusCodes.NOT_FOUND, `Variant not found in product with ID: ${item.product}`);
+//                     }
+
+//                     if (isExistProduct.product_variant_Details[variantIndex].variantQuantity < item.quantity) {
+//                          throw new AppError(StatusCodes.BAD_REQUEST, `Variant quantity is not available in product with ID: ${item.product}`);
+//                     }
+
+//                     // Set the unit price for the order item
+//                     item.unitPrice = isExistProduct.product_variant_Details[variantIndex].variantPrice;
+//                     // Decrease the product's variant quantity
+//                     isExistProduct.product_variant_Details[variantIndex].variantQuantity -= item.quantity;
+//                     await isExistProduct.save(); // No session required here anymore
+//                }
+//           }
+
+//           // Handle coupon and update orderData
+//           if (orderData.coupon) {
+//                const coupon = await Coupon.findOne({ code: orderData.coupon, shopId: orderData.shop });
+//                if (coupon) {
+//                     const currentDate = new Date();
+
+//                     // Check if the coupon is within the valid date range
+//                     if (currentDate < coupon.startDate) {
+//                          throw new Error(`Coupon ${coupon.code} has not started yet.`);
+//                     }
+
+//                     if (currentDate > coupon.endDate) {
+//                          throw new Error(`Coupon ${coupon.code} has expired.`);
+//                     }
+
+//                     orderData.coupon = coupon._id as Types.ObjectId;
+//                } else {
+//                     throw new Error('Invalid coupon code. and coupon is not available for this shop');
+//                }
+//           }
+
+//           // Create the order
+//           const order = new Order({
+//                ...orderData,
+//                user: user.id,
+//           });
+
+//           // Validate the order data
+//           await order.validate();
+
+//           let createdOrder;
+//           if (orderData.paymentMethod === PAYMENT_METHOD.COD) {
+//                createdOrder = await order.save();
+
+//                const transactionId = generateTransactionId();
+
+//                const payment = new Payment({
+//                     user: user.id,
+//                     shop: createdOrder.shop,
+//                     order: createdOrder._id,
+//                     method: orderData.paymentMethod,
+//                     transactionId,
+//                     amount: createdOrder.finalAmount,
+//                });
+
+//                await payment.save();
+
+//                // increase the purchase count of the all the proudcts use operatros
+//                const updatePurchaseCount = await Product.updateMany({ _id: { $in: createdOrder.products.map((item) => item.product) } }, { $inc: { purchaseCount: 1 } });
+//                console.log(updatePurchaseCount);
+
+//                // send email to user, notification to shop woner or admins socket
+//                /** rabby
+//                 * find shop
+//                 * make array for specific this shop's owner and admins
+//                 * send notification to them using socket
+//                 *
+//                 * send email to user if poosible send order invoice pdf
+//                 */
+//                // 🏪 Find shop
+//                const shop = await Shop.findById(createdOrder.shop).populate('owners admins');
+
+//                // 👥 Prepare receivers array (owner + admins)
+//                const receivers = [...(shop?.owner || []), ...(shop?.admins || [])].map((user: any) => user._id.toString());
+
+//                // 📢 Send notifications to shop owners/admins
+//                for (const receiverId of receivers) {
+//                     await sendNotifications({
+//                          receiver: receiverId,
+//                          type: 'order',
+//                          text: `New order placed by ${thisCustomer?.full_name}.`,
+//                          order: createdOrder,
+//                     });
+//                }
+
+//                // 📧 Send email to user (PDF invoice support can be added later)
+//                await emailHelper.sendEmail({
+//                     to: thisCustomer?.email,
+//                     subject: 'Order Confirmation',
+//                     html: `<h3>Hello ${thisCustomer?.full_name},</h3>
+//          <p>Thanks for placing your order. Your order ID is <b>${createdOrder._id}</b>.</p>
+//          <p>We'll update you once it's on the way.</p>`,
+//                });
+//           }
+
+//           let result;
+
+//           if (orderData.paymentMethod !== PAYMENT_METHOD.COD) {
+//                let stripeCustomer = await stripe.customers.create({
+//                     name: thisCustomer?.full_name,
+//                     email: thisCustomer?.email,
+//                });
+//                // findbyid and update the user
+//                await User.findByIdAndUpdate(thisCustomer?.id, { $set: { stripeCustomerId: stripeCustomer.id } });
+//                const stripeSessionData: any = {
+//                     payment_method_types: ['card'],
+//                     mode: 'payment',
+//                     customer: stripeCustomer.id,
+//                     line_items: [
+//                          {
+//                               price_data: {
+//                                    currency: 'usd',
+//                                    product_data: {
+//                                         name: 'Amount',
+//                                    },
+//                                    unit_amount: order.finalAmount! * 100, // Convert to cents
+//                               },
+//                               quantity: 1,
+//                          },
+//                     ],
+//                     metadata: {
+//                          products: JSON.stringify(orderData.products), // only array are allowed TO PASS as metadata
+//                          coupon: orderData.coupon?.toString(),
+//                          shippingAddress: orderData.shippingAddress,
+//                          paymentMethod: orderData.paymentMethod,
+//                          user: user.id,
+//                          shop: orderData.shop,
+//                          amount: order.finalAmount,
+//                     },
+//                     success_url: config.stripe.success_url,
+//                     cancel_url: config.stripe.cancel_url,
+//                };
+//                try {
+//                     const session = await stripe.checkout.sessions.create(stripeSessionData);
+//                     console.log({
+//                          url: session.url,
+//                     });
+//                     result = { url: session.url };
+//                } catch (error) {
+//                     console.log({ error });
+//                }
+//           } else {
+//                result = order;
+//           }
+
+//           // No transaction commit needed anymore
+//           // ✅ Send Notification to User
+//           await sendNotifications({
+//                receiver: user.id,
+//                // order,
+//                result,
+//                text: 'Your order has been placed successfully!',
+//                type: 'order',
+//           });
+//           return result;
+//      } catch (error) {
+//           console.log(error);
+//           // Handle any errors without a session rollback
+//           throw error;
+//      }
+// };
+
 const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
      try {
           const thisCustomer = await User.findById(user.id);
-          if (!thisCustomer || !thisCustomer.stripeCustomerId) {
-               throw new AppError(StatusCodes.NOT_FOUND, 'User or Stripe Customer ID not found');
+          if (!thisCustomer) {
+               throw new AppError(StatusCodes.NOT_FOUND, 'User not found');
           }
 
           if (orderData.products) {
                for (const item of orderData.products) {
-                    // Validate product and variant
                     const [isExistProduct, isExistVariant] = await Promise.all([Product.findOne({ _id: item.product, shopId: orderData.shop }), Variant.findById(item.variant)]);
 
-                    if (!isExistProduct) {
-                         throw new AppError(StatusCodes.NOT_FOUND, `Product not found with ID: ${item.product} | products must be from the same shop`);
+                    if (!isExistProduct || !isExistVariant) {
+                         throw new AppError(StatusCodes.NOT_FOUND, `Invalid product or variant`);
                     }
 
-                    if (!isExistVariant) {
-                         throw new AppError(StatusCodes.NOT_FOUND, `Variant not found with ID: ${item.variant}`);
-                    }
-
-                    // Check if the variant exists in the product's variants array and validate quantity
                     const variantIndex = isExistProduct.product_variant_Details.findIndex((itm) => itm.variantId.toString() === item.variant.toString());
 
-                    if (variantIndex === -1) {
-                         throw new AppError(StatusCodes.NOT_FOUND, `Variant not found in product with ID: ${item.product}`);
+                    if (variantIndex === -1 || isExistProduct.product_variant_Details[variantIndex].variantQuantity < item.quantity) {
+                         throw new AppError(StatusCodes.BAD_REQUEST, `Insufficient quantity for variant`);
                     }
 
-                    if (isExistProduct.product_variant_Details[variantIndex].variantQuantity < item.quantity) {
-                         throw new AppError(StatusCodes.BAD_REQUEST, `Variant quantity is not available in product with ID: ${item.product}`);
-                    }
-
-                    // Set the unit price for the order item
                     item.unitPrice = isExistProduct.product_variant_Details[variantIndex].variantPrice;
-                    // Decrease the product's variant quantity
                     isExistProduct.product_variant_Details[variantIndex].variantQuantity -= item.quantity;
-                    await isExistProduct.save(); // No session required here anymore
+                    await isExistProduct.save();
                }
           }
 
-          // Handle coupon and update orderData
           if (orderData.coupon) {
                const coupon = await Coupon.findOne({ code: orderData.coupon, shopId: orderData.shop });
-               if (coupon) {
-                    const currentDate = new Date();
-
-                    // Check if the coupon is within the valid date range
-                    if (currentDate < coupon.startDate) {
-                         throw new Error(`Coupon ${coupon.code} has not started yet.`);
-                    }
-
-                    if (currentDate > coupon.endDate) {
-                         throw new Error(`Coupon ${coupon.code} has expired.`);
-                    }
-
-                    orderData.coupon = coupon._id as Types.ObjectId;
-               } else {
-                    throw new Error('Invalid coupon code. and coupon is not available for this shop');
+               if (!coupon) {
+                    throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid coupon');
                }
+
+               const now = new Date();
+               if (now < coupon.startDate || now > coupon.endDate) {
+                    throw new AppError(StatusCodes.BAD_REQUEST, 'Coupon expired or not active');
+               }
+
+               orderData.coupon = coupon._id as Types.ObjectId;
           }
 
-          // Create the order
           const order = new Order({
                ...orderData,
                user: user.id,
           });
 
-          // Validate the order data
           await order.validate();
 
           let createdOrder;
+
           if (orderData.paymentMethod === PAYMENT_METHOD.COD) {
                createdOrder = await order.save();
 
@@ -108,47 +279,65 @@ const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
 
                await payment.save();
 
-               // increase the purchase count of the all the proudcts use operatros
-               const updatePurchaseCount = await Product.updateMany({ _id: { $in: createdOrder.products.map((item) => item.product) } }, { $inc: { purchaseCount: 1 } });
-               console.log(updatePurchaseCount);
+               await Product.updateMany({ _id: { $in: createdOrder.products.map((item) => item.product) } }, { $inc: { purchaseCount: 1 } });
 
-               // send email to user, notification to shop woner or admins socket
-               /** rabby
-                * find shop
-                * make array for specific this shop's owner and admins
-                * send notification to them using socket
-                *
-                * send email to user if poosible send order invoice pdf
-                */
+               const shop = await Shop.findById(createdOrder.shop).populate('owners admins');
+
+               const receivers = [...(shop?.owner || []), ...(shop?.admins || [])].map((u: any) => u._id.toString());
+
+               for (const receiverId of receivers) {
+                    await sendNotifications({
+                         receiver: receiverId,
+                         type: 'order',
+                         text: `New order placed by ${thisCustomer?.full_name}.`,
+                         order: createdOrder,
+                    });
+               }
+
+               await emailHelper.sendEmail({
+                    to: thisCustomer.email,
+                    subject: 'Order Confirmation',
+                    html: `<h3>Hello ${thisCustomer.full_name},</h3>
+                           <p>Your order ID is <b>${createdOrder._id}</b>.</p>
+                           <p>Thanks for shopping with us!</p>`,
+               });
           }
 
           let result;
 
           if (orderData.paymentMethod !== PAYMENT_METHOD.COD) {
-               let stripeCustomer = await stripe.customers.create({
-                    name: thisCustomer?.full_name,
-                    email: thisCustomer?.email,
-               });
-               // findbyid and update the user
-               await User.findByIdAndUpdate(thisCustomer?.id, { $set: { stripeCustomerId: stripeCustomer.id } });
-               const stripeSessionData: any = {
+               let stripeCustomer = thisCustomer.stripeCustomerId;
+
+               if (!stripeCustomer) {
+                    const newStripeCustomer = await stripe.customers.create({
+                         name: thisCustomer.full_name,
+                         email: thisCustomer.email,
+                    });
+                    stripeCustomer = newStripeCustomer.id;
+
+                    await User.findByIdAndUpdate(user.id, {
+                         $set: { stripeCustomerId: stripeCustomer },
+                    });
+               }
+
+               const stripeSession = await stripe.checkout.sessions.create({
                     payment_method_types: ['card'],
                     mode: 'payment',
-                    customer: stripeCustomer.id,
+                    customer: stripeCustomer,
                     line_items: [
                          {
                               price_data: {
                                    currency: 'usd',
                                    product_data: {
-                                        name: 'Amount',
+                                        name: 'Order Payment',
                                    },
-                                   unit_amount: order.finalAmount! * 100, // Convert to cents
+                                   unit_amount: order.finalAmount! * 100,
                               },
                               quantity: 1,
                          },
                     ],
                     metadata: {
-                         products: JSON.stringify(orderData.products), // only array are allowed TO PASS as metadata
+                         products: JSON.stringify(orderData.products),
                          coupon: orderData.coupon?.toString(),
                          shippingAddress: orderData.shippingAddress,
                          paymentMethod: orderData.paymentMethod,
@@ -158,34 +347,23 @@ const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
                     },
                     success_url: config.stripe.success_url,
                     cancel_url: config.stripe.cancel_url,
-               };
-               try {
-                    const session = await stripe.checkout.sessions.create(stripeSessionData);
-                    console.log({
-                         url: session.url,
-                    });
-                    result = { url: session.url };
-               } catch (error) {
-                    console.log({ error });
-               }
+               });
+
+               result = { url: stripeSession.url };
           } else {
-               result = order;
+               result = createdOrder;
           }
 
-          // No transaction commit needed anymore
-          // Return the result
-          // ✅ Send Notification to User
           await sendNotifications({
                receiver: user.id,
-               //    order,
                result,
                text: 'Your order has been placed successfully!',
                type: 'order',
           });
+
           return result;
      } catch (error) {
-          console.log(error);
-          // Handle any errors without a session rollback
+          console.log('Order Error:', error);
           throw error;
      }
 };

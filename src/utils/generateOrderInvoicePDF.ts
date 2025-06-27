@@ -7,7 +7,6 @@ import { IOrder } from '../app/modules/order/order.interface';
  * @param {IOrder} order - The order object to generate the invoice for.
  * @returns {Promise<Buffer>} - The generated PDF as a Buffer.
  */
-export const generateOrderInvoicePDF = async (order: IOrder): Promise<Buffer> => {
     return new Promise<Buffer>(async (resolve, reject) => {
         try {
             const logoUrl = 'https://res.cloudinary.com/dbgrq28js/image/upload/v1736763971/logoipsum-282_ilqjfb_paw4if.png';

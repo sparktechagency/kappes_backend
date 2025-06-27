@@ -203,3 +203,47 @@ Fri Jun 27 2025 16:39:37 [SERVER-NAME] info: 10.0.60.114 - POST /api/v1/stripe/w
 Fri Jun 27 2025 16:39:37 [SERVER-NAME] info: 10.0.60.114 - POST /api/v1/stripe/webhook 200 - 585.428 ms
 Fri Jun 27 2025 16:39:39 [SERVER-NAME] info: 10.0.60.114 - POST /api/v1/stripe/webhook 200 - 1.476 ms
 Fri Jun 27 2025 16:41:36 [SERVER-NAME] info: [34mSIGINT received. Shutting down gracefully...[39m
+Fri Jun 27 2025 16:41:43 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 16:41:44 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 16:41:44 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.114:6002[39m
+Fri Jun 27 2025 16:41:44 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.114:7000[39m
+Fri Jun 27 2025 16:48:48 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 16:48:49 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 16:48:49 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.114:6002[39m
+Fri Jun 27 2025 16:48:49 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.114:7000[39m
+Fri Jun 27 2025 16:49:51 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 16:49:53 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 16:49:53 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.114:6002[39m
+Fri Jun 27 2025 16:49:53 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.114:7000[39m
+Fri Jun 27 2025 16:50:58 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 16:50:59 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 16:50:59 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.114:6002[39m
+Fri Jun 27 2025 16:50:59 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.114:7000[39m
+Fri Jun 27 2025 16:51:1 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 16:51:2 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 16:51:2 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.114:6002[39m
+Fri Jun 27 2025 16:51:2 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.114:7000[39m
+Fri Jun 27 2025 16:51:4 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 16:51:5 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 16:51:6 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 16:51:6 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.114:6002[39m
+Fri Jun 27 2025 16:51:6 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.114:7000[39m
+Fri Jun 27 2025 16:56:58 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 16:56:59 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 16:56:59 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.114:6002[39m
+Fri Jun 27 2025 16:56:59 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.114:7000[39m
+Fri Jun 27 2025 16:57:3 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 16:57:4 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 16:57:4 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.114:6002[39m
+Fri Jun 27 2025 16:57:4 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.114:7000[39m
+Fri Jun 27 2025 16:57:11 [SERVER-NAME] info: 10.0.60.114 - POST /api/v1/stripe/webhook 200 - 2.711 ms
+Fri Jun 27 2025 16:57:11 [SERVER-NAME] info: 10.0.60.114 - POST /api/v1/order/create 201 - 2460.764 ms
+Fri Jun 27 2025 16:57:23 [SERVER-NAME] info: 10.0.60.114 - POST /api/v1/stripe/webhook 200 - 2.936 ms
+Fri Jun 27 2025 16:57:23 [SERVER-NAME] info: 10.0.60.114 - POST /api/v1/stripe/webhook 200 - 1.518 ms
+Fri Jun 27 2025 16:57:23 [SERVER-NAME] info: 10.0.60.114 - POST /api/v1/stripe/webhook 200 - 4.550 ms
+Fri Jun 27 2025 16:57:25 [SERVER-NAME] info: 10.0.60.114 - POST /api/v1/stripe/webhook 200 - 2.047 ms
+Fri Jun 27 2025 16:57:27 [SERVER-NAME] info: 10.0.60.114 - POST /api/v1/stripe/webhook 200 - 584.216 ms
+Fri Jun 27 2025 16:57:40 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Fri Jun 27 2025 16:57:41 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Fri Jun 27 2025 16:57:41 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.114:6002[39m
+Fri Jun 27 2025 16:57:41 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.114:7000[39m
