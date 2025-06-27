@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 1
+    },
+    "auditLog": "D:\\rabby\\Asif\\kappes_backend\\winston\\success\\.ca79e166b1489b18844c33fe955161b5dc001178-audit.json",
+    "files": [
+        {
+            "date": 1751015926117,
+            "name": "D:\\rabby\\Asif\\kappes_backend\\winston\\success\\27-06-2025-15-success.log",
+            "hash": "8bc1b1617b58b8ffc5086c27873aed4df11db5a35aed108f01cf3cf7d07b5713"
+        }
+    ],
+    "hashType": "sha256"
+}
