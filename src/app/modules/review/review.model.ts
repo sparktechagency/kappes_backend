@@ -56,63 +56,63 @@ reviewSchema.virtual('target', {
 });
 
 // check user
-reviewSchema.post('save', async function () {
-     const review = this as IReview;
+// reviewSchema.post('save', async function () {
+//      const review = this as IReview;
 
-     if (review.rating < 1 || review.rating > 5) {
-          throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid rating value. Try give rating between 1 to 5');
-     }
+//      if (review.rating < 1 || review.rating > 5) {
+//           throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid rating value. Try give rating between 1 to 5');
+//      }
 
 
-     // const isExistProduct = await Product.findById(review.refferenceId);
-     // if (!isExistProduct) {
-     //      throw new Error('Product not found');
-     // }
+//      // const isExistProduct = await Product.findById(review.refferenceId);
+//      // if (!isExistProduct) {
+//      //      throw new Error('Product not found');
+//      // }
 
-     // const productAvgRating = Number(isExistProduct.avg_rating) + 1;
+//      // const productAvgRating = Number(isExistProduct.avg_rating) + 1;
 
-     // let newRating;
-     // if (isExistProduct.avg_rating === null || isExistProduct.avg_rating === 0) {
-     //      newRating = review.rating;
-     // } else {
-     //      // Calculate the new rating based on previous ratings
-     //      newRating = (Number(isExistProduct.avg_rating) * Number(isExistProduct.totalReviews) + Number(review.rating)) / productAvgRating;
-     // }
+//      // let newRating;
+//      // if (isExistProduct.avg_rating === null || isExistProduct.avg_rating === 0) {
+//      //      newRating = review.rating;
+//      // } else {
+//      //      // Calculate the new rating based on previous ratings
+//      //      newRating = (Number(isExistProduct.avg_rating) * Number(isExistProduct.totalReviews) + Number(review.rating)) / productAvgRating;
+//      // }
 
-     // const updatedProduct = await Product.findByIdAndUpdate({ _id: review.refferenceId }, { avg_rating: parseFloat(newRating.toFixed(2)), totalReviews: productAvgRating }, { new: true });
+//      // const updatedProduct = await Product.findByIdAndUpdate({ _id: review.refferenceId }, { avg_rating: parseFloat(newRating.toFixed(2)), totalReviews: productAvgRating }, { new: true });
 
-     // if (!updatedProduct) {
-     //      throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to update product');
-     // }
+//      // if (!updatedProduct) {
+//      //      throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to update product');
+//      // }
 
-     const model = review.review_type === REVIEW_TYPES.PRODUCT ? Product : Business;
-     const isExistRefDoc = review.review_type === REVIEW_TYPES.PRODUCT
-          ? await Product.findById(review.refferenceId)
-          : await Business.findById(review.refferenceId);
+//      const model = review.review_type === REVIEW_TYPES.PRODUCT ? Product : Business;
+//      const isExistRefDoc = review.review_type === REVIEW_TYPES.PRODUCT
+//           ? await Product.findById(review.refferenceId)
+//           : await Business.findById(review.refferenceId);
 
-     if (!isExistRefDoc) {
-          throw new Error('Product not found');
-     }
+//      if (!isExistRefDoc) {
+//           throw new Error('Product not found');
+//      }
 
-     const docTotalReviews = Number(isExistRefDoc.totalReviews) + 1;
+//      const docTotalReviews = Number(isExistRefDoc.totalReviews) + 1;
 
-     let newRating;
-     if (isExistRefDoc.avg_rating === null || isExistRefDoc.avg_rating === 0) {
-          newRating = review.rating;
-     } else {
-          // Calculate the new rating based on previous ratings
-          newRating = (Number(isExistRefDoc.avg_rating) * Number(isExistRefDoc.totalReviews) + Number(review.rating)) / docTotalReviews;
-     }
+//      let newRating;
+//      if (isExistRefDoc.avg_rating === null || isExistRefDoc.avg_rating === 0) {
+//           newRating = review.rating;
+//      } else {
+//           // Calculate the new rating based on previous ratings
+//           newRating = (Number(isExistRefDoc.avg_rating) * Number(isExistRefDoc.totalReviews) + Number(review.rating)) / docTotalReviews;
+//      }
 
-     if (newRating < 1 || newRating > 5) {
-          throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid rating value. Try give rating between 1 to 5');
-     }
+//      if (newRating < 1 || newRating > 5) {
+//           throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid rating value. Try give rating between 1 to 5');
+//      }
 
-     const updatedDoc = await model.findByIdAndUpdate({ _id: review.refferenceId }, { avg_rating: parseFloat(newRating.toFixed(2)), totalReviews: docTotalReviews, reviews: [...isExistRefDoc.reviews, this._id] }, { new: true });
+//      const updatedDoc = await model.findByIdAndUpdate({ _id: review.refferenceId }, { avg_rating: parseFloat(newRating.toFixed(2)), totalReviews: docTotalReviews, reviews: [...isExistRefDoc.reviews, this._id] }, { new: true });
 
-     if (!updatedDoc) {
-          throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to update document');
-     }
-});
+//      if (!updatedDoc) {
+//           throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to update document');
+//      }
+// });
 
 export const Review = model<IReview, ReviewModel>('Review', reviewSchema);

@@ -7,7 +7,8 @@ const productVariantSchema = new Schema<IProductSingleVariant>({
   variantId: {
     type: Schema.Types.ObjectId,
     ref: 'Variant',
-    required: true
+    required: true,
+    unique: true,
   },
   variantQuantity: {
     type: Number,
@@ -167,7 +168,7 @@ productSchema.pre<IProduct>('save', function (next) {
 // Pre-save middleware to update avg_rating
 productSchema.pre<IProduct>('save', async function (next) {
   if (this.isModified('reviews')) {
-    this.avg_rating = 0;
+    this.avg_rating = this.totalReviews > 0 ? this.avg_rating : 0;
     const populatedReviews = await mongoose.model('Review').find({ '_id': { $in: this.reviews } }).exec();
     const totalRating = populatedReviews.reduce((acc: number, review: IReview) => acc + review.rating, 0);
     this.avg_rating = this.totalReviews > 0 ? totalRating / this.totalReviews : 0;

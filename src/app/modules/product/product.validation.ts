@@ -9,7 +9,7 @@ const productVariantSchema = z.object({
     variantPrice: z.number().min(0, 'Variant price must be non-negative')
 });
 
-const productVariantByFieldNameSchema = z.object({
+export const productVariantByFieldNameSchema = z.object({
     color: z.object({
         name: z.string().optional(),
         code: z.string().optional(),
@@ -42,7 +42,7 @@ const createProductZodSchema = z.object({
         name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name must not exceed 100 characters'),
         description: z.string().min(10, 'Description must be at least 10 characters'),
         basePrice: z.number().min(0, 'Price must be non-negative'),
-        images: z.array(z.string()).min(1, 'At least one image is required'),
+        images: z.array(z.string()).min(1, 'At least one image is required').optional(),
         tags: z.array(z.string()).min(1, 'At least one tag is required'),
         categoryId: objectIdSchema,
         subcategoryId: objectIdSchema,
@@ -91,4 +91,15 @@ export const ProductValidation = {
     getProductByIdZodSchema,
     deleteProductZodSchema,
     upateProductsVarinatsPriceOrQuantityZodSchema,
+    updateProductVariant: z.object({
+        body: z.union([
+            productVariantSchema,
+            productVariantByFieldNameSchema
+        ])
+    }),
+    deleteProductVariantByVariantFieldName: z.object({
+        body: z.object({
+            variantIdToBeDeleted: objectIdSchema
+        })
+    })
 };

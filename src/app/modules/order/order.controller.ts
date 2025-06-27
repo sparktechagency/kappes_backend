@@ -74,10 +74,25 @@ const changeOrderStatus = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const cancelOrder = catchAsync(async (req: Request, res: Response) => {
+  const result = await OrderService.cancelOrder(
+    req.params.id,
+    req.user as IJwtPayload
+  );
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Order cancelled succesfully",
+    data: result,
+  });
+});
+
 export const OrderController = {
   createOrder,
   getMyShopOrders,
   getOrderDetails,
   getMyOrders,
   changeOrderStatus,
+  cancelOrder,
 };

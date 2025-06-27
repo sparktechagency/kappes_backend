@@ -3,9 +3,10 @@ import catchAsync from '../../../shared/catchAsync';
 import { ReviewService } from './review.service';
 import sendResponse from '../../../shared/sendResponse';
 import { StatusCodes } from 'http-status-codes';
+import { IJwtPayload } from '../auth/auth.interface';
 
-const createReview = catchAsync(async (req: Request, res: Response) => {
-     const result = await ReviewService.createReviewToDB(req.body);
+const createProductReview = catchAsync(async (req: Request, res: Response) => {
+     const result = await ReviewService.createProductReviewToDB(req.body, req.user as IJwtPayload);
 
      sendResponse(res, {
           statusCode: StatusCodes.OK,
@@ -15,4 +16,4 @@ const createReview = catchAsync(async (req: Request, res: Response) => {
      });
 });
 
-export const ReviewController = { createReview };
+export const ReviewController = { createProductReview };

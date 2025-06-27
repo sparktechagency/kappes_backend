@@ -61,7 +61,7 @@ const deleteProduct = catchAsync(async (req: Request, res: Response) => {
 
 const getProductsByCategory = catchAsync(async (req: Request, res: Response) => {
     const { categoryId } = req.params;
-    const result = await ProductService.getProductsByCategory(categoryId as string,req.query);
+    const result = await ProductService.getProductsByCategory(categoryId as string, req.query);
     sendResponse(res, {
         statusCode: StatusCodes.OK,
         success: true,
@@ -93,7 +93,7 @@ const getRecommendedProducts = catchAsync(async (req: Request, res: Response) =>
 
 const getProductsByShop = catchAsync(async (req: Request, res: Response) => {
     const { shopId } = req.params;
-    const result = await ProductService.getProductsByShop(shopId as string,req.query);
+    const result = await ProductService.getProductsByShop(shopId as string, req.query);
     sendResponse(res, {
         statusCode: StatusCodes.OK,
         success: true,
@@ -101,6 +101,40 @@ const getProductsByShop = catchAsync(async (req: Request, res: Response) => {
         data: result
     });
 });
+
+
+// const addNewVariantToProductByVariantFieldName = catchAsync(async (req: Request, res: Response) => {
+//     const { id } = req.params;
+//     const result = await ProductService.addNewVariantToProductByVariantFieldName(id, req.body, req.user as IJwtPayload);
+//     sendResponse(res, {
+//         statusCode: StatusCodes.OK,
+//         success: true,
+//         message: 'Product updated successfully',
+//         data: result
+//     });
+// }); 
+
+// const updateProductVariantByVariantFieldName = catchAsync(async (req: Request, res: Response) => {
+//     const { id } = req.params;
+//     const result = await ProductService.updateProductVariantByVariantFieldName(id, req.body, req.user as IJwtPayload);
+//     sendResponse(res, {
+//         statusCode: StatusCodes.OK,
+//         success: true,
+//         message: 'Product updated successfully',
+//         data: result
+//     });
+// }); 
+
+// const deleteProductVariantByVariantFieldName = catchAsync(async (req: Request, res: Response) => {
+//     const { id } = req.params;
+//     const result = await ProductService.deleteProductVariantByVariantFieldName(id, req.body, req.user as IJwtPayload);
+//     sendResponse(res, {
+//         statusCode: StatusCodes.OK,
+//         success: true,
+//         message: 'Product updated successfully',
+//         data: result
+//     });
+// });         
 
 export const ProductController = {
     createProduct,
@@ -111,5 +145,8 @@ export const ProductController = {
     getProductsByCategory,
     updateToggleProductIsRecommended,
     getRecommendedProducts,
-    getProductsByShop
+    getProductsByShop,
+    // addNewVariantToProductByVariantFieldName,
+    // updateProductVariantByVariantFieldName,
+    // deleteProductVariantByVariantFieldName,
 }

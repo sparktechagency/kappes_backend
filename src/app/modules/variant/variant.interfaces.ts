@@ -4,6 +4,7 @@ import { GRAPHICS_CARD_TYPE, NETWOR_TYPE, OS_TYPE, PROCESSOR_TYPE, RAM_OR_STORAG
 
 
 export interface IVariant {
+    _id?: Schema.Types.ObjectId;
     categoryId: Schema.Types.ObjectId;
     subCategoryId: Schema.Types.ObjectId;
     createdBy: Schema.Types.ObjectId;

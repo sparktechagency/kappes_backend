@@ -123,7 +123,7 @@ const createOrder = async (
                 { _id: { $in: createdOrder.products.map((item) => item.product) } },
                 { $inc: { purchaseCount: 1 } }
             );
-            console.log(updatePurchaseCount);    
+            console.log(updatePurchaseCount);
 
             // Proceed with generating invoice, sending email, etc.
             // Commit logic is not required anymore as no session is being used
@@ -296,10 +296,45 @@ const changeOrderStatus = async (
     return order;
 };
 
+const cancelOrder = async (
+    orderId: string,
+    user: IJwtPayload
+) => {
+    /**
+     * order status যদি not completed হয় তাহলে আমরা order cancell করতে পারব তবে ২ বিষয় আছে
+     * ১. order payment status যদি unpaid আমরা প্রথমে order এর status কে cancelled করে order এর মধ্যকার প্রতিটি product এর stock কে বাড়ানো হবে এবং আমরা পরে আমরা প্রথমে order এর status কে cancelled হাবে
+     * ২. order payment status যদি paid আমরা প্রথমে order এর status কে cancelled করে order এর মধ্যকার প্রতিটি product এর stock কে বাড়ানো হবে এবং আমরা পরে আমরা প্রথমে order এর status কে cancelled হাবে + buyer এর জন্য refund polilciy implement করতে হবে
+     * refund policy:
+     * 1. প্রথমে আমরা order model এ field বানাবো isRefunded নামে তারপর cancell এর সাথে সাথে এর value false set করব তারপর তাকে আমরা stripe account create করার জন্য লিংক পাটাব maile এ আর একটা refund me route বানাব(params এ stripe account id নিব) যেখানে কেউ order id দিলে আমরা তার refund validation করে তাকে stripe.transfer করব
+     * refund validation policy: order status cancle কিনা, isRefunded false কিনা এরপর stripe.transfer করব আর isRefunded true করে দিব
+     */
+
+    const order = await Order.findOneAndUpdate(
+        { _id: new Types.ObjectId(orderId), user: user.id },
+        { status: "cancelled" },
+        { new: true }
+    );
+    return { message: "Order cancelled service under progress", order };
+};
+
+const refundOrderRequest = async (
+    orderId: string,
+    user: IJwtPayload
+) => {
+    const order = await Order.findOneAndUpdate(
+        { _id: new Types.ObjectId(orderId), user: user.id },
+        { status: "cancelled" },
+        { new: true }
+    );
+    return { message: "Order cancelled service under progress", order };
+};
+
 export const OrderService = {
     createOrder,
     getMyShopOrders,
     getOrderDetails,
     getMyOrders,
     changeOrderStatus,
+    cancelOrder,
+    refundOrderRequest 
 };

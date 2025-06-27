@@ -42,10 +42,10 @@ router.patch(
 
 
 // Cancel order
-// router.delete(
-//     '/:id/cancel',
-//     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR),
-//     OrderController.cancelOrder
-// );
+router.delete(
+    '/:id/cancel',
+    auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR),
+    OrderController.cancelOrder
+);
 
 export const OrderRoutes = router;

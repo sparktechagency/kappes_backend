@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { IVariant } from '../variant/variant.interfaces';
 
 export interface IProductSingleVariant {
-    variantId: mongoose.Types.ObjectId;
+    variantId: mongoose.Types.ObjectId | string;
     variantQuantity: number;
     variantPrice: number;
 }
