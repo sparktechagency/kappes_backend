@@ -85,6 +85,15 @@ const orderSchema = new Schema<IOrder>(
             enum: PAYMENT_STATUS,
             default: PAYMENT_STATUS.PENDING,
         },
+        payment: {
+            type: Schema.Types.ObjectId,
+            ref: "Payment",
+            default: null,
+        },
+        isNeedRefund: {
+            type: Boolean,
+            default: false,
+        },
     },
     {
         timestamps: true,

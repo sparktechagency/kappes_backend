@@ -155,6 +155,12 @@ const getAllCouponByShopId = async (shopId: string, user: IJwtPayload) => {
     return coupon;
 };
 
+const getCouponById = async (couponId: string) => {
+    const coupon = await Coupon.findById(couponId);
+
+    return coupon;
+};
+
 export const CouponService = {
     createCoupon,
     getAllCoupon,
@@ -162,4 +168,5 @@ export const CouponService = {
     getCouponByCode,
     deleteCoupon,
     getAllCouponByShopId,
+    getCouponById,
 };

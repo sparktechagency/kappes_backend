@@ -1,5 +1,5 @@
 // ShopController.ts
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
@@ -257,6 +257,42 @@ const getProductsByShopId = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getShopAdminsByShopId = catchAsync(async (req: Request, res: Response) => {
+    const { shopId } = req.params;
+    const result = await ShopService.getShopAdminsByShopId(shopId,req.query,req.user as IJwtPayload);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: 'Shop admins by shop ID retrieved successfully',
+        data: result,
+    });
+});
+
+
+const createShopAdmin = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const { ...userData } = req.body; // name, email , password
+      const result = await ShopService.createShopAdmin(userData,req.params.shopId,req.user as IJwtPayload);
+  
+      sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.OK,
+        message: 'User created successfully',
+        data: result,
+      });
+    }
+  );
+
+const getShopOverview = catchAsync(async (req: Request, res: Response) => {
+    const { shopId } = req.params;
+    const result = await ShopService.getShopOverview(shopId,req.user as IJwtPayload);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: 'Shop overview retrieved successfully',
+        data: result,
+    });
+});
 
 export const ShopController = {
     createShop,
@@ -281,6 +317,9 @@ export const ShopController = {
     getShopsByShopCategory, 
     toggleFollowUnfollowShop,
     getShopsByOwnerOrAdmin,
-    getProductsByShopId
-}
+    getProductsByShopId,
+    getShopAdminsByShopId,
+    createShopAdmin,
+    getShopOverview
+}   
 

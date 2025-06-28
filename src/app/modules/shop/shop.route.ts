@@ -17,14 +17,28 @@ const router = express.Router();
 router.get('/', ShopController.getAllShops);
 router.post('/', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), fileUploadHandler(), parseMulitpleFieldsData(FOLDER_NAMES.LOGO, FOLDER_NAMES.BANNER, FOLDER_NAMES.COVER_PHOTO), validateRequest(ShopValidation.createShopZodSchema), ShopController.createShop);
 
+router.get('/shop-admin/:shopId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), ShopController.getShopAdminsByShopId);
+
+router
+    .route('/create-shop-admin/:shopId')
+    .post(
+        validateRequest(ShopValidation.createAdminZodSchema),
+        auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR),
+        ShopController.createShopAdmin
+    );
 router.patch('/make-shop-admin/:shopId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), validateRequest(ShopValidation.makeShopAdminZodSchema), ShopController.makeShopAdmin);
 
 // get users shops
 router.get('/user', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), ShopController.getShopsByOwnerOrAdmin);
 
 // Get a shop by ID
-router.get('/:id', ShopController.getShopById);
 router.get('/products/:shopId', ShopController.getProductsByShopId);
+
+// get shop overview 
+router.get('/overview/:shopId',
+    auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), ShopController.getShopOverview);
+
+router.get('/:id', ShopController.getShopById);
 // Update a shop by ID
 router.patch('/:id', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), fileUploadHandler(), validateRequest(ShopValidation.updateShopZodSchema), parseMulitpleFieldsData(FOLDER_NAMES.LOGO, FOLDER_NAMES.BANNER, FOLDER_NAMES.COVER_PHOTO), ShopController.updateShopById);
 

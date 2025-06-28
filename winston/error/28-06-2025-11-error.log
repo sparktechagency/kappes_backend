@@ -1,0 +1,7 @@
+Sat Jun 28 2025 11:19:19 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/review/product/shop/ 400 - 5.192 ms
+Sat Jun 28 2025 11:19:28 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/review/product/shop/ 400 - 15.197 ms
+Sat Jun 28 2025 11:20:12 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/review/product/shop/ 400 - 4.005 ms
+Sat Jun 28 2025 11:20:27 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/review/product/shop/685806ee0d8150920d3662a5 403 - 93.009 ms
+Sat Jun 28 2025 11:20:39 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/auth/login 400 - 2.413 ms
+Sat Jun 28 2025 11:23:30 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/review/product/shop/685806ee0d8150920d3662a6 404 - 188.223 ms
+Sat Jun 28 2025 11:23:34 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/review/product/shop/685806ee0d8150920d3662a5 400 - 311.692 ms

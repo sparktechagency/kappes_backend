@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import mongoose, { model, Schema } from "mongoose";
 import { IShop } from "./shop.interface";
 import { BUSINESS_TYPES } from "../business/business.enums";
 import { IReview } from "../review/review.interface";

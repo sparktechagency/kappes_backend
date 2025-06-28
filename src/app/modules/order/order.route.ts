@@ -20,12 +20,6 @@ router.get(
     OrderController.getMyOrders
 );
 
-router.get(
-    '/:orderId',
-    auth(USER_ROLES.USER),
-    OrderController.getOrderDetails
-);
-
 router.post(
     '/create',
     validateRequest(OrderValidation.createOrderSchema),
@@ -33,6 +27,19 @@ router.post(
     OrderController.createOrder
 )
 
+router.get(
+    '/shop/:shopId',
+    auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR),
+    OrderController.getOrdersByShopId
+);
+
+
+
+router.get(
+    '/:orderId',
+    auth(USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN, USER_ROLES.USER, USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+    OrderController.getOrderDetails
+);
 router.patch(
     '/:orderId/status',
     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR),

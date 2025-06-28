@@ -187,7 +187,7 @@ const getProductById = async (id: string) => {
         .populate('categoryId', 'name')
         .populate('subcategoryId', 'name')
         .populate('brandId', 'name')
-        .populate('product_variant_Details.variantId', 'slug');
+        .populate('product_variant_Details.variantId');
 
     if (!product) {
         throw new AppError(StatusCodes.NOT_FOUND, 'Product not found');

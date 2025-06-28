@@ -34,7 +34,7 @@ const getMyShopOrders = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getOrderDetails = catchAsync(async (req: Request, res: Response) => {
-  const result = await OrderService.getOrderDetails(req.params.orderId);
+  const result = await OrderService.getOrderDetails(req.params.orderId, req.user as IJwtPayload);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
@@ -88,6 +88,20 @@ const cancelOrder = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getOrdersByShopId = catchAsync(async (req: Request, res: Response) => {
+  const result = await OrderService.getOrdersByShopId(
+    req.params.shopId,
+    req.user as IJwtPayload
+  );
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Order retrive succesfully",
+    data: result,
+  });
+});
+
 export const OrderController = {
   createOrder,
   getMyShopOrders,
@@ -95,4 +109,5 @@ export const OrderController = {
   getMyOrders,
   changeOrderStatus,
   cancelOrder,
+  getOrdersByShopId
 };

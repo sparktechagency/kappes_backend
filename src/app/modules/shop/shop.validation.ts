@@ -31,7 +31,7 @@ const createShopZodSchema = z.object({
         website: z.string().optional(),
         revenue: z.number().optional(),
     })
-})  
+})
 
 const updateShopZodSchema = z.object({
     body: z.object({
@@ -62,12 +62,12 @@ const updateShopZodSchema = z.object({
         })).optional(),
         website: z.string().optional(),
         revenue: z.number().optional(),
-            settings: z.object({
+        settings: z.object({
             allowChat: z.boolean().optional(),
             autoAcceptOrders: z.boolean().optional(),
-        }).optional(),  
+        }).optional(),
     })
-})  
+})
 
 const makeShopAdminZodSchema = z.object({
     body: z.object({
@@ -77,8 +77,18 @@ const makeShopAdminZodSchema = z.object({
 
 
 
+const createAdminZodSchema = z.object({
+    body: z.object({
+        full_name: z.string({ required_error: 'Name is required' }),
+        email: z.string({ required_error: 'Email is required' }),
+        password: z.string({ required_error: 'Password is required' }),
+    }),
+});
+
+
 export const ShopValidation = {
     createShopZodSchema,
     updateShopZodSchema,
-    makeShopAdminZodSchema
+    makeShopAdminZodSchema,
+    createAdminZodSchema
 }

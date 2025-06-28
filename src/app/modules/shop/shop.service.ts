@@ -11,6 +11,10 @@ import { StatusCodes } from "http-status-codes";
 import unlinkFile from "../../../shared/unlinkFile";
 import { stripeAccountService } from "../stripeAccount/stripeAccount.service";
 import { Product } from "../product/product.model";
+import { IUser } from "../user/user.interface";
+import { emailTemplate } from "../../../shared/emailTemplate";
+import { emailHelper } from "../../../helpers/emailHelper";
+import { Order } from "../order/order.model";
 
 const createShop = async (payload: IShop, user: IJwtPayload, host: string, protocol: string) => {
     const { name, email } = payload;
@@ -363,6 +367,175 @@ const getProductsByShopId = async (shopId: string, query: Record<string, unknown
     };
 }
 
+const getShopAdminsByShopId = async (shopId: string, query: Record<string, unknown>, user: IJwtPayload) => {
+    const shopQuery = new QueryBuilder(
+        Shop.find({ _id: shopId })
+            .populate('admins', 'name email').populate('owner', 'name email').select('admins owner name email phone address'),
+        query,
+    )
+        .search(['name', 'description', 'tags'])
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+
+    const shops = await shopQuery.modelQuery;
+    const meta = await shopQuery.countTotal();
+
+    if (!shops || shops.length === 0) {
+        throw new AppError(404, 'No shops found for this shop');
+    }
+
+    return {
+        meta,
+        shops,
+    };
+}
+
+const createShopAdmin = async (payload: Partial<IUser>, shopId: string, user: IJwtPayload) => {
+    const session = await mongoose.startSession();
+    await session.withTransaction(async () => {
+        // check if user exists with the payload.email
+        const userExists = await User.findOne({ email: payload.email }).session(session);
+        if (userExists) {
+            throw new AppError(400, `User already exists so use "/make-shop-admin/:shopId" api`);
+        }
+        // create user
+        payload.role = USER_ROLES.SHOP_ADMIN;
+        payload.verified = true;
+        const newUser = await User.create([payload], { session });
+        if (!newUser) {
+            throw new AppError(400, 'User not created');
+        }
+        const shop = await Shop.findById(new mongoose.Types.ObjectId(shopId)).session(session);
+        if (!shop) {
+            throw new AppError(404, 'Shop not found');
+        }
+
+        if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
+            if (shop.owner.toString() !== user.id && !shop.admins?.some(admin => admin.toString() === user.id)) {
+                throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to create a shop admin for this shop');
+            }
+        }
+        shop.admins?.push(newUser[0]._id);
+        await shop.save({ session });
+
+
+        const values = {
+            name: newUser[0].full_name,
+            email: newUser[0].email!,
+            password: payload.password!,
+        };
+        const createAccountTemplate = emailTemplate.createAdminAccount(values);
+        await emailHelper.sendEmail(createAccountTemplate);
+
+        return newUser[0];
+    });
+}
+
+const getShopOverview = async (shopId: string, user: IJwtPayload) => {
+    const shop = await Shop.findById(shopId)
+        .populate('owner', 'name email')
+        .populate('admins', 'name email')
+        .populate('followers', 'name email');
+
+    if (!shop) {
+        throw new AppError(404, 'Shop not found');
+    }
+
+    // get total orders
+    const totalOrders = await Order.countDocuments({ shop: shopId });
+
+    // get total earnings
+    const totalEarnings = await Order.aggregate([
+        {
+            $match: {
+                shop: new mongoose.Types.ObjectId(shopId),
+            },
+        },
+        {
+            $group: {
+                _id: null,
+                totalEarnings: { $sum: '$finalAmount' },
+            },
+        },
+    ]);
+
+    // get year based orders
+    const yearOrders = await Order.aggregate([
+        {
+            $match: {
+                shop: new mongoose.Types.ObjectId(shopId),
+            },
+        },
+        {
+            $group: {
+                _id: { $year: '$createdAt' },
+                orders: { $sum: 1 },
+            },
+        },
+        {
+            $sort: {
+                _id: -1,
+            },
+        },
+    ]);
+
+    // get year based earnings
+    const yearEarnings = await Order.aggregate([
+        {
+            $match: {
+                shop: new mongoose.Types.ObjectId(shopId),
+            },
+        },
+        {
+            $group: {
+                _id: { $year: '$createdAt' },
+                earnings: { $sum: '$finalAmount' },
+            },
+        },
+        {
+            $sort: {
+                _id: -1,
+            },
+        },
+    ]);
+
+    // get month based earnings
+    const monthEarnings = await Order.aggregate([
+        {
+            $match: {
+                shop: new mongoose.Types.ObjectId(shopId),
+            },
+        },
+        {
+            $group: {
+                _id: {
+                    year: { $year: '$createdAt' },
+                    month: { $month: '$createdAt' },
+                },
+                earnings: { $sum: '$finalAmount' },
+            },
+        },
+        {
+            $sort: {
+                '_id.year': -1,
+                '_id.month': -1,
+            },
+        },
+    ]);
+
+    return {
+        ...shop.toObject(),
+        totalOrders,
+        totalEarnings: totalEarnings?.[0]?.totalEarnings || 0,
+        yearOrders,
+        yearEarnings,
+        monthEarnings,
+    };
+}
+
+
 // Export the ShopService
 export const ShopService = {
     createShop,
@@ -389,5 +562,8 @@ export const ShopService = {
     getShopsByShopCategory,
     getShopsByOwnerOrAdmin,
     isShopExist,
-    getProductsByShopId
+    getProductsByShopId,
+    getShopAdminsByShopId,
+    createShopAdmin,
+    getShopOverview
 }

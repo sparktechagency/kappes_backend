@@ -14,7 +14,7 @@ import AppError from "../../../errors/AppError";
 import { StatusCodes } from "http-status-codes";
 import { Shop } from "../shop/shop.model";
 import Variant from "../variant/variant.model";
-import { PAYMENT_METHOD } from "./order.enums";
+import { ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS } from "./order.enums";
 import { USER_ROLES } from "../user/user.enums";
 import { DEFAULT_SHOP_REVENUE } from "../shop/shop.enum";
 // import stripe from "../../../config/stripe";
@@ -116,6 +116,8 @@ const createOrder = async (
                 amount: createdOrder.finalAmount,
             });
 
+            createdOrder.payment = payment._id;
+            await createdOrder.save();
             await payment.save();
 
             // increase the purchase count of the all the proudcts use operatros
@@ -238,15 +240,47 @@ const getMyShopOrders = async (
     };
 };
 
-const getOrderDetails = async (orderId: string) => {
-    const order = await Order.findById(orderId).populate(
-        "user products.product coupon"
-    );
+const getOrderDetails = async (orderId: string, user: IJwtPayload) => {
+    let order: IOrder | null = null;
+    if (user.role === USER_ROLES.USER) {
+        order = await Order.findOne({ _id: orderId, user: user.id }).populate(
+            "user products.product coupon payment"
+        );
+        if (!order) {
+            throw new AppError(
+                StatusCodes.FORBIDDEN,
+                "You are not allowed to watch this order"
+            );
+        }
+    } else if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
+        order = await Order.findOne({ _id: orderId }).populate(
+            "user products.product coupon payment"
+        );
+        if (!order) {
+            throw new AppError(StatusCodes.NOT_FOUND, "Order not Found");
+        }
+
+        const productOfShop = await Product.findOne({
+            _id: order.products[0].product,
+            shopId: order.shop,
+        });
+        if (!productOfShop) {
+            throw new AppError(
+                StatusCodes.FORBIDDEN,
+                "You are not allowed to watch this order"
+            );
+        }
+    }
+
+    // for admin and super admin allowing them
+    if (!order) {
+        order = await Order.findById(orderId).populate(
+            "user products.product coupon payment"
+        );
+    }
     if (!order) {
         throw new AppError(StatusCodes.NOT_FOUND, "Order not Found");
     }
-
-    order.payment = await Payment.findOne({ order: order._id });
     return order;
 };
 
@@ -281,25 +315,60 @@ const changeOrderStatus = async (
     status: string,
     user: IJwtPayload
 ) => {
-    const userHasShop = await User.findById(user.id).select(
-        "isActive hasShop"
-    );
+
+    // find order
+    const order = await Order.findById(orderId);
+    if (!order) {
+        throw new AppError(StatusCodes.NOT_FOUND, "Order not Found");
+    }
+
+    // find shop
+    const shop = await Shop.findOne({ _id: order.shop, isActive: true });
+    if (!shop) {
+        throw new AppError(StatusCodes.NOT_FOUND, "Shop not Found");
+    }
+
+    // check verndor or shop admins authorization
+    if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
+        if (shop.owner.toString() !== user.id && !shop.admins?.some(admin => admin.toString() === user.id)) {
+            throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to update this order');
+        }
+    }
+
+    switch (order.status) {
+        case ORDER_STATUS.PENDING:
+            if (status === ORDER_STATUS.PROCESSING) {
+                break;
+            }
+            throw new AppError(StatusCodes.BAD_REQUEST, "Invalid order status");
+        case ORDER_STATUS.PROCESSING:
+            if (
+                status === ORDER_STATUS.COMPLETED &&
+                order.paymentMethod !== PAYMENT_METHOD.COD &&
+                order.paymentStatus === PAYMENT_STATUS.PAID
+            ) {
+                break;
+            }
+            if (status === ORDER_STATUS.COMPLETED && order.paymentMethod === PAYMENT_METHOD.COD) {
+                break;
+            }
+            if (status === ORDER_STATUS.CANCELLED) {
+                throw new AppError(StatusCodes.BAD_REQUEST, `Order can't be cancelled by this api use cancelOrder api "/order/:id/cancel"`);
+            }
+            throw new AppError(StatusCodes.BAD_REQUEST, "Invalid order status");
+        case ORDER_STATUS.COMPLETED:
+            throw new AppError(StatusCodes.BAD_REQUEST, "Order status can't be updated");
+        default:
+            throw new AppError(StatusCodes.BAD_REQUEST, "Invalid order status");
+    }
 
 
-    const shopIsActive = await Shop.findOne({
-        owner: userHasShop?.id,
-        isActive: true,
-    }).select("isActive");
-
-    if (!shopIsActive)
-        throw new AppError(StatusCodes.BAD_REQUEST, "Shop is not active!");
-
-    const order = await Order.findOneAndUpdate(
-        { _id: new Types.ObjectId(orderId), shop: shopIsActive._id },
+    const updatedOrder = await Order.findOneAndUpdate(
+        { _id: new Types.ObjectId(orderId), shop: shop._id },
         { status },
         { new: true }
     );
-    return order;
+    return updatedOrder;
 };
 
 const cancelOrder = async (
@@ -307,12 +376,18 @@ const cancelOrder = async (
     user: IJwtPayload
 ) => {
     /**
+     * সবার আগে order cancelation validation করব যেমন,
+     * প্রথমে আমরা order এর status যদি completed হয় তাহলে আমরা order cancell করতে পারব না
+     *  order এর status যদি cancelled হয় তাহলে আমরা order cancell করতে পারব না
+     *  order এর paymentStatus যদি unpaid হয়+order.status:any i.o completed or cancel তাহলে আমরা order cancell করতে পারব
+     *  order এর paymentStatus যদি paid হয়+order.status:any i.o completed or cancel তাহলে আমরা order cancell করতে পারব তবে সেক্ষেত্রে refund policy maintain করতে হবে
+     * 
      * order status যদি not completed হয় তাহলে আমরা order cancell করতে পারব তবে ২ বিষয় আছে
      * ১. order payment status যদি unpaid আমরা প্রথমে order এর status কে cancelled করে order এর মধ্যকার প্রতিটি product এর stock কে বাড়ানো হবে এবং আমরা পরে আমরা প্রথমে order এর status কে cancelled হাবে
      * ২. order payment status যদি paid আমরা প্রথমে order এর status কে cancelled করে order এর মধ্যকার প্রতিটি product এর stock কে বাড়ানো হবে এবং আমরা পরে আমরা প্রথমে order এর status কে cancelled হাবে + buyer এর জন্য refund polilciy implement করতে হবে
      * refund policy:
-     * 1. প্রথমে আমরা order model এ field বানাবো isRefunded নামে তারপর cancell এর সাথে সাথে এর value false set করব তারপর তাকে আমরা stripe account create করার জন্য লিংক পাটাব maile এ আর একটা refund me route বানাব(params এ stripe account id নিব) যেখানে কেউ order id দিলে আমরা তার refund validation করে তাকে stripe.transfer করব
-     * refund validation policy: order status cancle কিনা, isRefunded false কিনা এরপর stripe.transfer করব আর isRefunded true করে দিব
+     * 1. প্রথমে আমরা order model এ field বানাবো isNeedRefund নামে তারপর order.paymentStatus:true হলে cancell এর সাথে সাথে এর isNeedRefund:true set করব তারপর তাকে আমরা stripe account create করার জন্য লিংক পাটাব maile এ আর একটা refund me route বানাব(params এ stripe account id নিব) যেখানে কেউ order id দিলে আমরা তার refund validation করে তাকে stripe.transfer করব
+     * refund validation policy: order status cancle কিনা, isNeedRefund true কিনা এরপর stripe.transfer করব আর isNeedRefund false করে দিব
      */
 
     const order = await Order.findOneAndUpdate(
@@ -335,6 +410,25 @@ const refundOrderRequest = async (
     return { message: "Order cancelled service under progress", order };
 };
 
+const getOrdersByShopId = async (
+    shopId: string,
+    user: IJwtPayload
+) => {
+    const orderQuery = new QueryBuilder(
+        Order.find({ shop: shopId }).populate("user products.product coupon payment"),
+        {}
+    )
+        .search(["user.name", "user.email", "products.product.name"])
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+
+    const orders = await orderQuery.modelQuery;
+    const meta = await orderQuery.countTotal();
+    return { meta, orders };
+};
+
 export const OrderService = {
     createOrder,
     getMyShopOrders,
@@ -342,5 +436,5 @@ export const OrderService = {
     getMyOrders,
     changeOrderStatus,
     cancelOrder,
-    refundOrderRequest
+    refundOrderRequest, getOrdersByShopId
 };

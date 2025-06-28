@@ -14,6 +14,25 @@ router.post(
      ReviewController.createProductReview,
 );
 
+router.get(
+     '/product/shop/:shopId',
+     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR),
+     ReviewController.getShopProductsReviews,
+);
+router.get(
+     '/product/:productId',
+     ReviewController.getProductReviews,
+);
+
+router.delete(
+     '/:reviewId',
+     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR),
+     ReviewController.deleteProductReview,
+);
+
+
+
+
 // business related routes
 // router.post(
 //      '/business',

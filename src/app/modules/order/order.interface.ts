@@ -24,5 +24,6 @@ export interface IOrder extends Document {
   paymentStatus: PAYMENT_STATUS;
   createdAt?: Date;
   updatedAt?: Date;
-  payment?: IPayment | null;
+  payment?: Types.ObjectId;
+  isNeedRefund: boolean;
 }

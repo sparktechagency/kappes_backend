@@ -1,10 +1,10 @@
 import { IContact, ICreateAccount, IHelpContact, IResetPassword, IResetPasswordByEmail } from '../types/emailTamplate';
 
 const createAccount = (values: ICreateAccount) => {
-     const data = {
-          to: values.email,
-          subject: 'Verify your account',
-          html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
+  const data = {
+    to: values.email,
+    subject: 'Verify your account',
+    html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
     <div style="width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); text-align: center;">
         <img src="https://i.postimg.cc/6pgNvKhD/logo.png" alt="Logo" style="display: block; margin: 0 auto 20px; width:150px" />
           <h2 style="color: #277E16; font-size: 24px; margin-bottom: 20px;">Hey! ${values.name}, Your Account Credentials</h2>
@@ -15,14 +15,14 @@ const createAccount = (values: ICreateAccount) => {
         </div>
     </div>
 </body>`,
-     };
-     return data;
+  };
+  return data;
 };
 const contact = (values: IContact) => {
-     const data = {
-          to: values.email,
-          subject: 'We’ve Received Your Message – Thank You!',
-          html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">      
+  const data = {
+    to: values.email,
+    subject: 'We’ve Received Your Message – Thank You!',
+    html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">      
       <div style="width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
           <img src="https://res.cloudinary.com/ddhhyc6mr/image/upload/v1742293522/buzzy-box-logo.png" alt="Logo" style="display: block; margin: 0 auto 20px; width:150px" />
           <h2 style="color: #277E16; font-size: 24px; margin-bottom: 20px; text-align: center;">Thank You for Contacting Us, ${values.name}!</h2>
@@ -51,14 +51,14 @@ const contact = (values: IContact) => {
           </p>
       </div>
   </body>`,
-     };
-     return data;
+  };
+  return data;
 };
 const resetPassword = (values: IResetPassword) => {
-     const data = {
-          to: values.email,
-          subject: 'Reset your password',
-          html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
+  const data = {
+    to: values.email,
+    subject: 'Reset your password',
+    html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
     <div style="width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
         <img src="https://i.postimg.cc/6pgNvKhD/logo.png" alt="Logo" style="display: block; margin: 0 auto 20px; width:150px" />
         <div style="text-align: center;">
@@ -69,14 +69,14 @@ const resetPassword = (values: IResetPassword) => {
         </div>
     </div>
 </body>`,
-     };
-     return data;
+  };
+  return data;
 };
 const resetPasswordByUrl = (values: IResetPasswordByEmail) => {
-     const data = {
-          to: values.email,
-          subject: 'Reset Your Password',
-          html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
+  const data = {
+    to: values.email,
+    subject: 'Reset Your Password',
+    html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
       <div style="width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
         <img src="https://i.postimg.cc/6pgNvKhD/logo.png" alt="Logo" style="display: block; margin: 0 auto 20px; width:150px" />
         <div style="text-align: center;">
@@ -88,15 +88,15 @@ const resetPasswordByUrl = (values: IResetPasswordByEmail) => {
         </div>
       </div>
     </body>`,
-     };
-     return data;
+  };
+  return data;
 };
 
 const contactFormTemplate = (values: IHelpContact) => {
-     const data = {
-          to: values.email,
-          subject: 'Thank you for reaching out to us',
-          html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
+  const data = {
+    to: values.email,
+    subject: 'Thank you for reaching out to us',
+    html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
     <div style="width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
         <img src="https://i.postimg.cc/6pgNvKhD/logo.png" alt="Logo" style="display: block; margin: 0 auto 20px; width:150px" />
         <div style="text-align: center;">
@@ -112,14 +112,14 @@ const contactFormTemplate = (values: IHelpContact) => {
         </div>
     </div>
 </body>`,
-     };
-     return data;
+  };
+  return data;
 };
 const sendTrialWarningEmail = (user: any) => {
-    const data = {
-      to: user.email,
-      subject: 'Your Free Trial Expires Tomorrow! ⏰',
-      html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
+  const data = {
+    to: user.email,
+    subject: 'Your Free Trial Expires Tomorrow! ⏰',
+    html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
         <div style="max-width: 600px; margin: 0 auto; padding: 20px; background: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
           <h2 style="color: #333;">Your Free Trial Expires Tomorrow! ⏰</h2>
           <p>Dear ${user.name},</p>
@@ -131,15 +131,15 @@ const sendTrialWarningEmail = (user: any) => {
           <p>Questions? Reply to this email for support.</p>
         </div>
       </body>`
-    };
-    return data;
   };
-  
-  const sendEarlyWarningEmail = (user: any) => {
-    const data = {
-      to: user.email,
-      subject: '3 Days Left in Your Free Trial! 🚀',
-      html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
+  return data;
+};
+
+const sendEarlyWarningEmail = (user: any) => {
+  const data = {
+    to: user.email,
+    subject: '3 Days Left in Your Free Trial! 🚀',
+    html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
         <div style="max-width: 600px; margin: 0 auto; padding: 20px; background: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
           <h2 style="color: #333;">3 Days Left in Your Free Trial! 🚀</h2>
           <p>Hi ${user.name},</p>
@@ -150,15 +150,15 @@ const sendTrialWarningEmail = (user: any) => {
           </a>
         </div>
       </body>`
-    };
-    return data;
   };
-  
-  const sendReEngagementEmail = (user: any) => {
-    const data = {
-      to: user.email,
-      subject: 'We Miss You! Come Back with 50% Off 🎉',
-      html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
+  return data;
+};
+
+const sendReEngagementEmail = (user: any) => {
+  const data = {
+    to: user.email,
+    subject: 'We Miss You! Come Back with 50% Off 🎉',
+    html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
         <div style="max-width: 600px; margin: 0 auto; padding: 20px; background: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
           <h2 style="color: #333;">We Miss You! Come Back with 50% Off 🎉</h2>
           <p>Hi ${user.name},</p>
@@ -169,15 +169,15 @@ const sendTrialWarningEmail = (user: any) => {
           </a>
         </div>
       </body>`
-    };
-    return data;
   };
-  
-  const sendTrialExpiredEmail = (user: any) => {
-    const data = {
-      to: user.email,
-      subject: 'Your Free Trial Has Ended 😢',
-      html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
+  return data;
+};
+
+const sendTrialExpiredEmail = (user: any) => {
+  const data = {
+    to: user.email,
+    subject: 'Your Free Trial Has Ended 😢',
+    html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
         <div style="max-width: 600px; margin: 0 auto; padding: 20px; background: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
           <h2 style="color: #333;">Your Free Trial Has Ended 😢</h2>
           <p>Dear ${user.name},</p>
@@ -189,18 +189,55 @@ const sendTrialWarningEmail = (user: any) => {
           <p>Your progress is saved and will be restored when you subscribe.</p>
         </div>
       </body>`
-    };
-    return data;
   };
-  
+  return data;
+};
+
+
+const createAdminAccount = (values: ICreateAccount) => {
+  const data = {
+    to: values.email,
+    subject: `Hi! ${values.name}, Your Account Credentials`,  // Email subject
+    html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
+  <div style="width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+    <img src="https://i.postimg.cc/6pgNvKhD/logo.png" alt="Logo" style="display: block; margin: 0 auto 20px; width: 150px;" />
+    
+    <h2 style="color: #277E16; font-size: 24px; margin-bottom: 20px;">
+      Welcome, ${values.name}! Your Admin Account Has Been Created
+    </h2>
+    
+    <p style="font-size: 16px; line-height: 1.5; margin-bottom: 10px;">
+      Your admin account for Toothlens has been successfully created. Below are your login credentials:
+    </p>
+
+    <div style="background-color: #f2f2f2; padding: 15px; border-radius: 8px; margin: 20px 0;">
+      <p style="margin: 8px 0;"><strong>Email:</strong> ${values.email}</p>
+      <p style="margin: 8px 0;"><strong>Password:</strong> ${values.password}</p>
+    </div>
+
+    <p style="font-size: 14px; color: #888; margin-bottom: 0;">
+      For security, please log in and change your password as soon as possible.
+    </p>
+    
+    <p style="font-size: 14px; color: #888;">
+      If you did not request this account or believe it was created in error, please contact support immediately.
+    </p>
+  </div>
+</body>
+`,
+  };
+  return data;
+};
+
 export const emailTemplate = {
-     createAccount,
-     resetPassword,
-     resetPasswordByUrl,
-     contactFormTemplate,
-     contact,
-     sendTrialWarningEmail,
-     sendEarlyWarningEmail,
-     sendReEngagementEmail,
-     sendTrialExpiredEmail,
+  createAccount,
+  resetPassword,
+  resetPasswordByUrl,
+  contactFormTemplate,
+  contact,
+  sendTrialWarningEmail,
+  sendEarlyWarningEmail,
+  sendReEngagementEmail,
+  sendTrialExpiredEmail,
+  createAdminAccount
 };

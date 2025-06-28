@@ -205,6 +205,9 @@ const handlePaymentSucceeded = async (session: Stripe.Checkout.Session) => {
             // extra field for payments gatewayResponse,transactionId,status,order
         });
 
+        newOrder.payment = newPayment._id;
+        await newOrder.save();
+
         console.log('newPayment : 11');
         // send email to user, notification to shop woner or admins socket
         /** rabby

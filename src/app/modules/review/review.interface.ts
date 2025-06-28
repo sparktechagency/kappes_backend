@@ -10,6 +10,7 @@ export type IReview = {
      refferenceId: Types.ObjectId; // either product or business
      review_type: REVIEW_TYPES; // New field: Specifies which model refferenceId points to
      target?: IProduct | IBusiness; // When populated, this will hold the actual product or business object
+     isDeleted?: boolean;
 };
 
 export type ReviewModel = Model<IReview>;

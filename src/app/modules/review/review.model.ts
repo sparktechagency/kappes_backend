@@ -34,7 +34,11 @@ const reviewSchema = new Schema<IReview, ReviewModel>(
           review_type: {
                type: String,
                required: true,
-               enum: ['Product', 'Business'], // IMPORTANT: Defines the allowed models
+               enum: REVIEW_TYPES, // IMPORTANT: Defines the allowed models
+          },
+          isDeleted: {
+               type: Boolean,
+               default: false,
           },
      },
      {
@@ -114,5 +118,21 @@ reviewSchema.virtual('target', {
 //           throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to update document');
 //      }
 // });
+
+reviewSchema.pre('find', function (next) {
+     this.find({ isDeleted: { $ne: true } });
+     next();
+});
+
+reviewSchema.pre('findOne', function (next) {
+     this.find({ isDeleted: { $ne: true } });
+     next();
+});
+
+reviewSchema.pre('aggregate', function (next) {
+     this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+     next();
+});
+
 
 export const Review = model<IReview, ReviewModel>('Review', reviewSchema);

@@ -78,6 +78,19 @@ const getAllCouponByShopId = catchAsync(async (req: Request, res: Response) => {
    });
 });
 
+const getCouponById = catchAsync(async (req: Request, res: Response) => {
+   const { couponId } = req.params;
+
+   const result = await CouponService.getCouponById(couponId);
+
+   sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: 'Coupon fetched successfully',
+      data: result,
+   });
+});
+
 export const CouponController = {
    createCoupon,
    getAllCoupon,
@@ -85,4 +98,5 @@ export const CouponController = {
    getCouponByCode,
    deleteCoupon,
    getAllCouponByShopId,
+   getCouponById,
 };

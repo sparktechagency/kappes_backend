@@ -33,4 +33,9 @@ router.delete(
     CouponController.deleteCoupon
 );
 
+router.get(
+    '/:couponId',
+    CouponController.getCouponById
+);
+
 export const CouponRoutes = router;

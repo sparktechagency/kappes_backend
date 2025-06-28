@@ -1,0 +1,2 @@
+Sat Jun 28 2025 7:40:27 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/order/create 403 - 121.575 ms
+Sat Jun 28 2025 7:41:45 [SERVER-NAME] error: 10.0.60.110 - GET /favicon.ico 404 - 0.552 ms

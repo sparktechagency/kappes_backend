@@ -38,11 +38,6 @@ export const createOrderSchema = z.object({
 
 // Validation schema for updating order status
 export const updateOrderStatusSchema = z.object({
-  params: z.object({
-    id: z.string().refine((val) => Types.ObjectId.isValid(val), {
-      message: 'Invalid order ID',
-    }),
-  }),
   body: z.object({
     status: z.nativeEnum(ORDER_STATUS, {
       required_error: 'Status is required',
