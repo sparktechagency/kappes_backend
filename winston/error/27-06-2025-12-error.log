@@ -1,5 +1,0 @@
-Fri Jun 27 2025 12:10:27 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/product/create 403 - 101.550 ms
-Fri Jun 27 2025 12:10:46 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/product/create 403 - 77.700 ms
-Fri Jun 27 2025 12:12:11 [SERVER-NAME] error: 10.0.60.110 - PATCH /api/v1/product/create/685e35fc0d0cac4fab9ffb76 404 - 0.494 ms
-Fri Jun 27 2025 12:21:13 [SERVER-NAME] error: 10.0.60.110 - PATCH /api/v1/product/685e35fc0d0cac4fab9ffb76 400 - 426.075 ms
-Fri Jun 27 2025 12:30:25 [SERVER-NAME] error: 10.0.60.110 - PATCH /api/v1/product/685e35fc0d0cac4fab9ffb76 400 - 91.713 ms

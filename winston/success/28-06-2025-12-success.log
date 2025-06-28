@@ -67,3 +67,4 @@ Sat Jun 28 2025 12:48:33 [SERVER-NAME] info: [33m♻️  Socket is listening on
 Sat Jun 28 2025 12:48:33 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
 Sat Jun 28 2025 12:48:42 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop/overview/685806ee0d8150920d3662a5 200 - 692.707 ms
 Sat Jun 28 2025 12:48:48 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop/overview/685806ee0d8150920d3662a5 200 - 663.873 ms
+Sat Jun 28 2025 12:49:37 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop/overview/685806ee0d8150920d3662a5 200 - 674.594 ms

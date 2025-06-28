@@ -1,20 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { BUSINESS_TYPES } from "./business.enums";
 
-interface ITimeSlot {
-    start: string; // e.g., "09:00"
-    end: string;   // e.g., "17:00"
-}
 
-export interface IBusinessHours {
-    monday: ITimeSlot[];
-    tuesday: ITimeSlot[];
-    wednesday: ITimeSlot[];
-    thursday: ITimeSlot[];
-    friday: ITimeSlot[];
-    saturday: ITimeSlot[];
-    sunday: ITimeSlot[];
-}
 
 export interface IGeoLocation {
     type: 'Point';

@@ -28,6 +28,7 @@ import stripeAccountRoutes from '../app/modules/stripeAccount/stripeAccount.rout
 import { OrderRoutes } from '../app/modules/order/order.route';
 import { paymentRoutes } from '../app/modules/payment/payment.route';
 import { ReviewRoutes } from '../app/modules/review/review.routes';
+import { WishlistRoutes } from '../app/modules/wishlist/wishlist.route';
 
 const router = express.Router();
 const routes = [
@@ -174,7 +175,10 @@ const routes = [
      {
        path: '/review',
        route: ReviewRoutes,
-     },
+     },{
+          path: '/wishlist',
+          route: WishlistRoutes,
+        },
 ];
 
 routes.forEach((element) => {
