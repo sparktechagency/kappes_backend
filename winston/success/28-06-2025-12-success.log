@@ -61,3 +61,9 @@ Sat Jun 28 2025 12:35:2 [SERVER-NAME] info: [32m🚀 Database connected success
 Sat Jun 28 2025 12:35:2 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
 Sat Jun 28 2025 12:35:2 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
 Sat Jun 28 2025 12:35:3 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop/overview/685806ee0d8150920d3662a5 200 - 1108.297 ms
+Sat Jun 28 2025 12:48:32 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Sat Jun 28 2025 12:48:33 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Sat Jun 28 2025 12:48:33 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Sat Jun 28 2025 12:48:33 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Sat Jun 28 2025 12:48:42 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop/overview/685806ee0d8150920d3662a5 200 - 692.707 ms
+Sat Jun 28 2025 12:48:48 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop/overview/685806ee0d8150920d3662a5 200 - 663.873 ms

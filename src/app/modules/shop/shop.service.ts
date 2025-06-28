@@ -501,7 +501,7 @@ const getShopOverview = async (shopId: string, user: IJwtPayload) => {
         },
     ]);
 
-    // get month based earnings
+    // get month based earnings and orders
     const monthEarnings = await Order.aggregate([
         {
             $match: {
@@ -515,6 +515,7 @@ const getShopOverview = async (shopId: string, user: IJwtPayload) => {
                     month: { $month: '$createdAt' },
                 },
                 earnings: { $sum: '$finalAmount' },
+                orders: { $sum: 1 },
             },
         },
         {
