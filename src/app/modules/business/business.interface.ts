@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Document } from "mongoose";
 import { BUSINESS_TYPES } from "./business.enums";
 
 
@@ -15,7 +15,8 @@ export interface IBusinessSearchParams {
     searchByLocationText?: string;
 }
 
-export interface IBusiness {
+export interface IBusiness extends Document {
+    _id: mongoose.Types.ObjectId;
     name: string;
     type: BUSINESS_TYPES;
     email: string;
@@ -28,19 +29,28 @@ export interface IBusiness {
         country?: string;
         detail_address?: string;
     };
-    location: IGeoLocation;
-    service: string;    
+    service: string;
     working_hours?: { day: string; start: string; end: string }[];
     logo: string;
     coverPhoto: string;
     banner: string;
-    reviews: Schema.Types.ObjectId[];
     owner: mongoose.Types.ObjectId;
-    isDeleted: boolean;
-    isActive: boolean;
-    isVerified: boolean;
+    reviews: mongoose.Types.ObjectId[];
     totalReviews: number;
     avg_rating: number;
+    isDeleted: boolean;
+    isActive: boolean;
+    verified: boolean;
+    authentication?: {
+        oneTimeCode: number;
+        expireAt: Date;
+    };
+    messages : {
+        senderName:string;
+        senderEmail:string;
+        message:string;
+        createdAt:Date;
+    }[]
 }
 
 

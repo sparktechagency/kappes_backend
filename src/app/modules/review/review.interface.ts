@@ -3,14 +3,23 @@ import { IBusiness } from '../business/business.interface';
 import { REVIEW_TYPES } from './review.enums';
 import { IProduct } from '../product/product.interface';
 
-export type IReview = {
+export interface IReviewBase {
      customer: Types.ObjectId;
      rating: number;
      comment: string;
-     refferenceId: Types.ObjectId; // either product or business
-     review_type: REVIEW_TYPES; // New field: Specifies which model refferenceId points to
-     target?: IProduct | IBusiness; // When populated, this will hold the actual product or business object
+     review_type: REVIEW_TYPES;
      isDeleted?: boolean;
-};
+     isApproved?: boolean;
+}
+
+export interface IReview extends IReviewBase {
+     refferenceId: Types.ObjectId; // Unpopulated reference
+     target?: IProduct | IBusiness; // Populated reference
+}
+
+export interface IPopulatedReview extends IReviewBase {
+     refferenceId: IProduct | IBusiness; // Populated reference
+     target?: IProduct | IBusiness;
+}
 
 export type ReviewModel = Model<IReview>;

@@ -181,8 +181,8 @@ const getFollowersByShop = catchAsync(async (req: Request, res: Response) => {
 
 const toggleFollowUnfollowShop = catchAsync(async (req: Request, res: Response) => {
     const { shopId } = req.params;
-    const { userId } = req.body;
-    const result = await ShopService.toggleFollowUnfollowShop(shopId, userId as string);
+    const { id:userId } = req.user as IJwtPayload;
+    const result = await ShopService.toggleFollowUnfollowShop(shopId, userId);
     sendResponse(res, {
         statusCode: StatusCodes.OK,
         success: true,
@@ -294,6 +294,17 @@ const getShopOverview = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getShopsByFollower = catchAsync(async (req: Request, res: Response) => {
+    const { followerId } = req.params;
+    const result = await ShopService.getShopsByFollower(followerId);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: 'Shops by follower retrieved successfully',
+        data: result,
+    });
+});
+
 export const ShopController = {
     createShop,
     makeShopAdmin,
@@ -320,6 +331,7 @@ export const ShopController = {
     getProductsByShopId,
     getShopAdminsByShopId,
     createShopAdmin,
-    getShopOverview
+    getShopOverview,
+    getShopsByFollower
 }   
 

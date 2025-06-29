@@ -34,12 +34,39 @@ router.delete(
 
 
 // business related routes
-// router.post(
-//      '/business',
-//      validateRequest(ReviewValidation.reviewZodSchema),
-//      auth(USER_ROLES.USER),
-//      ReviewController.createReview,
-// );
+router.post(
+     '/business',
+     validateRequest(ReviewValidation.reviewZodSchema),
+     auth(USER_ROLES.USER),
+     ReviewController.createBusinessReview,
+);
+
+
+
+// toggle approved business review
+router.patch(
+     '/:reviewId',
+     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR,USER_ROLES.USER),
+     ReviewController.toggleApprovedBusinessReviewByOwner,
+);
+
+// get all unapproved business reviews
+router.get(
+     '/owner',
+     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR,USER_ROLES.USER),
+     ReviewController.getAllBusinessReviewsByOwner,
+);
+
+router.get(
+     '/business/:businessId',
+     ReviewController.getApprovedBusinessReviews,
+);
+
+router.delete(
+     '/:reviewId',
+     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR,USER_ROLES.USER),
+     ReviewController.deleteBusinessReviewByOwner,
+);
 
 // // shop related routes
 // // Get reviews by shop

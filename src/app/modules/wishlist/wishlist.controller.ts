@@ -39,7 +39,7 @@ const getWishlist = catchAsync(async (req: Request, res: Response) => {
 
     const { id } = req.user as IJwtPayload;
 
-    const result = await WishlistService.getWishlist(id);
+    const result = await WishlistService.getWishlist(id,req.query);
 
     sendResponse(res, {
         statusCode: StatusCodes.OK,

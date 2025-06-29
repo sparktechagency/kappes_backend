@@ -6,7 +6,7 @@ import { CommunityRouter } from '../app/modules/community/community.router';
 import { ContactRoutes } from '../app/modules/contcatus/contactus.route';
 import { CategoryRoutes } from '../app/modules/category/category.route';
 import { SubCategoryRoutes } from '../app/modules/subCategorys/subCategory.route';
-import { userManagementRouter } from '../app/modules/admin/userManagement/userManagement.route'; 
+import { userManagementRouter } from '../app/modules/admin/userManagement/userManagement.route';
 import { ComingSoonRoutes } from '../app/modules/admin/comeingSoon/comeingSoon.router';
 import { DashboardRoutes } from '../app/modules/admin/dashboard/dashboard.route';
 import { FavouritdRouter } from '../app/modules/favourit/favourit.router';
@@ -14,7 +14,7 @@ import { CreatePostRoutes } from '../app/modules/admin/creaetPost/creaetPost.rou
 import SettingsRouter from '../app/modules/sattings/sattings.route';
 import { ExploreRoutes } from '../app/modules/explore/explore.route';
 import { AdminRoutes } from '../app/modules/admin/admin.route';
-import { NotificationRoutes } from '../app/modules/notification/notification.routes'; 
+import { NotificationRoutes } from '../app/modules/notification/notification.routes';
 import { ChallengeRoutes } from '../app/modules/admin/challanges/challanges.router';
 import { VariantRoutes } from '../app/modules/variant/variant.routes';
 import { BrandRoutes } from '../app/modules/brand/brand.routes';
@@ -29,6 +29,7 @@ import { OrderRoutes } from '../app/modules/order/order.route';
 import { paymentRoutes } from '../app/modules/payment/payment.route';
 import { ReviewRoutes } from '../app/modules/review/review.routes';
 import { WishlistRoutes } from '../app/modules/wishlist/wishlist.route';
+import { BusinessRouter } from '../app/modules/business/business.route';
 
 const router = express.Router();
 const routes = [
@@ -67,7 +68,7 @@ const routes = [
      {
           path: '/category',
           route: CategoryRoutes,
-     }, 
+     },
      {
           path: '/admin/subcategory',
           route: SubCategoryRoutes,
@@ -79,7 +80,7 @@ const routes = [
      {
           path: '/admin/user/managment',
           route: userManagementRouter,
-     }, 
+     },
      {
           path: '/admin/post/managment',
           route: CreatePostRoutes,
@@ -87,7 +88,7 @@ const routes = [
      {
           path: '/post',
           route: CreatePostRoutes,
-     }, 
+     },
      {
           path: '/admin/notifications',
           route: NotificationRoutes,
@@ -161,24 +162,29 @@ const routes = [
           route: OfferedRoutes,
      },
      {
-       path: '/stripe',
-       route: stripeAccountRoutes,
+          path: '/stripe',
+          route: stripeAccountRoutes,
      },
      {
-       path: '/order',
-       route: OrderRoutes,
+          path: '/order',
+          route: OrderRoutes,
      },
      {
-       path: '/payment',
-       route: paymentRoutes,
+          path: '/payment',
+          route: paymentRoutes,
      },
      {
-       path: '/review',
-       route: ReviewRoutes,
-     },{
+          path: '/review',
+          route: ReviewRoutes,
+     },
+     {
           path: '/wishlist',
           route: WishlistRoutes,
-        },
+     },
+     {
+          path: '/business',
+          route: BusinessRouter,
+     },
 ];
 
 routes.forEach((element) => {

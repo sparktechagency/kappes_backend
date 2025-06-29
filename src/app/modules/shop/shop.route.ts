@@ -46,18 +46,15 @@ router.patch('/:id', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.V
 // router.patch('/update-revenue/:shopId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), validateRequest(ShopValidation.updateRevenueZodSchema), ShopController.updateRevenue);
 
 
-// Get followed shops by user
-// router.get('/shop/:userId', ShopController.getShopsByFollower);
-// const getShopsByFollower = catchAsync(async (req: Request, res: Response) => {
-//     const { followerId } = req.params;
-//     const result = await ShopService.getShopsByFollower(followerId);
-//     sendResponse(res, {
-//         statusCode: StatusCodes.OK,
-//         success: true,
-//         message: 'Shops by follower retrieved successfully',
-//         data: result,
-//     });
-// });
+// Get followed shops by user or my followed shops
+router.get('/followed/:followerId', auth(USER_ROLES.USER), ShopController.getShopsByFollower);
+
+// toggle Follow-unfollow a shop
+router.post('/follow-unfollow/:shopId', auth(USER_ROLES.USER), ShopController.toggleFollowUnfollowShop);
+// Get followers by shop
+router.get('/followers/:shopId', ShopController.getFollowersByShop);
+
+
 // Delete a shop by ID
 // router.delete('/:id', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), ShopController.deleteShopById);
 // // Get shops by owner
@@ -74,14 +71,10 @@ router.patch('/:id', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.V
 // router.get('/:shopId/coupons', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), ShopController.getCouponsByShop);
 // // Get admins by shop
 // router.get('/:shopId/admins', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), ShopController.getAdminsByShop);
-// // Get followers by shop
-// router.get('/:shopId/followers', ShopController.getFollowersByShop);
 // // make admin for shop
 // // router.post('/:shopId/admins', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), ShopController.addAdminToShop);
 // // remove admin from shop
 // // router.delete('/:shopId/admins/:adminId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), ShopController.removeAdminFromShop);
-// // toggle Follow-unfollow a shop
-// router.post('/follow-unfollow/:shopId', ShopController.toggleFollowUnfollowShop);
 
 // Export the router
 export const ShopRoutes = router;

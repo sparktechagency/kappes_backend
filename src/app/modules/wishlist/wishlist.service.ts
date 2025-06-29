@@ -3,6 +3,8 @@ import { IWishlist, IWishlistItem } from './wishlist.interface';
 import { Wishlist } from './wishlist.model';
 import AppError from '../../../errors/AppError';
 import { StatusCodes } from 'http-status-codes';
+import { Record } from 'aws-sdk/clients/cognitosync';
+import QueryBuilder from '../../builder/QueryBuilder';
 
 const addToWishlist = async (userId: string, productId: string): Promise<IWishlist> => {
     let wishlist = await Wishlist.findOne({ user: userId });
@@ -38,8 +40,13 @@ const removeFromWishlist = async (userId: string, productId: string): Promise<IW
     return wishlist;
 };
 
-const getWishlist = async (userId: string): Promise<IWishlist | null> => {
-    return Wishlist.findOne({ user: userId }).populate('items.product');
+const getWishlist = async (userId: string, query: any) => {
+    const querBuilder = new QueryBuilder(Wishlist.find({ user: userId }).populate('items.product'), query);
+
+    const result = await querBuilder.fields().sort().paginate().filter().search(['items.product.name', 'items.product.description', 'items.product.price']).modelQuery; // Final query model    
+
+    const meta = await querBuilder.countTotal();
+    return { result, meta };
 };
 
 const isProductInWishlist = async (userId: string, productId: string): Promise<boolean> => {

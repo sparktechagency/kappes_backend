@@ -215,7 +215,7 @@ const updateProduct = async (
     payload: Partial<IProduct | ICreateProductRequest | any>,
     user: IJwtPayload
 ) => {
-    const product = await Product.findById(id)
+    const product: any = await Product.findById(id)
         .populate('shopId', 'owner admins')
         .populate('categoryId', 'name')
         .populate('subcategoryId', 'name');
@@ -248,7 +248,7 @@ const updateProduct = async (
             if (isVariantId) {
                 // Check if variant exists in the product
                 const existingVariant = product.product_variant_Details.find(
-                    v => v.variantId.toString() === variant.variantId.toString()
+                    (v: any) => v.variantId.toString() === variant.variantId.toString()
                 );
 
                 if (!existingVariant) {
@@ -289,7 +289,7 @@ const updateProduct = async (
 
                 // Check if the variant already exists in the product's variants array
                 const existingVariantIndex = product.product_variant_Details.findIndex(
-                    v => v.variantId.toString() === foundVariant._id!.toString()
+                    (v: any) => v.variantId.toString() === foundVariant._id!.toString()
                 );
 
                 if (existingVariantIndex !== -1) {

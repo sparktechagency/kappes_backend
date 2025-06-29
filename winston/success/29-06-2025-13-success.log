@@ -1,0 +1,73 @@
+Sun Jun 29 2025 13:1:15 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/all 200 - 291.146 ms
+Sun Jun 29 2025 13:1:52 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/all?fields=messages 200 - 232.273 ms
+Sun Jun 29 2025 13:2:6 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/all?fields=messages 200 - 237.106 ms
+Sun Jun 29 2025 13:2:32 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Sun Jun 29 2025 13:2:33 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Sun Jun 29 2025 13:2:33 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Sun Jun 29 2025 13:2:33 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Sun Jun 29 2025 13:2:46 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Sun Jun 29 2025 13:2:47 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Sun Jun 29 2025 13:2:47 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Sun Jun 29 2025 13:2:47 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Sun Jun 29 2025 13:2:49 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/all?fields=messages 200 - 254.865 ms
+Sun Jun 29 2025 13:3:12 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Sun Jun 29 2025 13:3:13 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Sun Jun 29 2025 13:3:13 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Sun Jun 29 2025 13:3:13 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Sun Jun 29 2025 13:3:17 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Sun Jun 29 2025 13:3:18 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Sun Jun 29 2025 13:3:18 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Sun Jun 29 2025 13:3:18 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Sun Jun 29 2025 13:3:19 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/all?fields=messages 200 - 1076.250 ms
+Sun Jun 29 2025 13:3:24 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/all 200 - 224.564 ms
+Sun Jun 29 2025 13:4:24 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Sun Jun 29 2025 13:4:25 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Sun Jun 29 2025 13:4:25 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Sun Jun 29 2025 13:4:25 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Sun Jun 29 2025 13:4:31 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Sun Jun 29 2025 13:4:32 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Sun Jun 29 2025 13:4:32 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Sun Jun 29 2025 13:4:32 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Sun Jun 29 2025 13:4:33 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/my-businesses 200 - 1082.012 ms
+Sun Jun 29 2025 13:4:50 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Sun Jun 29 2025 13:4:51 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Sun Jun 29 2025 13:4:51 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Sun Jun 29 2025 13:4:51 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Sun Jun 29 2025 13:4:53 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/my-businesses 200 - 1293.377 ms
+Sun Jun 29 2025 13:6:34 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/messages/6860da081206e0b144c939db 200 - 304.149 ms
+Sun Jun 29 2025 13:10:19 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Sun Jun 29 2025 13:10:21 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Sun Jun 29 2025 13:10:21 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Sun Jun 29 2025 13:10:21 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Sun Jun 29 2025 13:12:9 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/business/message/6860da081206e0b144c939db 200 - 391.493 ms
+Sun Jun 29 2025 13:12:22 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/messages/6860da081206e0b144c939db 200 - 201.051 ms
+Sun Jun 29 2025 13:12:47 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Sun Jun 29 2025 13:12:48 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Sun Jun 29 2025 13:12:48 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Sun Jun 29 2025 13:12:48 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Sun Jun 29 2025 13:14:0 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Sun Jun 29 2025 13:14:1 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Sun Jun 29 2025 13:14:1 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Sun Jun 29 2025 13:14:1 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Sun Jun 29 2025 13:14:11 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/business/message/6860da081206e0b144c939db 200 - 284.430 ms
+Sun Jun 29 2025 13:14:12 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/business/message/6860da081206e0b144c939db 200 - 240.885 ms
+Sun Jun 29 2025 13:14:20 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/messages/6860da081206e0b144c939db 200 - 163.233 ms
+Sun Jun 29 2025 13:14:44 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/messages/6860da081206e0b144c939db?page=2 200 - 160.998 ms
+Sun Jun 29 2025 13:15:12 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/messages/6860da081206e0b144c939db?page=1 200 - 159.284 ms
+Sun Jun 29 2025 13:16:29 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/6860da081206e0b144c939db 200 - 98.513 ms
+Sun Jun 29 2025 13:17:41 [SERVER-NAME] info: 10.0.60.110 - PATCH /api/v1/business/update/6860da081206e0b144c939db 200 - 351.696 ms
+Sun Jun 29 2025 13:17:49 [SERVER-NAME] info: 10.0.60.110 - PATCH /api/v1/business/update/6860da081206e0b144c939db 200 - 244.826 ms
+Sun Jun 29 2025 13:17:52 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/6860da081206e0b144c939db 200 - 83.043 ms
+Sun Jun 29 2025 13:18:18 [SERVER-NAME] info: 10.0.60.110 - PATCH /api/v1/business/update/6860da081206e0b144c939db 200 - 270.313 ms
+Sun Jun 29 2025 13:19:7 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/business/create 201 - 469.574 ms
+Sun Jun 29 2025 13:19:10 [SERVER-NAME] info: Mail send successfully
+Sun Jun 29 2025 13:19:50 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/my-businesses 200 - 338.818 ms
+Sun Jun 29 2025 13:20:7 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/business/message/6860e8ebc9314030811fe871 200 - 262.377 ms
+Sun Jun 29 2025 13:20:8 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/business/message/6860e8ebc9314030811fe871 200 - 238.566 ms
+Sun Jun 29 2025 13:20:9 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/business/message/6860e8ebc9314030811fe871 200 - 241.978 ms
+Sun Jun 29 2025 13:20:10 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/business/message/6860e8ebc9314030811fe871 200 - 239.465 ms
+Sun Jun 29 2025 13:20:18 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/messages/6860e8ebc9314030811fe871 200 - 157.344 ms
+Sun Jun 29 2025 13:20:21 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/messages/6860e8ebc9314030811fe871 200 - 157.980 ms
+Sun Jun 29 2025 13:20:29 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/messages/6860e8ebc9314030811fe871 200 - 158.809 ms
+Sun Jun 29 2025 13:21:43 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/messages/6860e8ebc9314030811fe871 200 - 164.845 ms
+Sun Jun 29 2025 13:22:3 [SERVER-NAME] info: 10.0.60.110 - DELETE /api/v1/business/6860e8ebc9314030811fe871 200 - 342.364 ms

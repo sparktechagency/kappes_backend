@@ -17,7 +17,7 @@ const createProductReview = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getProductReviews = catchAsync(async (req: Request, res: Response) => {
-     const result = await ReviewService.getProductReviews(req.params.productId,req.query);
+     const result = await ReviewService.getProductReviews(req.params.productId, req.query);
 
      sendResponse(res, {
           statusCode: StatusCodes.OK,
@@ -28,7 +28,7 @@ const getProductReviews = catchAsync(async (req: Request, res: Response) => {
 });
 
 const deleteProductReview = catchAsync(async (req: Request, res: Response) => {
-     const result = await ReviewService.deleteProductReview(req.params.reviewId,req.user as IJwtPayload);
+     const result = await ReviewService.deleteProductReview(req.params.reviewId, req.user as IJwtPayload);
 
      sendResponse(res, {
           statusCode: StatusCodes.OK,
@@ -50,7 +50,7 @@ const getAllProductReviewsByVendorAndShopAdmin = catchAsync(async (req: Request,
 });
 
 const getShopProductsReviews = catchAsync(async (req: Request, res: Response) => {
-     const result = await ReviewService.getShopProductsReviews(req.params.shopId,req.query,req.user as IJwtPayload );
+     const result = await ReviewService.getShopProductsReviews(req.params.shopId, req.query, req.user as IJwtPayload);
 
      sendResponse(res, {
           statusCode: StatusCodes.OK,
@@ -60,4 +60,60 @@ const getShopProductsReviews = catchAsync(async (req: Request, res: Response) =>
      });
 });
 
-export const ReviewController = { createProductReview,getProductReviews,deleteProductReview,getAllProductReviewsByVendorAndShopAdmin,getShopProductsReviews };
+/* business related */
+const createBusinessReview = catchAsync(async (req: Request, res: Response) => {
+     const result = await ReviewService.createBusinessReview(req.body, req.user as IJwtPayload);
+
+     sendResponse(res, {
+          statusCode: StatusCodes.CREATED,
+          success: true,
+          message: 'Business Review Created Successfully',
+          data: result,
+     });
+});
+
+const getApprovedBusinessReviews = catchAsync(async (req: Request, res: Response) => {
+     const result = await ReviewService.getApprovedBusinessReviews(req.params.businessId, req.query);
+
+     sendResponse(res, {
+          statusCode: StatusCodes.OK,
+          success: true,
+          message: 'Business Reviews Retrieved Successfully',
+          data: result,
+     });
+});
+
+const deleteBusinessReviewByOwner = catchAsync(async (req: Request, res: Response) => {
+     const result = await ReviewService.deleteBusinessReviewByOwner(req.params.reviewId, req.user as IJwtPayload);
+
+     sendResponse(res, {
+          statusCode: StatusCodes.OK,
+          success: true,
+          message: 'Business Review Deleted Successfully',
+          data: result,
+     });
+});
+
+const toggleApprovedBusinessReviewByOwner = catchAsync(async (req: Request, res: Response) => {
+     const result = await ReviewService.toggleApprovedBusinessReviewByOwner(req.params.reviewId, req.user as IJwtPayload);
+
+     sendResponse(res, {
+          statusCode: StatusCodes.OK,
+          success: true,
+          message: 'Business Review Toggled Successfully',
+          data: result,
+     });
+});  
+
+const getAllBusinessReviewsByOwner = catchAsync(async (req: Request, res: Response) => {
+     const result = await ReviewService.getAllBusinessReviewsByOwner(req.user as IJwtPayload);
+
+     sendResponse(res, {
+          statusCode: StatusCodes.OK,
+          success: true,
+          message: 'Business Reviews Retrieved Successfully',
+          data: result,
+     });
+});
+
+export const ReviewController = { createProductReview, getProductReviews, deleteProductReview, getAllProductReviewsByVendorAndShopAdmin, getShopProductsReviews, createBusinessReview, getApprovedBusinessReviews, deleteBusinessReviewByOwner,toggleApprovedBusinessReviewByOwner,getAllBusinessReviewsByOwner };

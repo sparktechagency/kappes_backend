@@ -1,8 +1,0 @@
-Sat Jun 28 2025 12:3:32 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/shop/create-shop-admin/685806ee0d8150920d3662a5 400 - 58.902 ms
-Sat Jun 28 2025 12:3:47 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/shop/create-shop-admin/685806ee0d8150920d3662a5 403 - 126.347 ms
-Sat Jun 28 2025 12:4:51 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/shop/create-shop-admin/6857d5988a47be1e4bf6adc4 403 - 77.205 ms
-Sat Jun 28 2025 12:5:31 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/shop/create-shop-admin/6857d5988a47be1e4bf6adc4 403 - 79.662 ms
-Sat Jun 28 2025 12:6:5 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/shop/create-shop-admin/6857d5988a47be1e4bf6adc4 403 - 702.519 ms
-Sat Jun 28 2025 12:6:27 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/shop/create-shop-admin/6857d5988a47be1e4bf6adc4 403 - 81.252 ms
-Sat Jun 28 2025 12:6:57 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/shop/create-shop-admin/6857d5988a47be1e4bf6adc4 400 - 1135.549 ms
-Sat Jun 28 2025 12:11:29 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/shop/create-shop-admin/6857d5988a47be1e4bf6adc4 400 - 242.320 ms

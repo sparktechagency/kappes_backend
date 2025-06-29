@@ -6,7 +6,7 @@ const createAccount = (values: ICreateAccount) => {
     subject: 'Verify your account',
     html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
     <div style="width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); text-align: center;">
-        <img src="https://i.postimg.cc/6pgNvKhD/logo.png" alt="Logo" style="display: block; margin: 0 auto 20px; width:150px" />
+        <img src="https://i.ibb.co/Jjnzyh9s/logo-removebg-preview.png" alt="Logo" style="display: block; margin: 0 auto 20px; width:150px" />
           <h2 style="color: #277E16; font-size: 24px; margin-bottom: 20px;">Hey! ${values.name}, Your Account Credentials</h2>
         <div style="text-align: center;">
             <p style="color: #555; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">Your single use code is:</p>
@@ -60,7 +60,7 @@ const resetPassword = (values: IResetPassword) => {
     subject: 'Reset your password',
     html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
     <div style="width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-        <img src="https://i.postimg.cc/6pgNvKhD/logo.png" alt="Logo" style="display: block; margin: 0 auto 20px; width:150px" />
+        <img src="https://i.ibb.co/Jjnzyh9s/logo-removebg-preview.png" alt="Logo" style="display: block; margin: 0 auto 20px; width:150px" />
         <div style="text-align: center;">
             <p style="color: #555; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">Your single use code is:</p>
             <div style="background-color: #277E16; width: 120px; padding: 10px; text-align: center; border-radius: 8px; color: #fff; font-size: 25px; letter-spacing: 2px; margin: 20px auto;">${values.otp}</div>
@@ -78,7 +78,7 @@ const resetPasswordByUrl = (values: IResetPasswordByEmail) => {
     subject: 'Reset Your Password',
     html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
       <div style="width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-        <img src="https://i.postimg.cc/6pgNvKhD/logo.png" alt="Logo" style="display: block; margin: 0 auto 20px; width:150px" />
+        <img src="https://i.ibb.co/Jjnzyh9s/logo-removebg-preview.png" alt="Logo" style="display: block; margin: 0 auto 20px; width:150px" />
         <div style="text-align: center;">
           <h2 style="color: #333;">Reset Your Password</h2>
           <p style="color: #555; font-size: 16px; line-height: 1.5;">We received a request to reset your password. Click the button below to reset it:</p>
@@ -98,7 +98,7 @@ const contactFormTemplate = (values: IHelpContact) => {
     subject: 'Thank you for reaching out to us',
     html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
     <div style="width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-        <img src="https://i.postimg.cc/6pgNvKhD/logo.png" alt="Logo" style="display: block; margin: 0 auto 20px; width:150px" />
+        <img src="https://i.ibb.co/Jjnzyh9s/logo-removebg-preview.png" alt="Logo" style="display: block; margin: 0 auto 20px; width:150px" />
         <div style="text-align: center;">
             <p style="color: #555; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">Hello ${values.name},</p>
             <p style="color: #555; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">Thank you for reaching out to us. We have received your message:</p>
@@ -200,7 +200,7 @@ const createAdminAccount = (values: ICreateAccount) => {
     subject: `Hi! ${values.name}, Your Account Credentials`,  // Email subject
     html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
   <div style="width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-    <img src="https://i.postimg.cc/6pgNvKhD/logo.png" alt="Logo" style="display: block; margin: 0 auto 20px; width: 150px;" />
+    <img src="https://i.ibb.co/Jjnzyh9s/logo-removebg-preview.png" alt="Logo" style="display: block; margin: 0 auto 20px; width: 150px;" />
     
     <h2 style="color: #277E16; font-size: 24px; margin-bottom: 20px;">
       Welcome, ${values.name}! Your Admin Account Has Been Created

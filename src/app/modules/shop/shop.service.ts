@@ -212,7 +212,7 @@ const getFollowersByShop = async (shopId: string) => {
     if (!shop) {
         throw new AppError(404, 'Shop not found');
     }
-    return shop.followers;
+    return { totalFollowers: shop.totalFollowers || shop.followers?.length || 0, followers: shop.followers, };
 }
 // const addAdminToShop = async (shopId: string, adminId: string) => {
 //     const shop = await Shop.findById(shopId);
@@ -536,6 +536,32 @@ const getShopOverview = async (shopId: string, user: IJwtPayload) => {
     };
 }
 
+const getShopsByFollower = async (followerId: string) => {
+    console.log(followerId);
+    const shopQuery = new QueryBuilder(
+        Shop.find({ followers: { $in: [followerId] } })
+            .populate('owner', 'full_name email'),
+        {},
+    )
+        .search(['name', 'description', 'tags'])
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+
+    const shops = await shopQuery.modelQuery;
+    const meta = await shopQuery.countTotal();
+
+    if (!shops || shops.length === 0) {
+        throw new AppError(404, 'No shops found for this follower');
+    }
+
+    return {
+        meta,
+        shops,
+    };
+}
+
 
 // Export the ShopService
 export const ShopService = {
@@ -566,5 +592,6 @@ export const ShopService = {
     getProductsByShopId,
     getShopAdminsByShopId,
     createShopAdmin,
-    getShopOverview
+    getShopOverview,
+    getShopsByFollower
 }

@@ -40,6 +40,10 @@ const reviewSchema = new Schema<IReview, ReviewModel>(
                type: Boolean,
                default: false,
           },
+          isApproved: {
+               type: Boolean,
+               default: true,
+          },
      },
      {
           timestamps: true,
