@@ -314,13 +314,22 @@ const createBusinessReview = async (payload: IReview, user: IJwtPayload): Promis
 
      await business.save();
 
-     return result;
+     return result.populate({
+          path: 'refferenceId',
+          model: 'Business',
+          match: {
+               isDeleted: false,
+          },
+          select: 'owner name email address',
+     });
 };
 
 
 
 const toggleApprovedBusinessReviewByOwner = async (reviewId: string, user: IJwtPayload) => {
+     console.log({ reviewId });
      const review = await Review.findById(reviewId);
+     console.log({ review });
      if (!review) {
           throw new AppError(StatusCodes.NOT_FOUND, 'No Review Found');
      }
@@ -352,7 +361,7 @@ const getApprovedBusinessReviews = async (businessId: string, query: Record<stri
                match: {
                     isDeleted: false,
                },
-               select: 'owner',
+               select: 'owner name email',
           }).populate({
                path: 'customer',
                model: 'User',
@@ -383,7 +392,7 @@ const deleteBusinessReviewByOwner = async (reviewId: string, user: IJwtPayload) 
           throw new AppError(StatusCodes.NOT_FOUND, 'No Review Found');
      }
 
-     const isExistBusiness: IBusiness | null = await Business.findById(existingReview.refferenceId).populate("owner", "full_name email");
+     const isExistBusiness: IBusiness | null = await Business.findOne({ _id: existingReview.refferenceId, isDeleted: false, owner: user.id });
      if (!isExistBusiness) {
           throw new AppError(StatusCodes.NOT_FOUND, 'No Business Found');
      }
@@ -419,25 +428,13 @@ const getAllBusinessReviewsByOwner = async (user: IJwtPayload) => {
       * res as per businesswise array
       * 
       */
-     const businesses = await Business.find({ owner: user.id, isDeleted: false });
+     const businesses = await Business.find({ owner: user.id, isDeleted: false }).populate("reviews");
      if (!businesses || businesses.length === 0) {
           throw new AppError(StatusCodes.NOT_FOUND, 'No Business Found');
      }
-     const businessIds = businesses.map((business) => business._id);
-     const reviews = await Review.find({ refferenceId: { $in: businessIds } }).populate({
-          path: 'refferenceId',
-          model: 'Business',
-          match: {
-               isDeleted: false,
-          },
-          select: 'owner isApproved name email address working_hours',
-     })
 
      return businesses.map((business: IBusiness) => {
-          return {
-               business,
-               reviews: reviews.filter((review: IReview) => review.refferenceId.toString() === business._id.toString()),
-          };
+          return business
      });
 };
 

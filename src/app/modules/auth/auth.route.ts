@@ -7,6 +7,7 @@ import auth from '../../middleware/auth';
 const router = express.Router();
 
 router.post('/login', validateRequest(AuthValidation.createLoginZodSchema), AuthController.loginUser);
+router.get('/google/callback', AuthController.googleCallback);
 router.post('/refresh-token', AuthController.refreshToken);
 router.post('/forget-password', validateRequest(AuthValidation.createForgetPasswordZodSchema), AuthController.forgetPassword);
 

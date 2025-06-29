@@ -25,7 +25,7 @@ router.get(
 );
 
 router.delete(
-     '/:reviewId',
+     '/product/:reviewId',
      auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR),
      ReviewController.deleteProductReview,
 );
@@ -45,14 +45,14 @@ router.post(
 
 // toggle approved business review
 router.patch(
-     '/:reviewId',
+     '/business/:reviewId',
      auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR,USER_ROLES.USER),
      ReviewController.toggleApprovedBusinessReviewByOwner,
 );
 
 // get all unapproved business reviews
 router.get(
-     '/owner',
+     '/business/owner',
      auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR,USER_ROLES.USER),
      ReviewController.getAllBusinessReviewsByOwner,
 );
@@ -63,7 +63,7 @@ router.get(
 );
 
 router.delete(
-     '/:reviewId',
+     '/business/:reviewId',
      auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR,USER_ROLES.USER),
      ReviewController.deleteBusinessReviewByOwner,
 );

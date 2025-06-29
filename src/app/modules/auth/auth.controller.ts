@@ -3,6 +3,7 @@ import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { AuthService } from './auth.service';
 import config from '../../../config';
+import passport from '../../../config/passport';
 
 const verifyEmail = catchAsync(async (req, res) => {
      const { ...verifyData } = req.body;
@@ -39,7 +40,6 @@ const loginUser = catchAsync(async (req, res) => {
                accessToken: result.accessToken,
                refreshToken: result.refreshToken,
                role: result.role,
-               expireDate: result.expireDate,
           },
      });
 });
@@ -131,6 +131,30 @@ const refreshToken = catchAsync(async (req, res) => {
           data: result,
      });
 });
+
+const googleCallback = catchAsync(async (req, res) => {
+     const passportRes = passport.authenticate("google", { failureRedirect: "/" });
+     const result = await AuthService.loginUserFromDB(passportRes);
+     const cookieOptions: any = {
+          secure: false,
+          httpOnly: true,
+          maxAge: 31536000000,
+     };
+
+     if (config.node_env === 'production') {
+          cookieOptions.sameSite = 'none';
+     }
+     sendResponse(res, {
+          success: true,
+          statusCode: StatusCodes.OK,
+          message: 'User logged in successfully.',
+          data: {
+               accessToken: result.accessToken,
+               refreshToken: result.refreshToken,
+               role: result.role,
+          },
+     });
+});
 export const AuthController = {
      verifyEmail,
      loginUser,
@@ -141,4 +165,5 @@ export const AuthController = {
      resetPasswordByUrl,
      resendOtp,
      refreshToken,
+     googleCallback,
 };

@@ -10,7 +10,7 @@ passport.use(
           {
                clientID: config.social.google_client_id as string,
                clientSecret: config.social.google_client_secret as string,
-               callbackURL: 'https://nadir.binarybards.online/api/v1/auth/google/callback',
+               callbackURL: `${config.backend_url}/api/v1/auth/google/callback`,
           },
           async (accessToken, refreshToken, profile, done) => {
                try {
