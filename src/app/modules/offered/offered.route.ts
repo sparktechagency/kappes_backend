@@ -8,7 +8,7 @@ import { OfferedValidation } from './offered.validation';
 const router = Router();
 
 router.get('/', OfferedController.getActiveOfferedService)
-router.get('/all', OfferedController.getAllOffered)
+router.get('/all',auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), OfferedController.getAllOffered)
 
 router.post(
     '/',
