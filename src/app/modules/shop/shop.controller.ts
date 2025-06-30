@@ -62,11 +62,12 @@ const updateShopById = catchAsync(async (req: Request, res: Response) => {
 
 const deleteShopById = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
-    await ShopService.deleteShopById(id);
+    const result = await ShopService.deleteShopById(id,req.user as IJwtPayload);
     sendResponse(res, {
         statusCode: StatusCodes.NO_CONTENT,
         success: true,
         message: 'Shop deleted successfully',
+        data: result,
     });
 });
 

@@ -48,3 +48,91 @@ Mon Jun 30 2025 11:25:20 [SERVER-NAME] info: [32mConfig validation successful.
 Mon Jun 30 2025 11:25:21 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
 Mon Jun 30 2025 11:25:21 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
 Mon Jun 30 2025 11:25:21 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 11:25:30 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 11:25:30 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 11:25:30 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 11:25:30 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 11:27:28 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop 200 - 280.526 ms
+Mon Jun 30 2025 11:27:41 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 11:27:42 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 11:27:42 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 11:27:42 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 11:27:44 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?searchTerm=Ontario 200 - 1423.341 ms
+Mon Jun 30 2025 11:27:48 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop 200 - 249.503 ms
+Mon Jun 30 2025 11:27:58 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?searchTerm=!Ontario 200 - 172.509 ms
+Mon Jun 30 2025 11:28:13 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?searchTerm=-Ontario 200 - 169.759 ms
+Mon Jun 30 2025 11:28:17 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/login 200 - 715.400 ms
+Mon Jun 30 2025 11:28:18 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?searchTerm=Ontario 200 - 262.701 ms
+Mon Jun 30 2025 11:28:21 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop 200 - 259.430 ms
+Mon Jun 30 2025 11:28:37 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/login 200 - 595.925 ms
+Mon Jun 30 2025 11:29:2 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop 200 - 263.152 ms
+Mon Jun 30 2025 11:29:45 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?limit=1&page=1 200 - 259.692 ms
+Mon Jun 30 2025 11:29:53 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?limit=1&page=2 200 - 253.988 ms
+Mon Jun 30 2025 11:29:58 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?limit=1&page=3 200 - 253.231 ms
+Mon Jun 30 2025 11:30:2 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?limit=1&page=4 200 - 260.943 ms
+Mon Jun 30 2025 11:30:7 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?limit=1&page=5 200 - 251.450 ms
+Mon Jun 30 2025 11:30:11 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?limit=1&page=6 200 - 252.958 ms
+Mon Jun 30 2025 11:30:15 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?limit=1&page=7 200 - 252.116 ms
+Mon Jun 30 2025 11:30:22 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?limit=1&page=8 200 - 249.860 ms
+Mon Jun 30 2025 11:30:42 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop 200 - 266.386 ms
+Mon Jun 30 2025 11:31:15 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 11:31:16 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 11:31:16 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 11:31:16 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 11:31:23 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 11:31:24 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 11:31:24 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 11:31:24 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 11:31:47 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 11:31:48 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 11:31:48 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 11:31:48 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 11:32:43 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 11:32:44 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 11:32:44 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 11:32:44 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 11:34:18 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?searchTerm=Ontario 200 - 302.217 ms
+Mon Jun 30 2025 11:34:38 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?searchTerm=Toronto 200 - 257.912 ms
+Mon Jun 30 2025 11:34:43 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?searchTerm=Toront0 200 - 166.710 ms
+Mon Jun 30 2025 11:34:47 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?searchTerm=Toront 200 - 336.877 ms
+Mon Jun 30 2025 11:34:51 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/login 200 - 900.239 ms
+Mon Jun 30 2025 11:34:52 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?searchTerm=Toronto 200 - 256.793 ms
+Mon Jun 30 2025 11:35:30 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?searchTerm=123 200 - 253.206 ms
+Mon Jun 30 2025 11:36:37 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/users 200 - 1453.586 ms
+Mon Jun 30 2025 11:36:37 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/stripe/webhook 200 - 4.871 ms
+Mon Jun 30 2025 11:36:39 [SERVER-NAME] info: Mail send successfully
+Mon Jun 30 2025 11:37:16 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop 200 - 260.400 ms
+Mon Jun 30 2025 11:38:7 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?limit=1&page=8 200 - 247.765 ms
+Mon Jun 30 2025 11:38:16 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?searchTerm=123 200 - 249.923 ms
+Mon Jun 30 2025 11:39:44 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 11:39:45 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 11:39:45 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 11:39:45 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 11:40:18 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/auth/login 200 - 641.286 ms
+Mon Jun 30 2025 11:40:35 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop/6857ef75b1e96a6bba1a489a 200 - 167.324 ms
+Mon Jun 30 2025 11:40:52 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/auth/login 200 - 559.682 ms
+Mon Jun 30 2025 11:40:56 [SERVER-NAME] info: 10.0.60.110 - DELETE /api/v1/shop/6857ef75b1e96a6bba1a489a 204 - 250.148 ms
+Mon Jun 30 2025 11:42:11 [SERVER-NAME] info: 10.0.60.110 - DELETE /api/v1/shop/6857ef75b1e96a6bba1a489a 204 - 233.871 ms
+Mon Jun 30 2025 11:42:54 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 11:42:55 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 11:42:55 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 11:42:55 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 11:42:57 [SERVER-NAME] info: 10.0.60.110 - DELETE /api/v1/shop/6857ef75b1e96a6bba1a489a 204 - 1114.915 ms
+Mon Jun 30 2025 11:43:51 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 11:43:52 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 11:43:52 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 11:43:52 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 11:44:11 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 11:44:12 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 11:44:12 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 11:44:12 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 11:44:13 [SERVER-NAME] info: 10.0.60.110 - DELETE /api/v1/shop/6857ef75b1e96a6bba1a489a 204 - 1134.571 ms
+Mon Jun 30 2025 11:44:30 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 11:44:31 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 11:44:31 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 11:44:31 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 11:45:15 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 11:45:16 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 11:45:16 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 11:45:16 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 11:45:26 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?fields=name,description,logo,coverPhoto 200 - 274.536 ms

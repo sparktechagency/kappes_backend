@@ -82,7 +82,7 @@ const makeShopAdmin = async (shopId: string, tobeAdminId: string, user: IJwtPayl
 
 const getAllShops = async (query: Record<string, unknown>) => {
     const shopQuery = new QueryBuilder(Shop.find().populate('owner', 'full_name email').populate('admins', 'full_name email').populate('followers', 'full_name email'), query)
-        .search(['name', 'email'])
+        .search(['name', 'email', 'address.province', 'address.city', 'address.territory'])
         .filter()
         .sort()
         .paginate()
@@ -140,11 +140,20 @@ const updateShopById = async (id: string, payload: Partial<IShop>, user: IJwtPay
 
     return updatedShop;
 }
-const deleteShopById = async (id: string) => {
-    const shop = await Shop.findByIdAndDelete(id);
+const deleteShopById = async (id: string, user: IJwtPayload) => {
+    const shop = await Shop.findById(id);
     if (!shop) {
         throw new AppError(StatusCodes.NOT_FOUND, 'Shop not found');
     }
+
+    if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
+        if (shop.owner.toString() !== user.id && !shop.admins?.some(admin => admin.toString() === user.id)) {
+            throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to delete this shop');
+        }
+    }
+    // make isDeleted true
+    shop.isDeleted = true;
+    await shop.save();
     return shop;
 }
 const getShopsByOwner = async (ownerId: string) => {
