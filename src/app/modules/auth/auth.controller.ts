@@ -8,7 +8,7 @@ import { NextFunction, Request, Response } from 'express';
 import { jwtHelper } from '../../../helpers/jwtHelper';
 import { Secret } from 'jsonwebtoken';
 import { IJwtPayload } from './auth.interface';
-import { passportHandlers } from '../../../helpers/passportJsRedirectData';
+import { passportHandlers} from '../../../helpers/passportJsRedirectData';
 import { failureRedirectUrl } from './auth.utils';
 
 const verifyEmail = catchAsync(async (req, res) => {
@@ -140,32 +140,21 @@ const refreshToken = catchAsync(async (req, res) => {
 
 
 
-const googleAuth = (req: Request, res: Response, next: NextFunction) => {
-     // Store any state or session data you need
-     const { state } = req.query;
-     
-     const authenticator = passport.authenticate("google", {
-          scope: ["profile", "email"],
-          state: state?.toString(), // Pass through any state
-          accessType: 'offline', // Request refresh token
-          prompt: 'consent' // Force consent screen
-     });
-     
-     authenticator(req, res, next);
-};
+const googleAuth = passport.authenticate("google", {
+     scope: ["profile", "email"],
+   });
 
 const googleCallback = (req: Request, res: Response, next: NextFunction) => {
      passport.authenticate(
           "google",
           {
                failureRedirect: failureRedirectUrl,
-               session: false // We're using JWT, so disable session
           },
           async (err: any, user: any, info: any) => {
                try {
                     if (err || !user) {
                          console.error('Google OAuth Error:', err || 'No user returned');
-                         return res.redirect(`${failureRedirectUrl}?error=${encodeURIComponent(err?.message || 'Authentication failed')}`);
+                         return await passportHandlers.setErrorDataAndRedirect(res, err, user);
                     }
 
                     // Generate JWT token

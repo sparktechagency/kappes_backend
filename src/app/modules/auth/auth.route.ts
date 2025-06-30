@@ -22,7 +22,7 @@ router.post('/resend-otp', AuthController.resendOtp);
 
 router.get("/google", AuthController.googleAuth);
 router.get("/google/callback", AuthController.googleCallback);
-router.get("/facebook", AuthController.facebookAuth);
-router.get("/facebook/callback", AuthController.facebookCallback);
+// router.get("/facebook", AuthController.facebookAuth);
+// router.get("/facebook/callback", AuthController.facebookCallback);
 
 export const AuthRouter = router;
