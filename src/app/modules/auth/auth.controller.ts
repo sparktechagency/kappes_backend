@@ -4,6 +4,12 @@ import sendResponse from '../../../shared/sendResponse';
 import { AuthService } from './auth.service';
 import config from '../../../config';
 import passport from '../../../config/passport';
+import { NextFunction, Request, Response } from 'express';
+import { jwtHelper } from '../../../helpers/jwtHelper';
+import { Secret } from 'jsonwebtoken';
+import { IJwtPayload } from './auth.interface';
+import { passportHandlers } from '../../../helpers/passportJsRedirectData';
+import { failureRedirectUrl } from './auth.utils';
 
 const verifyEmail = catchAsync(async (req, res) => {
      const { ...verifyData } = req.body;
@@ -132,29 +138,80 @@ const refreshToken = catchAsync(async (req, res) => {
      });
 });
 
-const googleCallback = catchAsync(async (req, res) => {
-     const passportRes = passport.authenticate("google", { failureRedirect: "/" });
-     const result = await AuthService.loginUserFromDB(passportRes);
-     const cookieOptions: any = {
-          secure: false,
-          httpOnly: true,
-          maxAge: 31536000000,
-     };
 
-     if (config.node_env === 'production') {
-          cookieOptions.sameSite = 'none';
-     }
-     sendResponse(res, {
-          success: true,
-          statusCode: StatusCodes.OK,
-          message: 'User logged in successfully.',
-          data: {
-               accessToken: result.accessToken,
-               refreshToken: result.refreshToken,
-               role: result.role,
-          },
+
+const googleAuth = (req: Request, res: Response, next: NextFunction) => {
+     // Store any state or session data you need
+     const { state } = req.query;
+     
+     const authenticator = passport.authenticate("google", {
+          scope: ["profile", "email"],
+          state: state?.toString(), // Pass through any state
+          accessType: 'offline', // Request refresh token
+          prompt: 'consent' // Force consent screen
      });
-});
+     
+     authenticator(req, res, next);
+};
+
+const googleCallback = (req: Request, res: Response, next: NextFunction) => {
+     passport.authenticate(
+          "google",
+          {
+               failureRedirect: failureRedirectUrl,
+               session: false // We're using JWT, so disable session
+          },
+          async (err: any, user: any, info: any) => {
+               try {
+                    if (err || !user) {
+                         console.error('Google OAuth Error:', err || 'No user returned');
+                         return res.redirect(`${failureRedirectUrl}?error=${encodeURIComponent(err?.message || 'Authentication failed')}`);
+                    }
+
+                    // Generate JWT token
+                    const token = await jwtHelper.createToken(
+                         {
+                              id: user._id,
+                              role: user.role,
+                              email: user.email
+                         } as IJwtPayload,
+                         config.jwt.jwt_secret as Secret,
+                         config.jwt.jwt_expire_in as string
+                    );
+
+                    // Handle the successful authentication
+                    await passportHandlers.setSuccessDataAndRedirect(res, user, token);
+               } catch (error) {
+                    console.error('Error in Google callback:', error);
+                    res.redirect(`${failureRedirectUrl}?error=${encodeURIComponent('Authentication error')}`);
+               }
+          }
+     )(req, res, next);
+};
+
+
+
+
+const facebookAuth = passport.authenticate("facebook");
+
+const facebookCallback = (req: Request, res: Response, next: NextFunction) => {
+     passport.authenticate(
+          "facebook",
+          { failureRedirect: failureRedirectUrl },
+          async (err: any, user: any, info: any) => {
+               if (err || !user) {
+                    return await passportHandlers.setErrorDataAndRedirect(res, err, user);
+               }
+               const token = await jwtHelper.createToken({
+                    id: user._id,
+                    role: user.role,
+                    email: user.email
+               } as IJwtPayload, config.jwt.jwt_secret as Secret, config.jwt.jwt_expire_in as string);
+               await passportHandlers.setSuccessDataAndRedirect(res, user, token);
+          }
+     )(req, res, next);
+};
+
 export const AuthController = {
      verifyEmail,
      loginUser,
@@ -164,6 +221,10 @@ export const AuthController = {
      forgetPasswordByUrl,
      resetPasswordByUrl,
      resendOtp,
-     refreshToken,
+     refreshToken,  
+     googleAuth,
      googleCallback,
+     facebookAuth,
+     facebookCallback,
+
 };

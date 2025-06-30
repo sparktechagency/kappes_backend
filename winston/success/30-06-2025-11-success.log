@@ -1,0 +1,50 @@
+Mon Jun 30 2025 11:0:0 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google 302 - 24.799 ms
+Mon Jun 30 2025 11:1:5 [SERVER-NAME] info: [34mSIGINT received. Shutting down gracefully...[39m
+Mon Jun 30 2025 11:1:10 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 11:1:11 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 11:1:11 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Mon Jun 30 2025 11:1:11 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:8000[39m
+Mon Jun 30 2025 11:2:56 [SERVER-NAME] info: [34mSIGINT received. Shutting down gracefully...[39m
+Mon Jun 30 2025 11:3:1 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 11:3:2 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 11:3:2 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Mon Jun 30 2025 11:3:2 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:8000[39m
+Mon Jun 30 2025 11:3:4 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 13.049 ms
+Mon Jun 30 2025 11:3:17 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 2.283 ms
+Mon Jun 30 2025 11:4:5 [SERVER-NAME] info: [34mSIGINT received. Shutting down gracefully...[39m
+Mon Jun 30 2025 11:4:10 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 11:4:10 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 11:4:10 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Mon Jun 30 2025 11:4:10 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Mon Jun 30 2025 11:5:26 [SERVER-NAME] info: [34mSIGINT received. Shutting down gracefully...[39m
+Mon Jun 30 2025 11:5:32 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 11:5:33 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 11:5:33 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Mon Jun 30 2025 11:5:33 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Mon Jun 30 2025 11:9:42 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 140.381 ms
+Mon Jun 30 2025 11:10:6 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 4.631 ms
+Mon Jun 30 2025 11:10:15 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 0.997 ms
+Mon Jun 30 2025 11:12:44 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 11:12:45 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 11:12:45 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Mon Jun 30 2025 11:12:45 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Mon Jun 30 2025 11:13:4 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 11:13:5 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 11:13:5 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Mon Jun 30 2025 11:13:5 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Mon Jun 30 2025 11:18:37 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 11:18:39 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 11:18:39 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 11:18:39 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 11:18:50 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/login 200 - 632.222 ms
+Mon Jun 30 2025 11:19:53 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google 302 - 3.512 ms
+Mon Jun 30 2025 11:20:20 [SERVER-NAME] info: 10.0.60.147 - GET /api/v1/auth/google 302 - 1.335 ms
+Mon Jun 30 2025 11:20:53 [SERVER-NAME] info: 10.0.60.147 - GET /api/v1/auth/google 302 - 3.013 ms
+Mon Jun 30 2025 11:21:9 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/login 200 - 611.634 ms
+Mon Jun 30 2025 11:21:21 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google 302 - 1.579 ms
+Mon Jun 30 2025 11:24:45 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop 200 - 352.888 ms
+Mon Jun 30 2025 11:24:53 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/shop?searchTerm=Ontario 200 - 169.468 ms
+Mon Jun 30 2025 11:25:20 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 11:25:21 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 11:25:21 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 11:25:21 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m

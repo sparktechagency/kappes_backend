@@ -1,8 +1,0 @@
-Sun Jun 29 2025 11:41:44 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/shop/followed/685a209195fac3398ed00fca 404 - 249.182 ms
-Sun Jun 29 2025 11:43:11 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/shop/follow-unfollow/685806ee0d8150920d3662a6 404 - 155.756 ms
-Sun Jun 29 2025 11:43:39 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/shop/followed/685a209195fac3398ed00fca 404 - 232.408 ms
-Sun Jun 29 2025 11:44:8 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/shop/followed/685a209195fac3398ed00fca 404 - 233.481 ms
-Sun Jun 29 2025 11:47:39 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/shop/followed/685a209195fac3398ed00fca 404 - 246.755 ms
-Sun Jun 29 2025 11:48:2 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/shop/followed/685a209195fac3398ed00fca 404 - 858.650 ms
-Sun Jun 29 2025 11:48:17 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/shop/followed/685a209195fac3398ed00fca 404 - 1169.574 ms
-Sun Jun 29 2025 11:49:42 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/shop/followed/685a209195fac3398ed00fca 404 - 247.094 ms

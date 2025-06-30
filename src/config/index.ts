@@ -10,6 +10,7 @@ export default {
      frontend_url: process.env.FRONTEND_URL,
      backend_url: process.env.BACKEND_URL,
      node_env: process.env.NODE_ENV,
+     session_secret: process.env.SESSION_SECRET,
      port: process.env.PORT,
      stripe_secret_key: process.env.STRIPE_SECRET_KYE,
      bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,

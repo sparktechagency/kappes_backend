@@ -20,6 +20,23 @@ const RecentSearchLocationSchema = new Schema({
 // Define the user schema
 const userSchema = new Schema<IUser, UserModel>(
      {
+          googleId: {
+               type: String,
+               default: '',
+               unique: true,
+               required: false,
+          },   
+          facebookId: {
+               type: String,
+               default: '',
+               unique: true,
+               required: false,
+          },
+          provider: {
+               type: String,
+               default: '',
+               required: false,
+          },
           full_name: {
                type: String,
                required: true,
@@ -39,7 +56,7 @@ const userSchema = new Schema<IUser, UserModel>(
           },
           password: {
                type: String,
-               required: true,
+               required: false,
                select: false,
                minlength: 8,
           },

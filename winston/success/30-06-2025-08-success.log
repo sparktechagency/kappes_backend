@@ -1,0 +1,172 @@
+Mon Jun 30 2025 8:1:46 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:1:47 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:1:47 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:1:47 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:2:20 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:2:20 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:2:20 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:2:20 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:2:42 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:2:43 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:2:43 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:2:43 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:2:51 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:2:52 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:2:52 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:2:52 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:4:15 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:4:16 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:4:16 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:4:16 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:4:41 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:4:42 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:4:42 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:4:42 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:4:42 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google/logout 302 - 4.973 ms
+Mon Jun 30 2025 8:4:42 [SERVER-NAME] info: 10.0.60.110 - GET / 200 - 1.950 ms
+Mon Jun 30 2025 8:5:2 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:5:3 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:5:3 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:5:3 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:5:8 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google/logout 302 - 6.316 ms
+Mon Jun 30 2025 8:5:27 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google 302 - 3.632 ms
+Mon Jun 30 2025 8:6:5 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJhS09Rj3rjssOn8j9VP6ao48Hn9JjAVonfM6TQ1kwIOISMRqQC2v3SY_uuxndRCUw&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&prompt=none - - - ms
+Mon Jun 30 2025 8:6:5 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google 302 - 1.386 ms
+Mon Jun 30 2025 8:6:32 [SERVER-NAME] info: [34mSIGINT received. Shutting down gracefully...[39m
+Mon Jun 30 2025 8:6:42 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:6:43 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:6:43 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:6:43 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:6:52 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google/ 302 - 2.882 ms
+Mon Jun 30 2025 8:7:51 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:7:52 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:7:52 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:7:52 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:8:46 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:8:47 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:8:47 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:8:47 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:9:35 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:9:36 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:9:36 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:9:36 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:10:28 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google 302 - 6.636 ms
+Mon Jun 30 2025 8:10:46 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google/logout 302 - 7.057 ms
+Mon Jun 30 2025 8:12:1 [SERVER-NAME] info: 10.0.60.110 - GET / 200 - 1.188 ms
+Mon Jun 30 2025 8:12:16 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google/logout 302 - 2.000 ms
+Mon Jun 30 2025 8:12:29 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:12:30 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:12:30 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:12:30 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:12:30 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google/logout 302 - 5.413 ms
+Mon Jun 30 2025 8:12:43 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:12:44 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:12:44 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:12:44 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:12:45 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google/logout 302 - 5.434 ms
+Mon Jun 30 2025 8:12:45 [SERVER-NAME] info: 10.0.60.110 - GET / 200 - 1.708 ms
+Mon Jun 30 2025 8:12:57 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:12:58 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:12:58 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:12:58 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:12:58 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google/logout 302 - 5.281 ms
+Mon Jun 30 2025 8:12:58 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google 302 - 1.220 ms
+Mon Jun 30 2025 8:12:58 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google/logout 302 - 1.086 ms
+Mon Jun 30 2025 8:12:58 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google 302 - 0.855 ms
+Mon Jun 30 2025 8:13:2 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google/logout 302 - 1.747 ms
+Mon Jun 30 2025 8:13:2 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google 302 - 1.216 ms
+Mon Jun 30 2025 8:13:2 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google/logout 302 - 1.427 ms
+Mon Jun 30 2025 8:13:2 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google 302 - 0.906 ms
+Mon Jun 30 2025 8:13:7 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google/logout 302 - 11.683 ms
+Mon Jun 30 2025 8:13:7 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google 302 - 3.929 ms
+Mon Jun 30 2025 8:13:8 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google/logout 302 - 1.846 ms
+Mon Jun 30 2025 8:13:8 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google 302 - 2.104 ms
+Mon Jun 30 2025 8:13:44 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google 302 - 0.691 ms
+Mon Jun 30 2025 8:14:13 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJiHmcZssXtXEEd-k9s97MtSeQkzobCNFEySf4yUYrh6zoRoG56jfJvuJIrZc1YW8A&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&prompt=none - - - ms
+Mon Jun 30 2025 8:14:13 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google 302 - 0.670 ms
+Mon Jun 30 2025 8:14:18 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJghQj7g8o-6Bole2CvAxvBOlpIBY-0ZhCbu2Zk8prj2lhIybfm7xOHyWydBA1DPow&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&authuser=0&prompt=none - - - ms
+Mon Jun 30 2025 8:14:18 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google 302 - 1.003 ms
+Mon Jun 30 2025 8:14:30 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJhXuIJVdiCFLykyQ9RQ30Cr6qqhxsWfVMp_1XQn0a61D7W6mzSzB9Z9G5NINOF4vw&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&prompt=none - - - ms
+Mon Jun 30 2025 8:14:30 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google 302 - 1.309 ms
+Mon Jun 30 2025 8:16:16 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:16:18 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:16:18 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:16:18 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:16:28 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google/ 302 - 1.622 ms
+Mon Jun 30 2025 8:18:28 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJg2O83oE8I4PL5B7un5QcYhxTTF7oq1pZN0hTqtJE3iYXSYjeezxfXaK782kOIsbw&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&prompt=none - - - ms
+Mon Jun 30 2025 8:25:42 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:25:43 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:25:43 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:25:43 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:26:4 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:26:5 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:26:5 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:26:5 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:26:48 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:26:49 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:26:49 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:26:49 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:27:3 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:27:4 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:27:4 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:27:4 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:28:12 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:28:13 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:28:13 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:28:13 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:29:10 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:29:11 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:29:11 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:29:11 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:30:39 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:30:40 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:30:40 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:30:40 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:31:0 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:31:1 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:31:1 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:31:1 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:32:53 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:32:54 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:32:54 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:32:54 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:41:55 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:41:56 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:41:56 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:41:56 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:43:51 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:43:52 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:43:52 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:43:52 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:44:35 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:44:36 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:44:36 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:44:36 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:45:14 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:45:15 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:45:15 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:45:15 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:46:26 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:46:27 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:46:27 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:46:27 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:46:53 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:46:53 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:46:53 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:46:53 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:47:47 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google 302 - 5.723 ms
+Mon Jun 30 2025 8:48:10 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:48:11 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:48:11 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:48:11 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:48:11 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google 302 - 4.921 ms
+Mon Jun 30 2025 8:48:59 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google 302 - 1.866 ms
+Mon Jun 30 2025 8:49:30 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:49:31 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:49:31 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:49:31 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 8:50:7 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/auth/google 302 - 5.243 ms
+Mon Jun 30 2025 8:56:58 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 8:56:59 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 8:56:59 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 8:56:59 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m

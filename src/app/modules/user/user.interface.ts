@@ -11,6 +11,9 @@ export interface IRecentSearchLocation {
 
 
 export type IUser = {
+     googleId?: string;
+     facebookId?: string;
+     provider?: string;
      full_name: string;
      role: USER_ROLES;
      email: string;
