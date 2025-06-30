@@ -36,6 +36,10 @@ const reviewSchema = new Schema<IReview, ReviewModel>(
                required: true,
                enum: REVIEW_TYPES, // IMPORTANT: Defines the allowed models
           },
+          images: {
+               type: [String],
+               default: [],
+          },
           isDeleted: {
                type: Boolean,
                default: false,

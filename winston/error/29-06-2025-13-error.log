@@ -1,6 +1,0 @@
-Sun Jun 29 2025 13:1:8 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/business 404 - 37.813 ms
-Sun Jun 29 2025 13:11:57 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/business/messages/6860da081206e0b144c939db 404 - 79.461 ms
-Sun Jun 29 2025 13:17:22 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/business/update/6860da081206e0b144c939db 404 - 14.688 ms
-Sun Jun 29 2025 13:18:54 [SERVER-NAME] error: 10.0.60.110 - POST /api/v1/business/create 409 - 196.716 ms
-Sun Jun 29 2025 13:21:53 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/business/deleteBusiness/6860e8ebc9314030811fe871 404 - 1.372 ms
-Sun Jun 29 2025 13:22:11 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/business/messages/6860e8ebc9314030811fe871 404 - 161.209 ms

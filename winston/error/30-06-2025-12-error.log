@@ -1,0 +1,10 @@
+Mon Jun 30 2025 12:0:55 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/users 400 - 21.387 ms
+Mon Jun 30 2025 12:5:10 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/users 400 - 20.218 ms
+Mon Jun 30 2025 12:8:7 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/users 400 - 20.937 ms
+Mon Jun 30 2025 12:8:52 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/users 400 - 6.648 ms
+Mon Jun 30 2025 12:10:10 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/users 400 - 6.975 ms
+Mon Jun 30 2025 12:10:31 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/users 400 - 12.892 ms
+Mon Jun 30 2025 12:12:29 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/auth/login 409 - 288.169 ms
+Mon Jun 30 2025 12:12:36 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/auth/login 409 - 237.348 ms
+Mon Jun 30 2025 12:25:10 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/users 409 - 93.734 ms
+Mon Jun 30 2025 12:30:53 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/users 409 - 120.506 ms

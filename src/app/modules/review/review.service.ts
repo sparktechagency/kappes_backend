@@ -14,93 +14,174 @@ import { Shop } from '../shop/shop.model';
 import { USER_ROLES } from '../user/user.enums';
 import { IBusiness } from '../business/business.interface';
 import { Business } from '../business/business.model';
+import unlinkFile from '../../../shared/unlinkFile';
 
+
+// const createProductReviewToDB = async (payload: IReview, user: IJwtPayload): Promise<IReview> => {
+//      console.log({payload});
+//      // Fetch product and check if it exists in one query
+//      const product: IProduct | null = await Product.findById(payload.refferenceId);
+//      if (!product) {
+//           throw new AppError(StatusCodes.NOT_FOUND, 'No Product Found');
+//      }
+
+//      const rating = Number(payload.rating);
+//      if (rating) {
+//           // checking the rating is valid or not;
+//           if (rating < 1 || rating > 5) {
+//                throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid rating value');
+//           }
+//      }
+
+//      // Check if the user has a completed order that includes this product
+//      const completedOrderByProduct = await Order.findOne({
+//           user: user.id,
+//           products: { $elemMatch: { product: product._id } },
+//           status: ORDER_STATUS.COMPLETED,
+//      });
+
+//      if (!completedOrderByProduct) {
+//           throw new AppError(
+//                StatusCodes.UNAUTHORIZED,
+//                'You are not eligible to write a review because you have not purchased this product'
+//           );
+//      }
+
+//      // Check if user already has a review for this product
+//      const existingReview = await Review.findOne({
+//           customer: user.id,
+//           refferenceId: payload.refferenceId,
+//           isDeleted: false
+//      });
+
+//      let result;
+//      let previousRating = 0;
+
+//      if (existingReview) {
+//           // Store the previous rating for recalculation
+//           previousRating = existingReview.rating;
+
+//           // Update the existing review
+//           existingReview.rating = rating;
+//           existingReview.comment = payload.comment;
+//           existingReview.images = payload.images;
+//           // Update any other fields you want to allow updating
+//           result = await existingReview.save();
+//      } else {
+//           // Create new review
+//           result = await Review.create({ ...payload, customer: user.id });
+//      }
+
+//      if (!result) {
+//           throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to process review');
+//      }
+
+//      // Calculate new average rating
+//      let newRating;
+//      let reviewCount = product.totalReviews;
+
+//      if (existingReview) {
+//           // If updating existing review, adjust the average by removing the old rating
+//           const totalRating = (product.avg_rating * reviewCount) - previousRating + rating;
+//           newRating = totalRating / reviewCount;
+//      } else {
+//           // If new review, increment count and calculate new average
+//           reviewCount = product.totalReviews + 1;
+//           newRating = product.avg_rating
+//                ? (product.avg_rating * product.totalReviews + rating) / reviewCount
+//                : rating;
+//      }
+
+//      // Update product's rating and total reviews count
+//      product.avg_rating = newRating;
+//      product.totalReviews = reviewCount;
+
+//      // If it's a new review, add it to the product's reviews array
+//      if (!existingReview) {
+//           product.reviews.push(result._id);
+//      }
+
+//      await product.save();
+
+//      return result;
+// };
 
 const createProductReviewToDB = async (payload: IReview, user: IJwtPayload): Promise<IReview> => {
-     // Fetch product and check if it exists in one query
-     const product: IProduct | null = await Product.findById(payload.refferenceId);
-     if (!product) {
-          throw new AppError(StatusCodes.NOT_FOUND, 'No Product Found');
-     }
+     const session = await mongoose.startSession();
+     session.startTransaction();
 
-     const rating = Number(payload.rating);
-     if (rating) {
-          // checking the rating is valid or not;
-          if (rating < 1 || rating > 5) {
-               throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid rating value');
+     try {
+          // 1. Find product
+          const product = await Product.findById(payload.refferenceId).session(session);
+          if (!product) throw new AppError(StatusCodes.NOT_FOUND, 'Product not found');
+
+          // 2. Validate rating
+          const rating = Number(payload.rating);
+          if (rating && (rating < 1 || rating > 5)) {
+               throw new AppError(StatusCodes.BAD_REQUEST, 'Rating must be between 1-5');
           }
+
+          // 3. Check if user purchased the product
+          const hasPurchased = await Order.exists({
+               user: user.id,
+               'products.product': product._id,
+               status: ORDER_STATUS.COMPLETED
+          }).session(session);
+
+          if (!hasPurchased) {
+               throw new AppError(StatusCodes.UNAUTHORIZED, 'Purchase product to review');
+          }
+
+          // 4. Find existing review
+          let review = await Review.findOne({
+               customer: user.id,
+               refferenceId: payload.refferenceId,
+               isDeleted: false
+          }).session(session);
+
+          // 5. Create or update review
+          if (review) {
+               // Save old rating for recalculation
+               const oldRating = review.rating;
+               Object.assign(review, payload);
+               await review.save({ session });
+
+               // Update product rating
+               const totalRating = (product.avg_rating * product.totalReviews) - oldRating + rating;
+               product.avg_rating = totalRating / product.totalReviews;
+          } else {
+               // Create new review
+               const newReview = await Review.create([{ ...payload, customer: user.id }], { session });
+               review = newReview[0];
+
+               // Update product with new review
+               const totalReviews = product.totalReviews + 1;
+               const totalRating = (product.avg_rating * product.totalReviews) + rating;
+               product.avg_rating = totalRating / totalReviews;
+               product.totalReviews = totalReviews;
+               product.reviews.push(review._id);
+          }
+
+          await product.save({ session });
+          await session.commitTransaction();
+          session.endSession();
+
+          return review;
+     } catch (error) {
+          await session.abortTransaction();
+          session.endSession();
+
+          // Basic image cleanup
+          if (payload.images?.length) {
+               payload.images.forEach(image => {
+                    // Replace with your image deletion logic
+                    console.log('Cleaning up image:', image);
+                    unlinkFile(image); // Example for local files
+               });
+          }
+
+          throw error;
      }
-
-     // Check if the user has a completed order that includes this product
-     const completedOrderByProduct = await Order.findOne({
-          user: user.id,
-          products: { $elemMatch: { product: product._id } },
-          status: ORDER_STATUS.COMPLETED,
-     });
-
-     if (!completedOrderByProduct) {
-          throw new AppError(
-               StatusCodes.UNAUTHORIZED,
-               'You are not eligible to write a review because you have not purchased this product'
-          );
-     }
-
-     // Check if user already has a review for this product
-     const existingReview = await Review.findOne({
-          customer: user.id,
-          refferenceId: payload.refferenceId,
-          isDeleted: false
-     });
-
-     let result;
-     let previousRating = 0;
-
-     if (existingReview) {
-          // Store the previous rating for recalculation
-          previousRating = existingReview.rating;
-
-          // Update the existing review
-          existingReview.rating = rating;
-          existingReview.comment = payload.comment;
-          // Update any other fields you want to allow updating
-          result = await existingReview.save();
-     } else {
-          // Create new review
-          result = await Review.create({ ...payload, customer: user.id });
-     }
-
-     if (!result) {
-          throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to process review');
-     }
-
-     // Calculate new average rating
-     let newRating;
-     let reviewCount = product.totalReviews;
-
-     if (existingReview) {
-          // If updating existing review, adjust the average by removing the old rating
-          const totalRating = (product.avg_rating * reviewCount) - previousRating + rating;
-          newRating = totalRating / reviewCount;
-     } else {
-          // If new review, increment count and calculate new average
-          reviewCount = product.totalReviews + 1;
-          newRating = product.avg_rating
-               ? (product.avg_rating * product.totalReviews + rating) / reviewCount
-               : rating;
-     }
-
-     // Update product's rating and total reviews count
-     product.avg_rating = newRating;
-     product.totalReviews = reviewCount;
-
-     // If it's a new review, add it to the product's reviews array
-     if (!existingReview) {
-          product.reviews.push(result._id);
-     }
-
-     await product.save();
-
-     return result;
 };
 
 const getProductReviews = async (productId: string, query: Record<string, unknown>) => {
@@ -117,6 +198,13 @@ const getProductReviews = async (productId: string, query: Record<string, unknow
                     isDeleted: false,
                },
                select: 'shopId',
+          }).populate({
+               path: 'customer',
+               model: 'User',
+               match: {
+                    isDeleted: false,
+               },
+               select: 'full_name email',
           }),
           query
      )

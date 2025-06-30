@@ -6,16 +6,14 @@
     "auditLog": "C:\\Users\\Asif Abdul Owadud\\Desktop\\everything_asif\\everything_office\\everything_sparktech\\kappes_backend\\winston\\error\\.9693c46064b47537d25a75149f68832ed4e6ba76-audit.json",
     "files": [
         {
-            "date": 1751180468894,
-            "name": "C:\\Users\\Asif Abdul Owadud\\Desktop\\everything_asif\\everything_office\\everything_sparktech\\kappes_backend\\winston\\error\\29-06-2025-13-error.log",
-            "hash": "e94082d5fa4fcef699c86042bfc54d6d18e83d877fd26737a1adf8e1d958fe97"
-        },
-        {
+<<<<<<< Updated upstream
+=======
             "date": 1751184553188,
             "name": "C:\\Users\\Asif Abdul Owadud\\Desktop\\everything_asif\\everything_office\\everything_sparktech\\kappes_backend\\winston\\error\\29-06-2025-14-error.log",
             "hash": "36151959cbbb80913a2d5838c95e56baa6fb11df1c51e9018722fa35eae02342"
         },
         {
+>>>>>>> Stashed changes
             "date": 1751187654900,
             "name": "C:\\Users\\Asif Abdul Owadud\\Desktop\\everything_asif\\everything_office\\everything_sparktech\\kappes_backend\\winston\\error\\29-06-2025-15-error.log",
             "hash": "8783bb273798ba5a5d7192b26d66b9279d847c44aa0deb3d4213126975b8c2b5"
@@ -54,6 +52,17 @@
             "date": 1751266853106,
             "name": "C:\\Users\\Asif Abdul Owadud\\Desktop\\everything_asif\\everything_office\\everything_sparktech\\kappes_backend\\winston\\error\\30-06-2025-13-error.log",
             "hash": "37d6333b5e90680276cbd599cc865a68f6570db5caa5ac21207fde29a59a0071"
+        },
+        {
+<<<<<<< Updated upstream
+            "date": 1751271507740,
+            "name": "C:\\Users\\Asif Abdul Owadud\\Desktop\\everything_asif\\everything_office\\everything_sparktech\\kappes_backend\\winston\\error\\30-06-2025-14-error.log",
+            "hash": "8d3f327f3245b5e957c666afd18be6aed25042b0bf2d4faca88347d60c65e06c"
+=======
+            "date": 1751270403279,
+            "name": "C:\\Users\\Asif Abdul Owadud\\Desktop\\everything_asif\\everything_office\\everything_sparktech\\kappes_backend\\winston\\error\\30-06-2025-14-error.log",
+            "hash": "870d03f2bce8e1e99c4cf4222f77662f3c1174541a89bfa509103c9ff5519ba8"
+>>>>>>> Stashed changes
         }
     ],
     "hashType": "sha256"

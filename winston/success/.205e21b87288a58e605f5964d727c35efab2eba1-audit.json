@@ -6,11 +6,6 @@
     "auditLog": "C:\\Users\\Asif Abdul Owadud\\Desktop\\everything_asif\\everything_office\\everything_sparktech\\kappes_backend\\winston\\success\\.205e21b87288a58e605f5964d727c35efab2eba1-audit.json",
     "files": [
         {
-            "date": 1751184552515,
-            "name": "C:\\Users\\Asif Abdul Owadud\\Desktop\\everything_asif\\everything_office\\everything_sparktech\\kappes_backend\\winston\\success\\29-06-2025-14-success.log",
-            "hash": "8c34024bd3eec3af028de0d923baa0b8131f5f920b3bb2a0f225307904b43a97"
-        },
-        {
             "date": 1751187601150,
             "name": "C:\\Users\\Asif Abdul Owadud\\Desktop\\everything_asif\\everything_office\\everything_sparktech\\kappes_backend\\winston\\success\\29-06-2025-15-success.log",
             "hash": "09c0df097b44470b4da74b89c10c195567374ab7977380c3471cfba5db8a449b"
@@ -49,6 +44,17 @@
             "date": 1751266875924,
             "name": "C:\\Users\\Asif Abdul Owadud\\Desktop\\everything_asif\\everything_office\\everything_sparktech\\kappes_backend\\winston\\success\\30-06-2025-13-success.log",
             "hash": "8e6e93378dad9252eeb7fb2d7d99a397d83b012c3449f44a01d79f87c4cd06dd"
+        },
+        {
+<<<<<<< Updated upstream
+            "date": 1751271507736,
+            "name": "C:\\Users\\Asif Abdul Owadud\\Desktop\\everything_asif\\everything_office\\everything_sparktech\\kappes_backend\\winston\\success\\30-06-2025-14-success.log",
+            "hash": "0fe39b5254d05e6901980d69275ee94f35196c04852635150a71c3839c1c4766"
+=======
+            "date": 1751270526574,
+            "name": "C:\\Users\\Asif Abdul Owadud\\Desktop\\everything_asif\\everything_office\\everything_sparktech\\kappes_backend\\winston\\success\\30-06-2025-14-success.log",
+            "hash": "1c167e4b08eb9a5b3cb131f260246d9816a02a68b634fa2b7b0e6c5705e1734c"
+>>>>>>> Stashed changes
         }
     ],
     "hashType": "sha256"

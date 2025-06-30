@@ -8,6 +8,7 @@ const reviewZodSchema = z.object({
           comment: z.string({ required_error: 'Comment is required' }),
           refferenceId: objectIdSchema,
           review_type: z.enum([...(Object.values(REVIEW_TYPES) as [string, ...string[]])]),
+          images: z.array(z.string()).optional(),
      }),
 });
 

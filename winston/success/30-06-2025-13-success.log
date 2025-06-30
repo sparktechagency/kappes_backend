@@ -1,0 +1,48 @@
+Mon Jun 30 2025 13:1:19 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 13:1:20 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 13:1:20 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 13:1:20 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 13:1:31 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 13:1:32 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 13:1:32 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 13:1:32 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 13:2:22 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 13:2:23 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 13:2:23 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 13:2:23 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 13:4:4 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 13:4:5 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 13:4:5 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 13:4:5 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 13:4:28 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 13:4:29 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 13:4:29 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 13:4:29 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 13:10:20 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/business/all 200 - 373.871 ms
+Mon Jun 30 2025 13:11:28 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/offered/all 200 - 256.217 ms
+Mon Jun 30 2025 13:11:59 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/offered/all 200 - 230.816 ms
+Mon Jun 30 2025 13:13:56 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/offered 200 - 296.041 ms
+Mon Jun 30 2025 13:15:20 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/offered/all 200 - 236.712 ms
+Mon Jun 30 2025 13:16:34 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/offered 200 - 228.451 ms
+Mon Jun 30 2025 13:17:12 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 13:17:13 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 13:17:13 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 13:17:13 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 13:17:23 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 13:17:23 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 13:17:23 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 13:17:23 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 13:20:7 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/product/685908f08d400d0b748cf4ec 200 - 660.895 ms
+Mon Jun 30 2025 13:21:12 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/product/category/68537718cdf9f2ba6dae9477 200 - 253.401 ms
+Mon Jun 30 2025 13:22:38 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/product/685908f08d400d0b748cf4ec 200 - 423.160 ms
+Mon Jun 30 2025 13:24:22 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/product 200 - 249.369 ms
+Mon Jun 30 2025 13:25:34 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/product?filter=avg_rating[gte]=1 200 - 160.821 ms
+Mon Jun 30 2025 13:27:6 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/product??filter[avg_rating][$gte]=1 200 - 190.975 ms
+Mon Jun 30 2025 13:29:34 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/product??filter=avg_rating 200 - 219.687 ms
+Mon Jun 30 2025 13:29:52 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/product??filter=[avg_rating] 200 - 160.236 ms
+Mon Jun 30 2025 13:31:9 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/product?avg_rating[gte]=2 200 - 282.778 ms
+Mon Jun 30 2025 13:31:17 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/product?avg_rating[lte]=5 200 - 245.393 ms
+Mon Jun 30 2025 13:31:41 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/product?avg_rating[lte]=5&avg_rating[gte]=2 200 - 249.408 ms
+Mon Jun 30 2025 13:32:5 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/product?avg_rating[lte]=5&avg_rating[gte]=2&basePrice[gte]=40 200 - 247.264 ms
+Mon Jun 30 2025 13:46:39 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/product/category/68537718cdf9f2ba6dae9477 200 - 387.284 ms
+Mon Jun 30 2025 13:47:12 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/category 200 - 314.655 ms

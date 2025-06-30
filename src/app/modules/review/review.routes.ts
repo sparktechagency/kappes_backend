@@ -1,17 +1,40 @@
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import auth from '../../middleware/auth';
 import { USER_ROLES } from '../user/user.enums';
 import { ReviewController } from './review.controller';
 import { ReviewValidation } from './review.validation';
 import validateRequest from '../../middleware/validateRequest';
+import fileUploadHandler from '../../middleware/fileUploadHandler';
+import { getMultipleFilesPath } from '../../../shared/getFilePath';
 const router = express.Router();
 
 // product related routes
 router.post(
      '/product',
-     validateRequest(ReviewValidation.reviewZodSchema),
      auth(USER_ROLES.USER),
-     ReviewController.createProductReview,
+     fileUploadHandler(), (req: Request, res: Response, next: NextFunction) => {
+          try {
+               if (req.body.data) {
+                    const parsedData = JSON.parse(req.body.data);
+                    // Attach image path or filename to parsed data
+                    if (req.files) {
+                         let image = getMultipleFilesPath(req.files, 'image');
+                         parsedData.images = image;
+                    }
+                    
+                    
+                    // Validate and assign to req.body
+                    let formattedParsedData = ReviewValidation.reviewZodSchema.parse({ body: parsedData });
+                    req.body = formattedParsedData.body;
+               }
+
+               // Proceed to controller
+               return ReviewController.createProductReview(req, res, next);
+
+          } catch (error) {
+               next(error); // Pass validation errors to error handler
+          }
+     },
 );
 
 router.get(
@@ -46,14 +69,14 @@ router.post(
 // toggle approved business review
 router.patch(
      '/business/:reviewId',
-     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR,USER_ROLES.USER),
+     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR, USER_ROLES.USER),
      ReviewController.toggleApprovedBusinessReviewByOwner,
 );
 
 // get all unapproved business reviews
 router.get(
      '/business/owner',
-     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR,USER_ROLES.USER),
+     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR, USER_ROLES.USER),
      ReviewController.getAllBusinessReviewsByOwner,
 );
 
@@ -64,7 +87,7 @@ router.get(
 
 router.delete(
      '/business/:reviewId',
-     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR,USER_ROLES.USER),
+     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR, USER_ROLES.USER),
      ReviewController.deleteBusinessReviewByOwner,
 );
 

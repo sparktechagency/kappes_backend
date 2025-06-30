@@ -10,6 +10,7 @@ export interface IReviewBase {
      review_type: REVIEW_TYPES;
      isDeleted?: boolean;
      isApproved?: boolean;
+     images?: string[];
 }
 
 export interface IReview extends IReviewBase {
