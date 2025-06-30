@@ -7,6 +7,27 @@ import { User } from '../app/modules/user/user.model';
 import { logger } from '../shared/logger';
 import { USER_ROLES } from '../app/modules/user/user.enums';
 
+/** steps to create g auth 02
+ * go to link : https://console.cloud.google.com/projectselector2/iam-admin/settings?organizationId=0&inv=1&invt=Ab1eTg&supportedpurview=project,organizationId,folder&orgonly=true
+ * click "create project" at top right
+ * give project name e.g "kappes2" and no location need to select now click create. you will get a notification click select project on that or goto this link: https://console.cloud.google.com/projectselector2/iam-admin/settings?organizationId=0&inv=1&invt=Ab1eTg&supportedpurview=project,organizationId,folder&orgonly=true 
+ * slecte the recent created project i.e "kappes2" 
+ * click on the righ-left hambarger menu icon it will pop up  the side bar
+ * click on the "APIs & Services" >> "Enabled Api and services"
+ * click on "OAuth consent screen" from the left side bar
+ * click "Get started"
+ * give app name e.g "kappes2App" and give user support email e.g "asifaowadud@gmail.com" >>next audienc>>  click "External" >>next contact info>> email address e.g "asifaowadud@gmail.com" >>next finish >> tik on agree checkbox >> click continue >> click "create"
+ * click "Create 0Auth client"
+ * select Applicaiton type as "Web application" >>next name >> give name e.g "kappes2App" >>next Authorized redirect URIs >> give url e.g "http://localhost:7000/api/v1/auth/google/callback" >>next>> click "Create"
+ * a pop up will open copy the clinet id and click "OK" >> it will automatically redirect to link : https://console.cloud.google.com/auth/clients?inv=1&invt=Ab1egg&orgonly=true&project=kappes2&supportedpurview=project,organizationId,folder
+ * select the recent created project i.e "kappes2App" from the table list it will redirect to link : https://console.cloud.google.com/auth/clients/3728050386-jtd9meu32rbkq1994sq4s9b9kninhofv.apps.googleusercontent.com?inv=1&invt=Ab1egg&orgonly=true&project=kappes2&supportedpurview=project,organizationId,folder
+ * at middle right will get the client id and client secret copy them and paste them in the config file
+ * 
+ * Client ID = 3728050386-jtd9meu32rbkq1994sq4s9b9kninhofv.apps.googleusercontent.com
+ * Client secret = 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 
+ * 
+*/
+
 // Google OAuth Strategy
 passport.use(
      new GoogleStrategy(
