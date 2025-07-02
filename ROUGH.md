@@ -22,3 +22,9 @@
  # offerd module (pending)
  ## routes done testng pending
  
+
+ <!-- sdfsdfsdfsdf -->
+
+ - search shops by geo location
+ - order cancelation with proper refund
+ - passport js for google auth
