@@ -1,6 +1,6 @@
 import path from 'path';
-import { ISettings } from './sattings.interface';
-import Settings from './sattings.model';
+import { ISettings, ISingleContact, ISocials } from './settings.interface';
+import Settings from './settings.model';
 import { StatusCodes } from 'http-status-codes';
 import AppError from '../../../errors/AppError';
 
@@ -70,6 +70,69 @@ const getAccountDelete = async () => {
 // const getSupport = async () => {
 //   return path.join(__dirname, '..', 'htmlResponse', 'support.html');
 // };
+
+const getContact = async () => {
+     const settings: any = await Settings.findOne();
+
+     if (!settings) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
+     }
+     return settings.contact;
+};
+
+const addContact = async (contact: ISingleContact) => {
+     const settings: any = await Settings.findOne();
+
+     if (!settings) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
+     }
+     settings.contact.push(contact);
+     await settings.save();
+     return settings.contact;
+};
+
+const updateContact = async (contactId: string, contact: ISingleContact) => {
+     const settings: any = await Settings.findOne();
+
+     if (!settings) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
+     }
+     const updatedContact = await settings.contact.id(contactId).set(contact);
+     await settings.save();
+     return updatedContact;
+};
+
+const deleteContact = async (contactId: string) => {
+     const settings: any = await Settings.findOne();
+
+     if (!settings) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
+     }
+     const deletedContact = await settings.contact.id(contactId).deleteOne();
+     await settings.save();
+     return deletedContact;
+};
+
+const getSocials = async () => {
+     const settings: any = await Settings.findOne();
+
+     if (!settings) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
+     }
+     return settings.socials;
+};
+
+const addOrUpdateSocials = async (socials: ISocials) => {
+     const settings: any = await Settings.findOne();
+
+     if (!settings) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
+     }
+     settings.socials = socials;
+     await settings.save();
+     return settings.socials;
+};
+
 export const settingsService = {
      upsertSettings,
      getSettings,
@@ -78,4 +141,10 @@ export const settingsService = {
      getSupport,
      getTermsOfService,
      getAboutUs,
+     getContact,
+     addContact,
+     updateContact,
+     deleteContact,
+     getSocials,
+     addOrUpdateSocials,
 };

@@ -42,11 +42,6 @@ router.get('/territory', ShopController.getShopsTerritoryListWithProductCount);
 router.get('/overview/:shopId',
     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), ShopController.getShopOverview);
 
-router.get('/:id', ShopController.getShopById);
-// Update a shop by ID
-router.patch('/:id', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), fileUploadHandler(), validateRequest(ShopValidation.updateShopZodSchema), parseMulitpleFieldsData(FOLDER_NAMES.LOGO, FOLDER_NAMES.BANNER, FOLDER_NAMES.COVER_PHOTO), ShopController.updateShopById);
-
-
 // router.patch('/update-revenue/:shopId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), validateRequest(ShopValidation.updateRevenueZodSchema), ShopController.updateRevenue);
 
 
@@ -57,12 +52,17 @@ router.get('/followed/:followerId', auth(USER_ROLES.USER), ShopController.getSho
 router.post('/follow-unfollow/:shopId', auth(USER_ROLES.USER), ShopController.toggleFollowUnfollowShop);
 // Get followers by shop
 router.get('/followers/:shopId', ShopController.getFollowersByShop);
+// Get shops by location
+router.get('/location', validateRequest(ShopValidation.getShopsByGeoLocation), ShopController.getShopsByLocation);
 
 
 // Delete a shop by ID
 router.delete('/:id', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), ShopController.deleteShopById);
-// Get shops by location
-router.get('/location', ShopController.getShopsByLocation);
+
+router.get('/:id', ShopController.getShopById);
+// Update a shop by ID
+router.patch('/:id', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), fileUploadHandler(), validateRequest(ShopValidation.updateShopZodSchema), parseMulitpleFieldsData(FOLDER_NAMES.LOGO, FOLDER_NAMES.BANNER, FOLDER_NAMES.COVER_PHOTO), ShopController.updateShopById);
+
 // // Get shops by owner
 // router.get('/owner/:ownerId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), ShopController.getShopsByOwner);
 // // Get shops by getShopsByShopCategory

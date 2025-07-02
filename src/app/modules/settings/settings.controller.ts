@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
-import { settingsService } from './sattings.service';
+import { settingsService } from './settings.service';
 
 const addSetting = catchAsync(async (req, res) => {
      const result = await settingsService.upsertSettings(req.body);
@@ -69,6 +69,67 @@ const getAboutUs = catchAsync(async (req, res): Promise<void> => {
 //   const htmlContent = await settingsService.getSupport();
 //   res.sendFile(htmlContent);
 // });
+
+const getContact = catchAsync(async (req, res): Promise<void> => {
+     const privacy = await settingsService.getContact();
+     sendResponse(res, {
+          statusCode: StatusCodes.OK,
+          success: true,
+          message: 'Contact retrieved successfully',
+          data: privacy,
+     });
+});
+
+const addContact = catchAsync(async (req, res): Promise<void> => {
+     const privacy = await settingsService.addContact(req.body);
+     sendResponse(res, {
+          statusCode: StatusCodes.OK,
+          success: true,
+          message: 'Contact added successfully',
+          data: privacy,
+     });
+});
+
+const updateContact = catchAsync(async (req, res): Promise<void> => {
+     const privacy = await settingsService.updateContact(req.params.contactId, req.body);
+     sendResponse(res, {
+          statusCode: StatusCodes.OK,
+          success: true,
+          message: 'Contact updated successfully',
+          data: privacy,
+     });
+});
+
+const deleteContact = catchAsync(async (req, res): Promise<void> => {
+     const privacy = await settingsService.deleteContact(req.params.contactId);
+     sendResponse(res, {
+          statusCode: StatusCodes.OK,
+          success: true,
+          message: 'Contact deleted successfully',
+          data: privacy,
+     });
+});
+
+const getSocials = catchAsync(async (req, res): Promise<void> => {
+     const privacy = await settingsService.getSocials();
+     sendResponse(res, {
+          statusCode: StatusCodes.OK,
+          success: true,
+          message: 'Socials retrieved successfully',
+          data: privacy,
+     });
+});
+
+const addOrUpdateSocials = catchAsync(async (req, res): Promise<void> => {
+     const privacy = await settingsService.addOrUpdateSocials(req.body);
+     sendResponse(res, {
+          statusCode: StatusCodes.OK,
+          success: true,
+          message: 'Socials added or updated successfully',
+          data: privacy,
+     });
+});  
+
 export const settingsController = {
      getSettings,
      getPrivacyPolicy,
@@ -76,4 +137,10 @@ export const settingsController = {
      getSupport,
      addSetting,
      getTermsOfService,
+     getContact,
+     addContact,
+     updateContact,
+     deleteContact,
+     getSocials,
+     addOrUpdateSocials,
 };

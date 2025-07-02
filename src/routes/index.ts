@@ -7,12 +7,9 @@ import { ContactRoutes } from '../app/modules/contcatus/contactus.route';
 import { CategoryRoutes } from '../app/modules/category/category.route';
 import { SubCategoryRoutes } from '../app/modules/subCategorys/subCategory.route';
 import { userManagementRouter } from '../app/modules/admin/userManagement/userManagement.route';
-import { ComingSoonRoutes } from '../app/modules/admin/comeingSoon/comeingSoon.router';
 import { DashboardRoutes } from '../app/modules/admin/dashboard/dashboard.route';
-import { FavouritdRouter } from '../app/modules/favourit/favourit.router';
 import { CreatePostRoutes } from '../app/modules/admin/creaetPost/creaetPost.router';
-import SettingsRouter from '../app/modules/sattings/sattings.route';
-import { ExploreRoutes } from '../app/modules/explore/explore.route';
+import SettingsRouter from '../app/modules/settings/settings.route';
 import { AdminRoutes } from '../app/modules/admin/admin.route';
 import { NotificationRoutes } from '../app/modules/notification/notification.routes';
 import { ChallengeRoutes } from '../app/modules/admin/challanges/challanges.router';
@@ -30,6 +27,7 @@ import { paymentRoutes } from '../app/modules/payment/payment.route';
 import { ReviewRoutes } from '../app/modules/review/review.routes';
 import { WishlistRoutes } from '../app/modules/wishlist/wishlist.route';
 import { BusinessRouter } from '../app/modules/business/business.route';
+import { FaqRoutes } from '../app/modules/faq/faq.route';
 
 const router = express.Router();
 const routes = [
@@ -96,11 +94,7 @@ const routes = [
      {
           path: '/notifications',
           route: NotificationRoutes,
-     },
-     {
-          path: '/admin/comingSoon',
-          route: ComingSoonRoutes,
-     },
+     }, 
      {
           path: '/admin/challenge',
           route: ChallengeRoutes,
@@ -112,22 +106,10 @@ const routes = [
      {
           path: '/admin/dashboard',
           route: DashboardRoutes,
-     },
-     {
-          path: '/comingSoon',
-          route: ComingSoonRoutes,
-     },
-     {
-          path: '/favourit',
-          route: FavouritdRouter,
-     },
+     }, 
      {
           path: '/settings',
           route: SettingsRouter,
-     },
-     {
-          path: '/explore',
-          route: ExploreRoutes,
      },
      {
           path: '/variant',
@@ -184,6 +166,10 @@ const routes = [
      {
           path: '/business',
           route: BusinessRouter,
+     },
+     {
+          path: '/faq',
+          route: FaqRoutes,
      },
 ];
 

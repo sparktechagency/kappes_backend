@@ -1,5 +1,12 @@
 import { Schema, model } from 'mongoose';
-import { ISettings } from './sattings.interface';
+import { ISettings } from './settings.interface';
+
+
+const ContactSchema: Schema = new Schema({
+     phone: { type: String, required: true },
+     email: { type: String, required: true },
+     location: { type: String, required: true }
+});
 
 const settingsSchema = new Schema<ISettings>(
      {
@@ -18,6 +25,13 @@ const settingsSchema = new Schema<ISettings>(
           termsOfService: {
                type: String,
                default: '',
+          },
+          contact: { type: [ContactSchema], required: true },
+          socials: {
+               whatsapp: { type: String, required: false },
+               facebook: { type: String, required: false },
+               instagram: { type: String, required: false },
+               tiktok: { type: String, required: false },
           },
      },
      { timestamps: true },

@@ -85,10 +85,19 @@ const createAdminZodSchema = z.object({
     }),
 });
 
+const getShopsByGeoLocation = z.object({
+    body: z.object({
+        location: z.object({
+            coordinates: z.array(z.number()),
+        })
+    })
+});
+
 
 export const ShopValidation = {
     createShopZodSchema,
     updateShopZodSchema,
     makeShopAdminZodSchema,
-    createAdminZodSchema
+    createAdminZodSchema,
+    getShopsByGeoLocation
 }

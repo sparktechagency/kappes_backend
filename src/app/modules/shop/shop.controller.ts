@@ -82,7 +82,7 @@ const getShopsByOwner = catchAsync(async (req: Request, res: Response) => {
     });
 });
 const getShopsByLocation = catchAsync(async (req: Request, res: Response) => {
-    const result = await ShopService.getShopsByLocation(req.query);
+    const result = await ShopService.getShopsByLocation(req.body.location);
     sendResponse(res, {
         statusCode: StatusCodes.OK,
         success: true,

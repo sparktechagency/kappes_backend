@@ -163,22 +163,32 @@ const getShopsByOwner = async (ownerId: string) => {
     }
     return shops;
 }
-const getShopsByLocation = async (query: Record<string, unknown>) => {
-    const shopQuery = new QueryBuilder(Shop.find().populate('owner', 'full_name email'), query)
-        .search(['address.province', 'address.city', 'address.territory'])
-        .filter()
-        .sort()
-        .paginate()
-        .fields();
-
-    const result = await shopQuery.modelQuery;
-    const meta = await shopQuery.countTotal();
-
-    return {
-        meta,
-        result,
-    };
+const getShopsByLocation = async (location: {
+    coordinates: [number, number];
+}) => {
+    if (
+        !location.coordinates ||
+        !Array.isArray(location.coordinates) ||
+        location.coordinates.length !== 2
+    ) {
+        throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid coordinates');
+    }
+    console.log(location.coordinates)
+    const result = await Shop.find({
+        'location.coordinates': { $ne: [0, 0] },
+        location: {
+            $near: {
+                $geometry: {
+                    type: 'Point',
+                    coordinates: location.coordinates,
+                },
+                $maxDistance: 5000, // 5 km radius
+            },
+        },
+    });
+    return result;
 }
+
 const getShopsByType = async (type: string) => {
     const shops = await Shop.find({ type })
         .populate('reviews')

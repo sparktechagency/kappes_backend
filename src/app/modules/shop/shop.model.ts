@@ -24,9 +24,20 @@ export const shopSchema = new Schema<IShop>({
         country: { type: String, required: false },
         detail_address: { type: String, required: false }
     },
-    location: { type: { type: String, enum: ['Point'], required: false }, coordinates: { type: [Number], required: false } },
+    location: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            default: 'Point',
+        },
+        coordinates: {
+            type: [Number],
+            default: [0, 0],
+            index: '2dsphere', // Creates the 2dsphere index for geospatial queries
+        },
+    },
     service: { type: String, required: false },
-    working_hours: { type: [{ day: String, start: String, end: String },{_id: false}], required: false },
+    working_hours: { type: [{ day: String, start: String, end: String }, { _id: false }], required: false },
     logo: { type: String, required: false },
     coverPhoto: { type: String, required: false },
     banner: { type: String, required: false },
@@ -46,6 +57,13 @@ export const shopSchema = new Schema<IShop>({
         autoAcceptOrders: { type: Boolean, default: false },
     },
 }, { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } });
+
+
+// Ensure that the 2dsphere index is created (useful in dev environments)
+shopSchema.index({ 'location.coordinates': '2dsphere' });
+
+
+
 
 
 // Middleware to calculate totalReviews and rating based on reviews

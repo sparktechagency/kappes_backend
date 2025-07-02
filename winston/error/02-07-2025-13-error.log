@@ -1,0 +1,2 @@
+Wed Jul 02 2025 13:0:53 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/auth/login 400 - 431.352 ms
+Wed Jul 02 2025 13:6:19 [SERVER-NAME] error: 10.0.60.110 - PATCH /api/v1/settings/contact/6864d89e9ec6f75feb7b1591 400 - 170.112 ms

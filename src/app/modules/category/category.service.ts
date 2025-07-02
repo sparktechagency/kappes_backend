@@ -7,7 +7,6 @@ import QueryBuilder from '../../builder/QueryBuilder';
 import { User } from '../user/user.model';
 import { SubCategory } from '../subCategorys/subCategory.model';
 import { USER_ROLES } from '../user/user.enums'; 
-import { Favourite } from '../favourit/favourit.model';
 import { Product } from '../product/product.model';
 import { IJwtPayload } from '../auth/auth.interface';
 

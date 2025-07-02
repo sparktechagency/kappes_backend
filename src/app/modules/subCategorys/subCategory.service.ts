@@ -5,7 +5,6 @@ import { SubCategory } from './subCategory.model';
 import { ISubCategory } from './subCategory.interface';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { Category } from '../category/category.model'; 
-import { Favourite } from '../favourit/favourit.model';
 import { User } from '../user/user.model';
 import { Product } from '../product/product.model';
 import { IJwtPayload } from '../auth/auth.interface';
@@ -133,10 +132,6 @@ const getSubCategoryReletedToCategory = async (id: string) => {
           throw new AppError(StatusCodes.NOT_FOUND, 'No subcategory found for this category!');
      }
      return result;
-};
-const getFevVideosOrNot = async (videoId: string, userId: string) => {
-     const favorite = await Favourite.findOne({ videoId, userId });
-     return favorite ? true : false;
 };
 
 
