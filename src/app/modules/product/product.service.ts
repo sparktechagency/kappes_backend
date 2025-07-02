@@ -452,141 +452,83 @@ const getProductsByShop = async (shopId: string, query: Record<string, unknown>)
     };
 };
 
-// const addNewVariantToProductByVariantFieldName = async (productId: string, data: IProductSingleVariantByFieldName, user: IJwtPayload) => {
-//     const product = await Product.findById(productId).populate('categoryId', 'name').populate('subcategoryId', 'name');
 
-//     if (!product) {
-//         throw new AppError(StatusCodes.BAD_REQUEST, 'Product not found');
-//     }
+// Service to get all products of a specific province
+const getAllProductsByProvince = async (province: string, query: Record<string, unknown>) => {
+    try {
+        // Step 1: Find all the shops located in the specified province
+        const shopQuery = new QueryBuilder(Shop.find({ 'address.province': province, isDeleted: { $ne: true } }), query).search(['name']).filter().sort().paginate().fields();
 
-//     const shop = await Shop.findById(product.shopId);
-//     if (!shop) {
-//         throw new AppError(StatusCodes.NOT_FOUND, 'Shop not found');
-//     }
+        const shopsInProvince = await shopQuery.modelQuery;
+
+        if (!shopsInProvince || shopsInProvince.length === 0) {
+            throw new AppError(StatusCodes.NOT_FOUND, `No shops found in the province: ${province}`);
+        }
+
+        // Step 2: Extract the shopIds from the shops
+        const shopIds = shopsInProvince.map(shop => shop._id);
+
+        // Step 3: Fetch all products that belong to the shops in the given province
+        const productQuery = new QueryBuilder(Product.find({ shopId: { $in: shopIds }, isDeleted: { $ne: true } }).populate('shopId', 'name').populate('categoryId', 'name').populate('subcategoryId', 'name').populate('brandId', 'name').populate('product_variant_Details.variantId', 'slug'), query)
+            .search(['name', 'description', 'tags'])
+            .filter()
+            .sort()
+            .paginate()
+            .fields();
+
+        const products = await productQuery.modelQuery;
+        const productMeta = await productQuery.countTotal();
+
+        // Step 4: Return the products
+        return {
+            productMeta,
+            products,
+        };
+    } catch (error) {
+        console.error("Error fetching products by province:", error);
+        throw error; // Throw the error for further handling
+    }
+};
+
+// Service to get all products of a specific territory
+const getAllProductsByTerritory = async (territory: string, query: Record<string, unknown>) => {
+    try {
+        // Step 1: Find all the shops located in the specified territory
+        const shopQuery = new QueryBuilder(Shop.find({ 'address.territory': territory, isDeleted: { $ne: true } }), query).search(['name']).filter().sort().paginate().fields();
+
+        const shopsInProvince = await shopQuery.modelQuery;
+
+        if (!shopsInProvince || shopsInProvince.length === 0) {
+            throw new AppError(StatusCodes.NOT_FOUND, `No shops found in the territory: ${territory}`);
+        }
+
+        // Step 2: Extract the shopIds from the shops
+        const shopIds = shopsInProvince.map(shop => shop._id);
+
+        // Step 3: Fetch all products that belong to the shops in the given province
+        const productQuery = new QueryBuilder(Product.find({ shopId: { $in: shopIds }, isDeleted: { $ne: true } }).populate('shopId', 'name').populate('categoryId', 'name').populate('subcategoryId', 'name').populate('brandId', 'name').populate('product_variant_Details.variantId', 'slug'), query)
+            .search(['name', 'description', 'tags'])
+            .filter()
+            .sort()
+            .paginate()
+            .fields();
+
+        const products = await productQuery.modelQuery;
+        const productMeta = await productQuery.countTotal();
+
+        // Step 4: Return the products
+        return {
+            productMeta,
+            products,
+        };
+    } catch (error) {
+        console.error("Error fetching products by territory:", error);
+        throw error; // Throw the error for further handling
+    }
+};
 
 
-//     if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
-//         if (shop.owner.toString() !== user.id && !shop.admins?.some(admin => admin.toString() === user.id)) {
-//             throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to delete this product');
-//         }
-//     }
 
-//     const variantSlug = generateSlug(
-//         product.categoryId.name,
-//         product.subcategoryId.name,
-//         data
-//     );
-
-//     const isVariantExistSlug = await Variant.findOne({ slug: variantSlug }, null, { session });
-//     if (isVariantExistSlug) {
-//         throw new AppError(StatusCodes.BAD_REQUEST, 'Variant already exists');
-//     }
-
-//     const variant = await Variant.findOne({ slug: variantSlug });
-
-//     if (!variant) {
-//         throw new AppError(StatusCodes.BAD_REQUEST, 'Variant not found');
-//     }
-
-//     const productVariant = await Product.findOne({
-//         _id: productId,
-//         'product_variant_Details.variantSlug': data.variantSlug,
-//     });
-
-//     if (productVariant) {
-//         throw new AppError(StatusCodes.BAD_REQUEST, 'Variant already exists in product');
-//     }
-
-//     const newVariant: IProductSingleVariant = {
-//         variantId: variant._id.toString(),
-//         variantQuantity: data.variantQuantity,
-//         variantPrice: data.variantPrice,
-//     };
-
-//     product.product_variant_Details.push(newVariant);
-
-//     await product.save();
-
-//     return product;
-// };
-
-// const updateProductVariantByVariantFieldName = async (productId: string, data: IProductSingleVariantByFieldName, user: IJwtPayload) => {
-//     const product = await Product.findById(productId);
-
-//     if (!product) {
-//         throw new AppError(StatusCodes.BAD_REQUEST, 'Product not found');
-//     }
-
-//     if (user.role === USER_ROLES.USER) {
-//         throw new AppError(StatusCodes.UNAUTHORIZED, 'You are not allowed to perform this action');
-//     }
-
-//     const variant = await Variant.findOne({ slug: data.variantSlug });
-
-//     if (!variant) {
-//         throw new AppError(StatusCodes.BAD_REQUEST, 'Variant not found');
-//     }
-
-//     const productVariant = await Product.findOne({
-//         _id: productId,
-//         'product_variant_Details.variantSlug': data.variantSlug,
-//     });
-
-//     if (!productVariant) {
-//         throw new AppError(StatusCodes.BAD_REQUEST, 'Variant does not exist in product');
-//     }
-
-//     productVariant.product_variant_Details = productVariant.product_variant_Details.map((variant) => {
-//         if (variant.variantSlug === data.variantSlug) {
-//             return {
-//                 variantId: variant.variantId,
-//                 variantQuantity: data.variantQuantity,
-//                 variantPrice: data.variantPrice,
-//             };
-//         }
-
-//         return variant;
-//     });
-
-//     await productVariant.save();
-
-//     return productVariant;
-// };
-
-// const deleteProductVariantByVariantFieldName = async (productId: string, data: IProductSingleVariantByFieldName, user: IJwtPayload) => {
-//     const product = await Product.findById(productId);
-
-//     if (!product) {
-//         throw new AppError(StatusCodes.BAD_REQUEST, 'Product not found');
-//     }
-
-//     if (user.role === USER_ROLES.USER) {
-//         throw new AppError(StatusCodes.UNAUTHORIZED, 'You are not allowed to perform this action');
-//     }
-
-//     const variant = await Variant.findOne({ slug: data.variantSlug });
-
-//     if (!variant) {
-//         throw new AppError(StatusCodes.BAD_REQUEST, 'Variant not found');
-//     }
-
-//     const productVariant = await Product.findOne({
-//         _id: productId,
-//         'product_variant_Details.variantSlug': data.variantSlug,
-//     });
-
-//     if (!productVariant) {
-//         throw new AppError(StatusCodes.BAD_REQUEST, 'Variant does not exist in product');
-//     }
-
-//     productVariant.product_variant_Details = productVariant.product_variant_Details.filter(
-//         (variant) => variant.variantSlug !== data.variantSlug
-//     );
-
-//     await productVariant.save();
-
-//     return productVariant;
-// };
 
 
 export const ProductService = {
@@ -599,7 +541,6 @@ export const ProductService = {
     updateToggleProductIsRecommended,
     getRecommendedProducts,
     getProductsByShop,
-    // addNewVariantToProductByVariantFieldName,
-    // updateProductVariantByVariantFieldName,
-    // deleteProductVariantByVariantFieldName,
+    getAllProductsByProvince,
+    getAllProductsByTerritory
 };

@@ -179,3 +179,11 @@ Mon Jun 30 2025 14:45:23 [SERVER-NAME] info: [32mConfig validation successful.
 Mon Jun 30 2025 14:45:24 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
 Mon Jun 30 2025 14:45:24 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
 Mon Jun 30 2025 14:45:24 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 14:45:28 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Mon Jun 30 2025 14:45:29 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jun 30 2025 14:45:29 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Mon Jun 30 2025 14:45:29 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
+Mon Jun 30 2025 14:45:36 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/review/product 200 - 569.983 ms
+Mon Jun 30 2025 14:45:40 [SERVER-NAME] info: 10.0.60.110 - POST /api/v1/review/product 200 - 553.289 ms
+Mon Jun 30 2025 14:47:16 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/review/product/6858dafad21add59c265e18e?fields=refferenceId 200 - 251.069 ms
+Mon Jun 30 2025 14:47:24 [SERVER-NAME] info: 10.0.60.110 - GET /api/v1/review/product/6858dafad21add59c265e18e 200 - 234.352 ms

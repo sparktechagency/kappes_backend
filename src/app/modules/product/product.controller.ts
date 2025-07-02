@@ -102,39 +102,28 @@ const getProductsByShop = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getAllProductsByProvince = catchAsync(async (req: Request, res: Response) => {
+    const { province } = req.params;
+    const result = await ProductService.getAllProductsByProvince(province as string, req.query);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: 'Products retrieved successfully',
+        data: result
+    });
+});
 
-// const addNewVariantToProductByVariantFieldName = catchAsync(async (req: Request, res: Response) => {
-//     const { id } = req.params;
-//     const result = await ProductService.addNewVariantToProductByVariantFieldName(id, req.body, req.user as IJwtPayload);
-//     sendResponse(res, {
-//         statusCode: StatusCodes.OK,
-//         success: true,
-//         message: 'Product updated successfully',
-//         data: result
-//     });
-// }); 
+const getAllProductsByTerritory = catchAsync(async (req: Request, res: Response) => {
+    const { territory } = req.params;
+    const result = await ProductService.getAllProductsByTerritory(territory as string, req.query);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: 'Products retrieved successfully',
+        data: result
+    });
+}); 
 
-// const updateProductVariantByVariantFieldName = catchAsync(async (req: Request, res: Response) => {
-//     const { id } = req.params;
-//     const result = await ProductService.updateProductVariantByVariantFieldName(id, req.body, req.user as IJwtPayload);
-//     sendResponse(res, {
-//         statusCode: StatusCodes.OK,
-//         success: true,
-//         message: 'Product updated successfully',
-//         data: result
-//     });
-// }); 
-
-// const deleteProductVariantByVariantFieldName = catchAsync(async (req: Request, res: Response) => {
-//     const { id } = req.params;
-//     const result = await ProductService.deleteProductVariantByVariantFieldName(id, req.body, req.user as IJwtPayload);
-//     sendResponse(res, {
-//         statusCode: StatusCodes.OK,
-//         success: true,
-//         message: 'Product updated successfully',
-//         data: result
-//     });
-// });         
 
 export const ProductController = {
     createProduct,
@@ -146,7 +135,6 @@ export const ProductController = {
     updateToggleProductIsRecommended,
     getRecommendedProducts,
     getProductsByShop,
-    // addNewVariantToProductByVariantFieldName,
-    // updateProductVariantByVariantFieldName,
-    // deleteProductVariantByVariantFieldName,
+    getAllProductsByProvince,
+    getAllProductsByTerritory,
 }

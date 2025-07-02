@@ -29,10 +29,14 @@ router
 router.patch('/make-shop-admin/:shopId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), validateRequest(ShopValidation.makeShopAdminZodSchema), ShopController.makeShopAdmin);
 
 // get users shops
-router.get('/user', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), ShopController.getShopsByOwnerOrAdmin);
+router.get('/admin/user', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), ShopController.getShopsByOwnerOrAdmin);
 
 // Get a shop by ID
 router.get('/products/:shopId', ShopController.getProductsByShopId);
+// get shops provinces,territory with prouduct count list in a single route
+router.get('/provinces', ShopController.getShopsProvincesListWithProductCount);
+router.get('/territory', ShopController.getShopsTerritoryListWithProductCount);
+
 
 // get shop overview 
 router.get('/overview/:shopId',
@@ -57,10 +61,10 @@ router.get('/followers/:shopId', ShopController.getFollowersByShop);
 
 // Delete a shop by ID
 router.delete('/:id', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), ShopController.deleteShopById);
+// Get shops by location
+router.get('/location', ShopController.getShopsByLocation);
 // // Get shops by owner
 // router.get('/owner/:ownerId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), ShopController.getShopsByOwner);
-// // Get shops by location
-// router.get('/location', ShopController.getShopsByLocation);
 // // Get shops by getShopsByShopCategory
 // router.get('/shopCategory/:category', ShopController.getShopsByShopCategory);
 // // Get chats by shop

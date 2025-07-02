@@ -306,6 +306,26 @@ const getShopsByFollower = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getShopsProvincesListWithProductCount = catchAsync(async (req: Request, res: Response) => {
+    const result = await ShopService.getShopsProvincesListWithProductCount(req.query);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: 'Shops provinces,territory with product count retrieved successfully',
+        data: result,
+    });
+});
+
+const getShopsTerritoryListWithProductCount = catchAsync(async (req: Request, res: Response) => {
+    const result = await ShopService.getShopsTerritoryListWithProductCount(req.query);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: 'Shops territory with product count retrieved successfully',
+        data: result,
+    });
+});
+
 export const ShopController = {
     createShop,
     makeShopAdmin,
@@ -333,6 +353,8 @@ export const ShopController = {
     getShopAdminsByShopId,
     createShopAdmin,
     getShopOverview,
-    getShopsByFollower
+    getShopsByFollower,
+    getShopsProvincesListWithProductCount,
+    getShopsTerritoryListWithProductCount
 }   
 

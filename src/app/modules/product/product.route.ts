@@ -61,6 +61,14 @@ router.patch('/recommended/:id',
     ProductController.updateToggleProductIsRecommended
 );
 
+// get all products by province (public endpoint)
+router.get('/province/:province',
+    ProductController.getAllProductsByProvince
+);
+router.get('/territory/:territory',
+    ProductController.getAllProductsByTerritory
+);
+
 // get product by shop
 router.get('/shop/:shopId',
     ProductController.getProductsByShop

@@ -571,6 +571,112 @@ const getShopsByFollower = async (followerId: string) => {
     };
 }
 
+/**getShopsProvincesListWithProductCount
+     * get all the shops
+     * make a count products using each shopId
+     * make a array of objects [{province: 'Dhaka',productCount: 10}]
+     * 
+*/
+
+const getShopsProvincesListWithProductCount = async (query: Record<string, unknown>) => {
+
+    const pipeline = [
+        {
+            // Optional: Filter the shops based on the provided query (if necessary)
+            $match: query,
+        },
+        {
+            // Lookup products based on the shopId field in the products collection
+            $lookup: {
+                from: 'products', // Join with the 'products' collection
+                localField: '_id', // The _id of the shop
+                foreignField: 'shopId', // The field that holds the shopId in the products collection
+                as: 'products', // This will add a new field "products" with matched items
+            },
+        },
+        {
+            // Add the count of products for each shop
+            $addFields: {
+                productCount: { $size: { $ifNull: ["$products", []] } }, // Count the number of products
+            },
+        },
+        {
+            // Group by province and sum the product count
+            $group: {
+                _id: "$address.province", // Group by province (from address field)
+                totalProducts: { $sum: "$productCount" }, // Sum the product counts for each province
+            },
+        },
+        {
+            // Project the result in the desired format [{ province: 'Dhaka', productCount: 10 }]
+            $project: {
+                province: "$_id", // Rename _id to province
+                productCount: "$totalProducts", // Rename totalProducts to productCount
+                _id: 0, // Remove _id field
+            },
+        },
+    ];
+
+    try {
+        const result = await Shop.aggregate(pipeline).exec(); // Use Mongoose's aggregate method
+        return result; // Returns an array of { province: 'Dhaka', productCount: 10 }
+    } catch (error) {
+        console.error("Error fetching provinces with product counts:", error);
+        throw error; // Throws the error if aggregation fails
+    }
+};
+
+const getShopsTerritoryListWithProductCount = async (query: Record<string, unknown>) => {
+
+    const pipeline = [
+        {
+            // Optional: Filter the shops based on the provided query (if necessary)
+            $match: query,
+        },
+        {
+            // Lookup products based on the shopId field in the products collection
+            $lookup: {
+                from: 'products', // Join with the 'products' collection
+                localField: '_id', // The _id of the shop
+                foreignField: 'shopId', // The field that holds the shopId in the products collection
+                as: 'products', // This will add a new field "products" with matched items
+            },
+        },
+        {
+            // Add the count of products for each shop
+            $addFields: {
+                productCount: { $size: { $ifNull: ["$products", []] } }, // Count the number of products
+            },
+        },
+        {
+            // Group by province and sum the product count
+            $group: {
+                _id: "$address.territory", // Group by province (from address field)
+                totalProducts: { $sum: "$productCount" }, // Sum the product counts for each province
+            },
+        },
+        {
+            // Project the result in the desired format [{ province: 'Dhaka', productCount: 10 }]
+            $project: {
+                province: "$_id", // Rename _id to province
+                productCount: "$totalProducts", // Rename totalProducts to productCount
+                _id: 0, // Remove _id field
+            },
+        },
+    ];
+
+    try {
+        const result = await Shop.aggregate(pipeline).exec(); // Use Mongoose's aggregate method
+        return result; // Returns an array of { province: 'Dhaka', productCount: 10 }
+    } catch (error) {
+        console.error("Error fetching territories with product counts:", error);
+        throw error; // Throws the error if aggregation fails
+    }
+};
+
+
+
+
 
 // Export the ShopService
 export const ShopService = {
@@ -602,5 +708,7 @@ export const ShopService = {
     getShopAdminsByShopId,
     createShopAdmin,
     getShopOverview,
-    getShopsByFollower
+    getShopsByFollower,
+    getShopsProvincesListWithProductCount,
+    getShopsTerritoryListWithProductCount
 }

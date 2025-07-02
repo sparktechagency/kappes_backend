@@ -1,0 +1,6 @@
+Tue Jul 01 2025 12:1:47 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Tue Jul 01 2025 12:2:17 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Tue Jul 01 2025 12:15:43 [SERVER-NAME] info: 10.0.60.126 - GET /api/v1/users/profile 200 - 174.572 ms
+Tue Jul 01 2025 12:15:58 [SERVER-NAME] info: 10.0.60.126 - GET /api/v1/users/profile 200 - 178.529 ms
+Tue Jul 01 2025 12:16:18 [SERVER-NAME] info: 10.0.60.126 - GET /api/v1/users/profile 200 - 173.625 ms
+Tue Jul 01 2025 12:28:47 [SERVER-NAME] info: 10.0.60.126 - GET /api/v1/users/profile 200 - 194.562 ms

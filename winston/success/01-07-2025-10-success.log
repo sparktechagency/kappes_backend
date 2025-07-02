@@ -1,0 +1,48 @@
+Tue Jul 01 2025 10:0:46 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 199.828 ms
+Tue Jul 01 2025 10:1:2 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:2:5 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password - - - ms
+Tue Jul 01 2025 10:2:8 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:3:31 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 198.922 ms
+Tue Jul 01 2025 10:3:34 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:5:46 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 200.780 ms
+Tue Jul 01 2025 10:5:49 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:11:53 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 192.216 ms
+Tue Jul 01 2025 10:11:56 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:12:15 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 176.483 ms
+Tue Jul 01 2025 10:12:18 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:16:17 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 212.403 ms
+Tue Jul 01 2025 10:16:20 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:19:35 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 193.309 ms
+Tue Jul 01 2025 10:19:38 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:21:53 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 192.816 ms
+Tue Jul 01 2025 10:21:55 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:21:57 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 175.805 ms
+Tue Jul 01 2025 10:21:59 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:22:1 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 169.161 ms
+Tue Jul 01 2025 10:22:3 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:22:4 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 165.909 ms
+Tue Jul 01 2025 10:22:7 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:22:43 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 175.209 ms
+Tue Jul 01 2025 10:22:45 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:23:27 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 179.128 ms
+Tue Jul 01 2025 10:23:30 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:25:23 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 196.490 ms
+Tue Jul 01 2025 10:25:26 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:25:29 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 173.151 ms
+Tue Jul 01 2025 10:25:31 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:25:47 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 173.487 ms
+Tue Jul 01 2025 10:25:49 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:26:26 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 174.070 ms
+Tue Jul 01 2025 10:26:29 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:33:55 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 197.329 ms
+Tue Jul 01 2025 10:33:58 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:34:43 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 173.258 ms
+Tue Jul 01 2025 10:34:45 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:36:59 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 189.876 ms
+Tue Jul 01 2025 10:37:2 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:37:17 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 174.620 ms
+Tue Jul 01 2025 10:37:20 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:38:14 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 174.741 ms
+Tue Jul 01 2025 10:38:17 [SERVER-NAME] info: Mail send successfully
+Tue Jul 01 2025 10:57:27 [SERVER-NAME] info: 10.0.60.126 - POST /api/v1/auth/forget-password 200 - 191.832 ms
+Tue Jul 01 2025 10:57:30 [SERVER-NAME] info: Mail send successfully
