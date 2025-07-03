@@ -4,3 +4,57 @@ Thu Jul 03 2025 13:4:21 [SERVER-NAME] info: [33m♻️  Socket is listening on 
 Thu Jul 03 2025 13:4:21 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
 Thu Jul 03 2025 13:4:25 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 3.311 ms
 Thu Jul 03 2025 13:4:27 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJi6IJYs_h2nX5cCaSYmEVt5PIhLfJ1Lj3x36TNLZAzxJQgJCAMN0GPvkiP27v6DJw&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=none 200 - 977.001 ms
+Thu Jul 03 2025 13:6:55 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 0.877 ms
+Thu Jul 03 2025 13:6:56 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJgHaJTo55rKYvu5Su9gwu_I3ibKvkvHkoREzVad4E5l-17erPmMtq4sa9M3dLRY0A&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&authuser=0&prompt=none 200 - 1235.359 ms
+Thu Jul 03 2025 13:7:55 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 18.336 ms
+Thu Jul 03 2025 13:8:30 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 0.963 ms
+Thu Jul 03 2025 13:8:31 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 1.411 ms
+Thu Jul 03 2025 13:8:32 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJi9cvpdL6LTHxo63dOorte41KEZPZJ2aSLucJNQrtZ_bObWk561bThzkYKHrRhpjQ&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&prompt=none 200 - 997.416 ms
+Thu Jul 03 2025 13:13:51 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:15:8 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:16:20 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:16:55 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:17:47 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:18:6 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:18:27 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:18:38 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:22:8 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:22:22 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:23:12 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:23:22 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:23:53 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:24:6 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:24:47 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:25:6 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:25:39 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:27:22 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:29:24 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:29:59 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:34:36 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:35:38 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:36:19 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:37:19 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:40:11 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:40:54 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:41:35 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:41:49 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:43:40 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:46:18 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:47:9 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:47:24 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:47:35 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:47:45 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:47:57 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:48:6 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:48:52 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:49:52 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:50:21 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:52:32 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:53:4 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:53:25 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 13:54:14 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 13:55:36 [SERVER-NAME] info: [34mSIGINT received. Shutting down gracefully...[39m
+Thu Jul 03 2025 13:55:42 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 13:55:45 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 13:55:45 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Thu Jul 03 2025 13:55:45 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m
