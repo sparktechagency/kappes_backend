@@ -106,6 +106,91 @@ const loginUserFromDB = async (payload: ILoginData) => {
      return { accessToken, refreshToken, role: isExistUser.role };
 };
 
+//SocialLoginUserFromDB
+const SocialLoginUserFromDB = async (payload: ILoginData) => {
+     const { email } = payload;
+     if (!email) {
+          throw new AppError(StatusCodes.BAD_REQUEST, 'Email is required!');
+     }
+
+     // Find user with password (password select is false by default)
+     const isExistUser = await User.findOne({ email }).select('+password +tokenVersion');
+     if (!isExistUser) {
+          throw new AppError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
+     }
+     const getAdmin = await User.findOne({ role: USER_ROLES.SUPER_ADMIN });
+     if (!getAdmin) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Admin not found!');
+     }
+     // Check if the user is verified
+     if (!isExistUser.verified) {
+          const otp = generateOTP(4);
+          const value = { otp, email: isExistUser.email };
+          const forgetPassword = emailTemplate.resetPassword(value);
+          emailHelper.sendEmail(forgetPassword);
+
+          const authentication = {
+               oneTimeCode: otp,
+               expireAt: new Date(Date.now() + 3 * 60000),
+          };
+          await User.findOneAndUpdate({ email }, { $set: { authentication } });
+
+          throw new AppError(StatusCodes.CONFLICT, 'Please verify your account, then try to login again');
+     }
+
+     // Check if the user account is blocked
+     if (isExistUser?.status === 'blocked') {
+          throw new AppError(StatusCodes.BAD_REQUEST, 'You don’t have permission to access this content. It looks like your account has been blocked.');
+     }
+
+     const today = new Date().toLocaleDateString();
+
+     // Increment login count if last login not today
+     if (isExistUser.lastLogin && new Date(isExistUser.lastLogin).toLocaleDateString() !== today) {
+          await User.findByIdAndUpdate(isExistUser._id, { $inc: { loginCount: 1 } }, { new: true });
+     }
+
+     // Update last login to now
+     await User.findByIdAndUpdate(isExistUser._id, { $set: { lastLogin: new Date() } }, { new: true });
+
+     // Generate JWT tokens including tokenVersion
+     const jwtData = {
+          id: isExistUser._id.toString() as string,
+          role: isExistUser.role,
+          email: isExistUser.email,
+          tokenVersion: isExistUser.tokenVersion ?? 0, // <-- include tokenVersion here
+     };
+     if (isExistUser.role === USER_ROLES.ADMIN) {
+          await sendNotifications({
+               title: `${isExistUser.full_name}`,
+               receiver: getAdmin._id,
+               message: `Admin ${isExistUser.full_name} has just logged into the dashboard.`,
+               type: 'MESSAGE',
+          });
+     }
+     if (isExistUser.role === USER_ROLES.SUPER_ADMIN) {
+          await sendNotifications({
+               title: `${isExistUser.full_name}`,
+               receiver: isExistUser._id,
+               message: `Hay super admin ${isExistUser.full_name} wellcome back to the dashboard.`,
+               type: 'MESSAGE',
+          });
+     }
+
+     if (isExistUser.role === USER_ROLES.USER) {
+          await sendNotifications({
+               title: `${isExistUser.full_name}`,
+               receiver: isExistUser._id,
+               message: `Wellcome ${isExistUser.full_name} to the app.`,
+               type: 'MESSAGE',
+          });
+     }
+     const accessToken = jwtHelper.createToken(jwtData, config.jwt.jwt_secret as Secret, config.jwt.jwt_expire_in as string);
+     const refreshToken = jwtHelper.createToken(jwtData, config.jwt.jwt_refresh_secret as string, config.jwt.jwt_refresh_expire_in as string);
+
+     return { accessToken, refreshToken, role: isExistUser.role };
+};
+
 //forget password
 const forgetPasswordToDB = async (email: string) => {
      const isExistUser = await User.isExistUserByEmail(email);
@@ -402,4 +487,5 @@ export const AuthService = {
      resetPasswordByUrl,
      resendOtpFromDb,
      refreshToken,
+     SocialLoginUserFromDB,
 };

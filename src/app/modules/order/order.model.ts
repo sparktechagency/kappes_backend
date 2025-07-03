@@ -83,7 +83,7 @@ const orderSchema = new Schema<IOrder>(
         paymentStatus: {
             type: String,
             enum: PAYMENT_STATUS,
-            default: PAYMENT_STATUS.PENDING,
+            default: PAYMENT_STATUS.UNPAID,
         },
         payment: {
             type: Schema.Types.ObjectId,

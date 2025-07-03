@@ -1,0 +1,174 @@
+Thu Jul 03 2025 12:0:20 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:0:21 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:0:21 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:0:21 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:0:26 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 9.921 ms
+Thu Jul 03 2025 12:0:44 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 2.063 ms
+Thu Jul 03 2025 12:0:45 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 1.123 ms
+Thu Jul 03 2025 12:0:45 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJiFaUypFbLpsIqmMVERhEoGRwWUFj07LLmAD90Du5uqh2nsuvPNIhZ08KYzzU6lhg&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&prompt=none 302 - 204.710 ms
+Thu Jul 03 2025 12:2:10 [SERVER-NAME] info: [34mSIGINT received. Shutting down gracefully...[39m
+Thu Jul 03 2025 12:2:16 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:2:17 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:2:17 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:2:17 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:2:21 [SERVER-NAME] info: [34mSIGINT received. Shutting down gracefully...[39m
+Thu Jul 03 2025 12:2:38 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:2:39 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:2:39 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:2:39 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:3:33 [SERVER-NAME] info: [34mSIGINT received. Shutting down gracefully...[39m
+Thu Jul 03 2025 12:3:38 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:3:39 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:3:39 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:3:39 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:3:49 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 6.269 ms
+Thu Jul 03 2025 12:3:50 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 1.656 ms
+Thu Jul 03 2025 12:3:51 [SERVER-NAME] error: TypeError: Cannot read properties of undefined (reading 'id')
+Thu Jul 03 2025 12:4:21 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJgg2UrfWeXqIUXJXFuPY3ICNHrBuWkc2tURx34Ui7rapmKVDaEd2mP5pONmdN_Qhw&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none - - - ms
+Thu Jul 03 2025 12:4:21 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 1.306 ms
+Thu Jul 03 2025 12:4:22 [SERVER-NAME] error: TypeError: Cannot read properties of undefined (reading 'id')
+Thu Jul 03 2025 12:4:24 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJi9ISHgy53PxSkJ4ponim8PBHUFVLyv6-adYUj5PZBxzFeeXuCT_sMgwSYQgFL3lw&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&authuser=0&prompt=none - - - ms
+Thu Jul 03 2025 12:4:29 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 0.879 ms
+Thu Jul 03 2025 12:4:30 [SERVER-NAME] error: TypeError: Cannot read properties of undefined (reading 'id')
+Thu Jul 03 2025 12:5:27 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJg1Y83__UCnn9tx5KbHPPWyKFU4enQpx7JScxsCeMKyLakf9TN4M2yIv0fBXEdypw&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&authuser=0&prompt=none - - - ms
+Thu Jul 03 2025 12:5:40 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:5:41 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:5:41 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:5:41 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:5:47 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:5:48 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:5:48 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:5:48 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:5:57 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 5.553 ms
+Thu Jul 03 2025 12:6:0 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 2.410 ms
+Thu Jul 03 2025 12:6:1 [SERVER-NAME] error: Error: Email already exists!
+Thu Jul 03 2025 12:6:1 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJirvB31vDHwiffH0im103skoNRJOfVZOfqr7IFtuZ_NBRB-8wwJ6nEZUAqSd2H-yw&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&authuser=0&prompt=none 302 - 565.231 ms
+Thu Jul 03 2025 12:8:45 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:8:46 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:8:46 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:8:46 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:8:51 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 3.675 ms
+Thu Jul 03 2025 12:8:57 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 1.702 ms
+Thu Jul 03 2025 12:8:58 [SERVER-NAME] error: Error: Email already exists!
+Thu Jul 03 2025 12:8:58 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJghHZM7qIKpL_HtUpO48eKYa05n7nvYQ4R7yjRQrpJ8wgHCYyjqcxd0RLsqZZttcA&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&authuser=0&prompt=none 302 - 600.476 ms
+Thu Jul 03 2025 12:11:1 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 1.044 ms
+Thu Jul 03 2025 12:14:2 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:14:3 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:14:3 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:14:3 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:14:13 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:14:14 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:14:14 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:14:14 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:14:20 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 3.772 ms
+Thu Jul 03 2025 12:14:21 [SERVER-NAME] error: Error: data and salt arguments required
+Thu Jul 03 2025 12:14:21 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJhn89puS9281mQvFrUMq1bZ1RAYYem_fSYb-AuDapRnl6Q6EzbM89LJn0gLtxkG6g&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none 302 - 591.891 ms
+Thu Jul 03 2025 12:16:4 [SERVER-NAME] info: [34mSIGINT received. Shutting down gracefully...[39m
+Thu Jul 03 2025 12:16:8 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:16:9 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:16:9 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:16:9 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:16:16 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 5.249 ms
+Thu Jul 03 2025 12:16:18 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 1.775 ms
+Thu Jul 03 2025 12:16:19 [SERVER-NAME] error: Error: data and salt arguments required
+Thu Jul 03 2025 12:16:19 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJhb5YYLaZ9WT1tAOlovHQegkv7cGmMJQs14qGpIOMB1tCvuIwRXLhZhiA4u-I2iGA&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none 302 - 654.103 ms
+Thu Jul 03 2025 12:16:40 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:16:41 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:16:41 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:16:41 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:16:44 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 3.371 ms
+Thu Jul 03 2025 12:16:44 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 0.913 ms
+Thu Jul 03 2025 12:16:45 [SERVER-NAME] error: Error: data and salt arguments required
+Thu Jul 03 2025 12:16:45 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJgRXvVJwode0aeevuNIranFm2ZXPxtncWHvjZkCE1EhDYsYYnD_rbPysxtns_w7Zw&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&authuser=0&prompt=none 302 - 554.389 ms
+Thu Jul 03 2025 12:17:23 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:17:24 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:17:24 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:17:24 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:17:24 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 3.165 ms
+Thu Jul 03 2025 12:17:25 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 0.943 ms
+Thu Jul 03 2025 12:17:26 [SERVER-NAME] error: Error: data and salt arguments required
+Thu Jul 03 2025 12:17:26 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJgSwBFOSw2yapbydIAlFwf0tIZx4zFNoOO9H2AEfShmPagWLfXkWLIe6Nse97zU9Q&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none 302 - 788.407 ms
+Thu Jul 03 2025 12:17:55 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:17:56 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:17:56 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:17:56 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:17:56 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 3.219 ms
+Thu Jul 03 2025 12:17:57 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 0.929 ms
+Thu Jul 03 2025 12:17:58 [SERVER-NAME] error: Error: data and salt arguments required
+Thu Jul 03 2025 12:17:58 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJjpaD2XorawtnX6dE90huFWXltcs9OaiXyTLVXDqrjlif_f8nOIq8hbfxoAWVhu7A&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=none 302 - 609.913 ms
+Thu Jul 03 2025 12:18:23 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:18:24 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:18:24 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:18:24 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:18:26 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 3.673 ms
+Thu Jul 03 2025 12:18:26 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 0.959 ms
+Thu Jul 03 2025 12:18:27 [SERVER-NAME] error: Error: data and salt arguments required
+Thu Jul 03 2025 12:18:27 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJhtKWQ1OlzTanDmFVwlMOQpxQXGhLDCxMAnIJqx-qbjo75zz_lkFREjHRrDzdn_eA&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&prompt=none 302 - 572.982 ms
+Thu Jul 03 2025 12:18:45 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 18.903 ms
+Thu Jul 03 2025 12:19:1 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 1.097 ms
+Thu Jul 03 2025 12:19:7 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 0.687 ms
+Thu Jul 03 2025 12:19:7 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 0.492 ms
+Thu Jul 03 2025 12:19:8 [SERVER-NAME] error: Error: data and salt arguments required
+Thu Jul 03 2025 12:19:8 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJiCAp9hSn3aanvfulvZjLwQrrfaQjdTI6FVcfky9-OyBVR5hl2Mi0zI91zBBCSIgw&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none 302 - 583.041 ms
+Thu Jul 03 2025 12:21:38 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:21:39 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:21:39 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:21:39 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:21:44 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 3.124 ms
+Thu Jul 03 2025 12:21:45 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 1.615 ms
+Thu Jul 03 2025 12:21:46 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJiwoyVB7z2Dyhjp7MYn0l6Rl3qiP9wqEF-cX9Hv80jfBGnETqukidHSCLDQh_Vjiw&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none 302 - 697.877 ms
+Thu Jul 03 2025 12:35:57 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:35:58 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:35:58 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:35:58 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:36:13 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 6.309 ms
+Thu Jul 03 2025 12:36:14 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJhmQtvFTZ73JQhZ_jWy2Q_b6kAFq4dMzkKLXuM68gouNQZE6fgzYTRbGSlxekLWJg&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&authuser=0&prompt=none 302 - 711.029 ms
+Thu Jul 03 2025 12:36:33 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:36:34 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:36:34 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:36:34 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:36:37 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 3.296 ms
+Thu Jul 03 2025 12:36:38 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJiRK4ILhQ2206VhjydrN0uuitlxkJLsuRD3SMEQHoqV3x_wmzF4NDkiOruf5hzHYg&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none 302 - 1161.465 ms
+Thu Jul 03 2025 12:36:57 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:36:58 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:36:58 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:36:58 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:37:0 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 3.351 ms
+Thu Jul 03 2025 12:37:1 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJjEIwv_nXoP_I-J6Qe1MoLLH0DlZAv_ejNtuRr6CNAU6adjlmXWP1QIL2PYxCpFuw&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&authuser=0&prompt=none 302 - 653.265 ms
+Thu Jul 03 2025 12:37:8 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:37:9 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:37:9 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:37:9 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:37:58 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 5.094 ms
+Thu Jul 03 2025 12:37:58 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJifrE5zEen-KTkrjCojxLu87TIOJQ86j0Kg6v20PAkt3fuggDl1jI84F0xAzgeoGg&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&prompt=none 302 - 639.619 ms
+Thu Jul 03 2025 12:39:32 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:39:33 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:39:33 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:39:33 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:44:11 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:44:12 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:44:12 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:44:12 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:44:19 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 5.051 ms
+Thu Jul 03 2025 12:44:20 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJj-W9mBKlZBoZ6QTayPIauv-cxmyQK_6q88s5WkLxfON50jypBU80bLA8OG4Kb8rw&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&authuser=0&prompt=none 302 - 672.103 ms
+Thu Jul 03 2025 12:46:48 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:46:49 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:46:49 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:46:49 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:47:25 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:47:25 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:47:25 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:47:25 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:48:53 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:48:54 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:48:54 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:48:54 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:50:31 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 12:50:32 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 12:50:32 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 12:50:32 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 12:51:22 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 23.381 ms
+Thu Jul 03 2025 12:51:37 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 1.635 ms
+Thu Jul 03 2025 12:51:39 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJg4G89FKiHqvdKVHlnPZxreUF0ROVEt45iF-Y1TE2yJgq8Kcf6WwMW6Rg_nPPawtQ&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid&authuser=0&prompt=none 200 - 1244.740 ms
+Thu Jul 03 2025 12:54:47 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 0.985 ms
+Thu Jul 03 2025 12:54:48 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJjyaC0U8VjukvmzU7b6UG4CIgGAFP7QAQUa7o7lj2a6bBlwsJxK7euKAnHS5ltkgw&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&prompt=none 200 - 906.010 ms

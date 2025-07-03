@@ -25,7 +25,7 @@ const userSchema = new Schema<IUser, UserModel>(
                default: '',
                unique: true,
                required: false,
-          },   
+          },
           facebookId: {
                type: String,
                default: '',
@@ -138,7 +138,7 @@ const userSchema = new Schema<IUser, UserModel>(
                },
                select: false,
           },
-          recentSearchLocations: [RecentSearchLocationSchema], 
+          recentSearchLocations: [RecentSearchLocationSchema],
           balance: { type: Number, default: 0 },
      },
      { timestamps: true },
@@ -189,7 +189,12 @@ userSchema.pre('save', async function (next) {
           throw new AppError(StatusCodes.BAD_REQUEST, 'Email already exists!');
      }
 
-     this.password = await bcrypt.hash(this.password, Number(config.bcrypt_salt_rounds));
+     // this.password = await bcrypt.hash(this.password, Number(config.bcrypt_salt_rounds));
+
+     // Only hash the password if it's set (i.e., not null or empty)
+     if (this.password && this.isModified('password')) {
+          this.password = await bcrypt.hash(this.password, Number(config.bcrypt_salt_rounds));
+     }
      next();
 });
 

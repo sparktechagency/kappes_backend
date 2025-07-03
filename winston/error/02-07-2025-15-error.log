@@ -1,0 +1,4 @@
+Wed Jul 02 2025 15:0:49 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/auth/verify-email 400 - 15.287 ms
+Wed Jul 02 2025 15:0:50 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/auth/verify-email 400 - 4.590 ms
+Wed Jul 02 2025 15:1:21 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/auth/verify-email 400 - 4.019 ms
+Wed Jul 02 2025 15:2:53 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/auth/verify-email 400 - 2.570 ms

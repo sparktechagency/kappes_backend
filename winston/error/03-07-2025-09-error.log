@@ -1,0 +1,8 @@
+Thu Jul 03 2025 9:24:5 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/auth/verify-email 400 - 14.936 ms
+Thu Jul 03 2025 9:24:6 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/auth/verify-email 400 - 2.280 ms
+Thu Jul 03 2025 9:24:17 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/auth/verify-email 400 - 2.018 ms
+Thu Jul 03 2025 9:24:17 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/auth/verify-email 400 - 1.372 ms
+Thu Jul 03 2025 9:24:17 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/auth/verify-email 400 - 1.728 ms
+Thu Jul 03 2025 9:24:17 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/auth/verify-email 400 - 0.939 ms
+Thu Jul 03 2025 9:33:9 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/users 409 - 106.153 ms
+Thu Jul 03 2025 9:39:58 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/auth/verify-email 400 - 84.494 ms

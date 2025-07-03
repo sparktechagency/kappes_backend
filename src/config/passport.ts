@@ -35,15 +35,16 @@ passport.use(
                clientID: config.social.google_client_id as string,
                clientSecret: config.social.google_client_secret as string,
                callbackURL: `${config.backend_url}/api/v1/auth/google/callback`,
-               proxy: true, // Add this line if you're behind a proxy
-               passReqToCallback: true, // Add this to access the request object in the callback
+               // proxy: true, // Add this line if you're behind a proxy
+               // passReqToCallback: true, // Add this to access the request object in the callback
           },
           async (accessToken, refreshToken, profile: any, done: any) => {
                try {
                     console.log({ profile });
                     let user = await User.findOne({ googleId: profile.id });
+                    console.log({ user });
                     let isNewUser = false;
-
+                    
                     if (!user) {
                          const newUser = {
                               googleId: profile?.id,
@@ -54,8 +55,10 @@ passport.use(
                               verified: true,
                               role: USER_ROLES.USER,
                          };
-
+                         
+                         console.log({newUser});
                          user = await User.create(newUser);
+                         console.log({user});
                          isNewUser = true;
                     }
 

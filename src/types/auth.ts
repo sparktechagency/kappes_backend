@@ -5,7 +5,7 @@ export type IVerifyEmail = {
 
 export type ILoginData = {
      email: string;
-     password: string;
+     password?: string;
 };
 
 export type IAuthResetPassword = {

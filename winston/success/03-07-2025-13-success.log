@@ -1,0 +1,6 @@
+Thu Jul 03 2025 13:4:20 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 13:4:21 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 13:4:21 [SERVER-NAME] info: [33m♻️  Socket is listening on localhost:6002[39m
+Thu Jul 03 2025 13:4:21 [SERVER-NAME] info: [33m♻️  Application listening on http://localhost:7000[39m
+Thu Jul 03 2025 13:4:25 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google 302 - 3.311 ms
+Thu Jul 03 2025 13:4:27 [SERVER-NAME] info: ::1 - GET /api/v1/auth/google/callback?code=4%2F0AVMBsJi6IJYs_h2nX5cCaSYmEVt5PIhLfJ1Lj3x36TNLZAzxJQgJCAMN0GPvkiP27v6DJw&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=none 200 - 977.001 ms

@@ -8,7 +8,7 @@ import { NextFunction, Request, Response } from 'express';
 import { jwtHelper } from '../../../helpers/jwtHelper';
 import { Secret } from 'jsonwebtoken';
 import { IJwtPayload } from './auth.interface';
-import { passportHandlers} from '../../../helpers/passportJsRedirectData';
+import { passportHandlers } from '../../../helpers/passportJsRedirectData';
 import { failureRedirectUrl } from './auth.utils';
 
 const verifyEmail = catchAsync(async (req, res) => {
@@ -142,7 +142,7 @@ const refreshToken = catchAsync(async (req, res) => {
 
 const googleAuth = passport.authenticate("google", {
      scope: ["profile", "email"],
-   });
+});
 
 const googleCallback = (req: Request, res: Response, next: NextFunction) => {
      passport.authenticate(
@@ -156,20 +156,42 @@ const googleCallback = (req: Request, res: Response, next: NextFunction) => {
                          console.error('Google OAuth Error:', err || 'No user returned');
                          return await passportHandlers.setErrorDataAndRedirect(res, err, user);
                     }
-
+                    console.log('user from google callback', user)
                     // Generate JWT token
-                    const token = await jwtHelper.createToken(
-                         {
-                              id: user._id,
-                              role: user.role,
-                              email: user.email
-                         } as IJwtPayload,
-                         config.jwt.jwt_secret as Secret,
-                         config.jwt.jwt_expire_in as string
-                    );
+                    // const token = await jwtHelper.createToken(
+                    //      {
+                    //           id: user._id,
+                    //           role: user.role,
+                    //           email: user.email
+                    //      } as IJwtPayload,
+                    //      config.jwt.jwt_secret as Secret,
+                    //      config.jwt.jwt_expire_in as string
+                    // );
 
-                    // Handle the successful authentication
-                    await passportHandlers.setSuccessDataAndRedirect(res, user, token);
+                    // // Handle the successful authentication
+                    // await passportHandlers.setSuccessDataAndRedirect(res, user, token);
+
+
+                    const result = await AuthService.SocialLoginUserFromDB({ email: user.email });
+                    const cookieOptions: any = {
+                         secure: false,
+                         httpOnly: true,
+                         maxAge: 31536000000,
+                    };
+
+                    if (config.node_env === 'production') {
+                         cookieOptions.sameSite = 'none';
+                    }
+                    sendResponse(res, {
+                         success: true,
+                         statusCode: StatusCodes.OK,
+                         message: 'User logged in successfully.',
+                         data: {
+                              accessToken: result.accessToken,
+                              refreshToken: result.refreshToken,
+                              role: result.role,
+                         },
+                    });
                } catch (error) {
                     console.error('Error in Google callback:', error);
                     res.redirect(`${failureRedirectUrl}?error=${encodeURIComponent('Authentication error')}`);
@@ -210,7 +232,7 @@ export const AuthController = {
      forgetPasswordByUrl,
      resetPasswordByUrl,
      resendOtp,
-     refreshToken,  
+     refreshToken,
      googleAuth,
      googleCallback,
      facebookAuth,

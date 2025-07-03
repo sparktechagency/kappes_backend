@@ -1,0 +1,4 @@
+Wed Jul 02 2025 18:43:0 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Wed Jul 02 2025 18:43:10 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Wed Jul 02 2025 18:51:19 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Wed Jul 02 2025 18:51:22 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m

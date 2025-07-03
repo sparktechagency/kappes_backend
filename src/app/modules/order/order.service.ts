@@ -390,6 +390,20 @@ const cancelOrder = async (
      * refund validation policy: order status cancle কিনা, isNeedRefund true কিনা এরপর stripe.transfer করব আর isNeedRefund false করে দিব
      */
 
+    // isExistOder by this user
+    const isExistOderrder = await Order.findOne({ _id: new Types.ObjectId(orderId), user: user.id });
+    if (!isExistOderrder) {
+        throw new AppError(StatusCodes.NOT_FOUND, "Order not found");
+    }
+
+    if (isExistOderrder.status === ORDER_STATUS.COMPLETED || isExistOderrder.status === ORDER_STATUS.CANCELLED) {
+        throw new AppError(StatusCodes.BAD_REQUEST, "Order can't be cancelled");
+    }
+
+    if (isExistOderrder.paymentStatus === PAYMENT_STATUS.UNPAID) {
+        throw new AppError(StatusCodes.BAD_REQUEST, "Order can't be cancelled");
+    }
+
     const order = await Order.findOneAndUpdate(
         { _id: new Types.ObjectId(orderId), user: user.id },
         { status: "cancelled" },
@@ -402,7 +416,7 @@ const refundOrderRequest = async (
     orderId: string,
     user: IJwtPayload
 ) => {
-    const order = await Order.findOneAndUpdate(
+        const order = await Order.findOneAndUpdate(
         { _id: new Types.ObjectId(orderId), user: user.id },
         { status: "cancelled" },
         { new: true }
