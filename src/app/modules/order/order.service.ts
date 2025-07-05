@@ -371,6 +371,19 @@ const changeOrderStatus = async (
     return updatedOrder;
 };
 
+
+const refundOrderRequest = async (
+    orderId: string,
+    user: IJwtPayload
+) => {
+    const order = await Order.findOneAndUpdate(
+        { _id: new Types.ObjectId(orderId), user: user.id },
+        { status: "cancelled" },
+        { new: true }
+    );
+    return { message: "Order cancelled service under progress", order };
+};
+
 const cancelOrder = async (
     orderId: string,
     user: IJwtPayload
@@ -379,8 +392,8 @@ const cancelOrder = async (
      * সবার আগে order cancelation validation করব যেমন,
      * প্রথমে আমরা order এর status যদি completed হয় তাহলে আমরা order cancell করতে পারব না
      *  order এর status যদি cancelled হয় তাহলে আমরা order cancell করতে পারব না
-     *  order এর paymentStatus যদি unpaid হয়+order.status:any i.o completed or cancel তাহলে আমরা order cancell করতে পারব
      *  order এর paymentStatus যদি paid হয়+order.status:any i.o completed or cancel তাহলে আমরা order cancell করতে পারব তবে সেক্ষেত্রে refund policy maintain করতে হবে
+     *  order এর paymentStatus যদি unpaid হয়+order.status:any i.o completed or cancel তাহলে আমরা order cancell করতে পারব
      * 
      * order status যদি not completed হয় তাহলে আমরা order cancell করতে পারব তবে ২ বিষয় আছে
      * ১. order payment status যদি unpaid আমরা প্রথমে order এর status কে cancelled করে order এর মধ্যকার প্রতিটি product এর stock কে বাড়ানো হবে এবং আমরা পরে আমরা প্রথমে order এর status কে cancelled হাবে
@@ -391,38 +404,42 @@ const cancelOrder = async (
      */
 
     // isExistOder by this user
-    const isExistOderrder = await Order.findOne({ _id: new Types.ObjectId(orderId), user: user.id });
-    if (!isExistOderrder) {
+    const isExistOrder = await Order.findOne({ _id: new Types.ObjectId(orderId), user: user.id });
+    if (!isExistOrder) {
         throw new AppError(StatusCodes.NOT_FOUND, "Order not found");
     }
 
-    if (isExistOderrder.status === ORDER_STATUS.COMPLETED || isExistOderrder.status === ORDER_STATUS.CANCELLED) {
+    if (isExistOrder.status === ORDER_STATUS.COMPLETED || isExistOrder.status === ORDER_STATUS.CANCELLED) {
         throw new AppError(StatusCodes.BAD_REQUEST, "Order can't be cancelled");
     }
 
-    if (isExistOderrder.paymentStatus === PAYMENT_STATUS.UNPAID) {
-        throw new AppError(StatusCodes.BAD_REQUEST, "Order can't be cancelled");
+
+
+    if (isExistOrder.paymentStatus === PAYMENT_STATUS.PAID) {
+        // করা যাবে cancel তবে refund করতে হবে
+        if (isExistOrder.isNeedRefund) {
+            throw new AppError(StatusCodes.BAD_REQUEST, "Order is already need refund");            
+        }   
+        
+        isExistOrder.status = ORDER_STATUS.CANCELLED;
+        isExistOrder.isNeedRefund = true;
+        await isExistOrder.save();
+        // send mail notification for the manager and client
+        // make a stripe transfer link to the user for refund 
     }
 
-    const order = await Order.findOneAndUpdate(
-        { _id: new Types.ObjectId(orderId), user: user.id },
-        { status: "cancelled" },
-        { new: true }
-    );
-    return { message: "Order cancelled service under progress", order };
+
+    if (isExistOrder.paymentStatus === PAYMENT_STATUS.UNPAID) {
+        // ইজিলি করা যাবে cancel
+        isExistOrder.status = ORDER_STATUS.CANCELLED;
+        await isExistOrder.save();
+        // send mail notification for the manager and client
+
+    }
+
+    return { message: "Order cancelled service under progress", order:isExistOrder };
 };
 
-const refundOrderRequest = async (
-    orderId: string,
-    user: IJwtPayload
-) => {
-        const order = await Order.findOneAndUpdate(
-        { _id: new Types.ObjectId(orderId), user: user.id },
-        { status: "cancelled" },
-        { new: true }
-    );
-    return { message: "Order cancelled service under progress", order };
-};
 
 const getOrdersByShopId = async (
     shopId: string,
