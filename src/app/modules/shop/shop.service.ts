@@ -163,9 +163,33 @@ const getShopsByOwner = async (ownerId: string) => {
     }
     return shops;
 }
-const getShopsByLocation = async (location: {
-    coordinates: [number, number];
-}) => {
+// const getShopsByLocation = async (location: {
+//     coordinates: [number, number];
+// }) => {
+//     if (
+//         !location.coordinates ||
+//         !Array.isArray(location.coordinates) ||
+//         location.coordinates.length !== 2
+//     ) {
+//         throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid coordinates');
+//     }
+//     console.log(location.coordinates)
+//     const result = await Shop.find({
+//         'location.coordinates': { $ne: [0, 0] },
+//         location: {
+//             $near: {
+//                 $geometry: {
+//                     type: 'Point',
+//                     coordinates: location.coordinates,
+//                 },
+//                 $maxDistance: 5000, // 5 km radius
+//             },
+//         },
+//     });
+//     return result;
+// }
+
+const getShopsByLocation = async (location: { coordinates: [number, number] }) => {
     if (
         !location.coordinates ||
         !Array.isArray(location.coordinates) ||
@@ -173,21 +197,36 @@ const getShopsByLocation = async (location: {
     ) {
         throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid coordinates');
     }
-    console.log(location.coordinates)
-    const result = await Shop.find({
-        'location.coordinates': { $ne: [0, 0] },
-        location: {
-            $near: {
-                $geometry: {
-                    type: 'Point',
-                    coordinates: location.coordinates,
-                },
-                $maxDistance: 5000, // 5 km radius
-            },
-        },
-    });
-    return result;
-}
+
+    try {
+        // Get the native MongoDB collection
+        const collection = Shop.collection;
+
+        // Use the native aggregate method
+        const result = await collection.aggregate([
+            {
+                $geoNear: {
+                    near: {
+                        type: 'Point',
+                        coordinates: location.coordinates,
+                    },
+                    distanceField: 'distance',
+                    maxDistance: 5000,
+                    spherical: true,
+                    query: {
+                        'location.coordinates': { $ne: [0, 0] },
+                        isDeleted: { $ne: true }
+                    }
+                }
+            }
+        ]).toArray();
+
+        return result;
+    } catch (error) {
+        console.error('Error in getShopsByLocation:', error);
+        throw error;
+    }
+};
 
 const getShopsByType = async (type: string) => {
     const shops = await Shop.find({ type })
