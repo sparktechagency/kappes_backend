@@ -94,6 +94,17 @@ const getAllRoleBasedUser = catchAsync(async (req, res) => {
      });
 });
 
+const getAllVendors = catchAsync(async (req, res) => {
+     const result = await UserService.getAllVendors(req.query);
+
+     sendResponse(res, {
+          success: true,
+          statusCode: StatusCodes.OK,
+          message: 'Vendors retrieved successfully',
+          data: result,
+     });
+});
+
 export const UserController = {
      createUser,
      createSellerUser,
@@ -101,4 +112,5 @@ export const UserController = {
      updateProfile,
      deleteProfile,
      getAllRoleBasedUser,
+     getAllVendors,
 };

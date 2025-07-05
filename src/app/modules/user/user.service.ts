@@ -13,6 +13,8 @@ import mongoose, { Schema } from 'mongoose';
 import config from '../../../config';
 import { Shop } from '../shop/shop.model';
 import { stripeAccountService } from '../stripeAccount/stripeAccount.service';
+import QueryBuilder from '../../builder/QueryBuilder';
+import { query } from 'winston';
 // create user
 const createUserToDB = async (payload: IUser): Promise<IUser> => {
      //set role
@@ -280,7 +282,15 @@ const getAllRoleBasedUser = async () => {
      return users;
 };
 
-
+const getAllVendors = async (query: Record<string, unknown>) => {
+     const queryBuilder = new QueryBuilder(User.find({ role: USER_ROLES.VENDOR }).select('full_name email phone'), query);
+     const users = await queryBuilder.fields().filter().paginate().search(['name', 'email', 'phone']).sort().modelQuery.exec();
+     const meta = await queryBuilder.countTotal();
+     return {
+          meta,
+          users,
+     };
+};
 
 
 export const UserService = {
@@ -291,5 +301,6 @@ export const UserService = {
      createVendorToDB,
      deleteUser,
      verifyUserPassword,
-     getAllRoleBasedUser
+     getAllRoleBasedUser,
+     getAllVendors
 };
