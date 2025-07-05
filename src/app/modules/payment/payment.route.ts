@@ -18,6 +18,12 @@ paymentRoutes
     auth(USER_ROLES.VENDOR),
     paymenController.getAllPaymentByOwnerId,
   )
+
+  .get(
+    '/admin',
+    auth(USER_ROLES.SUPER_ADMIN,USER_ROLES.ADMIN),
+    paymenController.getAllPaymentByAdmin,
+  )
   .get(
     '/last-12-months-earnings',
     auth(USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN),

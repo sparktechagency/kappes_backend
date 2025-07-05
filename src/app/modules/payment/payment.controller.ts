@@ -75,6 +75,17 @@ const cancelPage = catchAsync(async (req: Request, res: Response) => {
   res.render('cancel.ejs');
 });
 
+const getAllPaymentByAdmin = catchAsync(async (req: Request, res: Response) => {
+  const result = await paymentService.getAllPaymentByAdminService(req.query);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    data: result,
+    message: ' All payment get successful!!',
+  });
+});
+
 export const paymenController = {
   createPayment,
   getPaymentByCustomer,
@@ -82,4 +93,5 @@ export const paymenController = {
   getLast12MonthsEarnings,
   successPage,
   cancelPage,
+  getAllPaymentByAdmin
 };

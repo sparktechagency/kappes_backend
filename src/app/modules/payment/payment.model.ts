@@ -29,7 +29,7 @@ const paymentSchema = new Schema<IPayment>(
       type: String,
       enum: PAYMENT_STATUS,
       required: true,
-      default: PAYMENT_STATUS.PENDING,
+      default: PAYMENT_STATUS.UNPAID,
     },
     transactionId: {
       type: String,

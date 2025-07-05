@@ -295,6 +295,16 @@ const isPaymentExist = async (paymentIntent: string) => {
   return result;
 };
 
+const getAllPaymentByAdminService = async (query: Record<string, unknown>) => {
+  const queryBuilder = new QueryBuilder(Payment.find().select('method status transactionId createdAt'), query);
+  const payments = await queryBuilder.fields().filter().paginate().search(['name', 'email', 'phone']).sort().modelQuery.exec();
+  const meta = await queryBuilder.countTotal();
+  return {
+    meta,
+    payments,
+  };
+};  
+
 export const paymentService = {
   createPaymentService,
   getAllPaymentByUserId,
@@ -302,4 +312,5 @@ export const paymentService = {
   getLast12MonthsEarningsService,
   getLast7DaysEarnings,
   isPaymentExist,
+  getAllPaymentByAdminService
 };
