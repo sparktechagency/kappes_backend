@@ -1,0 +1,14 @@
+Thu Jul 03 2025 14:4:46 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 14:4:56 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 14:5:37 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 14:5:47 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 14:8:48 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 14:8:59 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 14:12:49 [SERVER-NAME] info: 10.0.60.126 - GET /api/v1/product/recommended 200 - 6207.104 ms
+Thu Jul 03 2025 14:13:20 [SERVER-NAME] info: 10.0.60.126 - GET /image/social-propic-1750654327083.png 200 - 5.170 ms
+Thu Jul 03 2025 14:14:20 [SERVER-NAME] warn: [33mMongoDB disconnected. Attempting to reconnect...[39m
+Thu Jul 03 2025 14:14:31 [SERVER-NAME] info: [32mMongoDB reconnected successfully[39m
+Thu Jul 03 2025 14:54:59 [SERVER-NAME] info: [32mConfig validation successful.[39m
+Thu Jul 03 2025 14:55:0 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Thu Jul 03 2025 14:55:0 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.0.60.110:6002[39m
+Thu Jul 03 2025 14:55:0 [SERVER-NAME] info: [33m♻️  Application listening on http://10.0.60.110:7000[39m

@@ -28,6 +28,12 @@ router.post(
 )
 
 router.get(
+    '/refund-order-requests/:shopId',
+    auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+    OrderController.getAllRefundOrderRequests
+)
+
+router.get(
     '/shop/:shopId',
     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR),
     OrderController.getOrdersByShopId
@@ -50,7 +56,7 @@ router.patch(
 
 // Cancel order
 router.delete(
-    '/:id/cancel',
+    '/cancel/:id',
     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR),
     OrderController.cancelOrder
 );

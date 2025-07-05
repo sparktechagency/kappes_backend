@@ -91,13 +91,30 @@ const cancelOrder = catchAsync(async (req: Request, res: Response) => {
 const getOrdersByShopId = catchAsync(async (req: Request, res: Response) => {
   const result = await OrderService.getOrdersByShopId(
     req.params.shopId,
-    req.user as IJwtPayload
+    req.user as IJwtPayload,
+    req.query
   );
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
     message: "Order retrive succesfully",
+    data: result,
+  });
+});
+
+const getAllRefundOrderRequests = catchAsync(async (req: Request, res: Response) => {
+  const shopId = req.params.shopId;
+  const result = await OrderService.getAllRefundOrderRequests(
+    req.query,
+    req.user as IJwtPayload,
+    shopId
+  );
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "isNeedRefund Orders retrive succesfully",
     data: result,
   });
 });
@@ -109,5 +126,6 @@ export const OrderController = {
   getMyOrders,
   changeOrderStatus,
   cancelOrder,
-  getOrdersByShopId
+  getOrdersByShopId,
+  getAllRefundOrderRequests
 };

@@ -1,0 +1,9 @@
+Sat Jul 05 2025 9:20:53 [SERVER-NAME] error: 10.0.60.110 - DELETE /api/v1/order/685f4c8bc798bcb6f1093158 404 - 1.285 ms
+Sat Jul 05 2025 9:27:15 [SERVER-NAME] error: 10.0.60.110 - DELETE /api/v1/order/cancel/685f4c8bc798bcb6f1093158 403 - 100.707 ms
+Sat Jul 05 2025 9:27:30 [SERVER-NAME] error: 10.0.60.110 - DELETE /api/v1/order/cancel/685f4c8bc798bcb6f1093158 404 - 167.396 ms
+Sat Jul 05 2025 9:28:16 [SERVER-NAME] error: 10.0.60.110 - DELETE /api/v1/order/cancel/685f4c8bc798bcb6f1093158 400 - 166.407 ms
+Sat Jul 05 2025 9:28:43 [SERVER-NAME] error: 10.0.60.110 - DELETE /api/v1/order/cancel/685f4c8bc798bcb6f1093158 400 - 680.409 ms
+Sat Jul 05 2025 9:29:31 [SERVER-NAME] error: 10.0.60.110 - DELETE /api/v1/order/cancel/685f4c8bc798bcb6f1093158 400 - 1100.372 ms
+Sat Jul 05 2025 9:30:43 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/order/my-orders 403 - 87.221 ms
+Sat Jul 05 2025 9:46:29 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/order/refund-order-requests/685806ee0d8150920d3662a5 403 - 79.371 ms
+Sat Jul 05 2025 9:46:48 [SERVER-NAME] error: 10.0.60.110 - GET /api/v1/order/refund-order-requests/685806ee0d8150920d3662a5 403 - 76.423 ms

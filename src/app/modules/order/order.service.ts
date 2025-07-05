@@ -372,16 +372,28 @@ const changeOrderStatus = async (
 };
 
 
-const refundOrderRequest = async (
-    orderId: string,
-    user: IJwtPayload
+const getAllRefundOrderRequests = async (
+    query: Record<string, unknown>,
+    user: IJwtPayload,
+    shopId: string
 ) => {
-    const order = await Order.findOneAndUpdate(
-        { _id: new Types.ObjectId(orderId), user: user.id },
-        { status: "cancelled" },
-        { new: true }
-    );
-    return { message: "Order cancelled service under progress", order };
+
+    // find shop
+    const shop = await Shop.findOne({ _id: new Types.ObjectId(shopId), isActive: true });
+    if (!shop) {
+        throw new AppError(StatusCodes.NOT_FOUND, "Shop not Found");
+    }
+
+    // check verndor or shop admins authorization
+    if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
+        if (shop.owner.toString() !== user.id && !shop.admins?.some(admin => admin.toString() === user.id)) {
+            throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to update this order');
+        }
+    }
+    const queryBuilder = new QueryBuilder(Order.find({ status: "CANCELLED", isNeedRefund: true, shop: shop._id }), query);
+    const orders = await queryBuilder.modelQuery;
+    const meta = await queryBuilder.countTotal();
+    return { meta, orders };
 };
 
 const cancelOrder = async (
@@ -404,13 +416,26 @@ const cancelOrder = async (
      */
 
     // isExistOder by this user
-    const isExistOrder = await Order.findOne({ _id: new Types.ObjectId(orderId), user: user.id });
+    const isExistOrder = await Order.findOne({ _id: new Types.ObjectId(orderId) });
     if (!isExistOrder) {
         throw new AppError(StatusCodes.NOT_FOUND, "Order not found");
     }
 
     if (isExistOrder.status === ORDER_STATUS.COMPLETED || isExistOrder.status === ORDER_STATUS.CANCELLED) {
-        throw new AppError(StatusCodes.BAD_REQUEST, "Order can't be cancelled");
+        throw new AppError(StatusCodes.BAD_REQUEST, `${isExistOrder.status} Order can't be cancelled`);
+    }
+
+    // find shop
+    const shop = await Shop.findOne({ _id: isExistOrder.shop, isActive: true });
+    if (!shop) {
+        throw new AppError(StatusCodes.NOT_FOUND, "Shop not Found");
+    }
+
+    // check verndor or shop admins authorization
+    if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
+        if (shop.owner.toString() !== user.id && !shop.admins?.some(admin => admin.toString() === user.id)) {
+            throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to update this order');
+        }
     }
 
 
@@ -418,9 +443,9 @@ const cancelOrder = async (
     if (isExistOrder.paymentStatus === PAYMENT_STATUS.PAID) {
         // করা যাবে cancel তবে refund করতে হবে
         if (isExistOrder.isNeedRefund) {
-            throw new AppError(StatusCodes.BAD_REQUEST, "Order is already need refund");            
-        }   
-        
+            throw new AppError(StatusCodes.BAD_REQUEST, "Order is already need refund");
+        }
+
         isExistOrder.status = ORDER_STATUS.CANCELLED;
         isExistOrder.isNeedRefund = true;
         await isExistOrder.save();
@@ -437,17 +462,31 @@ const cancelOrder = async (
 
     }
 
-    return { message: "Order cancelled service under progress", order:isExistOrder };
+    return { message: "Order cancelled successfully", order: isExistOrder };
 };
 
 
 const getOrdersByShopId = async (
     shopId: string,
-    user: IJwtPayload
+    user: IJwtPayload,
+    query: Record<string, unknown>
 ) => {
+    // find shop
+    const shop = await Shop.findOne({ _id: shopId, isActive: true });
+    if (!shop) {
+        throw new AppError(StatusCodes.NOT_FOUND, "Shop not Found");
+    }
+
+    // check verndor or shop admins authorization
+    if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
+        if (shop.owner.toString() !== user.id && !shop.admins?.some(admin => admin.toString() === user.id)) {
+            throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to update this order');
+        }
+    }
+
     const orderQuery = new QueryBuilder(
         Order.find({ shop: shopId }).populate("user products.product coupon payment"),
-        {}
+        query
     )
         .search(["user.name", "user.email", "products.product.name"])
         .filter()
@@ -467,5 +506,6 @@ export const OrderService = {
     getMyOrders,
     changeOrderStatus,
     cancelOrder,
-    refundOrderRequest, getOrdersByShopId
+    getAllRefundOrderRequests,
+    getOrdersByShopId
 };

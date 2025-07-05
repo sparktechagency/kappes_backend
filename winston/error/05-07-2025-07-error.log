@@ -1,0 +1,5 @@
+Sat Jul 05 2025 7:40:44 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/auth/login 400 - 191.469 ms
+Sat Jul 05 2025 7:40:52 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/auth/login 400 - 160.989 ms
+Sat Jul 05 2025 7:41:19 [SERVER-NAME] error: 10.0.60.126 - POST /api/v1/auth/login 400 - 88.274 ms
+Sat Jul 05 2025 7:44:8 [SERVER-NAME] error: 10.0.60.126 - GET /api/v1/users/profile 401 - 6.569 ms
+Sat Jul 05 2025 7:44:47 [SERVER-NAME] error: 10.0.60.126 - GET /api/v1/users/profile 401 - 5.862 ms
