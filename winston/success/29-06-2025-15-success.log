@@ -1,53 +1,53 @@
-Sun Jun 29 2025 15:0:1 [SERVER-NAME] info: 10.10.7.33 - PATCH /api/v1/review/business/6860f99219f24eaad206048f 200 - 355.813 ms
-Sun Jun 29 2025 15:0:12 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/review/business/6860da081206e0b144c939db 200 - 249.637 ms
+Sun Jun 29 2025 15:0:1 [SERVER-NAME] info: 10.10.7.112 - PATCH /api/v1/review/business/6860f99219f24eaad206048f 200 - 355.813 ms
+Sun Jun 29 2025 15:0:12 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/review/business/6860da081206e0b144c939db 200 - 249.637 ms
 Sun Jun 29 2025 15:1:10 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Sun Jun 29 2025 15:1:10 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Sun Jun 29 2025 15:1:10 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Sun Jun 29 2025 15:1:10 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
-Sun Jun 29 2025 15:1:21 [SERVER-NAME] info: 10.10.7.33 - POST /api/v1/review/business 201 - 475.949 ms
-Sun Jun 29 2025 15:1:34 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/review/business/6860da081206e0b144c939db 200 - 234.767 ms
-Sun Jun 29 2025 15:1:37 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/review/business/6860da081206e0b144c939db 200 - 230.186 ms
-Sun Jun 29 2025 15:1:47 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/review/business/6860da081206e0b144c939db 200 - 230.953 ms
-Sun Jun 29 2025 15:1:59 [SERVER-NAME] info: 10.10.7.33 - POST /api/v1/review/business 201 - 492.851 ms
-Sun Jun 29 2025 15:2:14 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/review/business/6860da081206e0b144c939db 200 - 230.194 ms
+Sun Jun 29 2025 15:1:10 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Sun Jun 29 2025 15:1:10 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
+Sun Jun 29 2025 15:1:21 [SERVER-NAME] info: 10.10.7.112 - POST /api/v1/review/business 201 - 475.949 ms
+Sun Jun 29 2025 15:1:34 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/review/business/6860da081206e0b144c939db 200 - 234.767 ms
+Sun Jun 29 2025 15:1:37 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/review/business/6860da081206e0b144c939db 200 - 230.186 ms
+Sun Jun 29 2025 15:1:47 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/review/business/6860da081206e0b144c939db 200 - 230.953 ms
+Sun Jun 29 2025 15:1:59 [SERVER-NAME] info: 10.10.7.112 - POST /api/v1/review/business 201 - 492.851 ms
+Sun Jun 29 2025 15:2:14 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/review/business/6860da081206e0b144c939db 200 - 230.194 ms
 Sun Jun 29 2025 15:2:51 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Sun Jun 29 2025 15:2:52 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Sun Jun 29 2025 15:2:52 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Sun Jun 29 2025 15:2:52 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
+Sun Jun 29 2025 15:2:52 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Sun Jun 29 2025 15:2:52 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
 Sun Jun 29 2025 15:2:58 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Sun Jun 29 2025 15:2:59 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Sun Jun 29 2025 15:2:59 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Sun Jun 29 2025 15:2:59 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
-Sun Jun 29 2025 15:3:3 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/review/business/6860da081206e0b144c939db 200 - 252.450 ms
+Sun Jun 29 2025 15:2:59 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Sun Jun 29 2025 15:2:59 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
+Sun Jun 29 2025 15:3:3 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/review/business/6860da081206e0b144c939db 200 - 252.450 ms
 Sun Jun 29 2025 15:3:37 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Sun Jun 29 2025 15:3:37 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Sun Jun 29 2025 15:3:37 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Sun Jun 29 2025 15:3:37 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
-Sun Jun 29 2025 15:3:39 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/review/business/6860da081206e0b144c939db 200 - 1833.976 ms
-Sun Jun 29 2025 15:4:43 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/review/business/owner/ 200 - 246.533 ms
+Sun Jun 29 2025 15:3:37 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Sun Jun 29 2025 15:3:37 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
+Sun Jun 29 2025 15:3:39 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/review/business/6860da081206e0b144c939db 200 - 1833.976 ms
+Sun Jun 29 2025 15:4:43 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/review/business/owner/ 200 - 246.533 ms
 Sun Jun 29 2025 15:5:14 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Sun Jun 29 2025 15:5:16 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Sun Jun 29 2025 15:5:16 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Sun Jun 29 2025 15:5:16 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
+Sun Jun 29 2025 15:5:16 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Sun Jun 29 2025 15:5:16 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
 Sun Jun 29 2025 15:5:59 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Sun Jun 29 2025 15:6:0 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Sun Jun 29 2025 15:6:0 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Sun Jun 29 2025 15:6:0 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
+Sun Jun 29 2025 15:6:0 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Sun Jun 29 2025 15:6:0 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
 Sun Jun 29 2025 15:7:0 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Sun Jun 29 2025 15:7:2 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Sun Jun 29 2025 15:7:2 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Sun Jun 29 2025 15:7:2 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
-Sun Jun 29 2025 15:7:18 [SERVER-NAME] info: 10.10.7.33 - DELETE /api/v1/review/business/6860f99219f24eaad206048f 200 - 517.696 ms
-Sun Jun 29 2025 15:7:32 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/review/business/6860da081206e0b144c939db 200 - 158.313 ms
-Sun Jun 29 2025 15:8:15 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/review/business/6860da081206e0b144c939db 200 - 240.042 ms
-Sun Jun 29 2025 15:8:30 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/review/business/6860da081206e0b144c939db 200 - 157.583 ms
-Sun Jun 29 2025 15:8:42 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/review/business/owner/ 200 - 160.345 ms
+Sun Jun 29 2025 15:7:2 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Sun Jun 29 2025 15:7:2 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
+Sun Jun 29 2025 15:7:18 [SERVER-NAME] info: 10.10.7.112 - DELETE /api/v1/review/business/6860f99219f24eaad206048f 200 - 517.696 ms
+Sun Jun 29 2025 15:7:32 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/review/business/6860da081206e0b144c939db 200 - 158.313 ms
+Sun Jun 29 2025 15:8:15 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/review/business/6860da081206e0b144c939db 200 - 240.042 ms
+Sun Jun 29 2025 15:8:30 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/review/business/6860da081206e0b144c939db 200 - 157.583 ms
+Sun Jun 29 2025 15:8:42 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/review/business/owner/ 200 - 160.345 ms
 Sun Jun 29 2025 15:9:24 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Sun Jun 29 2025 15:9:25 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Sun Jun 29 2025 15:9:25 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Sun Jun 29 2025 15:9:25 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
-Sun Jun 29 2025 15:9:27 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/review/business/owner/ 200 - 1655.842 ms
+Sun Jun 29 2025 15:9:25 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Sun Jun 29 2025 15:9:25 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
+Sun Jun 29 2025 15:9:27 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/review/business/owner/ 200 - 1655.842 ms
 Sun Jun 29 2025 15:10:13 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Sun Jun 29 2025 15:10:14 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Sun Jun 29 2025 15:10:14 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Sun Jun 29 2025 15:10:14 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
+Sun Jun 29 2025 15:10:14 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Sun Jun 29 2025 15:10:14 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m

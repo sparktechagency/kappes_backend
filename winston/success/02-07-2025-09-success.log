@@ -1,86 +1,86 @@
 Wed Jul 02 2025 9:0:28 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Wed Jul 02 2025 9:0:29 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Wed Jul 02 2025 9:0:29 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Wed Jul 02 2025 9:0:29 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
-Wed Jul 02 2025 9:0:30 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/shop/provinces 200 - 1177.547 ms
-Wed Jul 02 2025 9:1:45 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/shop 200 - 269.053 ms
-Wed Jul 02 2025 9:2:7 [SERVER-NAME] info: 10.10.7.33 - POST /api/v1/auth/login 200 - 681.506 ms
-Wed Jul 02 2025 9:2:13 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/shop/user 200 - 342.882 ms
+Wed Jul 02 2025 9:0:29 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Wed Jul 02 2025 9:0:29 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
+Wed Jul 02 2025 9:0:30 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/shop/provinces 200 - 1177.547 ms
+Wed Jul 02 2025 9:1:45 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/shop 200 - 269.053 ms
+Wed Jul 02 2025 9:2:7 [SERVER-NAME] info: 10.10.7.112 - POST /api/v1/auth/login 200 - 681.506 ms
+Wed Jul 02 2025 9:2:13 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/shop/user 200 - 342.882 ms
 Wed Jul 02 2025 9:2:39 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Wed Jul 02 2025 9:2:40 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Wed Jul 02 2025 9:2:40 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Wed Jul 02 2025 9:2:40 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
-Wed Jul 02 2025 9:3:4 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/shop/admin/user 200 - 322.420 ms
-Wed Jul 02 2025 9:3:27 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/shop/6857d5988a47be1e4bf6adc4 200 - 153.613 ms
-Wed Jul 02 2025 9:3:59 [SERVER-NAME] info: 10.10.7.33 - PATCH /api/v1/shop/6857d5988a47be1e4bf6adc4 200 - 249.970 ms
-Wed Jul 02 2025 9:4:6 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/shop/provinces 200 - 75.399 ms
+Wed Jul 02 2025 9:2:40 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Wed Jul 02 2025 9:2:40 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
+Wed Jul 02 2025 9:3:4 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/shop/admin/user 200 - 322.420 ms
+Wed Jul 02 2025 9:3:27 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/shop/6857d5988a47be1e4bf6adc4 200 - 153.613 ms
+Wed Jul 02 2025 9:3:59 [SERVER-NAME] info: 10.10.7.112 - PATCH /api/v1/shop/6857d5988a47be1e4bf6adc4 200 - 249.970 ms
+Wed Jul 02 2025 9:4:6 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/shop/provinces 200 - 75.399 ms
 Wed Jul 02 2025 9:4:43 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Wed Jul 02 2025 9:4:44 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Wed Jul 02 2025 9:4:44 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Wed Jul 02 2025 9:4:44 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
+Wed Jul 02 2025 9:4:44 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Wed Jul 02 2025 9:4:44 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
 Wed Jul 02 2025 9:5:1 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Wed Jul 02 2025 9:5:3 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Wed Jul 02 2025 9:5:3 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Wed Jul 02 2025 9:5:3 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
-Wed Jul 02 2025 9:5:8 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/shop?searchTerm=Ontario 200 - 266.282 ms
+Wed Jul 02 2025 9:5:3 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Wed Jul 02 2025 9:5:3 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
+Wed Jul 02 2025 9:5:8 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/shop?searchTerm=Ontario 200 - 266.282 ms
 Wed Jul 02 2025 9:5:27 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Wed Jul 02 2025 9:5:28 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Wed Jul 02 2025 9:5:28 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Wed Jul 02 2025 9:5:28 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
-Wed Jul 02 2025 9:7:23 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/shop/provinces 200 - 87.083 ms
-Wed Jul 02 2025 9:10:2 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/shop/territory 200 - 76.441 ms
-Wed Jul 02 2025 9:10:12 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/shop?searchTerm=Toronto 200 - 247.014 ms
-Wed Jul 02 2025 9:10:43 [SERVER-NAME] info: 10.10.7.33 - PATCH /api/v1/shop/6857d5988a47be1e4bf6adc4 200 - 331.563 ms
-Wed Jul 02 2025 9:10:48 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/shop/territory 200 - 79.789 ms
+Wed Jul 02 2025 9:5:28 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Wed Jul 02 2025 9:5:28 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
+Wed Jul 02 2025 9:7:23 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/shop/provinces 200 - 87.083 ms
+Wed Jul 02 2025 9:10:2 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/shop/territory 200 - 76.441 ms
+Wed Jul 02 2025 9:10:12 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/shop?searchTerm=Toronto 200 - 247.014 ms
+Wed Jul 02 2025 9:10:43 [SERVER-NAME] info: 10.10.7.112 - PATCH /api/v1/shop/6857d5988a47be1e4bf6adc4 200 - 331.563 ms
+Wed Jul 02 2025 9:10:48 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/shop/territory 200 - 79.789 ms
 Wed Jul 02 2025 9:18:17 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Wed Jul 02 2025 9:18:17 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Wed Jul 02 2025 9:18:17 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Wed Jul 02 2025 9:18:17 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
+Wed Jul 02 2025 9:18:17 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Wed Jul 02 2025 9:18:17 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
 Wed Jul 02 2025 9:19:46 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Wed Jul 02 2025 9:19:47 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Wed Jul 02 2025 9:19:47 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Wed Jul 02 2025 9:19:47 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
+Wed Jul 02 2025 9:19:47 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Wed Jul 02 2025 9:19:47 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
 Wed Jul 02 2025 9:20:39 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Wed Jul 02 2025 9:20:40 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Wed Jul 02 2025 9:20:40 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Wed Jul 02 2025 9:20:40 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
+Wed Jul 02 2025 9:20:40 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Wed Jul 02 2025 9:20:40 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
 Wed Jul 02 2025 9:20:45 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Wed Jul 02 2025 9:20:46 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Wed Jul 02 2025 9:20:46 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Wed Jul 02 2025 9:20:46 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
+Wed Jul 02 2025 9:20:46 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Wed Jul 02 2025 9:20:46 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
 Wed Jul 02 2025 9:20:50 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Wed Jul 02 2025 9:20:51 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Wed Jul 02 2025 9:20:51 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Wed Jul 02 2025 9:20:51 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
+Wed Jul 02 2025 9:20:51 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Wed Jul 02 2025 9:20:51 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
 Wed Jul 02 2025 9:21:12 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Wed Jul 02 2025 9:21:13 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Wed Jul 02 2025 9:21:13 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Wed Jul 02 2025 9:21:13 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
-Wed Jul 02 2025 9:22:9 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/shop/provinces 200 - 82.967 ms
-Wed Jul 02 2025 9:22:18 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/product/province/Ontario 200 - 492.272 ms
+Wed Jul 02 2025 9:21:13 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Wed Jul 02 2025 9:21:13 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
+Wed Jul 02 2025 9:22:9 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/shop/provinces 200 - 82.967 ms
+Wed Jul 02 2025 9:22:18 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/product/province/Ontario 200 - 492.272 ms
 Wed Jul 02 2025 9:22:42 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Wed Jul 02 2025 9:22:43 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Wed Jul 02 2025 9:22:43 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Wed Jul 02 2025 9:22:43 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
-Wed Jul 02 2025 9:22:44 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/product/province/Ontario 200 - 1275.822 ms
+Wed Jul 02 2025 9:22:43 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Wed Jul 02 2025 9:22:43 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
+Wed Jul 02 2025 9:22:44 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/product/province/Ontario 200 - 1275.822 ms
 Wed Jul 02 2025 9:25:35 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Wed Jul 02 2025 9:25:36 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Wed Jul 02 2025 9:25:36 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Wed Jul 02 2025 9:25:36 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
+Wed Jul 02 2025 9:25:36 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Wed Jul 02 2025 9:25:36 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
 Wed Jul 02 2025 9:26:46 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Wed Jul 02 2025 9:26:47 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Wed Jul 02 2025 9:26:47 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Wed Jul 02 2025 9:26:47 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
-Wed Jul 02 2025 9:27:20 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/shop/territory 200 - 77.929 ms
-Wed Jul 02 2025 9:27:50 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/product/province/Ontario 200 - 354.222 ms
+Wed Jul 02 2025 9:26:47 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Wed Jul 02 2025 9:26:47 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
+Wed Jul 02 2025 9:27:20 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/shop/territory 200 - 77.929 ms
+Wed Jul 02 2025 9:27:50 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/product/province/Ontario 200 - 354.222 ms
 Wed Jul 02 2025 9:28:3 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Wed Jul 02 2025 9:28:4 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Wed Jul 02 2025 9:28:4 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Wed Jul 02 2025 9:28:4 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
-Wed Jul 02 2025 9:28:5 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/product/territory/Territory2 200 - 801.858 ms
-Wed Jul 02 2025 9:28:16 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/product/territory/Territory%20Name 200 - 1524.702 ms
-Wed Jul 02 2025 9:47:31 [SERVER-NAME] info: 10.10.7.33 - GET /api/v1/product/territory/Territory%20Name 200 - 457.677 ms
+Wed Jul 02 2025 9:28:4 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Wed Jul 02 2025 9:28:4 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
+Wed Jul 02 2025 9:28:5 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/product/territory/Territory2 200 - 801.858 ms
+Wed Jul 02 2025 9:28:16 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/product/territory/Territory%20Name 200 - 1524.702 ms
+Wed Jul 02 2025 9:47:31 [SERVER-NAME] info: 10.10.7.112 - GET /api/v1/product/territory/Territory%20Name 200 - 457.677 ms
 Wed Jul 02 2025 9:52:30 [SERVER-NAME] info: [32mConfig validation successful.[39m
 Wed Jul 02 2025 9:52:31 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
-Wed Jul 02 2025 9:52:31 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.33:6002[39m
-Wed Jul 02 2025 9:52:31 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.33:7000[39m
+Wed Jul 02 2025 9:52:31 [SERVER-NAME] info: [33m♻️  Socket is listening on 10.10.7.112:6002[39m
+Wed Jul 02 2025 9:52:31 [SERVER-NAME] info: [33m♻️  Application listening on http://10.10.7.112:7000[39m
