@@ -42,7 +42,7 @@ export const generateOrderInvoicePDF = async (order: IOrder): Promise<Buffer> =>
             doc.text(`Order Date: ${(order.createdAt as Date).toLocaleDateString()}`);
             doc.moveDown(0.5);
             //@ts-ignore
-            doc.text(`Customer Id: ${order.user.id}`);
+            doc.text(`Customer Id: ${order.user}`);
             doc.text(`Shipping Address: ${order.shippingAddress}`);
             doc.moveDown(1);
 
@@ -72,7 +72,7 @@ export const generateOrderInvoicePDF = async (order: IOrder): Promise<Buffer> =>
             // Order Products (Normal text, not bold)
             order.products.forEach((item) => {
                 //@ts-ignore
-                const productName = item.product?.name || 'Unknown Product';
+                const productName = String(item.product) || 'Unknown Product';
                 const quantity = item.quantity;
                 //@ts-ignore
                 const price = item.unitPrice * quantity || 0;

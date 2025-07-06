@@ -15,6 +15,7 @@ import { verifyToken } from '../../../utils/verifyToken';
 import { createToken } from '../../../utils/createToken';
 import { USER_ROLES } from '../user/user.enums';
 import { sendNotifications } from '../../../helpers/notificationsHelper';
+import stripe from '../../config/stripe.config';
 
 //login
 const loginUserFromDB = async (payload: ILoginData) => {
@@ -187,6 +188,18 @@ const SocialLoginUserFromDB = async (payload: ILoginData) => {
      }
      const accessToken = jwtHelper.createToken(jwtData, config.jwt.jwt_secret as Secret, config.jwt.jwt_expire_in as string);
      const refreshToken = jwtHelper.createToken(jwtData, config.jwt.jwt_refresh_secret as string, config.jwt.jwt_refresh_expire_in as string);
+
+     let stripeCustomer;
+          try {
+               stripeCustomer = await stripe.customers.create({
+                    email: isExistUser.email,
+                    name: isExistUser.full_name,
+               });
+          } catch (error) {
+               throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to create Stripe customer');
+          }
+     
+          await User.findOneAndUpdate({ _id: isExistUser._id }, { $set: { stripeCustomerId: stripeCustomer.id } });
 
      return { accessToken, refreshToken, role: isExistUser.role };
 };

@@ -8,6 +8,6 @@ export interface INotification {
      referenceModel?: 'Payment' | 'Order' | 'Message';
      screen?: 'DASHBOARD' | 'PAYMENT_HISTORY' | 'PROFILE';
      read: boolean;
-     type?: 'ADMIN' | 'SYSTEM' | 'PAYMENT' | 'MESSAGE' | 'ALERT';
+     type?: 'ADMIN' | 'SYSTEM' | 'PAYMENT' | 'MESSAGE' | 'ALERT' | 'ORDER';
      title?: string;
 }

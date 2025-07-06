@@ -20,6 +20,9 @@ import { DEFAULT_SHOP_REVENUE } from "../shop/shop.enum";
 // import stripe from "../../../config/stripe";
 import config from "../../../config";
 import stripe from "../../config/stripe.config";
+import { emailTemplate } from "../../../shared/emailTemplate";
+import { path } from "pdfkit";
+import { sendNotifications } from "../../../helpers/notificationsHelper";
 
 
 const createOrder = async (
@@ -125,17 +128,45 @@ const createOrder = async (
                 { _id: { $in: createdOrder.products.map((item) => item.product) } },
                 { $inc: { purchaseCount: 1 } }
             );
-            console.log(updatePurchaseCount);
 
 
             // send email to user, notification to shop woner or admins socket
-            /** rabby
-             * find shop
-             * make array for specific this shop's owner and admins
-             * send notification to them using socket
-             * 
-             * send email to user if poosible send order invoice pdf
-             */
+            const shop = await Shop.findById(createdOrder.shop).populate('owner admins');
+
+            const receivers = [...(shop?.admins || []), shop?.owner].map((u: any) => u._id.toString());
+            
+           
+            for (const receiverId of receivers) {
+                await sendNotifications({
+                    receiver: receiverId,
+                    type: 'ORDER',
+                    title: `New order placed by test test ${thisCustomer?.full_name}.`,
+                    order: createdOrder,
+                });
+              
+            }
+
+            // Generate PDF invoice
+            const pdfBuffer = await generateOrderInvoicePDF(createdOrder);
+
+            // Prepare email with PDF attachment
+            const values = {
+                name: thisCustomer?.full_name,
+                email: thisCustomer?.email!,
+                order: createdOrder,
+                attachments: [{
+                    filename: `invoice-${createdOrder._id}.pdf`,
+                    content: pdfBuffer,
+                    contentType: 'application/pdf'
+                }]
+            };
+
+            // Send email with invoice attachment
+            const emailTemplateData = emailTemplate.orderInvoice(values);
+            emailHelper.sendEmail({
+                ...emailTemplateData,
+                attachments: values.attachments
+            });
         }
 
         let result;
