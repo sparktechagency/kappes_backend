@@ -29,8 +29,18 @@ const updateUserZodSchema = z.object({
      }),
 });
 
+const updateUserByIdZodSchema = z.object({
+     body: z.object({
+          role: z.string().optional(),
+          status: z.enum(['active', 'blocked']).optional(),
+          verified: z.boolean().optional(),
+          isDeleted: z.boolean().optional(),
+     }),
+});
+
 export type ISellerUserZod = z.infer<typeof createUserZodSchema>;
 export const UserValidation = {
      createUserZodSchema,
      updateUserZodSchema,
+     updateUserByIdZodSchema,
 };

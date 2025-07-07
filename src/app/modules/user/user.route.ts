@@ -23,6 +23,7 @@ router
           validateRequest(UserValidation.updateUserZodSchema),
           UserController.updateProfile,
      );
+router.route('/admin/:id').patch(auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), validateRequest(UserValidation.updateUserByIdZodSchema), UserController.updateUserById);
 
 router.route('/').post(validateRequest(UserValidation.createUserZodSchema), UserController.createUser);
 router.route('/seller').post(validateRequest(UserValidation.createUserZodSchema), UserController.createSellerUser);

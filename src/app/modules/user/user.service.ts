@@ -292,6 +292,18 @@ const getAllVendors = async (query: Record<string, unknown>) => {
      };
 };
 
+const updateUserByIdToDB = async (id: string, payload: Partial<IUser>) => {
+     const isExistUser = await User.isExistUserById(id);
+     if (!isExistUser) {
+          throw new AppError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
+     }
+
+     const updateDoc = await User.findOneAndUpdate({ _id: id }, payload, {
+          new: true,
+     });
+
+     return updateDoc;
+};
 
 export const UserService = {
      createUserToDB,
@@ -302,5 +314,6 @@ export const UserService = {
      deleteUser,
      verifyUserPassword,
      getAllRoleBasedUser,
-     getAllVendors
+     getAllVendors,
+     updateUserByIdToDB
 };

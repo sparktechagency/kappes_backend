@@ -105,6 +105,19 @@ const getAllVendors = catchAsync(async (req, res) => {
      });
 });
 
+const updateUserById = catchAsync(async (req, res) => {
+     const { id } = req.params;
+     const { ...userData } = req.body;
+     const result = await UserService.updateUserByIdToDB(id, userData);
+
+     sendResponse(res, {
+          success: true,
+          statusCode: StatusCodes.OK,
+          message: 'User updated successfully',
+          data: result,
+     });
+});
+
 export const UserController = {
      createUser,
      createSellerUser,
@@ -113,4 +126,5 @@ export const UserController = {
      deleteProfile,
      getAllRoleBasedUser,
      getAllVendors,
+     updateUserById,
 };
