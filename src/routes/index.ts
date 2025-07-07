@@ -25,6 +25,7 @@ import { BusinessRouter } from '../app/modules/business/business.route';
 import { FaqRoutes } from '../app/modules/faq/faq.route';
 import { ChatRoutes } from '../app/modules/chat/chat.routes';
 import { MessageRoutes } from '../app/modules/message/message.routes';
+import { PushNotificationRoutes } from '../app/modules/pushNotification/pushNotification.route';
 
 const router = express.Router();
 const routes = [
@@ -60,6 +61,10 @@ const routes = [
           path: '/notifications',
           route: NotificationRoutes,
      }, 
+     {
+          path: '/pushNotification',
+          route: PushNotificationRoutes,
+     },
      {
           path: '/settings',
           route: SettingsRouter,
