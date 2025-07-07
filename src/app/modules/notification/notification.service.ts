@@ -56,8 +56,8 @@ const adminNotificationFromDB = async (userId: string, query: Record<string, unk
           const result = await querBuilder.modelQuery;
           const meta = await querBuilder.countTotal();
           return {
-               result,
                meta,
+               result,
           };
      }
 };
@@ -69,6 +69,14 @@ const adminReadNotificationToDB = async (): Promise<INotification | null> => {
 };
 const adminSendNotificationFromDB = async (payload: any) => {
      const { title, message, receiver } = payload;
+
+     // handle reciver exist
+     if (receiver && typeof receiver === 'string') {
+          const user = await User.findById(receiver);
+          if (!user) {
+               throw new AppError(StatusCodes.NOT_FOUND, 'User not found');
+          }
+     }
 
      // Validate required fields
      if (!title || !message) {
