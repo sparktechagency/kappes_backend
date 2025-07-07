@@ -34,7 +34,6 @@ const updateUserByIdZodSchema = z.object({
           role: z.string().optional(),
           status: z.enum(['active', 'blocked']).optional(),
           verified: z.boolean().optional(),
-          isDeleted: z.boolean().optional(),
      }),
 });
 
