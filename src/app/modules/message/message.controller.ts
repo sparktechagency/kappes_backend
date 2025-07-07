@@ -3,22 +3,17 @@ import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { StatusCodes } from 'http-status-codes';
 import { MessageService } from './message.service';
+import { IJwtPayload } from '../auth/auth.interface';
+import { Types } from 'mongoose';
 
 const sendMessage = catchAsync(async (req: Request, res: Response) => {
-     const user = req?.user?.id;
-
-     let image;
-     if (req.files && 'image' in req.files && req.files.image[0]) {
-          image = `/images/${req.files.image[0].filename}`;
-     }
 
      const payload = {
           ...req.body,
-          image: image,
-          sender: user,
+          sender: (req.user as IJwtPayload).id,
      };
 
-     const message = await MessageService.sendMessageToDB(payload);
+     const message = await MessageService.sendMessageToDB(payload,req.user as IJwtPayload);
      sendResponse(res, {
           statusCode: StatusCodes.OK,
           success: true,
@@ -27,9 +22,9 @@ const sendMessage = catchAsync(async (req: Request, res: Response) => {
      });
 });
 
-const getMessage = catchAsync(async (req: Request, res: Response) => {
-     const id = req.params.id;
-     const messages = await MessageService.getMessageFromDB(id);
+const getMessageByChatId = catchAsync(async (req: Request, res: Response) => {
+     const id = new Types.ObjectId(req.params.id);
+     const messages = await MessageService.getMessageByChatIdFromDB(id, req.query);
      sendResponse(res, {
           statusCode: StatusCodes.OK,
           success: true,
@@ -38,4 +33,4 @@ const getMessage = catchAsync(async (req: Request, res: Response) => {
      });
 });
 
-export const MessageController = { sendMessage, getMessage };
+export const MessageController = { sendMessage, getMessageByChatId };
