@@ -6,13 +6,8 @@ import { CommunityRouter } from '../app/modules/community/community.router';
 import { ContactRoutes } from '../app/modules/contcatus/contactus.route';
 import { CategoryRoutes } from '../app/modules/category/category.route';
 import { SubCategoryRoutes } from '../app/modules/subCategorys/subCategory.route';
-import { userManagementRouter } from '../app/modules/admin/userManagement/userManagement.route';
-import { DashboardRoutes } from '../app/modules/admin/dashboard/dashboard.route';
-import { CreatePostRoutes } from '../app/modules/admin/creaetPost/creaetPost.router';
 import SettingsRouter from '../app/modules/settings/settings.route';
-import { AdminRoutes } from '../app/modules/admin/admin.route';
 import { NotificationRoutes } from '../app/modules/notification/notification.routes';
-import { ChallengeRoutes } from '../app/modules/admin/challanges/challanges.router';
 import { VariantRoutes } from '../app/modules/variant/variant.routes';
 import { BrandRoutes } from '../app/modules/brand/brand.routes';
 import { ShopCategoryRoutes } from '../app/modules/shopCategory/shopCategory.routes';
@@ -54,60 +49,16 @@ const routes = [
           route: ContactRoutes,
      },
      {
-          path: '/admin/contact',
-          route: ContactRoutes,
-     },
-     {
-          path: '/admin/category',
-          route: CategoryRoutes,
-     },
-     {
-          path: '/admin/managment',
-          route: AdminRoutes,
-     },
-     {
           path: '/category',
           route: CategoryRoutes,
-     },
-     {
-          path: '/admin/subcategory',
-          route: SubCategoryRoutes,
      },
      {
           path: '/subcategory',
           route: SubCategoryRoutes,
      },
      {
-          path: '/admin/user/managment',
-          route: userManagementRouter,
-     },
-     {
-          path: '/admin/post/managment',
-          route: CreatePostRoutes,
-     },
-     {
-          path: '/post',
-          route: CreatePostRoutes,
-     },
-     {
-          path: '/admin/notifications',
-          route: NotificationRoutes,
-     },
-     {
           path: '/notifications',
           route: NotificationRoutes,
-     }, 
-     {
-          path: '/admin/challenge',
-          route: ChallengeRoutes,
-     },
-     {
-          path: '/challenge',
-          route: ChallengeRoutes,
-     },
-     {
-          path: '/admin/dashboard',
-          route: DashboardRoutes,
      }, 
      {
           path: '/settings',
