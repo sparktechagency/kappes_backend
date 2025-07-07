@@ -1,8 +1,8 @@
 import { Model, Types } from 'mongoose';
 
-export type IChat = {
-     participants: [Types.ObjectId]; // rabby use all shop id field for all chats, allow shop specific admins and owner to chat with users
+export interface IChat {
+     participants: { participantId: Types.ObjectId; participantType: string }[]; // rabby use all shop id field for all chats, allow shop specific admins and owner to chat with users
      status: boolean;
 };
 
-export type ChatModel = Model<IChat, Record<string, unknown>>;
+export interface ChatModel extends Model<IChat, Record<string, unknown>> {};

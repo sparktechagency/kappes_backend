@@ -3,13 +3,10 @@ import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { StatusCodes } from 'http-status-codes';
 import { ChatService } from './chat.service';
+import { IJwtPayload } from '../auth/auth.interface';
 
 const createChat = catchAsync(async (req: Request, res: Response) => {
-     const user = req.user;
-     const otherUser = req.params.id;
-
-     const participants = [user?.id, otherUser];
-     const chat = await ChatService.createChatToDB(participants);
+     const chat = await ChatService.createChatToDB(req.body.participants);
 
      sendResponse(res, {
           statusCode: StatusCodes.OK,
@@ -19,10 +16,19 @@ const createChat = catchAsync(async (req: Request, res: Response) => {
      });
 });
 
-const getChat = catchAsync(async (req: Request, res: Response) => {
-     const user = req.user;
-     const search = req.query.search as string;
-     const chatList = await ChatService.getChatFromDB(user, search);
+const getChatForUser = catchAsync(async (req: Request, res: Response) => {
+     const chatList = await ChatService.getChatForUserFromDB(req.user,req.query);
+
+     sendResponse(res, {
+          statusCode: StatusCodes.OK,
+          success: true,
+          message: 'Chat Retrieve Successfully',
+          data: chatList,
+     });
+});
+
+const getChatForShopAdminOrOwner = catchAsync(async (req: Request, res: Response) => {
+     const chatList = await ChatService.getChatForShopAdminOrOwnerFromDB(req.user as IJwtPayload,req.query,req.params.id);
 
      sendResponse(res, {
           statusCode: StatusCodes.OK,
@@ -34,5 +40,6 @@ const getChat = catchAsync(async (req: Request, res: Response) => {
 
 export const ChatController = {
      createChat,
-     getChat,
+     getChatForUser,
+     getChatForShopAdminOrOwner,
 };

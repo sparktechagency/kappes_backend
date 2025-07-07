@@ -28,6 +28,7 @@ import { ReviewRoutes } from '../app/modules/review/review.routes';
 import { WishlistRoutes } from '../app/modules/wishlist/wishlist.route';
 import { BusinessRouter } from '../app/modules/business/business.route';
 import { FaqRoutes } from '../app/modules/faq/faq.route';
+import { ChatRoutes } from '../app/modules/chat/chat.routes';
 
 const router = express.Router();
 const routes = [
@@ -170,6 +171,10 @@ const routes = [
      {
           path: '/faq',
           route: FaqRoutes,
+     },
+     {
+          path: '/chat',
+          route: ChatRoutes,
      },
 ];
 
