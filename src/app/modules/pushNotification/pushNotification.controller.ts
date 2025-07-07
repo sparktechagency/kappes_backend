@@ -8,7 +8,7 @@ const sendPushNotificationController = catchAsync(async (req, res) => {
   const { topic, title, body } = req.body;
 
   if (!topic || !title || !body) {
-    throw new AppError(StatusCodes.BAD_REQUEST, 'Missing fields');
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Missing fields! Please provide topic, title and body');
   }
 
   const result = await sendToTopic(topic, { title, body });
