@@ -59,9 +59,6 @@ export const shopSchema = new Schema<IShop>({
 }, { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } });
 
 
-// Ensure that the 2dsphere index is created (useful in dev environments)
-shopSchema.index({ 'location.coordinates': '2dsphere' });
-
 
 
 
