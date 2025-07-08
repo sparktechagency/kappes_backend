@@ -11,7 +11,7 @@ const fileUpload = (uploadDirectory: string) => {
           destination: function (req: Request, file, cb) {
                cb(null, uploadDirectory);
           },
-          filename: function (req: Request, file, cb) {
+          filename: function (req: Request, file: any, cb) {
                const parts = file.originalname.split('.');
                let extenson;
                if (parts.length > 1) {
@@ -27,7 +27,7 @@ const fileUpload = (uploadDirectory: string) => {
                fileSize: 15 * 1024 * 1024,
           },
 
-          fileFilter: function (req: Request, file, cb) {
+          fileFilter: function (req: Request, file: any, cb) {
                if (
                     file.mimetype === 'image/png' ||
                     file.mimetype === 'image/jpg' ||

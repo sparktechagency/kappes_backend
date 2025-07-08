@@ -7,7 +7,6 @@ import { notFound } from './app/middleware/notFound';
 import { welcome } from './utils/welcome';
 import handleStripeWebhook from './helpers/stripe/handleStripeWebhook';
 import path from 'path';
-import setupTrialManagement from './utils/cornJobs';
 import webhookHandler from './app/modules/stripeAccount/webhookHandler';
 import session from 'express-session';
 import config from './config';

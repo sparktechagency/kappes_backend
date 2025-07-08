@@ -16,12 +16,9 @@ import { Shop } from "../shop/shop.model";
 import Variant from "../variant/variant.model";
 import { ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS } from "./order.enums";
 import { USER_ROLES } from "../user/user.enums";
-import { DEFAULT_SHOP_REVENUE } from "../shop/shop.enum";
-// import stripe from "../../../config/stripe";
 import config from "../../../config";
 import stripe from "../../config/stripe.config";
 import { emailTemplate } from "../../../shared/emailTemplate";
-import { path } from "pdfkit";
 import { sendNotifications } from "../../../helpers/notificationsHelper";
 
 

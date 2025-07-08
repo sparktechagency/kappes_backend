@@ -143,11 +143,11 @@ export const updateVariant = async (id: string, data: Partial<IVariant>, user: I
     toBeUpdatedVariant.set({
         ...data,  // Apply the incoming data
     });
-    const variantSlug = generateSlug(toBeUpdatedVariant.categoryId.name, toBeUpdatedVariant.subCategoryId.name, toBeUpdatedVariant)
+    const variantSlug = generateSlug((toBeUpdatedVariant.categoryId as any).name, (toBeUpdatedVariant.subCategoryId as any).name, toBeUpdatedVariant)
 
     const isVariantExistSlug = await Variant.findOne({ slug: variantSlug });
     if (isVariantExistSlug) {
-        throw new AppError(StatusCodes.NOT_ACCEPTABLE, `This Variant Already Exists under ${toBeUpdatedVariant.subCategoryId.name} subcategory`);
+        throw new AppError(StatusCodes.NOT_ACCEPTABLE, `This Variant Already Exists under ${(toBeUpdatedVariant.subCategoryId as any).name} subcategory`);
        }
     toBeUpdatedVariant.set({
         slug: variantSlug
