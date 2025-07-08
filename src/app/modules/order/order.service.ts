@@ -131,8 +131,8 @@ const createOrder = async (
             const shop = await Shop.findById(createdOrder.shop).populate('owner admins');
 
             const receivers = [...(shop?.admins || []), shop?.owner].map((u: any) => u._id.toString());
-            
-           
+
+
             for (const receiverId of receivers) {
                 await sendNotifications({
                     receiver: receiverId,
@@ -140,7 +140,7 @@ const createOrder = async (
                     title: `New order placed by test test ${thisCustomer?.full_name}.`,
                     order: createdOrder,
                 });
-              
+
             }
 
             // Generate PDF invoice
@@ -527,6 +527,51 @@ const getOrdersByShopId = async (
     return { meta, orders };
 };
 
+const refundOrder = async (orderId: string, user: IJwtPayload) => {
+
+    try {
+        // Fetch the order with populated payment details
+        const order = await Order.findById(orderId).populate("payment");
+
+        if (!order) {
+            throw new AppError(StatusCodes.NOT_FOUND, "Order not found.");
+        }
+
+        // Check if the order needs a refund
+        if (!order.isNeedRefund) {
+            throw new AppError(StatusCodes.BAD_REQUEST, "This order doesn't require a refund.");
+        }
+        // Check if the order payment is completed
+        const payment = await Payment.findOne({ order: orderId });
+        if (!payment || payment.status !== PAYMENT_STATUS.PAID) {
+            throw new AppError(StatusCodes.BAD_REQUEST, "Payment for this order is not successful or not found.");
+        }
+        // Refund logic with Stripe
+        const refundAmount = Math.round(payment.amount * 100); // Convert to integer (cents)
+        // Refund logic with Stripe
+        const refund = await stripe.refunds.create({
+            payment_intent: payment.paymentIntent,  // Use the saved paymentIntent
+            amount: refundAmount,  // Refund the full amount (you can modify this if partial refund is needed)
+        });
+        console.log("refund", refund);
+        // Update the order's payment status to 'REFUNDED' and save it
+        order.paymentStatus = PAYMENT_STATUS.REFUNDED;
+        order.status = ORDER_STATUS.CANCELLED; // Cancel the order if the refund is successful
+        order.isNeedRefund = false;
+        await order.save();
+
+        // update payment status to 'REFUNDED'
+        payment.status = PAYMENT_STATUS.REFUNDED;
+        await payment.save();
+
+        // Respond with success message and refund details
+        return { message: 'Refund processed successfully', refund };
+    } catch (error) {
+        console.error('Error processing refund:', error);
+        throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Error processing refund.');
+    }
+}
+
 export const OrderService = {
     createOrder,
     getMyShopOrders,
@@ -535,5 +580,6 @@ export const OrderService = {
     changeOrderStatus,
     cancelOrder,
     getAllRefundOrderRequests,
-    getOrdersByShopId
+    getOrdersByShopId,
+    refundOrder
 };

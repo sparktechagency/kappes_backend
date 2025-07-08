@@ -80,7 +80,7 @@ const handlePaymentSucceeded = async (session: Stripe.Checkout.Session) => {
 
         const paymentIntent = session.payment_intent as string;
 
-        console.log('paymentIntent : 2');
+        console.log('paymentIntent : 2', paymentIntent);
 
         const isPaymentExist = await paymentService.isPaymentExist(paymentIntent);
 

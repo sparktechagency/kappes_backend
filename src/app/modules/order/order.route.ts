@@ -33,6 +33,8 @@ router.get(
     OrderController.getAllRefundOrderRequests
 )
 
+router.post("/refund/:orderId", auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), OrderController.refundOrder);
+
 router.get(
     '/shop/:shopId',
     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR),
