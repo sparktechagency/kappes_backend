@@ -4,6 +4,7 @@ import { Product } from "../../product/product.model";
 import { StatusCodes } from "http-status-codes";
 import AppError from "../../../../errors/AppError";
 import { IJwtPayload } from "../../auth/auth.interface";
+import { ORDER_STATUS } from "../../order/order.enums";
 
 
 const getOverview = async (user: IJwtPayload) => {
@@ -16,7 +17,7 @@ const getOverview = async (user: IJwtPayload) => {
 
         // Total sales (sum of all orders' finalAmount)
         const totalSalesData = await Order.aggregate([
-            { $match: { status: { $ne: "CANCELLED" }, finalAmount: { $gt: 0 } } }, // Filter out cancelled or invalid orders
+            { $match: { status: { $ne: ORDER_STATUS.CANCELLED }, finalAmount: { $gt: 0 } } }, // Filter out cancelled or invalid orders
             { $group: { _id: null, totalSales: { $sum: "$finalAmount" } } },
         ]);
         const totalSales = totalSalesData.length > 0 ? totalSalesData[0].totalSales : 0;
