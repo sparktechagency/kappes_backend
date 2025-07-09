@@ -9,6 +9,7 @@ import { SubCategoryRoutes } from '../app/modules/subCategorys/subCategory.route
 import SettingsRouter from '../app/modules/settings/settings.route';
 import { NotificationRoutes } from '../app/modules/notification/notification.routes';
 import { VariantRoutes } from '../app/modules/variant/variant.routes';
+import { VariantFieldRoutes } from '../app/modules/variantField/variantField.routes';
 import { BrandRoutes } from '../app/modules/brand/brand.routes';
 import { ShopCategoryRoutes } from '../app/modules/shopCategory/shopCategory.routes';
 import { ShopRoutes } from '../app/modules/shop/shop.route';
@@ -73,6 +74,10 @@ const routes = [
      {
           path: '/variant',
           route: VariantRoutes,
+     },
+     {
+          path: '/variant-field',
+          route: VariantFieldRoutes,
      },
      {
           path: '/brand',
@@ -141,6 +146,10 @@ const routes = [
      {
           path: '/dashboard',
           route: DashboardRoutes,
+     },
+     {
+          path: '/variantField',
+          route: VariantFieldRoutes,
      },
 ];
 

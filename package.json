@@ -8,7 +8,8 @@
           "lint": "eslint src/**/*.ts",
           "lint:fix": "eslint src/**/*.ts --fix",
           "format": "prettier . --write",
-          "seed": "ts-node src/seed/seedAdmin.ts",
+          "seed:admin": "ts-node src/seed/seedAdmin.ts",
+          "seed:variant": "ts-node src/seed/seedVariantFields.ts",
           "build": "tsc"
      },
      "keywords": [],
