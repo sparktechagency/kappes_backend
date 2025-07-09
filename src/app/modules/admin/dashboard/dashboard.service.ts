@@ -22,12 +22,76 @@ const getOverview = async (user: IJwtPayload) => {
         ]);
         const totalSales = totalSalesData.length > 0 ? totalSalesData[0].totalSales : 0;
 
-        // Total revenue (sum of all shops' revenue)
-        const totalRevenueData = await Shop.aggregate([
-            { $match: { isDeleted: false } },
-            { $group: { _id: null, totalRevenue: { $sum: "$revenue" } } },
+        // Calculate total revenue based on shop's revenue percentage of their sales
+        const shopRevenues = await Shop.aggregate([
+            {
+                $match: {
+                    isDeleted: false,
+                    revenue: { $gt: 0 } // Only include shops with a revenue percentage
+                }
+            },
+            {
+                $lookup: {
+                    from: 'orders',
+                    let: { shopId: '$_id' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ['$shop', '$$shopId'] },
+                                        { $ne: ['$status', ORDER_STATUS.CANCELLED] },
+                                        { $gt: ['$finalAmount', 0] }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            $group: {
+                                _id: null,
+                                totalShopSales: { $sum: '$finalAmount' }
+                            }
+                        }
+                    ],
+                    as: 'orders'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$orders',
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $project: {
+                    shopId: '$_id',
+                    revenuePercentage: '$revenue',
+                    totalSales: { $ifNull: ['$orders.totalShopSales', 0] },
+                    calculatedRevenue: {
+                        $multiply: [
+                            { $divide: ['$revenue', 100] }, // Convert percentage to decimal
+                            { $ifNull: ['$orders.totalShopSales', 0] } // Total sales
+                        ]
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalRevenue: { $sum: '$calculatedRevenue' },
+                    shopRevenues: {
+                        $push: {
+                            shopId: '$shopId',
+                            revenuePercentage: '$revenuePercentage',
+                            totalSales: '$totalSales',
+                            calculatedRevenue: '$calculatedRevenue'
+                        }
+                    }
+                }
+            }
         ]);
-        const totalRevenue = totalRevenueData.length > 0 ? totalRevenueData[0].totalRevenue : 0;
+
+        const totalRevenue = shopRevenues.length > 0 ? shopRevenues[0].totalRevenue : 0;
 
         // Data for the Top Categories
         const topCategories = await Product.aggregate([
@@ -40,8 +104,8 @@ const getOverview = async (user: IJwtPayload) => {
         const responseData = {
             totalStores,
             totalProducts,
-            totalSales,
-            totalRevenue,
+            totalSales: Number(totalSales.toFixed(2)),
+            totalRevenue: Number(totalRevenue.toFixed(2)),
             topCategories,
         };
 
