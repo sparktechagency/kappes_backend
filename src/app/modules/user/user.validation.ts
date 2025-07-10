@@ -1,5 +1,5 @@
 import { string, z } from 'zod';
-export const objectIdSchema = z.string().regex(/^[a-f\d]{24}$/i, { message: "Invalid ObjectId" });
+export const objectIdSchema = z.string().regex(/^[a-f\d]{24}$/i, { message: 'Invalid ObjectId' });
 export const createUserZodSchema = z.object({
      body: z.object({
           full_name: z.string({ required_error: 'Name is required' }).min(2, 'Name must be at least 2 characters long'),
@@ -16,13 +16,18 @@ const updateUserZodSchema = z.object({
      body: z.object({
           full_name: z.string().optional(),
           phone: z.string().optional(),
-          address: z.object({
-               province: z.string().optional(),
-               territory: z.string().optional(),
-               city: z.string().optional(),
-               country: z.string().optional(),
-               detail_address: z.string().optional(),
-          }).optional(),
+          address: z
+               .union([
+                    z.string(),
+                    z.object({
+                         province: z.string().optional(),
+                         territory: z.string().optional(),
+                         city: z.string().optional(),
+                         country: z.string().optional(),
+                         detail_address: z.string().optional(),
+                    }),
+               ])
+               .optional(),
           email: z.string().email('Invalid email address').optional(),
           password: z.string().optional(),
           image: z.string().optional(),

@@ -1,14 +1,12 @@
 import { Model, Schema } from 'mongoose';
-import { USER_ROLES } from './user.enums';
 import { IGeoLocation } from '../business/business.interface';
-
+import { USER_ROLES } from './user.enums';
 
 export interface IRecentSearchLocation {
      locationName: string; // e.g., "New York City", "My Home Address"
      geoLocation?: IGeoLocation; // The coordinates (optional if only text searched)
      searchDate: Date; // When the search was performed
 }
-
 
 export type IUser = {
      googleId?: string;
@@ -22,13 +20,15 @@ export type IUser = {
      phone?: string;
      joinDate: Date;
      isDeleted: boolean;
-     address?: {
-          province: string;
-          territory: string;
-          city: string;
-          country?: string;
-          detail_address?: string;
-     };
+     address?:
+          | {
+                 province: string;
+                 territory: string;
+                 city: string;
+                 country?: string;
+                 detail_address?: string;
+            }
+          | string;
      business_informations: Schema.Types.ObjectId[];
      lastLogin: Date;
      tokenVersion: number;

@@ -2,20 +2,21 @@ import bcrypt from 'bcrypt';
 import { StatusCodes } from 'http-status-codes';
 import { model, Schema } from 'mongoose';
 import config from '../../../config';
-import { USER_ROLES } from './user.enums';
 import AppError from '../../../errors/AppError';
+import { USER_ROLES } from './user.enums';
 import { IUser, UserModel } from './user.interface';
 
-
-
-const RecentSearchLocationSchema = new Schema({
-     locationName: { type: String, required: true },
-     geoLocation: {
-          type: { type: String, enum: ['Point'] },
-          coordinates: { type: [Number] }, // [longitude, latitude]
+const RecentSearchLocationSchema = new Schema(
+     {
+          locationName: { type: String, required: true },
+          geoLocation: {
+               type: { type: String, enum: ['Point'] },
+               coordinates: { type: [Number] }, // [longitude, latitude]
+          },
+          searchDate: { type: Date, default: Date.now },
      },
-     searchDate: { type: Date, default: Date.now },
-}, { _id: false }); // No _id for sub-documents
+     { _id: false },
+); // No _id for sub-documents
 
 // Define the user schema
 const userSchema = new Schema<IUser, UserModel>(
@@ -68,27 +69,52 @@ const userSchema = new Schema<IUser, UserModel>(
                type: String,
                default: '',
           },
+          // address: {
+          //      province: {
+          //           type: String,
+          //      },
+          //      territory: {
+          //           type: String,
+          //      },
+          //      city: {
+          //           type: String,
+          //      },
+          //      country: {
+          //           type: String,
+          //      },
+          //      detail_address: {
+          //           type: String,
+          //      },
+          // },
           address: {
-               province: {
-                    type: String,
+               type: Schema.Types.Mixed, // Allows both object or string
+               validate: {
+                    validator: function (value) {
+                         if (typeof value === 'string') {
+                              return true; // Allow if it's a string
+                         }
+                         if (typeof value === 'object' && value !== null) {
+                              // Use Object.prototype.hasOwnProperty.call() to avoid the ESLint warning
+                              return (
+                                   Object.prototype.hasOwnProperty.call(value, 'province') ||
+                                   Object.prototype.hasOwnProperty.call(value, 'territory') ||
+                                   Object.prototype.hasOwnProperty.call(value, 'city') ||
+                                   Object.prototype.hasOwnProperty.call(value, 'country') ||
+                                   Object.prototype.hasOwnProperty.call(value, 'detail_address')
+                              );
+                         }
+                         return false; // Invalid if not a string or object with optional fields
+                    },
+                    message: 'Address must be either a string or an object with optional fields',
                },
-               territory: {
-                    type: String,
-               },
-               city: {
-                    type: String,
-               },
-               country: {
-                    type: String,
-               },
-               detail_address: {
-                    type: String,
-               },
+               required: false, // The address field itself is optional
           },
-          business_informations: [{
-               type: Schema.Types.ObjectId,
-               ref: 'Business',
-          }],
+          business_informations: [
+               {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Business',
+               },
+          ],
 
           joinDate: {
                type: Date,
