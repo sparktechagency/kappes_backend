@@ -22,9 +22,9 @@ router.get('/shop/:shopId', auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR), Orde
 
 router.patch('/status/:orderId', auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR), validateRequest(OrderValidation.updateOrderStatusSchema), OrderController.changeOrderStatus);
 
-router.get('/:orderId', auth(USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN, USER_ROLES.USER, USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), OrderController.getOrderDetails);
-
 // Cancel order
 router.delete('/cancel/:id', auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR), OrderController.cancelOrder);
+
+router.get('/:orderId', auth(USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN, USER_ROLES.USER, USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), OrderController.getOrderDetails);
 
 export const OrderRoutes = router;

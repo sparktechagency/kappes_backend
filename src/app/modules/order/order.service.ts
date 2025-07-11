@@ -414,6 +414,10 @@ const cancelOrder = async (orderId: string, user: IJwtPayload) => {
           isExistOrder.status = ORDER_STATUS.CANCELLED;
           isExistOrder.isNeedRefund = true;
           await isExistOrder.save();
+          // if isPaymentTransferdToVendor the refund needs by vendor
+          if (isExistOrder.isPaymentTransferdToVendor) {
+               return { message: 'Order cancelled successfully but refund needs by vendor cause payment already transferd to vendor', order: isExistOrder };
+          }
           // send mail notification for the manager and client
           // make a stripe transfer link to the user for refund
      }
