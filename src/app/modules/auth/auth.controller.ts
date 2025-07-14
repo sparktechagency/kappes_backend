@@ -138,15 +138,13 @@ const refreshToken = catchAsync(async (req, res) => {
      });
 });
 
-
-
-const googleAuth = passport.authenticate("google", {
-     scope: ["profile", "email"],
+const googleAuth = passport.authenticate('google', {
+     scope: ['profile', 'email'],
 });
 
 const googleCallback = (req: Request, res: Response, next: NextFunction) => {
      passport.authenticate(
-          "google",
+          'google',
           {
                failureRedirect: failureRedirectUrl,
           },
@@ -156,22 +154,7 @@ const googleCallback = (req: Request, res: Response, next: NextFunction) => {
                          console.error('Google OAuth Error:', err || 'No user returned');
                          return await passportHandlers.setErrorDataAndRedirect(res, err, user);
                     }
-                    console.log('user from google callback', user)
-                    // Generate JWT token
-                    // const token = await jwtHelper.createToken(
-                    //      {
-                    //           id: user._id,
-                    //           role: user.role,
-                    //           email: user.email
-                    //      } as IJwtPayload,
-                    //      config.jwt.jwt_secret as Secret,
-                    //      config.jwt.jwt_expire_in as string
-                    // );
-
-                    // // Handle the successful authentication
-                    // await passportHandlers.setSuccessDataAndRedirect(res, user, token);
-
-
+                    console.log('user from google callback', user);
                     const result = await AuthService.SocialLoginUserFromDB({ email: user.email });
                     const cookieOptions: any = {
                          secure: false,
@@ -196,31 +179,28 @@ const googleCallback = (req: Request, res: Response, next: NextFunction) => {
                     console.error('Error in Google callback:', error);
                     res.redirect(`${failureRedirectUrl}?error=${encodeURIComponent('Authentication error')}`);
                }
-          }
+          },
      )(req, res, next);
 };
 
-
-
-
-const facebookAuth = passport.authenticate("facebook");
+const facebookAuth = passport.authenticate('facebook');
 
 const facebookCallback = (req: Request, res: Response, next: NextFunction) => {
-     passport.authenticate(
-          "facebook",
-          { failureRedirect: failureRedirectUrl },
-          async (err: any, user: any, info: any) => {
-               if (err || !user) {
-                    return await passportHandlers.setErrorDataAndRedirect(res, err, user);
-               }
-               const token = await jwtHelper.createToken({
+     passport.authenticate('facebook', { failureRedirect: failureRedirectUrl }, async (err: any, user: any, info: any) => {
+          if (err || !user) {
+               return await passportHandlers.setErrorDataAndRedirect(res, err, user);
+          }
+          const token = await jwtHelper.createToken(
+               {
                     id: user._id,
                     role: user.role,
-                    email: user.email
-               } as IJwtPayload, config.jwt.jwt_secret as Secret, config.jwt.jwt_expire_in as string);
-               await passportHandlers.setSuccessDataAndRedirect(res, user, token);
-          }
-     )(req, res, next);
+                    email: user.email,
+               } as IJwtPayload,
+               config.jwt.jwt_secret as Secret,
+               config.jwt.jwt_expire_in as string,
+          );
+          await passportHandlers.setSuccessDataAndRedirect(res, user, token);
+     })(req, res, next);
 };
 
 export const AuthController = {
@@ -237,5 +217,4 @@ export const AuthController = {
      googleCallback,
      facebookAuth,
      facebookCallback,
-
 };

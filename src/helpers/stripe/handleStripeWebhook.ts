@@ -1,12 +1,12 @@
-import { Request, Response } from 'express';
-import Stripe from 'stripe';
 import colors from 'colors';
-import { handleAccountUpdatedEvent, handleSubscriptionCreated, handleSubscriptionDeleted, handleSubscriptionUpdated } from './handlers';
+import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { logger } from '../../shared/logger';
+import Stripe from 'stripe';
 import config from '../../config';
 import stripe from '../../config/stripe';
 import AppError from '../../errors/AppError';
+import { logger } from '../../shared/logger';
+import { handleSubscriptionCreated, handleSubscriptionDeleted, handleSubscriptionUpdated } from './handlers';
 
 const handleStripeWebhook = async (req: Request, res: Response) => {
      // Extract Stripe signature and webhook secret

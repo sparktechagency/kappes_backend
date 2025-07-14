@@ -1,20 +1,19 @@
 import { StatusCodes } from 'http-status-codes';
 import { JwtPayload } from 'jsonwebtoken';
-import { USER_ROLES } from './user.enums';
+import mongoose from 'mongoose';
+import config from '../../../config';
+import stripe from '../../../config/stripe';
+import AppError from '../../../errors/AppError';
 import { emailHelper } from '../../../helpers/emailHelper';
 import { emailTemplate } from '../../../shared/emailTemplate';
 import unlinkFile from '../../../shared/unlinkFile';
-import { ISellerUser, IUser } from './user.interface';
-import { User } from './user.model';
-import AppError from '../../../errors/AppError';
 import generateOTP from '../../../utils/generateOTP';
-import stripe from '../../../config/stripe';
-import mongoose, { Schema } from 'mongoose';
-import config from '../../../config';
+import QueryBuilder from '../../builder/QueryBuilder';
 import { Shop } from '../shop/shop.model';
 import { stripeAccountService } from '../stripeAccount/stripeAccount.service';
-import QueryBuilder from '../../builder/QueryBuilder';
-import { query } from 'winston';
+import { USER_ROLES } from './user.enums';
+import { ISellerUser, IUser } from './user.interface';
+import { User } from './user.model';
 // create user
 const createUserToDB = async (payload: IUser): Promise<IUser> => {
      //set role
@@ -93,11 +92,7 @@ const createSellerUserToDB = async (payload: ISellerUser, host: string, protocol
                oneTimeCode: otp,
                expireAt: new Date(Date.now() + Number(config.otp.otpExpiryTimeInMin) * 60000),
           };
-          await User.findOneAndUpdate(
-               { _id: createUser[0]._id },
-               { $set: { authentication } },
-               { session }
-          );
+          await User.findOneAndUpdate({ _id: createUser[0]._id }, { $set: { authentication } }, { session });
 
           // Create Stripe customer
           let stripeCustomer;
@@ -111,11 +106,7 @@ const createSellerUserToDB = async (payload: ISellerUser, host: string, protocol
           }
 
           createUser[0].stripeCustomerId = stripeCustomer.id;
-          await User.findOneAndUpdate(
-               { _id: createUser[0]._id },
-               { $set: { authentication, stripeCustomerId: stripeCustomer.id } },
-               { session }
-          );
+          await User.findOneAndUpdate({ _id: createUser[0]._id }, { $set: { authentication, stripeCustomerId: stripeCustomer.id } }, { session });
 
           // Now create the shop
           const shop = await Shop.create(
@@ -128,7 +119,7 @@ const createSellerUserToDB = async (payload: ISellerUser, host: string, protocol
                          phone: createUser[0].phone,
                     },
                ],
-               { session }
+               { session },
           );
 
           // Commit the transaction if all operations are successful
@@ -138,7 +129,6 @@ const createSellerUserToDB = async (payload: ISellerUser, host: string, protocol
           const stripe_account_onboarding_url = await stripeAccountService.createStripeAccount(user, host, protocol);
 
           return { createUser: createUser[0], shop, stripe_account_onboarding_url };
-
      } catch (error) {
           // If any operation fails, abort the transaction
           await session.abortTransaction();
@@ -146,7 +136,6 @@ const createSellerUserToDB = async (payload: ISellerUser, host: string, protocol
           throw error; // Rethrow the error to be handled outside
      }
 };
-
 
 // create Businessman
 const createVendorToDB = async (payload: IUser): Promise<IUser> => {
@@ -265,19 +254,22 @@ const deleteUser = async (id: string) => {
 const getAllRoleBasedUser = async () => {
      const result = await User.find({}, { _id: 1, role: 1, name: 1, email: 1 }).lean();
 
-     const users = result.reduce<Record<USER_ROLES, { data: typeof result[0][], count: number }>>((acc, curr) => {
-          const { role } = curr;
+     const users = result.reduce<Record<USER_ROLES, { data: (typeof result)[0][]; count: number }>>(
+          (acc, curr) => {
+               const { role } = curr;
 
-          // Ensure TypeScript understands the structure of acc
-          if (acc[role]) {
-               acc[role].data.push(curr);
-               acc[role].count += 1;
-          } else {
-               acc[role] = { count: 1, data: [curr], };
-          }
+               // Ensure TypeScript understands the structure of acc
+               if (acc[role]) {
+                    acc[role].data.push(curr);
+                    acc[role].count += 1;
+               } else {
+                    acc[role] = { count: 1, data: [curr] };
+               }
 
-          return acc;
-     }, {} as Record<USER_ROLES, { data: typeof result[0][], count: number }>);
+               return acc;
+          },
+          {} as Record<USER_ROLES, { data: (typeof result)[0][]; count: number }>,
+     );
 
      return users;
 };
@@ -315,5 +307,5 @@ export const UserService = {
      verifyUserPassword,
      getAllRoleBasedUser,
      getAllVendors,
-     updateUserByIdToDB
+     updateUserByIdToDB,
 };

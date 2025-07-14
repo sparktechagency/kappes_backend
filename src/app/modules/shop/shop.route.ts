@@ -1,12 +1,11 @@
-import { FOLDER_NAMES } from "../../../enums/files";
-import auth from "../../middleware/auth";
-import fileUploadHandler from "../../middleware/fileUploadHandler";
-import parseFileData from "../../middleware/parseFileData";
-import parseMulitpleFieldsData from "../../middleware/parseMulitpleFieldsData";
-import validateRequest from "../../middleware/validateRequest";
-import { USER_ROLES } from "../user/user.enums";
-import { ShopController } from "./shop.controller";
-import { ShopValidation } from "./shop.validation";
+import { FOLDER_NAMES } from '../../../enums/files';
+import auth from '../../middleware/auth';
+import fileUploadHandler from '../../middleware/fileUploadHandler';
+import parseMulitpleFieldsData from '../../middleware/parseMulitpleFieldsData';
+import validateRequest from '../../middleware/validateRequest';
+import { USER_ROLES } from '../user/user.enums';
+import { ShopController } from './shop.controller';
+import { ShopValidation } from './shop.validation';
 // necessasry routes for shop
 const express = require('express');
 const router = express.Router();
@@ -15,17 +14,20 @@ const router = express.Router();
 
 // Get all shops
 router.get('/', ShopController.getAllShops);
-router.post('/', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), fileUploadHandler(), parseMulitpleFieldsData(FOLDER_NAMES.LOGO, FOLDER_NAMES.BANNER, FOLDER_NAMES.COVER_PHOTO), validateRequest(ShopValidation.createShopZodSchema), ShopController.createShop);
+router.post(
+     '/',
+     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN),
+     fileUploadHandler(),
+     parseMulitpleFieldsData(FOLDER_NAMES.LOGO, FOLDER_NAMES.BANNER, FOLDER_NAMES.COVER_PHOTO),
+     validateRequest(ShopValidation.createShopZodSchema),
+     ShopController.createShop,
+);
 
 router.get('/shop-admin/:shopId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), ShopController.getShopAdminsByShopId);
 
 router
-    .route('/create-shop-admin/:shopId')
-    .post(
-        validateRequest(ShopValidation.createAdminZodSchema),
-        auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR),
-        ShopController.createShopAdmin
-    );
+     .route('/create-shop-admin/:shopId')
+     .post(validateRequest(ShopValidation.createAdminZodSchema), auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), ShopController.createShopAdmin);
 router.patch('/make-shop-admin/:shopId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), validateRequest(ShopValidation.makeShopAdminZodSchema), ShopController.makeShopAdmin);
 
 // get users shops
@@ -37,13 +39,10 @@ router.get('/products/:shopId', ShopController.getProductsByShopId);
 router.get('/provinces', ShopController.getShopsProvincesListWithProductCount);
 router.get('/territory', ShopController.getShopsTerritoryListWithProductCount);
 
-
-// get shop overview 
-router.get('/overview/:shopId',
-    auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), ShopController.getShopOverview);
+// get shop overview
+router.get('/overview/:shopId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), ShopController.getShopOverview);
 
 // router.patch('/update-revenue/:shopId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), validateRequest(ShopValidation.updateRevenueZodSchema), ShopController.updateRevenue);
-
 
 // Get followed shops by user or my followed shops
 router.get('/followed/:followerId', auth(USER_ROLES.USER), ShopController.getShopsByFollower);
@@ -55,13 +54,19 @@ router.get('/followers/:shopId', ShopController.getFollowersByShop);
 // Get shops by location
 router.get('/location', validateRequest(ShopValidation.getShopsByGeoLocation), ShopController.getShopsByLocation);
 
-
 // Delete a shop by ID
 router.delete('/:id', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), ShopController.deleteShopById);
 
 router.get('/:id', ShopController.getShopById);
 // Update a shop by ID
-router.patch('/:id', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), fileUploadHandler(), validateRequest(ShopValidation.updateShopZodSchema), parseMulitpleFieldsData(FOLDER_NAMES.LOGO, FOLDER_NAMES.BANNER, FOLDER_NAMES.COVER_PHOTO), ShopController.updateShopById);
+router.patch(
+     '/:id',
+     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN),
+     fileUploadHandler(),
+     validateRequest(ShopValidation.updateShopZodSchema),
+     parseMulitpleFieldsData(FOLDER_NAMES.LOGO, FOLDER_NAMES.BANNER, FOLDER_NAMES.COVER_PHOTO),
+     ShopController.updateShopById,
+);
 
 // // Get shops by owner
 // router.get('/owner/:ownerId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), ShopController.getShopsByOwner);

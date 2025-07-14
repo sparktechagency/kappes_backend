@@ -1,10 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
 import Stripe from 'stripe';
-import stripe from '../../../config/stripe';
-import AppError from '../../../errors/AppError'; 
-import { User } from '../../../app/modules/user/user.model';
-import { sendNotifications } from '../../notificationsHelper';
 import { USER_ROLES } from '../../../app/modules/user/user.enums';
+import { User } from '../../../app/modules/user/user.model';
+import stripe from '../../../config/stripe';
+import AppError from '../../../errors/AppError';
 
 const formatUnixToIsoUtc = (timestamp: number): string => {
      const date = new Date(timestamp * 1000);
@@ -37,7 +36,7 @@ export const handleSubscriptionCreated = async (data: Stripe.Subscription) => {
                if (!existingUser) {
                     throw new AppError(StatusCodes.NOT_FOUND, `User not found for email: ${customer.email}`);
                }
-               if (existingUser) { 
+               if (existingUser) {
                } else {
                     throw new AppError(StatusCodes.NOT_FOUND, `User not found for email: ${customer?.email}`);
                }
