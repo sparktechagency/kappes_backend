@@ -1,11 +1,22 @@
-import { Schema, model } from 'mongoose';
-import { IOrder } from './order.interface';
-import { Product } from '../product/product.model';
-import { Coupon } from '../coupon/coupon.model';
 import { StatusCodes } from 'http-status-codes';
+import { Schema, model } from 'mongoose';
 import AppError from '../../../errors/AppError';
-import { CENTRAL_SHIPPING_AREA, COUNTRY_SHIPPING_AREA, FREE_SHIPPING_CHARGE_AREA, ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS, SHIPPING_COST } from './order.enums';
 import { COUPON_DISCOUNT_TYPE } from '../coupon/coupon.enums';
+import { Coupon } from '../coupon/coupon.model';
+import { Product } from '../product/product.model';
+import {
+     CENTRAL_SHIPPING_AREA,
+     COUNTRY_SHIPPING_AREA,
+     DDAY_FOR_DELIVERY_OPTIONS,
+     DELIVERY_OPTIONS,
+     EXTRA_DELIVERY_COST_PERCENT_FOR_DELIVERY_OPTIONS,
+     FREE_SHIPPING_CHARGE_AREA,
+     ORDER_STATUS,
+     PAYMENT_METHOD,
+     PAYMENT_STATUS,
+     SHIPPING_COST,
+} from './order.enums';
+import { IOrder } from './order.interface';
 
 const orderSchema = new Schema<IOrder>(
      {
@@ -42,6 +53,14 @@ const orderSchema = new Schema<IOrder>(
                     },
                },
           ],
+          deliveryOptions: {
+               type: String,
+               enum: Object.values(DELIVERY_OPTIONS),
+               default: DELIVERY_OPTIONS.STANDARD,
+          },
+          deliveryDate: {
+               type: Date,
+          },
           coupon: {
                type: Schema.Types.ObjectId,
                ref: 'Coupon',
@@ -114,30 +133,12 @@ orderSchema.pre('validate', async function (next) {
      let shopId: Schema.Types.ObjectId | null = null;
 
      // Step 2: Calculate total amount for products
-     for (let item of order.products) {
+     for (const item of order.products) {
           const product = await Product.findById(item.product).populate('shopId');
 
           if (!product) {
                return next(new Error(`Product not found!.`));
           }
-          // const variant = await Variant.findById(item.variant).populate("shopId");
-
-          // if (!variant) {
-          //     return next(new Error(`variant not found!.`));
-          // }
-
-          // // check if ths vairant is in the product.product_variant_Details array if present then check variantQuantity of that item in product.product_variant_Details array
-          // const variantIndex = product.product_variant_Details.findIndex(
-          //     itm => itm.variantId.toString() === item.variant.toString()
-          // );
-
-          // if (variantIndex === -1) {
-          //     return next(new Error(`Variant not found in product with ID: ${item.product}`));
-          // }
-
-          // if (product.product_variant_Details[variantIndex].variantQuantity < item.quantity) {
-          //     return next(new Error(`Variant quantity is not available in product with ID: ${item.product}`));
-          // }
 
           if (shopId && String(shopId) !== String(product.shopId._id)) {
                return next(new Error('Products must be from the same shop.'));
@@ -172,8 +173,7 @@ orderSchema.pre('validate', async function (next) {
           }
      }
 
-     // const isDhaka = order?.shippingAddress?.toLowerCase()?.includes("dhaka");
-     // const deliveryCharge = isDhaka ? 60 : 120;
+     // Step 3: Calculate delivery charge based on shipping address and delivery options
      const shippingAdressLowerCased = order?.shippingAddress?.toLowerCase();
      let deliveryCharge = SHIPPING_COST.WORLD_WIDE;
      if (FREE_SHIPPING_CHARGE_AREA.some((area) => shippingAdressLowerCased?.includes(area))) {
@@ -183,6 +183,14 @@ orderSchema.pre('validate', async function (next) {
      } else if (COUNTRY_SHIPPING_AREA.some((area) => shippingAdressLowerCased?.includes(area))) {
           deliveryCharge = SHIPPING_COST.COUNTRY;
      }
+     // Additional delivery cost based on delivery options
+     if (order.deliveryOptions === DELIVERY_OPTIONS.EXPRESS) {
+          deliveryCharge += (deliveryCharge * EXTRA_DELIVERY_COST_PERCENT_FOR_DELIVERY_OPTIONS.EXPRESS) / 100;
+     } else if (order.deliveryOptions === DELIVERY_OPTIONS.OVERNIGHT) {
+          deliveryCharge += (deliveryCharge * EXTRA_DELIVERY_COST_PERCENT_FOR_DELIVERY_OPTIONS.OVERNIGHT) / 100;
+     } else {
+          deliveryCharge += (deliveryCharge * EXTRA_DELIVERY_COST_PERCENT_FOR_DELIVERY_OPTIONS.STANDARD) / 100;
+     }
 
      order.totalAmount = totalAmount;
      order.discount = finalDiscount;
@@ -190,6 +198,18 @@ orderSchema.pre('validate', async function (next) {
      order.finalAmount = totalAmount - finalDiscount + deliveryCharge;
      //@ts-ignore
      order.shop = shopId;
+     next();
+});
+
+// MIDDLEWARES TO define delivery date based on delivery options
+orderSchema.pre('save', function (next) {
+     if (this.deliveryOptions === DELIVERY_OPTIONS.EXPRESS) {
+          this.deliveryDate = new Date(Date.now() + Number(DDAY_FOR_DELIVERY_OPTIONS.EXPRESS) * 24 * 60 * 60 * 1000);
+     } else if (this.deliveryOptions === DELIVERY_OPTIONS.OVERNIGHT) {
+          this.deliveryDate = new Date(Date.now() + Number(DDAY_FOR_DELIVERY_OPTIONS.OVERNIGHT) * 24 * 60 * 60 * 1000);
+     } else {
+          this.deliveryDate = new Date(Date.now() + Number(DDAY_FOR_DELIVERY_OPTIONS.STANDARD) * 24 * 60 * 60 * 1000);
+     }
      next();
 });
 

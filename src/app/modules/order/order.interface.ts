@@ -1,6 +1,5 @@
-import { Types, Document } from 'mongoose';
-import { IPayment } from '../payment/payment.interface';
-import { ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS } from './order.enums';
+import { Document, Types } from 'mongoose';
+import { DELIVERY_OPTIONS, ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS } from './order.enums';
 
 export interface IOrderProduct {
      product: Types.ObjectId;
@@ -14,6 +13,8 @@ export interface IOrder extends Document {
      shop: Types.ObjectId;
      products: IOrderProduct[];
      coupon: Types.ObjectId | null;
+     deliveryOptions?: DELIVERY_OPTIONS;
+     deliveryDate?: Date;
      totalAmount: number;
      discount: number;
      deliveryCharge: number;
