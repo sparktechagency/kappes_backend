@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import AppError from '../../../errors/AppError';
 import stripe from '../../config/stripe.config';
-export async function transferToRider({
+export async function transferToVendor({
      stripeConnectedAccount,
      finalAmount,
      revenue,

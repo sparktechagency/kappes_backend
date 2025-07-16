@@ -20,7 +20,7 @@ import Variant from '../variant/variant.model';
 import { ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS } from './order.enums';
 import { IOrder } from './order.interface';
 import { Order } from './order.model';
-import { createPayout, transferToRider } from './order.utils';
+import { transferToVendor } from './order.utils';
 
 const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
      try {
@@ -318,7 +318,7 @@ const changeOrderStatus = async (orderId: string, status: string, user: IJwtPayl
           case ORDER_STATUS.PROCESSING:
                if (status === ORDER_STATUS.COMPLETED && order.paymentMethod !== PAYMENT_METHOD.COD && order.paymentStatus === PAYMENT_STATUS.PAID && order.isPaymentTransferdToVendor === false) {
                     if ((shop.owner as any).stripeConnectedAccount) {
-                         const transfer = await transferToRider({
+                         const transfer = await transferToVendor({
                               stripeConnectedAccount: (shop.owner as any).stripeConnectedAccount,
                               finalAmount: order.finalAmount,
                               revenue: shop.revenue,
