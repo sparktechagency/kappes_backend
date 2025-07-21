@@ -112,6 +112,7 @@ const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
 
                // increase the purchase count of the all the proudcts use operatros
                const updatePurchaseCount = await Product.updateMany({ _id: { $in: createdOrder.products.map((item) => item.product) } }, { $inc: { purchaseCount: 1 } });
+               console.log('🚀 ~ createOrder ~ updatePurchaseCount:', updatePurchaseCount);
 
                // send email to user, notification to shop woner or admins socket
                const shop = await Shop.findById(createdOrder.shop).populate('owner admins');
@@ -133,7 +134,7 @@ const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
                // Prepare email with PDF attachment
                const values = {
                     name: thisCustomer?.full_name,
-                    email: thisCustomer?.email!,
+                    email: thisCustomer.email!,
                     order: createdOrder,
                     attachments: [
                          {
@@ -410,16 +411,17 @@ const cancelOrder = async (orderId: string, user: IJwtPayload) => {
           if (isExistOrder.isNeedRefund) {
                throw new AppError(StatusCodes.BAD_REQUEST, 'Order is already need refund');
           }
-
-          isExistOrder.status = ORDER_STATUS.CANCELLED;
-          isExistOrder.isNeedRefund = true;
-          await isExistOrder.save();
-          // if isPaymentTransferdToVendor the refund needs by vendor
-          if (isExistOrder.isPaymentTransferdToVendor) {
-               return { message: 'Order cancelled successfully but refund needs by vendor cause payment already transferd to vendor', order: isExistOrder };
+          if (isExistOrder.paymentMethod !== PAYMENT_METHOD.COD) {
+               await refundOrder(orderId, user);
+          } else {
+               isExistOrder.status = ORDER_STATUS.CANCELLED;
+               isExistOrder.isNeedRefund = true;
+               await isExistOrder.save();
+               // // if isPaymentTransferdToVendor the refund needs by vendor
+               // if (isExistOrder.isPaymentTransferdToVendor) {
+               //      return { message: 'Order cancelled successfully but refund needs by vendor cause payment already transferd to vendor', order: isExistOrder };
+               // }
           }
-          // send mail notification for the manager and client
-          // make a stripe transfer link to the user for refund
      }
 
      if (isExistOrder.paymentStatus === PAYMENT_STATUS.UNPAID) {
@@ -467,23 +469,26 @@ const refundOrder = async (orderId: string, user: IJwtPayload) => {
                throw new AppError(StatusCodes.NOT_FOUND, 'Order not found.');
           }
 
-          // Check if the order needs a refund
-          if (!order.isNeedRefund) {
-               throw new AppError(StatusCodes.BAD_REQUEST, "This order doesn't require a refund.");
-          }
-          // Check if the order payment is completed
-          const payment = await Payment.findOne({ order: orderId });
-          if (!payment || payment.status !== PAYMENT_STATUS.PAID) {
+          const payment = await Payment.findOne({ order: orderId, user: user.id, status: { $nin: [PAYMENT_STATUS.UNPAID, PAYMENT_STATUS.REFUNDED] } });
+          if (!payment) {
                throw new AppError(StatusCodes.BAD_REQUEST, 'Payment for this order is not successful or not found.');
           }
-          // Refund logic with Stripe
-          const refundAmount = Math.round(payment.amount * 100); // Convert to integer (cents)
-          // Refund logic with Stripe
-          const refund = await stripe.refunds.create({
-               payment_intent: payment.paymentIntent, // Use the saved paymentIntent
-               amount: refundAmount, // Refund the full amount (you can modify this if partial refund is needed)
-          });
-          console.log('refund', refund);
+          // Check if the order payment is completed
+          if (order.paymentMethod !== PAYMENT_METHOD.COD) {
+               // Refund logic with Stripe
+               const refundAmount = Math.round(payment.amount * 100); // Convert to integer (cents)
+               // Refund logic with Stripe
+               const refund = await stripe.refunds.create({
+                    payment_intent: payment.paymentIntent, // Use the saved paymentIntent
+                    amount: refundAmount, // Refund the full amount (you can modify this if partial refund is needed)
+               });
+               console.log('refund', refund);
+          } else {
+               // Check if the order needs a refund
+               if (!order.isNeedRefund) {
+                    throw new AppError(StatusCodes.BAD_REQUEST, "This order doesn't require a refund.");
+               }
+          }
           // Update the order's payment status to 'REFUNDED' and save it
           order.paymentStatus = PAYMENT_STATUS.REFUNDED;
           order.status = ORDER_STATUS.CANCELLED; // Cancel the order if the refund is successful
@@ -495,7 +500,7 @@ const refundOrder = async (orderId: string, user: IJwtPayload) => {
           await payment.save();
 
           // Respond with success message and refund details
-          return { message: 'Refund processed successfully', refund };
+          return { message: 'Refund processed successfully' };
      } catch (error) {
           console.error('Error processing refund:', error);
           throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Error processing refund.');
