@@ -291,6 +291,10 @@ const getMyOrders = async (query: Record<string, unknown>, user: IJwtPayload) =>
 };
 
 const changeOrderStatus = async (orderId: string, status: string, user: IJwtPayload) => {
+     // if status to be canclled thne thrwos error metinoong the cancle route
+     if (status === ORDER_STATUS.CANCELLED) {
+          throw new AppError(StatusCodes.BAD_REQUEST, 'Use method: Delete and route: /api/v1/order/cancel/:id to cancel a booking');
+     }
      // find order
      const order = await Order.findById(orderId);
      if (!order) {
@@ -317,21 +321,26 @@ const changeOrderStatus = async (orderId: string, status: string, user: IJwtPayl
                }
                throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid order status');
           case ORDER_STATUS.PROCESSING:
-               if (status === ORDER_STATUS.COMPLETED && order.paymentMethod !== PAYMENT_METHOD.COD && order.paymentStatus === PAYMENT_STATUS.PAID && order.isPaymentTransferdToVendor === false) {
-                    if ((shop.owner as any).stripeConnectedAccount) {
-                         const transfer = await transferToVendor({
-                              stripeConnectedAccount: (shop.owner as any).stripeConnectedAccount,
-                              finalAmount: order.finalAmount,
-                              revenue: shop.revenue,
-                              orderId: (order._id as string).toString(),
-                         });
-                         console.log('🚀 ~ changeOrderStatus ~ transfer:', transfer);
-                    } else {
-                         throw new AppError(StatusCodes.BAD_REQUEST, 'Stripe account not found');
+               if (status === ORDER_STATUS.COMPLETED) {
+                    if (order.paymentStatus === PAYMENT_STATUS.UNPAID) {
+                         throw new AppError(StatusCodes.BAD_REQUEST, 'Payment is not done yet. Do the payment first');
+                    } else if (order.paymentStatus === PAYMENT_STATUS.PAID) {
+                         if (order.paymentMethod !== PAYMENT_METHOD.COD) {
+                              if (order.isPaymentTransferdToVendor === false) {
+                                   if ((shop!.owner as any).stripeConnectedAccount) {
+                                        const transfer = await transferToVendor({
+                                             stripeConnectedAccount: (shop.owner as any).stripeConnectedAccount,
+                                             finalAmount: order.finalAmount,
+                                             revenue: shop.revenue,
+                                             orderId: (order._id as string).toString(),
+                                        });
+                                        console.log('🚀 ~ changeBookingStatus ~ transfer:', transfer);
+                                   } else {
+                                        throw new AppError(StatusCodes.BAD_REQUEST, 'Stripe account not found');
+                                   }
+                              }
+                         }
                     }
-                    break;
-               }
-               if (status === ORDER_STATUS.COMPLETED && order.paymentMethod === PAYMENT_METHOD.COD) {
                     break;
                }
                if (status === ORDER_STATUS.CANCELLED) {
