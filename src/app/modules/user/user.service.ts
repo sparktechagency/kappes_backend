@@ -126,7 +126,7 @@ const createSellerUserToDB = async (payload: ISellerUser, host: string, protocol
           await session.commitTransaction();
           session.endSession();
 
-          const stripe_account_onboarding_url = await stripeAccountService.createStripeAccount(user, host, protocol);
+          const stripe_account_onboarding_url = await stripeAccountService.createConnectedStripeAccount(user, host, protocol);
 
           return { createUser: createUser[0], shop, stripe_account_onboarding_url };
      } catch (error) {
