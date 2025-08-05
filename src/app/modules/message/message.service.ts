@@ -19,7 +19,7 @@ const sendMessageToDB = async (payload: IMessage, user: IJwtPayload): Promise<IM
      if (user.role === USER_ROLES.USER) {
           // check user is in chat
           const isUserInChat = chat.participants.some((participant) => {
-               participant.participantId.toString() === user.id && participant.participantType === USER_ROLES.USER
+               return participant.participantId.toString() == user.id;
           });
           if (!isUserInChat) {
                throw new AppError(StatusCodes.FORBIDDEN, 'User is not in chat');
@@ -32,13 +32,13 @@ const sendMessageToDB = async (payload: IMessage, user: IJwtPayload): Promise<IM
      // find shop
      const shop = await Shop.findOne({ _id: shopId, isActive: true });
      if (!shop) {
-          throw new AppError(StatusCodes.NOT_FOUND, "Shop not Found");
+          throw new AppError(StatusCodes.NOT_FOUND, 'Shop not Found');
      }
 
      // check verndor or shop admins authorization
      if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
-          if (shop.owner.toString() !== user.id && !shop.admins?.some(admin => admin.toString() === user.id)) {
-               throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to update this order');
+          if (shop.owner.toString() !== user.id && !shop.admins?.some((admin) => admin.toString() === user.id)) {
+               throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to message');
           }
      }
      // save to DB
