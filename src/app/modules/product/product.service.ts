@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 import AppError from '../../../errors/AppError';
 import QueryBuilder from '../../builder/QueryBuilder';
 import unlinkFile from '../../../shared/unlinkFile';
-import { generateSlug } from '../variant/variant.utils';
+import { generateSlug, generateSlugDetails, SLUG_FIELD_ORDER, SLUG_FIELD_ORDER } from '../variant/variant.utils';
 import Variant from '../variant/variant.model';
 import { Shop } from '../shop/shop.model';
 import { Category } from '../category/category.model';
@@ -57,7 +57,7 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
 
           // Process variants in parallel
           const resolvedVariants = await Promise.all(
-               payload.product_variant_Details.map(async (variant, index) => {
+               payload.product_variant_Details.map(async (variant) => {
                     if (variant.variantId) {
                          // If variantId is provided, check if the variant exists
                          const isExistVariant = await Variant.findOne({ _id: variant.variantId }, null, { session });
@@ -105,6 +105,9 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
                }),
           );
 
+          // Generate the slugDetails object by calling the modified function
+          const slugDetails = await generateSlugDetails(resolvedVariants);
+
           // Calculate total stock and validate variant details
           const totalStock = resolvedVariants.reduce((sum, variant) => {
                if (variant.variantQuantity < 0) {
@@ -131,6 +134,7 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
                totalStock,
                product_variant_Details: resolvedVariants,
                isFeatured: payload.isFeatured || false,
+               slugDetails,
           };
 
           // Create and save the product
@@ -220,6 +224,8 @@ const updateProduct = async (id: string, payload: Partial<IProduct | ICreateProd
                throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to update this product');
           }
      }
+     // Initialize slugDetails as an empty object if not provided in payload
+     let slugDetails = product.slugDetails || {};
 
      // Handle variant updates if payload contains product_variant_Details
      if (payload.product_variant_Details && Array.isArray(payload.product_variant_Details)) {
@@ -285,6 +291,24 @@ const updateProduct = async (id: string, payload: Partial<IProduct | ICreateProd
                     }
                     totalStock += variant.variantQuantity;
                }
+               // Now update the slugDetails based on the new or updated variant fields
+               const variantSlug = generateSlug(product.categoryId.name, product.subcategoryId.name, variant as IProductSingleVariantByFieldName);
+               const slugParts = variantSlug.split('-');
+               SLUG_FIELD_ORDER.forEach((field, index) => {
+                    if (slugParts[index]) {
+                         const fieldValue = slugParts[index];
+
+                         // Initialize the field if it doesn't exist in slugDetails
+                         if (!slugDetails[field]) {
+                              slugDetails[field] = [];
+                         }
+
+                         // Add the value to slugDetails if it doesn't already exist
+                         if (!slugDetails[field].includes(fieldValue)) {
+                              slugDetails[field].push(fieldValue);
+                         }
+                    }
+               });
           }
 
           // Update product's variant details and total stock
@@ -305,6 +329,7 @@ const updateProduct = async (id: string, payload: Partial<IProduct | ICreateProd
                ...(payload.product_variant_Details && {
                     product_variant_Details: product.product_variant_Details,
                }),
+               slugDetails,
           },
           { new: true },
      );

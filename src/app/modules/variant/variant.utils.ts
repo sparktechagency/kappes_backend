@@ -1,5 +1,7 @@
 
+import { IProductSingleVariant } from "../product/product.interface";
 import { IVariant } from "./variant.interfaces";
+import Variant from "./variant.model";
 
 // Helper function to get the first word or value of a string, array, or object
 const getFirstWord = (value: string | string[] | undefined | object): string => {
@@ -16,7 +18,7 @@ const getFirstWord = (value: string | string[] | undefined | object): string => 
 };
 
 // Define the field order based on Zod schema for slug generation
-const SLUG_FIELD_ORDER = [
+export const SLUG_FIELD_ORDER = [
     'categoryId',
     'subCategoryId',
     'color',
@@ -75,4 +77,42 @@ export const generateSlug = (categoryName: string, subCategoryName: string, payl
     // Join the parts with a hyphen and convert to lowercase
     const slug = slugParts.join('-').toLowerCase();
     return slug;
+};
+
+
+// Function to generate the `slugDetails` object based on variants
+export const generateSlugDetails = async (variants: IProductSingleVariant[]): Promise<object> => {
+    const slugDetails: { [key: string]: string[] } = {};
+
+    // Fetch each variant by its variantId to get the slug
+    const variantIds = variants.map((variant) => variant.variantId);
+    const variantSlugs = await Variant.find({ _id: { $in: variantIds } }).select('slug _id');
+
+    // Create a mapping of variantId to slug
+    const variantSlugMap = variantSlugs.reduce((map: any, variant: any) => {
+        map[variant._id.toString()] = variant.slug;
+        return map;
+    }, {} as { [key: string]: string });
+
+    // Loop through each variant and extract the fields from their slugs
+    variants.forEach((variant) => {
+        const slug = variantSlugMap[variant.variantId.toString()];
+        const slugParts = slug.split('-');
+
+        SLUG_FIELD_ORDER.forEach((field, index) => {
+            if (slugParts[index]) {
+                const fieldValue = slugParts[index];
+
+                if (!slugDetails[field]) {
+                    slugDetails[field] = [];
+                }
+
+                if (!slugDetails[field].includes(fieldValue)) {
+                    slugDetails[field].push(fieldValue);
+                }
+            }
+        });
+    });
+
+    return slugDetails;
 };
