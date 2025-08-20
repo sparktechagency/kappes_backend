@@ -1,4 +1,4 @@
-import path from 'path';
+// import path from 'path';
 import { ISettings, ISingleContact, ISocials } from './settings.interface';
 import Settings from './settings.model';
 import { StatusCodes } from 'http-status-codes';
@@ -63,9 +63,9 @@ const getAboutUs = async () => {
 //   return path.join(__dirname, '..', 'htmlResponse', 'privacyPolicy.html');
 // };
 
-const getAccountDelete = async () => {
-     return path.join(__dirname, '..', 'htmlResponse', 'accountDelete.html');
-};
+// const getAccountDelete = async () => {
+//      return path.join(__dirname, '..', 'htmlResponse', 'accountDelete.html');
+// };
 
 // const getSupport = async () => {
 //   return path.join(__dirname, '..', 'htmlResponse', 'support.html');
@@ -133,11 +133,30 @@ const addOrUpdateSocials = async (socials: ISocials) => {
      return settings.socials;
 };
 
+const getShippingDetails = async () => {
+     const settings: any = await Settings.findOne();
+
+     if (!settings) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
+     }
+     return settings.shippingDetails;
+};
+
+const addOrUpdateShippingDetails = async (shippingDetails: any) => {
+     const settings: any = await Settings.findOne();
+
+     if (!settings) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
+     }
+     const updatedSettings = await Settings.findOneAndUpdate({ _id: settings._id }, { shippingDetails }, { new: true });
+     return updatedSettings?.shippingDetails;     
+};
+
 export const settingsService = {
      upsertSettings,
      getSettings,
      getPrivacyPolicy,
-     getAccountDelete,
+     // getAccountDelete,
      getSupport,
      getTermsOfService,
      getAboutUs,
@@ -147,4 +166,6 @@ export const settingsService = {
      deleteContact,
      getSocials,
      addOrUpdateSocials,
+     getShippingDetails,
+     addOrUpdateShippingDetails,
 };

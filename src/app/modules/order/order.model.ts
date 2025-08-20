@@ -5,18 +5,15 @@ import { COUPON_DISCOUNT_TYPE } from '../coupon/coupon.enums';
 import { Coupon } from '../coupon/coupon.model';
 import { Product } from '../product/product.model';
 import {
-     CENTRAL_SHIPPING_AREA,
-     COUNTRY_SHIPPING_AREA,
-     DDAY_FOR_DELIVERY_OPTIONS,
+     DAY_FOR_DELIVERY_OPTIONS,
      DELIVERY_OPTIONS,
      EXTRA_DELIVERY_COST_PERCENT_FOR_DELIVERY_OPTIONS,
-     FREE_SHIPPING_CHARGE_AREA,
      ORDER_STATUS,
      PAYMENT_METHOD,
      PAYMENT_STATUS,
-     SHIPPING_COST,
 } from './order.enums';
 import { IOrder } from './order.interface';
+import { settingsService } from '../settings/settings.service';
 
 const orderSchema = new Schema<IOrder>(
      {
@@ -175,14 +172,26 @@ orderSchema.pre('validate', async function (next) {
 
      // Step 3: Calculate delivery charge based on shipping address and delivery options
      const shippingAdressLowerCased = order?.shippingAddress?.toLowerCase();
-     let deliveryCharge = SHIPPING_COST.WORLD_WIDE;
-     if (FREE_SHIPPING_CHARGE_AREA.some((area) => shippingAdressLowerCased?.includes(area))) {
-          deliveryCharge = SHIPPING_COST.FREE;
-     } else if (CENTRAL_SHIPPING_AREA.some((area) => shippingAdressLowerCased?.includes(area))) {
-          deliveryCharge = SHIPPING_COST.CENTRAL;
-     } else if (COUNTRY_SHIPPING_AREA.some((area) => shippingAdressLowerCased?.includes(area))) {
-          deliveryCharge = SHIPPING_COST.COUNTRY;
+     const shippingDetails = await settingsService.getShippingDetails();
+     let deliveryCharge= null;
+     if (shippingDetails.freeShipping.area.some((area: string) => shippingAdressLowerCased?.includes(area))) {
+          deliveryCharge = shippingDetails.freeShipping.cost;
+     } else if (shippingDetails.centralShipping.area.some((area: string) => shippingAdressLowerCased?.includes(area))) {
+          deliveryCharge = shippingDetails.centralShipping.cost;
+     } else if (shippingDetails.countryShipping.area.some((area: string) => shippingAdressLowerCased?.includes(area))) {
+          deliveryCharge = shippingDetails.countryShipping.cost;
      }
+     if (!deliveryCharge) {
+          throw new AppError(StatusCodes.BAD_REQUEST, `Delivery charge not found for ${shippingAdressLowerCased}`);
+     }
+     // let deliveryCharge = SHIPPING_COST.WORLD_WIDE;
+     // if (FREE_SHIPPING_CHARGE_AREA.some((area) => shippingAdressLowerCased?.includes(area))) {
+     //      deliveryCharge = SHIPPING_COST.FREE;
+     // } else if (CENTRAL_SHIPPING_AREA.some((area) => shippingAdressLowerCased?.includes(area))) {
+     //      deliveryCharge = SHIPPING_COST.CENTRAL;
+     // } else if (COUNTRY_SHIPPING_AREA.some((area) => shippingAdressLowerCased?.includes(area))) {
+     //      deliveryCharge = SHIPPING_COST.COUNTRY;
+     // }
      // Additional delivery cost based on delivery options
      if (order.deliveryOptions === DELIVERY_OPTIONS.EXPRESS) {
           deliveryCharge += (deliveryCharge * EXTRA_DELIVERY_COST_PERCENT_FOR_DELIVERY_OPTIONS.EXPRESS) / 100;
@@ -204,11 +213,11 @@ orderSchema.pre('validate', async function (next) {
 // MIDDLEWARES TO define delivery date based on delivery options
 orderSchema.pre('save', function (next) {
      if (this.deliveryOptions === DELIVERY_OPTIONS.EXPRESS) {
-          this.deliveryDate = new Date(Date.now() + Number(DDAY_FOR_DELIVERY_OPTIONS.EXPRESS) * 24 * 60 * 60 * 1000);
+          this.deliveryDate = new Date(Date.now() + Number(DAY_FOR_DELIVERY_OPTIONS.EXPRESS) * 24 * 60 * 60 * 1000);
      } else if (this.deliveryOptions === DELIVERY_OPTIONS.OVERNIGHT) {
-          this.deliveryDate = new Date(Date.now() + Number(DDAY_FOR_DELIVERY_OPTIONS.OVERNIGHT) * 24 * 60 * 60 * 1000);
+          this.deliveryDate = new Date(Date.now() + Number(DAY_FOR_DELIVERY_OPTIONS.OVERNIGHT) * 24 * 60 * 60 * 1000);
      } else {
-          this.deliveryDate = new Date(Date.now() + Number(DDAY_FOR_DELIVERY_OPTIONS.STANDARD) * 24 * 60 * 60 * 1000);
+          this.deliveryDate = new Date(Date.now() + Number(DAY_FOR_DELIVERY_OPTIONS.STANDARD) * 24 * 60 * 60 * 1000);
      }
      next();
 });

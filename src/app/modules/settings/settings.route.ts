@@ -7,13 +7,12 @@ import { settingsSchema } from './settings.validation';
 
 const SettingsRouter = express.Router();
 
-SettingsRouter.put('/', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), settingsController.addSetting)
+SettingsRouter.put('/', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), settingsController.addSetting);
 SettingsRouter.get('/', settingsController.getSettings)
      .get('/privacy-policy', settingsController.getPrivacyPolicy)
      .get('/aboutus', settingsController.getAboutUs)
      .get('/support', settingsController.getSupport)
      .get('/termsOfService', settingsController.getTermsOfService);
-
 
 // Contact CRUD
 SettingsRouter.get('/contact', settingsController.getContact);
@@ -24,5 +23,14 @@ SettingsRouter.delete('/contact/:contactId', auth(USER_ROLES.ADMIN, USER_ROLES.S
 // Socials CRUD
 SettingsRouter.get('/socials', settingsController.getSocials);
 SettingsRouter.patch('/socials', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), validateRequest(settingsSchema.updateSocialsShcema), settingsController.addOrUpdateSocials);
+
+// Shipping Details CRUD
+SettingsRouter.get('/shipping-details', settingsController.getShippingDetails);
+SettingsRouter.patch(
+     '/shipping-details',
+     auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+     // validateRequest(settingsSchema.updateShippingDetailsSchema),
+     settingsController.addOrUpdateShippingDetails,
+);
 
 export default SettingsRouter;

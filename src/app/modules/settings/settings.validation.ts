@@ -15,7 +15,26 @@ export const updateContactShcema = z.object({
     location: z.string().min(1, "location is required").optional(),
 });
 
+const updateShippingDetailsSchema = z.object({
+    freeShipping: z.object({
+        area: z.array(z.string()).min(1, "Area is required"),
+        cost: z.number().min(1, "Cost is required"),
+    }),
+    centralShipping: z.object({
+        area: z.array(z.string()).min(1, "Area is required"),
+        cost: z.number().min(1, "Cost is required"),
+    }),
+    countryShipping: z.object({
+        area: z.array(z.string()).min(1, "Area is required"),
+        cost: z.number().min(1, "Cost is required"),
+    }),
+    worldWideShipping: z.object({
+        cost: z.number().min(1, "Cost is required"),
+    }),
+});
+
 export const settingsSchema = {
     updateSocialsShcema,
     updateContactShcema,
+    updateShippingDetailsSchema,
 }

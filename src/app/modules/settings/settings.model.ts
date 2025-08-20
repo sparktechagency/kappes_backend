@@ -33,6 +33,23 @@ const settingsSchema = new Schema<ISettings>(
                instagram: { type: String, required: false },
                tiktok: { type: String, required: false },
           },
+          shippingDetails:{
+               freeShipping:{
+                    area:[String],
+                    cost:Number
+               },
+               centralShipping:{
+                    area:[String],
+                    cost:Number
+               },
+               countryShipping:{
+                    area:[String],
+                    cost:Number
+               },
+               worldWideShipping:{
+                    cost:Number
+               },
+          }
      },
      { timestamps: true },
 );

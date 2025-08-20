@@ -19,7 +19,24 @@ export interface ISettings extends Document {
           whatsapp?: string;
           facebook?: string;
           instagram?: string;
-
+     },
+     shippingDetails :{
+          freeShipping:{
+               area:string[],
+               cost:number
+          },
+          centralShipping:{
+               area:string[],
+               cost:number
+          },
+          countryShipping:{
+               area:string[],
+               cost:number
+          },
+          worldWideShipping:{
+               cost:number
+          },
+          
      }
 }
 
