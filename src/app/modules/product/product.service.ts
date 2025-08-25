@@ -161,7 +161,7 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
 
 const getProducts = async (query: Record<string, unknown>) => {
      const productQuery = new QueryBuilder(
-          Product.find().populate('shopId', 'name').populate('categoryId', 'name').populate('subcategoryId', 'name').populate('brandId', 'name').populate('product_variant_Details.variantId', 'slug'),
+          Product.find().populate('shopId', 'name').populate('categoryId', 'name').populate('subcategoryId', 'name').populate('brandId', 'name').populate('product_variant_Details.variantId'),
           query,
      )
           .search(['name', 'description', 'tags'])
@@ -333,7 +333,7 @@ const updateProduct = async (id: string, payload: Partial<IProduct | ICreateProd
           },
           { new: true },
      );
-     // .populate('product_variant_Details.variantId');
+     
 
      if (!updatedProduct) {
           throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to update product');
@@ -378,7 +378,7 @@ const getProductsByCategory = async (categoryId: string, query: Record<string, u
                .populate('categoryId', 'name')
                .populate('subcategoryId', 'name')
                .populate('brandId', 'name')
-               .populate('product_variant_Details.variantId', 'slug'),
+               .populate('product_variant_Details.variantId'),
           query,
      )
           .search(['name', 'description', 'tags'])
@@ -425,7 +425,7 @@ const getRecommendedProducts = async (query: Record<string, unknown>) => {
                .populate('categoryId', 'name')
                .populate('subcategoryId', 'name')
                .populate('brandId', 'name')
-               .populate('product_variant_Details.variantId', 'slug'),
+               .populate('product_variant_Details.variantId'),
           query,
      )
           .search(['name', 'description', 'tags'])
@@ -450,7 +450,7 @@ const getProductsByShop = async (shopId: string, query: Record<string, unknown>)
                .populate('categoryId', 'name')
                .populate('subcategoryId', 'name')
                .populate('brandId', 'name')
-               .populate('product_variant_Details.variantId', 'slug'),
+               .populate('product_variant_Details.variantId'),
           query,
      )
           .search(['name', 'description', 'tags'])
@@ -490,7 +490,7 @@ const getAllProductsByProvince = async (province: string, query: Record<string, 
                     .populate('categoryId', 'name')
                     .populate('subcategoryId', 'name')
                     .populate('brandId', 'name')
-                    .populate('product_variant_Details.variantId', 'slug'),
+                    .populate('product_variant_Details.variantId'),
                query,
           )
                .search(['name', 'description', 'tags'])
@@ -535,7 +535,7 @@ const getAllProductsByTerritory = async (territory: string, query: Record<string
                     .populate('categoryId', 'name')
                     .populate('subcategoryId', 'name')
                     .populate('brandId', 'name')
-                    .populate('product_variant_Details.variantId', 'slug'),
+                    .populate('product_variant_Details.variantId'),
                query,
           )
                .search(['name', 'description', 'tags'])
