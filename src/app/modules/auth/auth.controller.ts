@@ -29,24 +29,24 @@ const verifyEmail = catchAsync(async (req, res) => {
 const loginUser = catchAsync(async (req, res) => {
      const { ...loginData } = req.body;
      const result = await AuthService.loginUserFromDB(loginData);
-     // const cookieOptions: any = {
-     //      secure: false,
-     //      httpOnly: true,
-     //      maxAge: 31536000000,
-     // };
      const cookieOptions: any = {
           secure: false,
           httpOnly: true,
           maxAge: 31536000000,
-          domain: `.${config.frontend_domain}`,
      };
+     // const cookieOptions: any = {
+     //      secure: false,
+     //      httpOnly: true,
+     //      maxAge: 31536000000,
+     //      domain: `.${config.frontend_domain}`,
+     // };
 
      if (config.node_env === 'production') {
           cookieOptions.sameSite = 'none';
      }
 
-     res.cookie('accessToken', result.accessToken, cookieOptions);
-     res.cookie('refreshToken', result.refreshToken, cookieOptions);
+     // res.cookie('accessToken', result.accessToken, cookieOptions);
+     // res.cookie('refreshToken', result.refreshToken, cookieOptions);
 
      sendResponse(res, {
           success: true,
@@ -166,24 +166,24 @@ const googleCallback = (req: Request, res: Response, next: NextFunction) => {
                     }
                     console.log('user from google callback', user);
                     const result = await AuthService.SocialLoginUserFromDB({ email: user.email });
-                    // const cookieOptions: any = {
-                    //      secure: false,
-                    //      httpOnly: true,
-                    //      maxAge: 31536000000,
-                    // };
                     const cookieOptions: any = {
                          secure: false,
                          httpOnly: true,
                          maxAge: 31536000000,
-                         domain: `.${config.frontend_domain}`,
                     };
+                    // const cookieOptions: any = {
+                    //      secure: false,
+                    //      httpOnly: true,
+                    //      maxAge: 31536000000,
+                    //      domain: `.${config.frontend_domain}`,
+                    // };
                
                     if (config.node_env === 'production') {
                          cookieOptions.sameSite = 'none';
                     }
                
-                    res.cookie('accessToken', result.accessToken, cookieOptions);
-                    res.cookie('refreshToken', result.refreshToken, cookieOptions);
+                    // res.cookie('accessToken', result.accessToken, cookieOptions);
+                    // res.cookie('refreshToken', result.refreshToken, cookieOptions);
                     sendResponse(res, {
                          success: true,
                          statusCode: StatusCodes.OK,
