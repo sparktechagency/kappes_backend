@@ -2,7 +2,7 @@ import auth from '../../middleware/auth';
 import validateRequest from '../../middleware/validateRequest';
 import { USER_ROLES } from '../user/user.enums';
 import { ProductController } from './product.controller';
-import { ProductValidation, productVariantByFieldNameSchema } from './product.validation';
+import { ProductValidation } from './product.validation';
 import express from 'express';
 import fileUploadHandler from '../../middleware/fileUploadHandler';
 import { Request, Response, NextFunction } from 'express';
@@ -19,13 +19,13 @@ router.post('/create',
                 const parsedData = JSON.parse(req.body.data);
                 // Attach image path or filename to parsed data
                 if (req.files) {
-                    let image = getMultipleFilesPath(req.files, 'image');
+                    const image = getMultipleFilesPath(req.files, 'image');
                     parsedData.images = image;
                 }
 
 
                 // Validate and assign to req.body
-                let formattedParsedData = ProductValidation.createProductZodSchema.parse({ body: parsedData });
+                const formattedParsedData = ProductValidation.createProductZodSchema.parse({ body: parsedData });
                 req.body = formattedParsedData.body;
             }
 

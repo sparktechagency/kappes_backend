@@ -8,6 +8,7 @@ const variantSchema = new Schema<IVariant & Document>({
     subCategoryId: { type: Schema.Types.ObjectId, ref: 'SubCategory', required: true },
     createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     slug: { type: String, required: true, unique: true },
+    images:{type:[String],required:false},
     color: {
         name: { type: String, required: false },
         code: { type: String, required: false },

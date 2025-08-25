@@ -8,6 +8,7 @@ export interface IVariant {
     categoryId: Schema.Types.ObjectId;
     subCategoryId: Schema.Types.ObjectId;
     createdBy: Schema.Types.ObjectId;
+    images?:string[];
     slug: string; // replacing all space by - of category-subCategory and make small letter
     color?: {
         name: string;

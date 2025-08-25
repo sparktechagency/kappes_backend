@@ -60,7 +60,7 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
                payload.product_variant_Details.map(async (variant) => {
                     if (variant.variantId) {
                          // If variantId is provided, check if the variant exists
-                         const isExistVariant = await Variant.findOne({ _id: variant.variantId }, null, { session });
+                         const isExistVariant = await Variant.findOne({ _id: variant.variantId, categoryId: payload.categoryId, subCategoryId: payload.subcategoryId }, null, { session });
                          if (!isExistVariant) {
                               throw new AppError(StatusCodes.NOT_FOUND, `Variant not found by id ${variant.variantId}`);
                          }
@@ -81,7 +81,7 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
 
                     const variantSlug = generateSlug(isExistCategory.name, isExistSubCategory.name, variant as IProductSingleVariantByFieldName);
 
-                    const isVariantExistSlug = await Variant.findOne({ slug: variantSlug }, null, { session });
+                    const isVariantExistSlug = await Variant.findOne({ slug: variantSlug, categoryId: payload.categoryId, subCategoryId: payload.subcategoryId }, null, { session });
                     if (isVariantExistSlug) {
                          return {
                               variantId: isVariantExistSlug._id,

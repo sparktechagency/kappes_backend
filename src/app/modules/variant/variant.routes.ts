@@ -4,10 +4,12 @@ import { USER_ROLES } from "../user/user.enums";
 import validateRequest from "../../middleware/validateRequest";
 import { variantValidation } from "./variant.validation";
 import { variantController } from "./variant.controller";
+import fileUploadHandler from "../../middleware/fileUploadHandler";
 
 const router = express.Router();
 
-router.post("/", auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), validateRequest(variantValidation.createVariantSchema), variantController.createVariantController); // Create a new variant
+// router.post("/", auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), validateRequest(variantValidation.createVariantSchema), variantController.createVariantController); // Create a new variant
+router.post("/", auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),fileUploadHandler(),variantController.createVariantController); // Create a new variant
 router.get("/", variantController.getAllVariants); // Create a new variant
 router.get("/single/:id", variantController.getSingleVariantById); // Create a new variant
 router.get("/subcategory/:id", variantController.getVariantsBySubCategoryId); // Create a new variant
