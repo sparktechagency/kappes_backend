@@ -8,6 +8,7 @@ export default {
      reset_pass_expire_time: process.env.RESET_TOKEN_EXPIRE_TIME,
      database_url: process.env.DATABASE_URL,
      frontend_url: process.env.FRONTEND_URL,
+     frontend_domain: process.env.FRONTEND_DOMAIN,
      backend_url: process.env.BACKEND_URL,
      node_env: process.env.NODE_ENV,
      session_secret: process.env.SESSION_SECRET,
