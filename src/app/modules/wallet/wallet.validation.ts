@@ -5,7 +5,7 @@ import { PAYMENT_METHOD } from '../order/order.enums';
 
 export const addBalanceValidation = z.object({
     amount: z.number(),
-    type: z.enum([WalletType.CREDIT]),
+    type: z.nativeEnum(WalletType),
     paymentMethod: z.nativeEnum(PAYMENT_METHOD),
 });
 
