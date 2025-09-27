@@ -12,6 +12,8 @@ import { Order } from '../order/order.model';
 import { PAYMENT_STATUS } from '../order/order.enums';
 import { Payment } from '../payment/payment.model';
 import { paymentService } from '../payment/payment.service';
+import { Wallet } from '../wallet/wallet.model';
+import { TransferType } from './stripeAccount.interface';
 
 const webhookHandler = async (req: Request, res: Response): Promise<void> => {
      console.log('Webhook received');
@@ -365,23 +367,29 @@ const handleSubscriptionUpdated = async (session: Stripe.Checkout.Session) => {
 // handleTransferCreated
 const handleTransferCreated = async (transfer: Stripe.Transfer) => {
      try {
-          console.log(`Transfer for user ${transfer.destination} created`);
+          const { orderId, type, amount, walletId } = transfer.metadata;
+          console.log(`Transfer for user ${transfer.destination} created | ${type}`);
 
-          // Get order and shop details from transfer metadata
-          const order = await Order.findById(transfer.metadata?.orderId);
-          if (!order) {
-               throw new AppError(StatusCodes.BAD_REQUEST, 'Order not found');
+          if (type === TransferType.TRANSFER) {
+               // Get order and shop details from transfer metadata
+               const order = await Order.findById(orderId);
+               if (!order) {
+                    throw new AppError(StatusCodes.BAD_REQUEST, 'Order not found');
+               }
+               // update isTransferd true
+               order.isPaymentTransferdToVendor = true;
+               await order.save();
+          } else if (type === TransferType.WITHDRAW) {
+               // Get order and shop details from transfer metadata
+               const wallet = await Wallet.findById(walletId);
+               if (!wallet) {
+                    throw new AppError(StatusCodes.BAD_REQUEST, 'Wallet not found');
+               }
+               // update isTransferd true
+               wallet.totalAvailableBalanceToWithdraw -= Number(amount);
+               wallet.totalLifeTimeWithdrawal += Number(amount);
+               await wallet.save();
           }
-          // update isTransferd true
-          order.isPaymentTransferdToVendor = true;
-          await order.save();
-          //   const shop = await Shop.findById(order.shop).populate('owner');
-          //   // Create payout to vendor's connected account
-          //   await createPayout({
-          //        stripeConnectedAccount: (shop!.owner as any).stripeConnectedAccount,
-          //        amount: transfer.amount,
-          //        orderId: transfer.metadata?.orderId,
-          //   });
      } catch (error) {
           console.error('Error in handleTransferCreated:', error);
      }

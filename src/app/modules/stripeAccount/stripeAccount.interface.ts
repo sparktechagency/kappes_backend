@@ -5,3 +5,9 @@ export interface IStripeAccounts {
   accountId: string; // Stripe account ID
   isCompleted: boolean; // Status indicating if the onboarding is completed
 }
+
+export enum TransferType {
+     TRANSFER = 'transfer',
+     WITHDRAW = 'withdraw',
+}
+

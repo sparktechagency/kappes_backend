@@ -28,6 +28,7 @@ import { ChatRoutes } from '../app/modules/chat/chat.routes';
 import { MessageRoutes } from '../app/modules/message/message.routes';
 import { PushNotificationRoutes } from '../app/modules/pushNotification/pushNotification.route';
 import { DashboardRoutes } from '../app/modules/admin/dashboard/dashboard.routes';
+import { WalletRoutes } from '../app/modules/wallet/wallet.route';
 
 const router = express.Router();
 const routes = [
@@ -126,6 +127,10 @@ const routes = [
      {
           path: '/wishlist',
           route: WishlistRoutes,
+     },
+     {
+          path: '/wallet',
+          route: WalletRoutes,
      },
      {
           path: '/business',

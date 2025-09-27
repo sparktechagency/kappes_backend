@@ -1,6 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import AppError from '../../../errors/AppError';
 import stripe from '../../config/stripe.config';
+import { TransferType } from '../stripeAccount/stripeAccount.interface';
 export async function transferToVendor({
      stripeConnectedAccount,
      finalAmount,
@@ -40,8 +41,31 @@ export async function transferToVendor({
           destination: stripeConnectedAccount,
           metadata: {
                orderId,
+               type: TransferType.TRANSFER,
           },
           transfer_group: `order_${orderId}`,
+     });
+     return transfer;
+}
+export async function transferToVendorAtWithdraw({
+     stripeConnectedAccount,
+     amount,
+     walletId,
+}: {
+     stripeConnectedAccount: string;
+     amount: number; // in dollars
+     walletId: string;
+}) {
+     const transfer = await stripe.transfers.create({
+          amount: Math.round(amount * 100), // in cents
+          currency: 'usd',
+          destination: stripeConnectedAccount,
+          metadata: {
+               walletId,
+               amount,
+               type: TransferType.WITHDRAW,
+          },
+          transfer_group: `wallet_${walletId}`,
      });
      return transfer;
 }
