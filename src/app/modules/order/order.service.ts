@@ -20,7 +20,9 @@ import Variant from '../variant/variant.model';
 import { ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS } from './order.enums';
 import { IOrder } from './order.interface';
 import { Order } from './order.model';
-import { transferToVendor } from './order.utils';
+// import { transferToVendor } from './order.utils';
+import { WalletService } from '../wallet/wallet.service';
+import { WalletType } from '../wallet/wallet.interface';
 
 const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
      try {
@@ -313,7 +315,7 @@ const changeOrderStatus = async (orderId: string, status: string, user: IJwtPayl
                throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to update this order');
           }
      }
-
+     let result;
      switch (order.status) {
           case ORDER_STATUS.PENDING:
                if (status === ORDER_STATUS.PROCESSING) {
@@ -327,17 +329,19 @@ const changeOrderStatus = async (orderId: string, status: string, user: IJwtPayl
                     } else if (order.paymentStatus === PAYMENT_STATUS.PAID) {
                          if (order.paymentMethod !== PAYMENT_METHOD.COD) {
                               if (order.isPaymentTransferdToVendor === false) {
-                                   if ((shop!.owner as any).stripeConnectedAccount) {
-                                        const transfer = await transferToVendor({
-                                             stripeConnectedAccount: (shop.owner as any).stripeConnectedAccount,
-                                             finalAmount: order.finalAmount,
-                                             revenue: shop.revenue,
-                                             orderId: (order._id as string).toString(),
-                                        });
-                                        console.log('🚀 ~ changeBookingStatus ~ transfer:', transfer);
-                                   } else {
-                                        throw new AppError(StatusCodes.BAD_REQUEST, 'Stripe account not found');
-                                   }
+                                   result = await WalletService.addToWallet(shop.owner._id.toString(), { amount: order.finalAmount, type: WalletType.CREDIT, paymentMethod: order.paymentMethod });
+
+                                   // if ((shop!.owner as any).stripeConnectedAccount) {
+                                   //      const transfer = await transferToVendor({
+                                   //           stripeConnectedAccount: (shop.owner as any).stripeConnectedAccount,
+                                   //           finalAmount: order.finalAmount,
+                                   //           revenue: shop.revenue,
+                                   //           orderId: (order._id as string).toString(),
+                                   //      });
+                                   //      console.log('🚀 ~ changeBookingStatus ~ transfer:', transfer);
+                                   // } else {
+                                   //      throw new AppError(StatusCodes.BAD_REQUEST, 'Stripe account not found');
+                                   // }
                               }
                          }
                     }
@@ -354,7 +358,8 @@ const changeOrderStatus = async (orderId: string, status: string, user: IJwtPayl
      }
 
      const updatedOrder = await Order.findOneAndUpdate({ _id: new Types.ObjectId(orderId), shop: shop._id }, { status }, { new: true });
-     return updatedOrder;
+     // return updatedOrder;
+     return { updatedOrder, result };
 };
 
 const getAllRefundOrderRequests = async (query: Record<string, unknown>, user: IJwtPayload, shopId: string) => {
