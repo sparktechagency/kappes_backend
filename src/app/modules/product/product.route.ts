@@ -101,13 +101,13 @@ router.patch('/:id',
                 }
                 // Attach image path or filename to parsed data
                 if (req.files) {
-                    let image = getMultipleFilesPath(req.files, 'image');
+                    const image = getMultipleFilesPath(req.files, 'image');
                     parsedData.images = image;
                 }
 
 
                 // Validate and assign to req.body
-                let formattedParsedData = ProductValidation.updateProductZodSchema.parse({ body: parsedData });
+                const formattedParsedData = ProductValidation.updateProductZodSchema.parse({ body: parsedData });
                 req.body = formattedParsedData.body;
             }
 
