@@ -6,7 +6,6 @@ export interface IWallet {
   totalLifeTimeWithdrawal: number;
   totalAvailableBalanceToWithdraw: number;
   totalLifeTimeSpentAsCustomer: number;
-  adminDueAmount: number;
 }
 
 export enum WalletType {

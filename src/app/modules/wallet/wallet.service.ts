@@ -1,10 +1,11 @@
 import QueryBuilder from '../../builder/QueryBuilder';
 import { transferToVendorAtWithdraw } from '../order/order.utils';
 import { User } from '../user/user.model';
-import { IWallet, WalletType } from './wallet.interface';
 import { Wallet } from './wallet.model';
+import { PAYMENT_METHOD } from '../order/order.enums';
+import { WalletType } from './wallet.interface';
 
-const addToWallet = async (userId: string, payload: { amount: number; type: WalletType }): Promise<IWallet> => {
+const addToWallet = async (userId: string, payload: { amount: number; type: WalletType; paymentMethod: PAYMENT_METHOD }) => {
      let wallet = await Wallet.findOne({ user: userId });
 
      if (!wallet) {
@@ -15,6 +16,11 @@ const addToWallet = async (userId: string, payload: { amount: number; type: Wall
 
      if (payload.type === WalletType.CREDIT) {
           wallet.totalLifeTimeEarning += payload.amount;
+          if (payload.paymentMethod === PAYMENT_METHOD.COD) {
+               wallet.totalLifeTimeWithdrawal += payload.amount;
+          } else {
+               wallet.totalAvailableBalanceToWithdraw += payload.amount;
+          }
      } else {
           wallet.totalLifeTimeSpentAsCustomer += payload.amount;
      }

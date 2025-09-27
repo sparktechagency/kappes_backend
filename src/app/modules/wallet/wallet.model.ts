@@ -25,10 +25,6 @@ const walletSchema = new Schema<IWallet>(
       type: Number,
       default: 0,
     },
-    adminDueAmount: {
-      type: Number,
-      default: 0,
-    },
   },
   {
     timestamps: true,
