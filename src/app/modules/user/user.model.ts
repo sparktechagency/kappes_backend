@@ -69,23 +69,6 @@ const userSchema = new Schema<IUser, UserModel>(
                type: String,
                default: '',
           },
-          // address: {
-          //      province: {
-          //           type: String,
-          //      },
-          //      territory: {
-          //           type: String,
-          //      },
-          //      city: {
-          //           type: String,
-          //      },
-          //      country: {
-          //           type: String,
-          //      },
-          //      detail_address: {
-          //           type: String,
-          //      },
-          // },
           address: {
                type: Schema.Types.Mixed, // Allows both object or string
                validate: {
@@ -133,10 +116,6 @@ const userSchema = new Schema<IUser, UserModel>(
                type: Boolean,
                default: false,
           },
-          stripeCustomerId: {
-               type: String,
-               default: '',
-          },
           stripeConnectedAccount: {
                type: String,
                default: '',
@@ -166,6 +145,20 @@ const userSchema = new Schema<IUser, UserModel>(
           },
           recentSearchLocations: [RecentSearchLocationSchema],
           balance: { type: Number, default: 0 },
+          // subscription related
+          subscription: {
+               type: Schema.Types.ObjectId,
+               ref: 'Subscription',
+               default: null,
+          },
+          isSubscribed: {
+               type: Boolean,
+               default: false,
+          },
+          stripeCustomerId: {
+               type: String,
+               default: '',
+          },
      },
      { timestamps: true },
 );

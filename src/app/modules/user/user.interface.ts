@@ -33,8 +33,7 @@ export type IUser = {
      lastLogin: Date;
      tokenVersion: number;
      loginCount: number;
-     stripeCustomerId: string;
-     stripeConnectedAccount?: string;
+     stripeConnectedAccount?: string; // for getting payment as a vendor
      status: 'active' | 'blocked';
      verified: boolean;
      authentication?: {
@@ -44,6 +43,10 @@ export type IUser = {
      };
      recentSearchLocations?: IRecentSearchLocation[];
      balance: number;
+     // subscription related
+     subscription: Schema.Types.ObjectId | null;
+     isSubscribed: boolean;
+     stripeCustomerId: string; // for subscription or paying as service taker
 };
 
 export type UserModel = {

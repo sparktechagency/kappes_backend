@@ -5,7 +5,6 @@ import { Morgan } from './shared/morgen';
 import globalErrorHandler from './globalErrorHandler/globalErrorHandler';
 import { notFound } from './app/middleware/notFound';
 import { welcome } from './utils/welcome';
-import handleStripeWebhook from './helpers/stripe/handleStripeWebhook';
 import path from 'path';
 import webhookHandler from './app/modules/stripeAccount/webhookHandler';
 import session from 'express-session';
