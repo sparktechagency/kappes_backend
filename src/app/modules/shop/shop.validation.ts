@@ -29,7 +29,7 @@ const createShopZodSchema = z.object({
             end: z.string(),
         })).optional(),
         website: z.string().optional(),
-        revenue: z.number().optional(),
+        // revenue: z.number().optional(),
     })
 })
 

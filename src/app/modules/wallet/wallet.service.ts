@@ -37,19 +37,17 @@ const getWallet = async (userId: string, query: any) => {
      return { result, meta };
 };
 
-const withDrawFromAvailableBalance = async (userId: string, amount: number) => {
-     const wallet = await Wallet.findOne({ user: userId });
+const withDrawFromAvailableBalance = async (vendorId: string, amount: number) => {
+     const wallet = await Wallet.findOne({ user: vendorId });
      if (!wallet) {
           throw new Error('Wallet not found');
      }
-     const vendor = await User.findById(userId).populate({
-          path: 'subscription',
-          populate: {
-               path: 'package',
-          },
-     });
+     const vendor = await User.findById(vendorId).select('stripeConnectedAccount').lean();
      if (!vendor) {
           throw new Error('Vendor not found');
+     }
+     if (!vendor.stripeConnectedAccount) {
+          throw new Error('Vendor stripe connected account not found');
      }
      if (wallet.totalAvailableBalanceToWithdraw < amount) {
           throw new Error('Insufficient balance');

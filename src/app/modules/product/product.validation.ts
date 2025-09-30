@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { IProductSingleVariant, IProductSingleVariantByFieldName } from './product.interface';
 import { objectIdSchema } from '../user/user.validation';
 import { GRAPHICS_CARD_TYPE, NETWOR_TYPE, OS_TYPE, PROCESSOR_TYPE, RAM_OR_STORAGE_OR_GRAPHICS_CARD, RESOLUTION_TYPE, STORAGE_TYPE, VARIANT_OPTIONS } from '../variant/variant.enums';
 
