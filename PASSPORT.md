@@ -63,7 +63,7 @@ Here's the step-by-step guide to creating Google OAuth2 credentials for your app
 
 13. **Configure Redirect URIs**
 
-     - **Authorized redirect URIs**: Enter the URI for your callback (e.g., `http://localhost:7000/api/v1/auth/google/callback`).
+     - **Authorized redirect URIs**: Enter the URI for your callback (e.g., `http://localhost:7002/api/v1/auth/google/callback`).
      - Click **"Create"**.
 
 14. **Copy Client ID**

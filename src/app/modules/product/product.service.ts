@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 import AppError from '../../../errors/AppError';
 import QueryBuilder from '../../builder/QueryBuilder';
 import unlinkFile from '../../../shared/unlinkFile';
-import { generateSlug, generateSlugDetails, SLUG_FIELD_ORDER, SLUG_FIELD_ORDER } from '../variant/variant.utils';
+import { generateSlug, generateSlugDetails, SLUG_FIELD_ORDER } from '../variant/variant.utils';
 import Variant from '../variant/variant.model';
 import { Shop } from '../shop/shop.model';
 import { Category } from '../category/category.model';
@@ -225,7 +225,7 @@ const updateProduct = async (id: string, payload: Partial<IProduct | ICreateProd
           }
      }
      // Initialize slugDetails as an empty object if not provided in payload
-     let slugDetails = product.slugDetails || {};
+     const slugDetails = product.slugDetails || {};
 
      // Handle variant updates if payload contains product_variant_Details
      if (payload.product_variant_Details && Array.isArray(payload.product_variant_Details)) {
@@ -253,7 +253,6 @@ const updateProduct = async (id: string, payload: Partial<IProduct | ICreateProd
                // Case (ii): If variant fields are provided (without variantId)
                else {
                     // Create slug from variant fields
-                    const variantFields = { ...variant };
                     const slug = generateSlug(product.categoryId.name, product.subcategoryId.name, variant as IProductSingleVariantByFieldName);
 
                     // Find variant by slug
