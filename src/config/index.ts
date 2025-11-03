@@ -73,4 +73,11 @@ export default {
           email: process.env.SUPER_ADMIN_EMAIL,
           password: process.env.SUPER_ADMIN_PASSWORD,
      },
+     chitchat: {
+          client_id: process.env.CHITCHATS_CLIENT_ID,
+          access_token: process.env.CHITCHATS_ACCESS_TOKEN,
+          api_base: process.env.CHITCHATS_API_BASE,
+          env: process.env.CHITCHATS_ENV,
+          shipping_mode: process.env.SHIPPING_MODE,
+     },
 };

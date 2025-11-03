@@ -29,6 +29,7 @@ import { MessageRoutes } from '../app/modules/message/message.routes';
 import { PushNotificationRoutes } from '../app/modules/pushNotification/pushNotification.route';
 import { DashboardRoutes } from '../app/modules/admin/dashboard/dashboard.routes';
 import { WalletRoutes } from '../app/modules/wallet/wallet.route';
+import { chitChatShipmentRoutes } from '../app/modules/third-party-modules/chitChatShipment/chitChatShipment.route';
 
 const router = express.Router();
 const routes = [
@@ -155,6 +156,10 @@ const routes = [
      {
           path: '/variantField',
           route: VariantFieldRoutes,
+     },
+     {
+          path: '/chitchatShipment',
+          route: chitChatShipmentRoutes,
      },
 ];
 
