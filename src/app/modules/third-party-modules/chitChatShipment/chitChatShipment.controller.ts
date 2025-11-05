@@ -25,44 +25,10 @@ const getAllChitChatShipments = catchAsync(async (req: Request, res: Response) =
      });
 });
 
-// const getAllUnpaginatedChitChatShipments = catchAsync(async (req: Request, res: Response) => {
-//      const result = await chitChatShipmentService.getAllUnpaginatedChitChatShipments();
 
-//      sendResponse(res, {
-//           statusCode: 200,
-//           success: true,
-//           message: 'ChitChatShipments retrieved successfully',
-//           data: result,
-//      });
-// });
-
-// const updateChitChatShipment = catchAsync(async (req: Request, res: Response) => {
-//      const { id } = req.params;
-//      const result = await chitChatShipmentService.updateChitChatShipment(id, req.body);
-
-//      sendResponse(res, {
-//           statusCode: 200,
-//           success: true,
-//           message: 'ChitChatShipment updated successfully',
-//           data: result || undefined,
-//      });
-// });
-
-// const deleteChitChatShipment = catchAsync(async (req: Request, res: Response) => {
-//      const { id } = req.params;
-//      const result = await chitChatShipmentService.deleteChitChatShipment(id);
-
-//      sendResponse(res, {
-//           statusCode: 200,
-//           success: true,
-//           message: 'ChitChatShipment deleted successfully',
-//           data: result || undefined,
-//      });
-// });
-
-const hardDeleteChitChatShipment = catchAsync(async (req: Request, res: Response) => {
-     const { id } = req.params;
-     const result = await chitChatShipmentService.hardDeleteChitChatShipment(id);
+const hardDeleteChitChatShipmentByShipMentId = catchAsync(async (req: Request, res: Response) => {
+     const { shipMentId } = req.params;
+     const result = await chitChatShipmentService.hardDeleteChitChatShipmentByShipMentId(shipMentId);
 
      sendResponse(res, {
           statusCode: 200,
@@ -72,9 +38,9 @@ const hardDeleteChitChatShipment = catchAsync(async (req: Request, res: Response
      });
 });
 
-const getChitChatShipmentById = catchAsync(async (req: Request, res: Response) => {
-     const { id } = req.params;
-     const result = await chitChatShipmentService.getChitChatShipmentById(id);
+const getChitChatShipmentByShipMentId = catchAsync(async (req: Request, res: Response) => {
+     const { shipMentId } = req.params;
+     const result = await chitChatShipmentService.getChitChatShipmentByShipMentId(shipMentId);
 
      sendResponse(res, {
           statusCode: 200,
@@ -87,9 +53,6 @@ const getChitChatShipmentById = catchAsync(async (req: Request, res: Response) =
 export const chitChatShipmentController = {
      createChitChatShipment,
      getAllChitChatShipments,
-     // getAllUnpaginatedChitChatShipments,
-     // updateChitChatShipment,
-     // deleteChitChatShipment,
-     hardDeleteChitChatShipment,
-     getChitChatShipmentById
+     hardDeleteChitChatShipmentByShipMentId,
+     getChitChatShipmentByShipMentId
 };

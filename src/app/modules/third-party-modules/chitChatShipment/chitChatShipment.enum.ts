@@ -44,7 +44,8 @@ export enum chitChatShipment_value_currency {
      cad = 'cad',
 }
 export enum chitChatShipment_postage_type {
-     unknown = 'Use when you wish to view rates before buying postage',
+     unknown = 'unknown',
+     // unknown = 'Use when you wish to view rates before buying postage',
      chit_chats_us_edge = 'Chit Chats U.S. Edge',
      chit_chats_us_select = 'Chit Chats U.S. Select',
      chit_chats_us_slim = 'Chit Chats U.S. Slim',
@@ -78,4 +79,18 @@ export enum chitChatShipment_order_store {
      squarespace = 'squarespace',
      woocommerce = 'woocommerce',
      other = 'other',
+}
+
+export enum chitChatShipment_status {
+     canceled = 'canceled', // Shipment has been canceled to prevent delivery and will either be held at a branch or returned to the client.
+     pending = 'pending', // Shipment is in the process of being created by the client. Shipments in this state cannot be received by Chat Chats.
+     ready = 'ready', // Shipment is ready to be received by Chit Chats. This means the postage has been purchased or provided.
+     in_transit = 'in_transit', // Shipment is in the process of being delivered.
+     received = 'received', // Shipment has been received by Chit Chats.
+     released = 'released', // Chit Chats has released the shipment to the carrier.
+     inducted = 'inducted', // Shipment is confirmed by tracking event to be in possesion by the shipping carrier.
+     resolved = 'resolved', // Shipment has been resolved.
+     delivered = 'delivered', // Shipment resolved as delivered.
+     exception = 'exception', // Shipment resolved as exception meaning that there may have been a problem delivering the shipment.
+     voided = 'voided', // Shipment resolved as voided because a postage refund was requested.
 }

@@ -1,74 +1,74 @@
-import { StatusCodes } from 'http-status-codes';
-import AppError from '../../../../errors/AppError';
+// import { StatusCodes } from 'http-status-codes';
+// import AppError from '../../../../errors/AppError';
+// import { ChitChatShipment } from './chitChatShipment.model';
 import { IchitChatShipment } from './chitChatShipment.interface';
-import { ChitChatShipment } from './chitChatShipment.model';
-import QueryBuilder from '../../../builder/QueryBuilder';
+import axios from 'axios';
+import config from '../../../../config';
 
-const createChitChatShipment = async (payload: IchitChatShipment): Promise<IchitChatShipment> => {
-     const result = await ChitChatShipment.create(payload);
-     if (!result) {
-          throw new AppError(StatusCodes.NOT_FOUND, 'ChitChatShipment not found.');
+const createChitChatShipment = async (payload: IchitChatShipment) => {
+     const apiRes = await axios.post(`https://chitchats.com/api/v1/clients/${config.chitchat.client_id}/shipments`, payload, {
+          headers: {
+               'Authorization': `${config.chitchat.access_token}`,
+               'Content-Type': 'application/json',
+          },
+     });
+
+     if (apiRes.status === 200) {
+          return apiRes.data;
      }
-     return result;
 };
 
-const getAllChitChatShipments = async (query: Record<string, any>): Promise<{ meta: { total: number; page: number; limit: number; }; result: IchitChatShipment[]; }> => {
-     const queryBuilder = new QueryBuilder(ChitChatShipment.find(), query);
-     const result = await queryBuilder.filter().sort().paginate().fields().modelQuery;
-     const meta = await queryBuilder.countTotal();
-     return { meta, result };
-};
+const getAllChitChatShipments = async (query: Record<string, any>) => {
+     const { page, limit, batch_id, package_type, from_date, to_date, q, status } = query;
+     const apiRes = await axios.get(`https://chitchats.com/api/v1/clients/${config.chitchat.client_id}/shipments`, {
+          headers: {
+               Authorization: `${config.chitchat.access_token}`,
+          },
+          params: {
+               page,
+               limit,
+               batch_id,
+               package_type,
+               from_date,
+               to_date,
+               q, // searchTerm
+               status,
+          },
+     });
 
-// const getAllUnpaginatedChitChatShipments = async (): Promise<IchitChatShipment[]> => {
-//      const result = await ChitChatShipment.find();
-//      return result;
-// };
-
-// const updateChitChatShipment = async (id: string, payload: Partial<IchitChatShipment>): Promise<IchitChatShipment | null> => {
-//      const isExist = await ChitChatShipment.findById(id);
-//      if (!isExist) {
-//           if(payload.image){
-//                unlinkFile(payload.image);
-//           }
-//           throw new AppError(StatusCodes.NOT_FOUND, 'ChitChatShipment not found.');
-//      }
-
-//      if(isExist.image){
-//           unlinkFile(isExist.image);
-//      }
-//      return await ChitChatShipment.findByIdAndUpdate(id, payload, { new: true });
-// };
-
-// const deleteChitChatShipment = async (id: string): Promise<IchitChatShipment | null> => {
-//      const result = await ChitChatShipment.findById(id);
-//      if (!result) {
-//           throw new AppError(StatusCodes.NOT_FOUND, 'ChitChatShipment not found.');
-//      }
-//      result.isDeleted = true;
-//      result.deletedAt = new Date();
-//      await result.save();
-//      return result;
-// };
-
-const hardDeleteChitChatShipment = async (id: string): Promise<IchitChatShipment | null> => {
-     const result = await ChitChatShipment.findByIdAndDelete(id);
-     if (!result) {
-          throw new AppError(StatusCodes.NOT_FOUND, 'ChitChatShipment not found.');
+     if (apiRes.status === 200) {
+          return apiRes.data;
      }
-     return result;
 };
 
-const getChitChatShipmentById = async (id: string): Promise<IchitChatShipment | null> => {
-     const result = await ChitChatShipment.findById(id);
-     return result;
-};   
+
+const hardDeleteChitChatShipmentByShipMentId = async (shipMentId: string) => {
+     const apiRes = await axios.delete(`https://chitchats.com/api/v1/clients/${config.chitchat.client_id}/shipments/${shipMentId}`, {
+          headers: {
+               Authorization: `${config.chitchat.access_token}`,
+          },
+     });
+
+     if (apiRes.status === 200) {
+          return apiRes.data;
+     }
+};
+
+const getChitChatShipmentByShipMentId = async (shipMentId: string) => {
+     const apiRes = await axios.get(`https://chitchats.com/api/v1/clients/${config.chitchat.client_id}/shipments/${shipMentId}`, {
+          headers: {
+               Authorization: `${config.chitchat.access_token}`,
+          },
+     });
+
+     if (apiRes.status === 200) {
+          return apiRes.data;
+     }
+};
 
 export const chitChatShipmentService = {
      createChitChatShipment,
      getAllChitChatShipments,
-     // getAllUnpaginatedChitChatShipments,
-     // updateChitChatShipment,
-     // deleteChitChatShipment,
-     hardDeleteChitChatShipment,
-     getChitChatShipmentById
+     hardDeleteChitChatShipmentByShipMentId,
+     getChitChatShipmentByShipMentId,
 };

@@ -12,7 +12,7 @@ const auth =
           try {
                const tokenWithBearer = req.headers.authorization;
                if (!tokenWithBearer) {
-                    throw new AppError(StatusCodes.UNAUTHORIZED, 'You are not authorized !!');
+                    throw new AppError(StatusCodes.UNAUTHORIZED, 'You are not authorized !.!');
                }
                if (!tokenWithBearer.startsWith('Bearer')) {
                     throw new AppError(StatusCodes.UNAUTHORIZED, 'Token send is not valid !!');

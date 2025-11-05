@@ -7,6 +7,7 @@ import {
      chitChatShipment_value_currency,
      chitChatShipment_order_store,
      chitChatShipment_postage_type,
+     chitChatShipment_status,
 } from './chitChatShipment.enum';
 
 const createChitChatShipmentZodSchema = z.object({
@@ -109,6 +110,20 @@ const createChitChatShipmentZodSchema = z.object({
           }),
 });
 
+const getAllChitChatShipmentsZodSchema = z.object({
+     query: z.object({
+          page: z.number().optional(),
+          limit: z.number().optional(),
+          batch_id: z.string().optional(),
+          package_type: z.string().optional(),
+          from_date: z.string().optional(),
+          to_date: z.string().optional(),
+          q: z.string().optional(), // searchTerm
+          status: z.nativeEnum(chitChatShipment_status).optional(),
+     }),
+});
+
 export const chitChatShipmentValidation = {
      createChitChatShipmentZodSchema,
+     getAllChitChatShipmentsZodSchema
 };

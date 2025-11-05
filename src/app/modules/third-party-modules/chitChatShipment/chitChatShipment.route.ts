@@ -7,24 +7,15 @@ import { chitChatShipmentValidation } from './chitChatShipment.validation';
 
 const router = express.Router();
 
-router.get('/', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), chitChatShipmentController.getAllChitChatShipments);
+router.get('/', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR),validateRequest(chitChatShipmentValidation.getAllChitChatShipmentsZodSchema), chitChatShipmentController.getAllChitChatShipments);
 router.post(
      '/',
      auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR),
      validateRequest(chitChatShipmentValidation.createChitChatShipmentZodSchema),
      chitChatShipmentController.createChitChatShipment,
 );
-router.get('/:id', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), chitChatShipmentController.getChitChatShipmentById);
+router.get('/:shipMentId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), chitChatShipmentController.getChitChatShipmentByShipMentId);
 
-router.delete('/hard-delete/:id', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), chitChatShipmentController.hardDeleteChitChatShipment);
+router.delete('/hard-delete/:shipMentId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), chitChatShipmentController.hardDeleteChitChatShipmentByShipMentId);
 
-/* router.get('/unpaginated', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), chitChatShipmentController.getAllUnpaginatedChitChatShipments);
-router.patch(
-     '/:id',
-     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR),
-     validateRequest(chitChatShipmentValidation.updateChitChatShipmentZodSchema),
-     chitChatShipmentController.updateChitChatShipment,
-);
-router.delete('/:id', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), chitChatShipmentController.deleteChitChatShipment);
- */
 export const chitChatShipmentRoutes = router;
