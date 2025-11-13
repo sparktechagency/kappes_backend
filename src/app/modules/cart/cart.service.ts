@@ -20,6 +20,7 @@ export const getCart = async (userId: string) => {
 
 export const addToCart = async (userId: string, items: Array<{
     productId: string;
+    shopId: string;
     variantId: string;
     variantQuantity: number;
 }>) => {
@@ -79,6 +80,7 @@ export const addToCart = async (userId: string, items: Array<{
                 // Add new item
                 const totalPrice = product.product_variant_Details[variantIndex].variantPrice * item.variantQuantity;
                 cart.items.push({
+                    shopId: new Types.ObjectId(item.shopId),
                     productId: new Types.ObjectId(item.productId),
                     variantId: new Types.ObjectId(item.variantId),
                     variantPrice: product.product_variant_Details[variantIndex].variantPrice,

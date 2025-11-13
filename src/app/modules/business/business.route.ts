@@ -7,10 +7,12 @@ import auth from '../../middleware/auth';
 import fileUploadHandler from '../../middleware/fileUploadHandler';
 import parseMulitpleFieldsData from '../../middleware/parseMulitpleFieldsData';
 import { FOLDER_NAMES } from '../../../enums/files';
+import parseMultipleFilesdata from '../../middleware/parseMultipleFilesdata';
 
 const router = express.Router();
 
-router.route('/create').post(auth(USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN,USER_ROLES.USER), fileUploadHandler(), parseMulitpleFieldsData(FOLDER_NAMES.LOGO, FOLDER_NAMES.BANNER, FOLDER_NAMES.COVER_PHOTO), validateRequest(BusinessValidation.createBusinessZodSchema), BusinessController.createBusiness);
+// router.route('/create').post(auth(USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN,USER_ROLES.USER), fileUploadHandler(), parseMulitpleFieldsData(FOLDER_NAMES.LOGO, FOLDER_NAMES.BANNER, FOLDER_NAMES.COVER_PHOTO), validateRequest(BusinessValidation.createBusinessZodSchema), BusinessController.createBusiness);
+router.route('/create').post(auth(USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN,USER_ROLES.USER), fileUploadHandler(), parseMulitpleFieldsData(FOLDER_NAMES.LOGO, FOLDER_NAMES.COVER_PHOTO),parseMultipleFilesdata(FOLDER_NAMES.BANNER), validateRequest(BusinessValidation.createBusinessZodSchema), BusinessController.createBusiness);
 
 router.route('/update/:id').patch(auth(USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN,USER_ROLES.USER), fileUploadHandler(), parseMulitpleFieldsData(FOLDER_NAMES.LOGO, FOLDER_NAMES.BANNER, FOLDER_NAMES.COVER_PHOTO), validateRequest(BusinessValidation.updateBusinessZodSchema), BusinessController.updateBusiness);
 

@@ -24,7 +24,7 @@ const BusinessSchema = new Schema({
     working_hours: { type: [{ day: String, start: String, end: String }, { _id: false }], required: false },
     logo: { type: String, required: false },
     coverPhoto: { type: String, required: false },
-    banner: { type: String, required: false },
+    banner: { type: [String], required: false },
     owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
     totalReviews: { type: Number, default: 0, min: 0 },

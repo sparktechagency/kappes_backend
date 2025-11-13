@@ -1,4 +1,3 @@
-import bcrypt from 'bcrypt';
 import { IRecentSearchLocation } from "../user/user.interface";
 import { User } from "../user/user.model";
 import { IBusiness, IBusinessSearchParams } from "./business.interface";

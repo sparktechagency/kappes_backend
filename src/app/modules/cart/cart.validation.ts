@@ -4,6 +4,7 @@ import { objectIdSchema } from '../user/user.validation';
 
 const cartItemSchema = z.object({
     productId: objectIdSchema,
+    shopId: objectIdSchema,
     variantId: objectIdSchema,
     variantQuantity: z.number().int().min(1, 'Quantity must be at least 1'),
 });

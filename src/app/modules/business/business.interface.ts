@@ -33,7 +33,7 @@ export interface IBusiness extends Document {
     working_hours?: { day: string; start: string; end: string }[];
     logo: string;
     coverPhoto: string;
-    banner: string;
+    banner: string[];
     owner: mongoose.Types.ObjectId;
     reviews: mongoose.Types.ObjectId[];
     totalReviews: number;

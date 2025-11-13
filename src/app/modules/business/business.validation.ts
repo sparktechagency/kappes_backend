@@ -67,7 +67,7 @@ const updateBusinessZodSchema = z.object({
         })).optional(),
         logo: z.string({ required_error: 'Logo is required' }).optional(),
         coverPhoto: z.string({ required_error: 'Cover photo is required' }).optional(),
-        banner: z.string({ required_error: 'Banner is required' }).optional(),
+        banner: z.array(z.string({ required_error: 'Banner is required' })).optional(),
     }),
 });
 const createVerifyEmailZodSchema = z.object({
