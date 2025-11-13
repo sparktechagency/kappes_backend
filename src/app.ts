@@ -21,7 +21,8 @@ app.use(Morgan.errorHandler);
 //body parser
 app.use(
      cors({
-          origin: '*',
+          // origin: '*',
+          origin: ['http://10.10.7.109:3000', 'http://10.10.7.109:3001', 'http://10.10.7.109:3002', 'http://10.10.7.33:3000', 'http://10.10.7.33:3001', 'http://10.10.7.33:3002'],
           credentials: true,
      }),
 );
@@ -40,14 +41,14 @@ app.use(
           resave: false,
           saveUninitialized: false,
           cookie: {
-               secure: config.node_env === "production",
+               secure: config.node_env === 'production',
                httpOnly: false,
                maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-               sameSite: config.node_env === "production" ? "none" : "lax",
+               sameSite: config.node_env === 'production' ? 'none' : 'lax',
                // domain: ".yourcaptureawards.com",
                // path: "/",
           },
-     })
+     }),
 );
 
 // Passport middleware
