@@ -86,7 +86,8 @@ const forgetPasswordByUrl = catchAsync(async (req, res) => {
 });
 
 const resetPasswordByUrl = catchAsync(async (req, res) => {
-     const token = req?.headers?.authorization?.split(' ')[1];
+     // const token = req?.headers?.authorization?.split(' ')[1];
+     const token: any = req.headers.resettoken;
      const { ...resetData } = req.body;
 
      const result = await AuthService.resetPasswordByUrl(token!, resetData);
