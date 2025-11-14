@@ -384,6 +384,94 @@ const getOverview = async (user: IJwtPayload) => {
      }
 };
 
+const getOrderStatsByYear = async (year?: number) => {
+    const currentDate = new Date();
+    const targetYear = year !== undefined ? year : currentDate.getFullYear();
+
+    const startDate = new Date(targetYear, 0, 1); // January 1st of target year
+    const endDate = new Date(targetYear, 11, 31, 23, 59, 59, 999); // December 31st of target year
+
+    const orderStats = await Order.aggregate([
+        {
+            $match: {
+                createdAt: { $gte: startDate, $lte: endDate },
+                status: { $ne: 'cancelled' }
+            }
+        },
+        {
+            $group: {
+                _id: { $dateToString: { format: "%Y-%m", date: "$createdAt" } }, // Group by month
+                totalOrders: { $sum: 1 },
+                totalRevenue: { $sum: "$finalAmount" },
+                orderCount: { $sum: 1 },
+                averageOrderValue: { $avg: "$finalAmount" }
+            }
+        },
+        { $sort: { _id: 1 } }
+    ]);
+
+    // Calculate yearly totals
+    const yearlyStats = orderStats.reduce((acc, month) => ({
+        totalOrders: acc.totalOrders + month.totalOrders,
+        totalRevenue: acc.totalRevenue + month.totalRevenue,
+        orderCount: acc.orderCount + month.orderCount
+    }), { totalOrders: 0, totalRevenue: 0, orderCount: 0 });
+
+    return {
+        year: targetYear,
+        ...yearlyStats,
+        averageOrderValue: yearlyStats.orderCount > 0 
+            ? yearlyStats.totalRevenue / yearlyStats.orderCount 
+            : 0,
+        monthlyStats: orderStats
+    };
+};
+
+const getRevenueStatsByYear = async (year?: number) => {
+    const currentDate = new Date();
+    const targetYear = year !== undefined ? year : currentDate.getFullYear();
+
+    const startDate = new Date(targetYear, 0, 1); // January 1st of target year
+    const endDate = new Date(targetYear, 11, 31, 23, 59, 59, 999); // December 31st of target year
+
+    const revenueStats = await Order.aggregate([
+        {
+            $match: {
+                createdAt: { $gte: startDate, $lte: endDate },
+                status: { $ne: 'cancelled' },
+                finalAmount: { $gt: 0 }
+            }
+        },
+        {
+            $group: {
+                _id: { $dateToString: { format: "%Y-%m", date: "$createdAt" } }, // Group by month
+                totalRevenue: { $sum: "$finalAmount" },
+                orderCount: { $sum: 1 },
+                averageOrderValue: { $avg: "$finalAmount" }
+            }
+        },
+        { $sort: { _id: 1 } }
+    ]);
+
+    // Calculate yearly totals
+    const yearlyTotals = revenueStats.reduce((acc, month) => ({
+        totalRevenue: acc.totalRevenue + month.totalRevenue,
+        orderCount: acc.orderCount + month.orderCount
+    }), { totalRevenue: 0, orderCount: 0 });
+
+    return {
+        year: targetYear,
+        totalRevenue: yearlyTotals.totalRevenue,
+        totalOrders: yearlyTotals.orderCount,
+        averageOrderValue: yearlyTotals.orderCount > 0 
+            ? yearlyTotals.totalRevenue / yearlyTotals.orderCount 
+            : 0,
+        monthlyStats: revenueStats
+    };
+};
+
 export const DashboardService = {
-     getOverview,
+    getOverview,
+    getOrderStatsByYear,
+    getRevenueStatsByYear
 };
