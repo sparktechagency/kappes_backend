@@ -15,7 +15,7 @@ router.post('/verify-email', validateRequest(AuthValidation.createVerifyEmailZod
 router.post('/reset-password', validateRequest(AuthValidation.createResetPasswordZodSchema), AuthController.resetPassword);
 router.post('/dashboard/forget-password', validateRequest(AuthValidation.createForgetPasswordZodSchema), AuthController.forgetPasswordByUrl);
 
-router.post('/dashboard/reset-password', auth(USER_ROLES.ADMIN, USER_ROLES.VENDOR), validateRequest(AuthValidation.createResetPasswordZodSchema), AuthController.resetPasswordByUrl);
+router.post('/dashboard/reset-password', validateRequest(AuthValidation.createResetPasswordZodSchema), AuthController.resetPasswordByUrl);
 
 router.post('/change-password', auth(USER_ROLES.ADMIN, USER_ROLES.USER, USER_ROLES.SUPER_ADMIN), validateRequest(AuthValidation.createChangePasswordZodSchema), AuthController.changePassword);
 router.post('/resend-otp', AuthController.resendOtp);
