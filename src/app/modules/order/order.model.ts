@@ -173,7 +173,7 @@ orderSchema.pre('validate', async function (next) {
      // Step 3: Calculate delivery charge based on shipping address and delivery options
      const shippingAdressLowerCased = order?.shippingAddress?.toLowerCase();
      const shippingDetails = await settingsService.getShippingDetails();
-     let deliveryCharge= null;
+     let deliveryCharge= shippingDetails.worldWideShipping.cost;
      if (shippingDetails.freeShipping.area.some((area: string) => shippingAdressLowerCased?.includes(area))) {
           deliveryCharge = shippingDetails.freeShipping.cost;
      } else if (shippingDetails.centralShipping.area.some((area: string) => shippingAdressLowerCased?.includes(area))) {
