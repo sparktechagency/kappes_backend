@@ -2,10 +2,11 @@ import express from "express";
 import auth from "../../../middleware/auth";
 import { USER_ROLES } from "../../user/user.enums";
 import { DashboardController } from "./dashboard.controller";
+import { UserRouter } from "../../user/user.route";
 
 // Create a new Express Router instance
 const router = express.Router();
-
+router.use("/user",auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),UserRouter)
 // Route to get all the info required for the overview page
 router.get("/overview", auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), DashboardController.getOverview);
 

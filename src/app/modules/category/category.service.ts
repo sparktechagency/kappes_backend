@@ -131,9 +131,10 @@ const deleteCategoryToDB = async (id: string, user: IJwtPayload) => {
                'You are not able to delete the Category!'
           );
      }
-     isExistCategory.set({ isDeleted: true });
-     // Save the updated variant
-     await isExistCategory.save();
+     // do hard delete
+     await Category.findByIdAndDelete(id);
+     // remove pic
+     unlinkFile(isExistCategory?.thumbnail);
 
      return isExistCategory;
 };

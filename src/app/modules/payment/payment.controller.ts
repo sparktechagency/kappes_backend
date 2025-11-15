@@ -24,7 +24,7 @@ const createPayment = catchAsync(async (req: Request, res: Response) => {
 const getPaymentByCustomer = catchAsync(async (req: Request, res: Response) => {
   const { id, role }: any = req.user;
 
-  const { meta, result } = await paymentService.getAllPaymentByUserId(
+  const { result } = await paymentService.getAllPaymentByUserId(
     id,
     role,
     req.query,
@@ -86,6 +86,28 @@ const getAllPaymentByAdmin = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getPaymentDetailByAdminById = catchAsync(async (req: Request, res: Response) => {
+  const result = await paymentService.getPaymentDetailByAdminByIdService(req.params.id);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    data: result,
+    message: 'Payment detail get successful!!',
+  });
+});
+
+const deletePaymentDetailByAdminById = catchAsync(async (req: Request, res: Response) => {
+  const result = await paymentService.deletePaymentDetailByAdminByIdService(req.params.id);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    data: result,
+    message: 'Payment detail delete successful!!',
+  });
+});
+
 export const paymenController = {
   createPayment,
   getPaymentByCustomer,
@@ -93,5 +115,7 @@ export const paymenController = {
   getLast12MonthsEarnings,
   successPage,
   cancelPage,
-  getAllPaymentByAdmin
+  getAllPaymentByAdmin,
+  getPaymentDetailByAdminById,
+  deletePaymentDetailByAdminById,
 };

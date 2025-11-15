@@ -25,6 +25,16 @@ paymentRoutes
     paymenController.getAllPaymentByAdmin,
   )
   .get(
+    '/admin/:id',
+    auth(USER_ROLES.SUPER_ADMIN,USER_ROLES.ADMIN),
+    paymenController.getPaymentDetailByAdminById,
+  )
+  .delete(
+    '/admin/:id',
+    auth(USER_ROLES.SUPER_ADMIN,USER_ROLES.ADMIN),
+    paymenController.deletePaymentDetailByAdminById,
+  )
+  .get(
     '/last-12-months-earnings',
     auth(USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN),
     paymenController.getLast12MonthsEarnings,

@@ -51,6 +51,7 @@ const createUserToDB = async (payload: IUser): Promise<IUser> => {
                name: createUser.full_name,
           });
      } catch (error) {
+          console.log("🚀 ~ createUserToDB ~ error:", error)
           throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to create Stripe customer');
      }
 
@@ -102,6 +103,7 @@ const createSellerUserToDB = async (payload: ISellerUser, host: string, protocol
                     name: createUser[0].full_name,
                });
           } catch (error) {
+               console.log("🚀 ~ createSellerUserToDB ~ error:", error)
                throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to create Stripe customer');
           }
 
@@ -297,6 +299,19 @@ const updateUserByIdToDB = async (id: string, payload: Partial<IUser>) => {
      return updateDoc;
 };
 
+const deleteUserByAdmin = async (id: string) => {
+     const isExistUser = await User.isExistUserById(id);
+     if (!isExistUser) {
+          throw new AppError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
+     }
+
+     await User.findByIdAndUpdate(id, {
+          $set: { isDeleted: true,email: `deleted_${isExistUser.email}` },
+     });
+
+     return true;
+};
+
 export const UserService = {
      createUserToDB,
      createSellerUserToDB,
@@ -308,4 +323,5 @@ export const UserService = {
      getAllRoleBasedUser,
      getAllVendors,
      updateUserByIdToDB,
+     deleteUserByAdmin,
 };

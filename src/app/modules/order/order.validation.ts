@@ -21,7 +21,7 @@ export const createOrderSchema = z.object({
           }),
           products: z.array(orderProductSchema).min(1, 'At least one product is required'),
           coupon: z.string().optional().nullable(),
-          shippingAddress: z.string().min(10, 'Shipping address must be at least 10 characters long'),
+          shippingAddress: z.string(),
           paymentMethod: z.nativeEnum(PAYMENT_METHOD, {
                required_error: 'Payment method is required',
                invalid_type_error: 'Invalid payment method',

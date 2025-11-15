@@ -478,7 +478,7 @@ const refundOrder = async (orderId: string, user: IJwtPayload) => {
                throw new AppError(StatusCodes.NOT_FOUND, 'Order not found.');
           }
 
-          const payment = await Payment.findOne({ order: orderId, user: user.id, status: { $nin: [PAYMENT_STATUS.UNPAID, PAYMENT_STATUS.REFUNDED] } });
+          const payment = await Payment.findOne({ order: orderId, user: user.id, status: { $nin: [PAYMENT_STATUS.UNPAID, PAYMENT_STATUS.REFUNDED],isDeleted: false } });
           if (!payment) {
                throw new AppError(StatusCodes.BAD_REQUEST, 'Payment for this order is not successful or not found.');
           }

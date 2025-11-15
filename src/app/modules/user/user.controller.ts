@@ -118,6 +118,18 @@ const updateUserById = catchAsync(async (req, res) => {
      });
 });
 
+const deleteUserByAdmin = catchAsync(async (req, res) => {
+     const { userId } = req.params;
+     const result = await UserService.deleteUserByAdmin(userId);
+
+     sendResponse(res, {
+          success: true,
+          statusCode: StatusCodes.OK,
+          message: 'User deleted successfully',
+          data: result,
+     });
+});
+
 export const UserController = {
      createUser,
      createSellerUser,
@@ -127,4 +139,5 @@ export const UserController = {
      getAllRoleBasedUser,
      getAllVendors,
      updateUserById,
+     deleteUserByAdmin,
 };

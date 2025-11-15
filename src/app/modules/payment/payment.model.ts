@@ -48,10 +48,15 @@ const paymentSchema = new Schema<IPayment>(
       type: Schema.Types.Mixed,
       default: null,
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
   }
 );
+
 
 export const Payment = model<IPayment>('Payment', paymentSchema);

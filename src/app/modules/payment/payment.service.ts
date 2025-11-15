@@ -1,10 +1,6 @@
 import { IPayment } from './payment.interface';
 import QueryBuilder from '../../builder/QueryBuilder';
 import mongoose from 'mongoose';
-import { User } from '../user/user.model';
-import { USER_ROLES } from '../user/user.enums';
-import AppError from '../../../errors/AppError';
-import { StatusCodes } from 'http-status-codes';
 import { Payment } from './payment.model';
 
 // Create court
@@ -22,8 +18,8 @@ const getAllPaymentByUserId = async (
 
   let filter;
 
-  let year = query.year as number;
-  let month = query.month as number;
+  const year = query.year as number;
+  const month = query.month as number;
 
   const page = query.page ? parseInt(query.page as string) : 1; // Default to page 1 if not provided
   const limit = query.limit ? parseInt(query.limit as string) : 10; // Default to limit 10 if not provided
@@ -62,6 +58,7 @@ const getAllPaymentByUserId = async (
         $gte: startOfMonth, // Greater than or equal to the 1st day of the specified month
         $lt: endOfMonth, // Less than the 1st day of the next month
       },
+      isDeleted: false,
     };
 
     console.log('Start of Year:', startOfMonth);
@@ -80,7 +77,7 @@ const getAllPaymentByUserId = async (
 
   const totalPages = Math.ceil(total / limit);
 
-  let meta = {
+  const meta = {
     page: page,
     limit: limit,
     total: total,
@@ -291,12 +288,15 @@ const getLast7DaysEarnings = async (
 };
 
 const isPaymentExist = async (paymentIntent: string) => {
-  const result = await Payment.findOne({ paymentIntent: paymentIntent });
+  const result = await Payment.findOne({ paymentIntent: paymentIntent, isDeleted: false });
+  if (!result) {
+    throw new Error('Payment not found');
+  }
   return result;
 };
 
 const getAllPaymentByAdminService = async (query: Record<string, unknown>) => {
-  const queryBuilder = new QueryBuilder(Payment.find().select('method status transactionId createdAt'), query);
+  const queryBuilder = new QueryBuilder(Payment.find({isDeleted: false}).select('method status transactionId createdAt isDeleted'), query);
   const payments = await queryBuilder.fields().filter().paginate().search(['name', 'email', 'phone']).sort().modelQuery.exec();
   const meta = await queryBuilder.countTotal();
   return {
@@ -305,6 +305,29 @@ const getAllPaymentByAdminService = async (query: Record<string, unknown>) => {
   };
 };  
 
+const getPaymentDetailByAdminByIdService = async (id: string) => {
+  const result = await Payment.findById(id,{isDeleted: false}).populate([
+    {
+      path: 'user',
+      select: 'full_name email phone',
+    },
+    {
+      path: 'shop',
+      select: 'name email phone',
+    },
+  ]).select('-gatewayResponse -__v').exec();
+  return result;
+};
+
+const deletePaymentDetailByAdminByIdService = async (id: string) => {
+  // do soft delete
+  const result = await Payment.findOneAndUpdate({_id: id,isDeleted: false}, { isDeleted: true },{new: true}).exec();
+  if (!result) {
+    throw new Error('Payment not found');
+  }
+  return result;
+};
+
 export const paymentService = {
   createPaymentService,
   getAllPaymentByUserId,
@@ -312,5 +335,7 @@ export const paymentService = {
   getLast12MonthsEarningsService,
   getLast7DaysEarnings,
   isPaymentExist,
-  getAllPaymentByAdminService
+  getAllPaymentByAdminService,
+  getPaymentDetailByAdminByIdService,
+  deletePaymentDetailByAdminByIdService
 };

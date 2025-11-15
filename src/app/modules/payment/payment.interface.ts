@@ -13,4 +13,5 @@ export interface IPayment {
   gatewayResponse?: Record<string, any>;
   createdAt?: Date;
   updatedAt?: Date;
+  isDeleted?: boolean;
 }

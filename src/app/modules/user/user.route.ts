@@ -31,7 +31,8 @@ router.delete('/delete', auth(USER_ROLES.USER), UserController.deleteProfile);
 router.get('/get-all', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), UserController.getAllRoleBasedUser);
 router.get('/get-all-vendors', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), UserController.getAllVendors);
 
-// make user admin, user to shop admin, user to vendor
+// makeadmin, user to shop admin
 // router.patch('/make-admin/:userId', auth(USER_ROLES.SUPER_ADMIN), UserController.makeAdmin);
+router.delete('/delete-user/:userId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), UserController.deleteUserByAdmin);
 
 export const UserRouter = router;
