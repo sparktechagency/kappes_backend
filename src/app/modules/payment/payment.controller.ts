@@ -67,7 +67,7 @@ const getLast12MonthsEarnings = catchAsync(async (req: Request, res: Response) =
 });
 
 const successPage = catchAsync(async (req: Request, res: Response) => {
-  // console.log('hit hoise');
+  console.log('hit hoise ✅');
   res.render('success.ejs');
 });
 

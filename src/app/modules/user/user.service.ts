@@ -312,10 +312,58 @@ const deleteUserByAdmin = async (id: string) => {
      return true;
 };
 
+const makeAdmin = async (payload: Partial<IUser>) => {
+     // 🏃‍♀️‍➡️
+     const isExistUser = await User.findOne({ email: payload.email });
+     if (isExistUser) {
+          throw new AppError(StatusCodes.BAD_REQUEST, "User already exists!");
+     }
+
+     // make a verified user no need otp set role ADMIN
+     const user = await User.create({
+          ...payload,
+          role: USER_ROLES.ADMIN,
+          isVerified: true,
+     });
+
+     return user;
+};
+
+const editAdminInDB = async (id: string, payload: Partial<IUser>): Promise<IUser | null> => {
+     // Check if user exists and is an admin
+     const user = await User.findOne({ _id: id, role: { $in: [USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN] } });
+     if (!user) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Admin not found');
+     }
+
+     // Prevent changing role to non-admin roles
+     if (payload.role && !Object.values([USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN]).includes(payload.role)) {
+          throw new AppError(StatusCodes.BAD_REQUEST, 'Cannot change admin to non-admin role');
+     }
+
+     // Update the admin
+     const updatedAdmin = await User.findByIdAndUpdate(id, payload, { new: true }).select('-password');
+     return updatedAdmin;
+};
+
+const deleteAdminFromDB = async (id: string): Promise<IUser | null> => {
+     // Check if user exists and is an admin (but not super admin)
+     const user = await User.findOne({ _id: id, role: USER_ROLES.ADMIN });
+     if (!user) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Admin not found or cannot be deleted');
+     }
+
+     // Delete the admin
+     const deletedAdmin = await User.findByIdAndDelete(id);
+     return deletedAdmin;
+};
+
 export const UserService = {
      createUserToDB,
      createSellerUserToDB,
      getUserProfileFromDB,
+     editAdminInDB,
+     deleteAdminFromDB,
      updateProfileToDB,
      createVendorToDB,
      deleteUser,
@@ -324,4 +372,5 @@ export const UserService = {
      getAllVendors,
      updateUserByIdToDB,
      deleteUserByAdmin,
+     makeAdmin,
 };

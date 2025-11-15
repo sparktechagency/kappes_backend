@@ -1,4 +1,5 @@
 import { string, z } from 'zod';
+import { USER_ROLES } from './user.enums';
 export const objectIdSchema = z.string().regex(/^[a-f\d]{24}$/i, { message: 'Invalid ObjectId' });
 export const createUserZodSchema = z.object({
      body: z.object({
@@ -36,9 +37,26 @@ const updateUserZodSchema = z.object({
 
 const updateUserByIdZodSchema = z.object({
      body: z.object({
-          role: z.string().optional(),
+          role: z.nativeEnum(USER_ROLES).optional(),
           status: z.enum(['active', 'blocked']).optional(),
           verified: z.boolean().optional(),
+     }),
+});
+
+const makeAdminZodSchema = z.object({
+     body: z.object({
+          role: z.nativeEnum(USER_ROLES),
+          email: z.string().email('Invalid email address'),
+          full_name: z.string(),
+          password: z.string(),
+     })
+     .superRefine((data, ctx) => {
+          if (data.role !== USER_ROLES.ADMIN) {
+               ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: `role must be ${USER_ROLES.ADMIN}`,
+               });
+          }
      }),
 });
 
@@ -47,4 +65,5 @@ export const UserValidation = {
      createUserZodSchema,
      updateUserZodSchema,
      updateUserByIdZodSchema,
+     makeAdminZodSchema
 };

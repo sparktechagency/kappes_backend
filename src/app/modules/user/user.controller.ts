@@ -130,14 +130,56 @@ const deleteUserByAdmin = catchAsync(async (req, res) => {
      });
 });
 
+const makeAdmin = catchAsync(async (req, res) => {
+     const { ...userData } = req.body;
+     const result = await UserService.makeAdmin(userData);
+
+     sendResponse(res, {
+          success: true,
+          statusCode: StatusCodes.OK,
+          message: 'User made admin successfully',
+          data: result,
+     });
+});
+
+const editAdmin = catchAsync(async (req, res) => {
+     const { id } = req.params;
+     const payload = req.body;
+     
+     const result = await UserService.editAdminInDB(id, payload);
+
+     sendResponse(res, {
+          success: true,
+          statusCode: StatusCodes.OK,
+          message: 'Admin updated successfully',
+          data: result,
+     });
+});
+
+const deleteAdmin = catchAsync(async (req, res) => {
+     const { id } = req.params;
+     
+     const result = await UserService.deleteAdminFromDB(id);
+
+     sendResponse(res, {
+          success: true,
+          statusCode: StatusCodes.OK,
+          message: 'Admin deleted successfully',
+          data: result,
+     });
+});
+
 export const UserController = {
      createUser,
      createSellerUser,
      getUserProfile,
      updateProfile,
+     updateUserById,
      deleteProfile,
      getAllRoleBasedUser,
      getAllVendors,
-     updateUserById,
      deleteUserByAdmin,
+     makeAdmin,
+     editAdmin,
+     deleteAdmin
 };

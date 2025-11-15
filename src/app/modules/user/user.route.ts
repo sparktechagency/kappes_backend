@@ -32,7 +32,21 @@ router.get('/get-all', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), UserContr
 router.get('/get-all-vendors', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), UserController.getAllVendors);
 
 // makeadmin, user to shop admin
-// router.patch('/make-admin/:userId', auth(USER_ROLES.SUPER_ADMIN), UserController.makeAdmin);
+router.post('/make-admin', auth(USER_ROLES.SUPER_ADMIN), validateRequest(UserValidation.makeAdminZodSchema), UserController.makeAdmin);
 router.delete('/delete-user/:userId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), UserController.deleteUserByAdmin);
+
+// Admin management routes
+router.patch(
+     '/admin/:id',
+     auth(USER_ROLES.SUPER_ADMIN),
+     validateRequest(UserValidation.updateUserByIdZodSchema),
+     UserController.editAdmin
+);
+
+router.delete(
+     '/admin/:id',
+     auth(USER_ROLES.SUPER_ADMIN),
+     UserController.deleteAdmin
+);
 
 export const UserRouter = router;
