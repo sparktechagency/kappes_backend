@@ -132,6 +132,7 @@ const createSellerUserToDB = async (payload: ISellerUser, host: string, protocol
 
           return { createUser: createUser[0], shop, stripe_account_onboarding_url };
      } catch (error) {
+          console.log("🚀 ~ createSellerUserToDB ~ error:", error)
           // If any operation fails, abort the transaction
           await session.abortTransaction();
           session.endSession();

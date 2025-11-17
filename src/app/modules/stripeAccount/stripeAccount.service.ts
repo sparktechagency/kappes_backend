@@ -8,7 +8,7 @@ import { successHTMLstripeConnection } from './stripeAccount.utils';
 
 const createConnectedStripeAccount = async (user: IJwtPayload, host: string, protocol: string): Promise<any> => {
      const existingAccount = await StripeAccount.findOne({
-          user: user.id,
+          user: user?.id,
      }).select('user accountId isCompleted');
      console.log('existingAccount', existingAccount);
 
@@ -47,7 +47,7 @@ const createConnectedStripeAccount = async (user: IJwtPayload, host: string, pro
      });
      console.log('stripe account', account);
 
-     await StripeAccount.create({ accountId: account.id, userId: user.id });
+     await StripeAccount.create({ accountId: account.id, userId: user?.id });
 
      const onboardingLink = await stripe.accountLinks.create({
           account: account.id,

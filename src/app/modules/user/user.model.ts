@@ -24,13 +24,11 @@ const userSchema = new Schema<IUser, UserModel>(
           googleId: {
                type: String,
                default: '',
-               unique: true,
                required: false,
           },
           facebookId: {
                type: String,
                default: '',
-               unique: true,
                required: false,
           },
           provider: {

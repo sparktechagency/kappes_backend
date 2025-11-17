@@ -11,7 +11,7 @@ export const shopSchema = new Schema<IShop>({
     categories: [{ type: Schema.Types.ObjectId, ref: 'ShopCategory' }],
     owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     phone: { type: String, required: true },
-    email: { type: String, required: false, unique: true },
+    email: { type: String, required: false},
     //..
     isDeleted: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
