@@ -287,14 +287,6 @@ const getLast7DaysEarnings = async (
   return { totalEarnings: result[0].totalEarnings || 0 };
 };
 
-const isPaymentExist = async (paymentIntent: string) => {
-  const result = await Payment.findOne({ paymentIntent: paymentIntent, isDeleted: false });
-  if (!result) {
-    throw new Error('Payment not found');
-  }
-  return result;
-};
-
 const getAllPaymentByAdminService = async (query: Record<string, unknown>) => {
   const queryBuilder = new QueryBuilder(Payment.find({isDeleted: false}).select('method status transactionId createdAt isDeleted'), query);
   const payments = await queryBuilder.fields().filter().paginate().search(['name', 'email', 'phone']).sort().modelQuery.exec();
@@ -334,7 +326,6 @@ export const paymentService = {
   getAllPaymentByOwnerIdService,
   getLast12MonthsEarningsService,
   getLast7DaysEarnings,
-  isPaymentExist,
   getAllPaymentByAdminService,
   getPaymentDetailByAdminByIdService,
   deletePaymentDetailByAdminByIdService

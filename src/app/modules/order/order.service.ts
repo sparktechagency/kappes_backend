@@ -162,35 +162,7 @@ const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
                });
                // findbyid and update the user
                await User.findByIdAndUpdate(thisCustomer?.id, { $set: { stripeCustomerId: stripeCustomer.id } });
-               // 🏃‍♀️‍➡️🏃‍♀️‍➡️
-               // const stripeSessionData: any = {
-               //      payment_method_types: ['card'],
-               //      mode: 'payment',
-               //      customer: stripeCustomer.id,
-               //      line_items: [
-               //           {
-               //                price_data: {
-               //                     currency: 'usd',
-               //                     product_data: {
-               //                          name: 'Amount',
-               //                     },
-               //                     unit_amount: order.finalAmount! * 100, // Convert to cents
-               //                },
-               //                quantity: 1,
-               //           },
-               //      ],
-               //      metadata: {
-               //           products: JSON.stringify(orderData.products), // only array are allowed TO PASS as metadata
-               //           coupon: orderData.coupon?.toString(),
-               //           shippingAddress: orderData.shippingAddress,
-               //           paymentMethod: orderData.paymentMethod,
-               //           user: user.id,
-               //           shop: orderData.shop,
-               //           amount: order.finalAmount,
-               //      },
-               //      success_url: config.stripe.success_url,
-               //      cancel_url: config.stripe.cancel_url,
-               // };
+               
                const stripeSessionData: any = {
                     payment_method_types: ['card'],
                     mode: 'payment',
