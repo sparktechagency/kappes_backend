@@ -99,95 +99,6 @@ const handlePaymentSucceeded = async (session: Stripe.Checkout.Session) => {
 
           console.log('isPaymentExist : 3');
 
-          // const { owner, revenue } = await ShopService.isShopExist(shop);
-          // console.log('owner : ', owner);
-
-          // const stripeAccountId = owner?.stripeConnectedAccount;
-
-          // if (!stripeAccountId) {
-          //     throw new AppError(StatusCodes.NOT_FOUND, 'Stripe account not found');
-          // }
-
-          // console.log('stripeAccountId : 4');
-
-          // const adminParcentage = revenue;
-
-          // if (!adminParcentage) {
-          //     throw new AppError(
-          //         StatusCodes.INTERNAL_SERVER_ERROR,
-          //         'Admin fee percentage not found',
-          //     );
-          // }
-
-          // const adminRevenue = Math.ceil((amount * adminParcentage) / 100);
-
-          // const shopOwnerRevenue = amount - adminRevenue;
-
-          // console.log({ adminParcentage });
-          // console.log({ adminRevenue });
-          // console.log({ shopOwnerRevenue });
-          // console.log({ amount });
-          // console.log('shopOwnerRevenue : 5');
-
-          // const balance = await stripe.balance.retrieve();
-
-          // console.log('balance');
-          // console.log(balance);
-
-          // if (balance?.available?.[0].amount < shopOwnerRevenue * 100) {
-          //     throw new AppError(
-          //         StatusCodes.BAD_REQUEST,
-          //         'Insufficient funds in admin account for transfer',
-          //     );
-          // }
-
-          // console.log('balance : 6');
-
-          // const shopAccountFromStripe = await stripe.accounts.retrieve(stripeAccountId);
-
-          // if (shopAccountFromStripe?.requirements?.disabled_reason) {
-          //     throw new AppError(
-          //         StatusCodes.BAD_REQUEST,
-          //         `Business's stripe account is not enabled: ${shopAccountFromStripe.requirements.disabled_reason}`,
-          //     );
-          // }
-
-          // console.log('businessAccount : 7');
-
-          // const transfer = await stripe.transfers.create({
-          //     amount: Math.floor(shopOwnerRevenue * 100),
-          //     currency: 'usd',
-          //     destination: stripeAccountId,
-          // });
-
-          // console.log('transfer : 7');
-
-          // // Payout to vendor's external bank account or card
-          // const externalAccount = await stripe.accounts.listExternalAccounts(
-          //     stripeAccountId,
-          //     { object: 'bank_account' },
-          // );
-
-          // if (!externalAccount.data.length) {
-          //     throw new AppError(
-          //         StatusCodes.BAD_REQUEST,
-          //         'No external bank accounts found for the vendor',
-          //     );
-          // }
-
-          // console.log('externalAccount : 8');
-
-          // //   Payment receive business account instant or standard
-          // await stripe.payouts.create(
-          //     {
-          //         amount: Math.floor(shopOwnerRevenue * 100), // Convert to cents
-          //         currency: 'usd',
-          //         destination: externalAccount.data[0].id,
-          //         method: 'instant', // Can change to 'instant' for instant payouts
-          //     },
-          //     { stripeAccount: stripeAccountId },
-          // );
-
           // console.log('payouts : 9');
           const newOrder = await Order.create({
                products: productsParsed,
@@ -209,7 +120,8 @@ const handlePaymentSucceeded = async (session: Stripe.Checkout.Session) => {
                status: PAYMENT_STATUS.PAID,
                transactionId: session.id,
                paymentIntent,
-               amount,
+               // amount
+               amount:newOrder.finalAmount,
                gatewayResponse: session,
                // extra field for payments gatewayResponse,transactionId,status,order
           });
