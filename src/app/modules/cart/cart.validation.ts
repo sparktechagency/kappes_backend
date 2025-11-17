@@ -17,7 +17,7 @@ export const createCartValidation = z.object({
 
 export const updateCartValidation = z.object({
     body: z.object({
-        items: z.array(cartItemSchema).min(1, 'At least one item is required')
+        variantQuantity: z.number().int().min(1, 'At least one item is required')
     })
 });
 

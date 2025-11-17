@@ -5,7 +5,7 @@ import { IVariant } from "../variant/variant.interfaces";
 
 export interface ICartItem {
     _id?: Types.ObjectId;
-    shopId: Types.ObjectId | IProduct;
+    shopId: Types.ObjectId;
     productId: Types.ObjectId | IProduct;
     variantId: Types.ObjectId | IVariant;
     variantPrice: number;

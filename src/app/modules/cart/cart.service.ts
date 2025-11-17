@@ -1,6 +1,6 @@
 // src/app/modules/cart/cart.service.ts
 import { StatusCodes } from 'http-status-codes';
-import { FilterQuery, Types } from 'mongoose';
+import { Types } from 'mongoose';
 import { Product } from '../product/product.model';
 import AppError from '../../../errors/AppError';
 import { Cart } from './cart.model';
@@ -126,11 +126,11 @@ export const updateCartItem = async (
         }
 
         const itemIndex = cart.items.findIndex(
-            item => item._id!.toString() === itemId
+            item => item.productId!.toString() === itemId
         );
 
         if (itemIndex === -1) {
-            throw new AppError(StatusCodes.NOT_FOUND, 'Item not found in cart');
+            throw new AppError(StatusCodes.NOT_FOUND, 'Item i.e product not found in cart');
         }
 
         // Update quantity and total price
@@ -148,6 +148,7 @@ export const updateCartItem = async (
             cart: populatedVariantCart,
         };
     } catch (error) {
+        console.log("🚀 ~ updateCartItem ~ error:", error)
         await session.abortTransaction();
         throw error;
     } finally {
@@ -166,10 +167,10 @@ export const removeFromCart = async (userId: string, itemId: string) => {
         }
 
         const initialLength = cart.items.length;
-        cart.items = cart.items.filter(item => item._id!.toString() !== itemId);
+        cart.items = cart.items.filter(item => item.productId!.toString() !== itemId);
 
         if (cart.items.length === initialLength) {
-            throw new AppError(StatusCodes.NOT_FOUND, 'Item not found in cart');
+            throw new AppError(StatusCodes.NOT_FOUND, 'Item i.e product not found in cart');
         }
 
         const savedCart = await cart.save({ session });
