@@ -169,6 +169,29 @@ const deleteAdmin = catchAsync(async (req, res) => {
      });
 });
 
+const getUserAdminById = catchAsync(async (req, res) => {
+     const { userId } = req.params;
+     const result = await UserService.getUserAdminById(userId);
+
+     sendResponse(res, {
+          success: true,
+          statusCode: StatusCodes.OK,
+          message: 'User retrieved successfully',
+          data: result,
+     });
+});
+
+const getAllUsers = catchAsync(async (req, res) => {
+     const result = await UserService.getAllUsers(req.query as any);
+
+     sendResponse(res, {
+          success: true,
+          statusCode: StatusCodes.OK,
+          message: 'Users retrieved successfully',
+          data: result,
+     });
+});
+
 export const UserController = {
      createUser,
      createSellerUser,
@@ -181,5 +204,7 @@ export const UserController = {
      deleteUserByAdmin,
      makeAdmin,
      editAdmin,
-     deleteAdmin
+     deleteAdmin,
+     getUserAdminById,
+     getAllUsers
 };

@@ -36,17 +36,20 @@ router.post('/make-admin', auth(USER_ROLES.SUPER_ADMIN), validateRequest(UserVal
 router.delete('/delete-user/:userId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), UserController.deleteUserByAdmin);
 
 // Admin management routes
+router.get('/admin/all-users', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), UserController.getAllUsers);
 router.patch(
      '/admin/:id',
-     auth(USER_ROLES.SUPER_ADMIN),
+     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
      validateRequest(UserValidation.updateUserByIdZodSchema),
      UserController.editAdmin
 );
 
+router.get('/admin/single-user/:userId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), UserController.getUserAdminById);
 router.delete(
      '/admin/:id',
      auth(USER_ROLES.SUPER_ADMIN),
      UserController.deleteAdmin
 );
+
 
 export const UserRouter = router;

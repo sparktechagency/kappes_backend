@@ -14,6 +14,8 @@ import { Payment } from '../payment/payment.model';
 import { paymentService } from '../payment/payment.service';
 import { Wallet } from '../wallet/wallet.model';
 import { TransferType } from './stripeAccount.interface';
+import { CategoryService } from '../category/category.service';
+import { clearCart } from '../cart/cart.service';
 
 const webhookHandler = async (req: Request, res: Response): Promise<void> => {
      console.log('Webhook received');
@@ -128,6 +130,9 @@ const handlePaymentSucceeded = async (session: Stripe.Checkout.Session) => {
 
           newOrder.payment = newPayment._id;
           await newOrder.save();
+
+          // clear cart of the user
+          await clearCart(user);
 
           console.log('newPayment : 11');
           // send email to user, notification to shop woner or admins socket

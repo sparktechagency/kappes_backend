@@ -51,7 +51,7 @@ const createUserToDB = async (payload: IUser): Promise<IUser> => {
                name: createUser.full_name,
           });
      } catch (error) {
-          console.log("🚀 ~ createUserToDB ~ error:", error)
+          console.log('🚀 ~ createUserToDB ~ error:', error);
           throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to create Stripe customer');
      }
 
@@ -103,7 +103,7 @@ const createSellerUserToDB = async (payload: ISellerUser, host: string, protocol
                     name: createUser[0].full_name,
                });
           } catch (error) {
-               console.log("🚀 ~ createSellerUserToDB ~ error:", error)
+               console.log('🚀 ~ createSellerUserToDB ~ error:', error);
                throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to create Stripe customer');
           }
 
@@ -306,7 +306,7 @@ const deleteUserByAdmin = async (id: string) => {
      }
 
      await User.findByIdAndUpdate(id, {
-          $set: { isDeleted: true,email: `deleted_${isExistUser.email}` },
+          $set: { isDeleted: true, email: `deleted_${isExistUser.email}` },
      });
 
      return true;
@@ -316,7 +316,7 @@ const makeAdmin = async (payload: Partial<IUser>) => {
      // 🏃‍♀️‍➡️
      const isExistUser = await User.findOne({ email: payload.email });
      if (isExistUser) {
-          throw new AppError(StatusCodes.BAD_REQUEST, "User already exists!");
+          throw new AppError(StatusCodes.BAD_REQUEST, 'User already exists!');
      }
 
      // make a verified user no need otp set role ADMIN
@@ -358,6 +358,32 @@ const deleteAdminFromDB = async (id: string): Promise<IUser | null> => {
      return deletedAdmin;
 };
 
+const getUserAdminById = async (id: string): Promise<IUser | null> => {
+     const user = await User.findById(id);
+     return user;
+};
+
+const getAllUsers = async (query: Record<string, unknown & { isRecentUsers?: string }>) => {
+     if (query.isRecentUsers) {
+          console.log(query);
+          const now = new Date();
+          const daysAgo7 = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+          if (query.isRecentUsers.toString() == true.toString()) {
+               query.createdAt = { lt: now, gt: daysAgo7 };
+               delete query.isRecentUsers;
+          }
+          console.log(query);
+     }
+     // querybuilder
+     const queryBuilder = new QueryBuilder(User.find({ role: { $in: [USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN] } }).select('-password'), query);
+     const users = await queryBuilder.fields().filter().paginate().search(['full_name', 'email', 'phone']).sort().modelQuery.exec();
+     const meta = await queryBuilder.countTotal();
+     return {
+          meta,
+          users,
+     };
+};
+
 export const UserService = {
      createUserToDB,
      createSellerUserToDB,
@@ -373,4 +399,6 @@ export const UserService = {
      updateUserByIdToDB,
      deleteUserByAdmin,
      makeAdmin,
+     getUserAdminById,
+     getAllUsers,
 };
