@@ -162,22 +162,56 @@ const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
                });
                // findbyid and update the user
                await User.findByIdAndUpdate(thisCustomer?.id, { $set: { stripeCustomerId: stripeCustomer.id } });
+               // 🏃‍♀️‍➡️🏃‍♀️‍➡️
+               // const stripeSessionData: any = {
+               //      payment_method_types: ['card'],
+               //      mode: 'payment',
+               //      customer: stripeCustomer.id,
+               //      line_items: [
+               //           {
+               //                price_data: {
+               //                     currency: 'usd',
+               //                     product_data: {
+               //                          name: 'Amount',
+               //                     },
+               //                     unit_amount: order.finalAmount! * 100, // Convert to cents
+               //                },
+               //                quantity: 1,
+               //           },
+               //      ],
+               //      metadata: {
+               //           products: JSON.stringify(orderData.products), // only array are allowed TO PASS as metadata
+               //           coupon: orderData.coupon?.toString(),
+               //           shippingAddress: orderData.shippingAddress,
+               //           paymentMethod: orderData.paymentMethod,
+               //           user: user.id,
+               //           shop: orderData.shop,
+               //           amount: order.finalAmount,
+               //      },
+               //      success_url: config.stripe.success_url,
+               //      cancel_url: config.stripe.cancel_url,
+               // };
                const stripeSessionData: any = {
                     payment_method_types: ['card'],
                     mode: 'payment',
-                    customer: stripeCustomer.id,
+                    success_url: config.stripe.success_url,
+                    cancel_url: config.stripe.cancel_url,
                     line_items: [
                          {
                               price_data: {
                                    currency: 'usd',
                                    product_data: {
                                         name: 'Amount',
+                                        description: `order from ${thisCustomer?.full_name || 'seller'}`,
                                    },
-                                   unit_amount: order.finalAmount! * 100, // Convert to cents
+                                   unit_amount: Math.round(order.finalAmount! * 100),
                               },
                               quantity: 1,
                          },
                     ],
+                    shipping_address_collection: {
+                         allowed_countries: ['US', 'CA', 'GB', 'BD'],
+                    },
                     metadata: {
                          products: JSON.stringify(orderData.products), // only array are allowed TO PASS as metadata
                          coupon: orderData.coupon?.toString(),
@@ -187,8 +221,6 @@ const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
                          shop: orderData.shop,
                          amount: order.finalAmount,
                     },
-                    success_url: config.stripe.success_url,
-                    cancel_url: config.stripe.cancel_url,
                };
                try {
                     const session = await stripe.checkout.sessions.create(stripeSessionData);
@@ -207,7 +239,7 @@ const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
           // Return the result
           return result;
      } catch (error) {
-          console.log(error);
+          console.log('🚀 ~ createOrder ~ error:', error);
           // Handle any errors without a session rollback
           throw error;
      }
@@ -478,7 +510,7 @@ const refundOrder = async (orderId: string, user: IJwtPayload) => {
                throw new AppError(StatusCodes.NOT_FOUND, 'Order not found.');
           }
 
-          const payment = await Payment.findOne({ order: orderId, user: user.id, status: { $nin: [PAYMENT_STATUS.UNPAID, PAYMENT_STATUS.REFUNDED],isDeleted: false } });
+          const payment = await Payment.findOne({ order: orderId, user: user.id, status: { $nin: [PAYMENT_STATUS.UNPAID, PAYMENT_STATUS.REFUNDED], isDeleted: false } });
           if (!payment) {
                throw new AppError(StatusCodes.BAD_REQUEST, 'Payment for this order is not successful or not found.');
           }

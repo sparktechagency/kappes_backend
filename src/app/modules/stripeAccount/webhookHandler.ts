@@ -91,7 +91,7 @@ const handlePaymentSucceeded = async (session: Stripe.Checkout.Session) => {
 
           console.log('paymentIntent : 2', paymentIntent);
 
-          const isPaymentExist = await paymentService.isPaymentExist(paymentIntent);
+          const isPaymentExist = await Payment.findOne({ paymentIntent: paymentIntent, isDeleted: false });
 
           if (isPaymentExist) {
                throw new AppError(StatusCodes.BAD_REQUEST, 'Payment Already exist');
