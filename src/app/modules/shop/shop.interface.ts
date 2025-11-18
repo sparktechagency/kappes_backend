@@ -1,4 +1,4 @@
-import mongoose, { model, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { IGeoLocation } from "../business/business.interface";
 import { BUSINESS_TYPES } from "../business/business.enums";
 

@@ -9,7 +9,7 @@ import { DEFAULT_SHOP_REVENUE } from "./shop.enum";
 export const shopSchema = new Schema<IShop>({
     name: { type: String, required: true, unique: true, trim: true, minlength: 3, maxlength: 100 },
     categories: [{ type: Schema.Types.ObjectId, ref: 'ShopCategory' }],
-    owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    owner: { type: Schema.Types.ObjectId, ref: 'User', required: true, unique: true },
     phone: { type: String, required: true },
     email: { type: String, required: false},
     //..

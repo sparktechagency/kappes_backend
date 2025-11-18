@@ -7,7 +7,7 @@ import { USER_ROLES } from '../user/user.enums';
 import { ShopController } from './shop.controller';
 import { ShopValidation } from './shop.validation';
 // necessasry routes for shop
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
 // Import necessary controllers
@@ -33,6 +33,8 @@ router.patch('/make-shop-admin/:shopId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES
 // get users shops
 router.get('/admin/user', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), ShopController.getShopsByOwnerOrAdmin);
 
+// // Get shops by owner
+router.get('/my-shops', auth(USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), ShopController.getShopsMyShops);
 // Get a shop by ID
 router.get('/products/:shopId', ShopController.getProductsByShopId);
 // get shops provinces,territory with prouduct count list in a single route
@@ -68,8 +70,6 @@ router.patch(
      ShopController.updateShopById,
 );
 
-// // Get shops by owner
-// router.get('/owner/:ownerId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), ShopController.getShopsByOwner);
 // // Get shops by getShopsByShopCategory
 // router.get('/shopCategory/:category', ShopController.getShopsByShopCategory);
 // // Get chats by shop

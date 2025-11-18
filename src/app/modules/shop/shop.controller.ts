@@ -1,5 +1,5 @@
 // ShopController.ts
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
@@ -71,9 +71,8 @@ const deleteShopById = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-const getShopsByOwner = catchAsync(async (req: Request, res: Response) => {
-    const { ownerId } = req.params;
-    const result = await ShopService.getShopsByOwner(ownerId);
+const getShopsMyShops = catchAsync(async (req: Request, res: Response) => {
+    const result = await ShopService.getShopsMyShops((req.user as IJwtPayload).id);
     sendResponse(res, {
         statusCode: StatusCodes.OK,
         success: true,
@@ -271,7 +270,7 @@ const getShopAdminsByShopId = catchAsync(async (req: Request, res: Response) => 
 
 
 const createShopAdmin = catchAsync(
-    async (req: Request, res: Response, next: NextFunction) => {
+    async (req: Request, res: Response) => {
       const { ...userData } = req.body; // name, email , password
       const result = await ShopService.createShopAdmin(userData,req.params.shopId,req.user as IJwtPayload);
   
@@ -333,7 +332,7 @@ export const ShopController = {
     getShopById,
     updateShopById,
     deleteShopById,
-    getShopsByOwner,
+    getShopsMyShops,
     getShopsByLocation,
     getShopsByType,
     getChatsByShop,

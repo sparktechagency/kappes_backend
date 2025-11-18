@@ -190,16 +190,16 @@ const SocialLoginUserFromDB = async (payload: ILoginData) => {
      const refreshToken = jwtHelper.createToken(jwtData, config.jwt.jwt_refresh_secret as string, config.jwt.jwt_refresh_expire_in as string);
 
      let stripeCustomer;
-          try {
-               stripeCustomer = await stripe.customers.create({
-                    email: isExistUser.email,
-                    name: isExistUser.full_name,
-               });
-          } catch (error) {
-               throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to create Stripe customer');
-          }
-     
-          await User.findOneAndUpdate({ _id: isExistUser._id }, { $set: { stripeCustomerId: stripeCustomer.id } });
+     try {
+          stripeCustomer = await stripe.customers.create({
+               email: isExistUser.email,
+               name: isExistUser.full_name,
+          });
+     } catch (error) {
+          throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to create Stripe customer');
+     }
+
+     await User.findOneAndUpdate({ _id: isExistUser._id }, { $set: { stripeCustomerId: stripeCustomer.id } });
 
      return { accessToken, refreshToken, role: isExistUser.role };
 };
@@ -314,7 +314,11 @@ const verifyEmailToDB = async (payload: IVerifyEmail) => {
      if (!isExistUser.verified) {
           await User.findOneAndUpdate({ _id: isExistUser._id }, { verified: true, authentication: { oneTimeCode: null, expireAt: null } });
           //create token
-          accessToken = jwtHelper.createToken({ id: isExistUser._id.toString() as string, role: isExistUser.role, email: isExistUser.email }, config.jwt.jwt_secret as Secret, config.jwt.jwt_expire_in as string);
+          accessToken = jwtHelper.createToken(
+               { id: isExistUser._id.toString() as string, role: isExistUser.role, email: isExistUser.email },
+               config.jwt.jwt_secret as Secret,
+               config.jwt.jwt_expire_in as string,
+          );
           message = 'Email verify successfully';
           user = await User.findById(isExistUser._id);
      } else {
