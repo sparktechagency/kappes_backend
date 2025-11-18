@@ -46,7 +46,7 @@ router.get(
 );
 
 // Get products with wishlist (public endpoint)
-router.get('/get-products-with-wishlist', auth(USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN, USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), ProductController.getProductsWithWishlist);
+router.get('/get-products-with-wishlist', auth(USER_ROLES.USER), ProductController.getProductsWithWishlist);
 
 // Get products by category (public endpoint)
 router.get('/category/:categoryId', ProductController.getProductsByCategory);
