@@ -150,6 +150,26 @@ const addOrUpdateShippingDetails = catchAsync(async (req, res): Promise<void> =>
      });
 });
 
+const updatePrivacyPolicy = catchAsync(async (req, res): Promise<void> => {
+     const privacy = await settingsService.updatePrivacyPolicy(req.body.privacyPolicy);
+     sendResponse(res, {
+          statusCode: StatusCodes.OK,
+          success: true,
+          message: 'Privacy Policy updated successfully',
+          data: privacy,
+     });
+});
+
+const updateTermsOfService = catchAsync(async (req, res): Promise<void> => {
+     const privacy = await settingsService.updateTermsOfService(req.body.termsOfService);
+     sendResponse(res, {
+          statusCode: StatusCodes.OK,
+          success: true,
+          message: 'Terms of Service updated successfully',
+          data: privacy,
+     });
+});
+
 export const settingsController = {
      getSettings,
      getPrivacyPolicy,
@@ -165,4 +185,6 @@ export const settingsController = {
      addOrUpdateSocials,
      getShippingDetails,
      addOrUpdateShippingDetails,
+     updatePrivacyPolicy,
+     updateTermsOfService,
 };

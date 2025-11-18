@@ -2,7 +2,7 @@ import { Product } from './product.model';
 import { ICreateProductRequest, IProduct, IProductSingleVariant, IProductSingleVariantByFieldName } from './product.interface';
 import { StatusCodes } from 'http-status-codes';
 import { IJwtPayload } from '../auth/auth.interface';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import AppError from '../../../errors/AppError';
 import QueryBuilder from '../../builder/QueryBuilder';
 import unlinkFile from '../../../shared/unlinkFile';
@@ -179,6 +179,95 @@ const getProducts = async (query: Record<string, unknown>) => {
      };
 };
 
+const getProductsWithWishlist = async (userId: string, query: Record<string, unknown>) => {
+     const limit = Number(query.limit) || 10;
+     const page = Number(query.page) || 1;
+     const skip = (page - 1) * limit;
+
+     // Ensure sort is a valid object with field names and 1 (ascending) or -1 (descending)
+     const sort = query.sort && typeof query.sort === 'object' ? query.sort : { createdAt: -1 };
+
+     // Ensure that the sort object is of type Record<string, 1 | -1>
+     const validSort: Record<string, 1 | -1> | any = typeof sort === 'object' ? sort : { createdAt: -1 };
+
+     // Define the aggregation pipeline
+     const productQuery = Product.aggregate([
+          {
+               $lookup: {
+                    from: 'wishlists', // Assuming 'wishlists' is your wishlist collection name
+                    let: { productId: '$_id' },
+                    pipeline: [
+                         { $match: { $expr: { $in: ['$$productId', '$items.product'] } } }, // Match wishlist items containing the product
+                         { $match: { user: new Types.ObjectId(userId) } }, // Match based on the userId
+                    ],
+                    as: 'wishlistDetails',
+               },
+          },
+          {
+               $addFields: {
+                    isWishListed: { $gt: [{ $size: '$wishlistDetails' }, 0] }, // If wishlistDetails has any items, it means it's in the wishlist
+               },
+          },
+          // Search stage (added dynamically from the QueryBuilder class)
+          {
+               $match: query.searchTerm
+                    ? {
+                           $or: ['name', 'description', 'tags'].map((field) => ({
+                                [field]: { $regex: query.searchTerm, $options: 'i' },
+                           })),
+                      }
+                    : {},
+          },
+          // Add filtering stage (if applicable)
+          {
+               $match: query.filter || {},
+          },
+          // Sorting
+          {
+               $sort: validSort, // Use the validSort object to ensure it's in the correct format
+          },
+          // Pagination
+          { $skip: skip },
+          { $limit: limit },
+          // Project the fields you want to return
+          {
+               $project: {
+                    name: 1,
+                    description: 1,
+                    basePrice: 1,
+                    totalStock: 1,
+                    images: 1,
+                    tags: 1,
+                    avg_rating: 1,
+                    isWishListed: 1,
+               },
+          },
+     ]);
+
+     // Await the result of the aggregation query
+     const products = await productQuery;
+
+     // Get the total count for pagination
+     const total = await Product.aggregate([
+          {
+               $match: {
+                    _id: { $in: products.map((product) => product._id) }, // Match products in the list of results
+               },
+          },
+          { $count: 'total' },
+     ]);
+
+     return {
+          meta: {
+               total: total[0]?.total || 0,
+               limit,
+               page,
+               totalPage: Math.ceil((total[0]?.total || 0) / limit),
+          },
+          result: products,
+     };
+};
+
 const getProductById = async (id: string) => {
      const product = await Product.findById(id)
           .populate('shopId', 'name logo address')
@@ -332,7 +421,6 @@ const updateProduct = async (id: string, payload: Partial<IProduct | ICreateProd
           },
           { new: true },
      );
-     
 
      if (!updatedProduct) {
           throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to update product');
@@ -569,4 +657,5 @@ export const ProductService = {
      getProductsByShop,
      getAllProductsByProvince,
      getAllProductsByTerritory,
+     getProductsWithWishlist
 };

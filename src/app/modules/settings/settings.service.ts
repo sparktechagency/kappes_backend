@@ -152,6 +152,28 @@ const addOrUpdateShippingDetails = async (shippingDetails: any) => {
      return updatedSettings?.shippingDetails;     
 };
 
+const updatePrivacyPolicy = async (privacyPolicy: string) => {
+     const settings: any = await Settings.findOne();
+
+     if (!settings) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
+     }
+     settings.privacyPolicy = privacyPolicy;
+     await settings.save();
+     return settings.privacyPolicy;
+};
+
+const updateTermsOfService = async (termsOfService: string) => {
+     const settings: any = await Settings.findOne();
+
+     if (!settings) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
+     }
+     settings.termsOfService = termsOfService;
+     await settings.save();
+     return settings.termsOfService;
+};
+
 export const settingsService = {
      upsertSettings,
      getSettings,
@@ -168,4 +190,6 @@ export const settingsService = {
      addOrUpdateSocials,
      getShippingDetails,
      addOrUpdateShippingDetails,
+     updatePrivacyPolicy,
+     updateTermsOfService,
 };

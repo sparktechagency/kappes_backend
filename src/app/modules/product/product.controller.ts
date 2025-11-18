@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { ProductService } from './product.service';
 import { IJwtPayload } from '../auth/auth.interface';
-import { USER_ROLES } from '../user/user.enums';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 
@@ -18,6 +17,16 @@ const createProduct = catchAsync(async (req: Request, res: Response) => {
 
 const getProducts = catchAsync(async (req: Request, res: Response) => {
     const result = await ProductService.getProducts(req.query);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: 'Products retrieved successfully',
+        data: result
+    });
+});
+
+const getProductsWithWishlist = catchAsync(async (req: Request, res: Response) => {
+    const result = await ProductService.getProductsWithWishlist((req.user as IJwtPayload).id,req.query);
     sendResponse(res, {
         statusCode: StatusCodes.OK,
         success: true,
@@ -137,4 +146,5 @@ export const ProductController = {
     getProductsByShop,
     getAllProductsByProvince,
     getAllProductsByTerritory,
+    getProductsWithWishlist
 }

@@ -14,6 +14,11 @@ SettingsRouter.get('/', settingsController.getSettings)
      .get('/support', settingsController.getSupport)
      .get('/termsOfService', settingsController.getTermsOfService);
 
+// patch privacy policy
+SettingsRouter.patch('/privacy-policy', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), settingsController.updatePrivacyPolicy);
+// patch terms of service
+SettingsRouter.patch('/termsOfService', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), settingsController.updateTermsOfService);
+
 // Contact CRUD
 SettingsRouter.get('/contact', settingsController.getContact);
 SettingsRouter.post('/contact', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), validateRequest(settingsSchema.updateContactShcema), settingsController.addContact);
