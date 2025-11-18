@@ -1,22 +1,24 @@
 import { StatusCodes } from 'http-status-codes';
-import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
-import { sendToTopic } from './pushNotification.utils';
-import AppError from '../../../errors/AppError';
+import catchAsync from '../../../shared/catchAsync';
+import { sendToTopic } from './pushNotification.service';
+
 
 const sendPushNotificationController = catchAsync(async (req, res) => {
+  
+
   const { topic, title, body } = req.body;
 
-  if (!topic || !title || !body) {
-    throw new AppError(StatusCodes.BAD_REQUEST, 'Missing fields! Please provide topic, title and body');
-  }
-
-  const result = await sendToTopic(topic, { title, body });
+  const result = await sendToTopic({
+    topic,
+    notification: { title, body },
+    // data,
+  });
 
   sendResponse(res, {
     success: true,
-    statusCode: 200,
-    message: 'Push notification send successfully',
+    statusCode: StatusCodes.OK,
+    message: 'Push notification sent successfully',
     data: result,
   });
 });
