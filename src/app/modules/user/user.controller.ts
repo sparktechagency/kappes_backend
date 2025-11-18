@@ -192,6 +192,18 @@ const getAllUsers = catchAsync(async (req, res) => {
      });
 });
 
+const getAllAdmins = catchAsync(async (req, res) => {
+     const result = await UserService.getAllAdmins(req.query as any);
+
+     sendResponse(res, {
+          success: true,
+          statusCode: StatusCodes.OK,
+          message: 'Users retrieved successfully',
+          data: result,
+     });
+});
+
+
 export const UserController = {
      createUser,
      createSellerUser,
@@ -206,5 +218,6 @@ export const UserController = {
      editAdmin,
      deleteAdmin,
      getUserAdminById,
-     getAllUsers
+     getAllUsers,
+     getAllAdmins
 };

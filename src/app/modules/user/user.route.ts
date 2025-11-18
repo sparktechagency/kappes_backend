@@ -30,6 +30,8 @@ router.route('/seller').post(validateRequest(UserValidation.createUserZodSchema)
 router.delete('/delete', auth(USER_ROLES.USER), UserController.deleteProfile);
 router.get('/get-all', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), UserController.getAllRoleBasedUser);
 router.get('/get-all-vendors', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), UserController.getAllVendors);
+router.get('/get-all-admins', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), UserController.getAllAdmins);
+
 
 // makeadmin, user to shop admin
 router.post('/make-admin', auth(USER_ROLES.SUPER_ADMIN), validateRequest(UserValidation.makeAdminZodSchema), UserController.makeAdmin);

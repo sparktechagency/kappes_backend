@@ -376,6 +376,27 @@ const getAllUsers = async (query: Record<string, unknown & { isRecentUsers?: str
           console.log(query);
      }
      // querybuilder
+     const queryBuilder = new QueryBuilder(User.find({ role: USER_ROLES.USER }).select('-password'), query);
+     const users = await queryBuilder.fields().filter().paginate().search(['full_name', 'email', 'phone']).sort().modelQuery.exec();
+     const meta = await queryBuilder.countTotal();
+     return {
+          meta,
+          users,
+     };
+};
+
+const getAllAdmins = async (query: Record<string, unknown & { isRecentUsers?: string }>) => {
+     if (query.isRecentUsers) {
+          console.log(query);
+          const now = new Date();
+          const daysAgo7 = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+          if (query.isRecentUsers.toString() == true.toString()) {
+               query.createdAt = { lt: now, gt: daysAgo7 };
+               delete query.isRecentUsers;
+          }
+          console.log(query);
+     }
+     // querybuilder
      const queryBuilder = new QueryBuilder(User.find({ role: { $in: [USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN] } }).select('-password'), query);
      const users = await queryBuilder.fields().filter().paginate().search(['full_name', 'email', 'phone']).sort().modelQuery.exec();
      const meta = await queryBuilder.countTotal();
@@ -402,4 +423,5 @@ export const UserService = {
      makeAdmin,
      getUserAdminById,
      getAllUsers,
+     getAllAdmins
 };
