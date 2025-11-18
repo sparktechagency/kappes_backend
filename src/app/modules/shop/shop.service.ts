@@ -155,11 +155,11 @@ const deleteShopById = async (id: string, user: IJwtPayload) => {
      return shop;
 };
 const getShopsMyShops = async (ownerId: string) => {
-     const shops = await Shop.find({ owner: ownerId }).populate('reviews').populate('owner', 'name email');
-     if (!shops || shops.length === 0) {
-          throw new AppError(StatusCodes.NOT_FOUND, 'No shops found for this owner');
-     }
-     return shops;
+     const shopIsActive = await Shop.findOne({
+          owner: ownerId,
+          isActive: true,
+     }).select('isActive name email');
+     return shopIsActive;
 };
 
 // const getShopsByLocation = async (location: {
