@@ -20,4 +20,22 @@ router.get("/orders/yearly-stats", auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN
 // Returns: Monthly breakdown of revenue and order metrics for the specified year
 router.get("/revenue/yearly-stats", auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), DashboardController.getRevenueStats);
 
+
+// Vendor Management
+router.get("/vendors", auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), DashboardController.getVendorList);
+router.get("/vendors/stats", auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), DashboardController.getVendorStats);
+router.patch("/vendors/status/:id", auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), DashboardController.toggleVendorStatus);
+// router.patch("/vendors/:id", auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), validateRequest(updateVendorSchema), DashboardController.updateVendor);
+router.delete("/vendors/:id", auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), DashboardController.deleteVendor);
+
+// Store Info & Product Management
+router.get("/stores/:id", auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), DashboardController.getStoreDetails);
+router.get("/stores/stats/:id", auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), DashboardController.getStoreStats);
+router.get("/stores/products/:id", auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), DashboardController.getStoreProducts);
+
+// Product CRUD (Admin can manage products for stores)
+// router.post("/products", auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), validateRequest(createProductSchema), DashboardController.createProduct);
+// router.patch("/products/:id", auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), validateRequest(updateProductSchema), DashboardController.updateProduct);
+router.delete("/products/:id", auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), DashboardController.deleteProduct);
+
 export const DashboardRoutes = router;
