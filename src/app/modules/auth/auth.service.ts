@@ -19,7 +19,7 @@ import stripe from '../../config/stripe.config';
 
 //login
 const loginUserFromDB = async (payload: ILoginData) => {
-     const { email, password } = payload;
+     const { email, password, role } = payload;
      if (!password) {
           throw new AppError(StatusCodes.BAD_REQUEST, 'Password is required!');
      }
@@ -28,6 +28,9 @@ const loginUserFromDB = async (payload: ILoginData) => {
      const isExistUser = await User.findOne({ email }).select('+password +tokenVersion');
      if (!isExistUser) {
           throw new AppError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
+     }
+     if (role && role !== isExistUser.role) {
+          throw new AppError(StatusCodes.BAD_REQUEST, `User role ${isExistUser.role} doesn't match!`);
      }
      const getAdmin = await User.findOne({ role: USER_ROLES.SUPER_ADMIN });
      if (!getAdmin) {

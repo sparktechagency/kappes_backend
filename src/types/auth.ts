@@ -1,3 +1,5 @@
+import { USER_ROLES } from '../app/modules/user/user.enums';
+
 export type IVerifyEmail = {
      email: string;
      oneTimeCode: number;
@@ -6,6 +8,7 @@ export type IVerifyEmail = {
 export type ILoginData = {
      email: string;
      password?: string;
+     role?: USER_ROLES;
 };
 
 export type IAuthResetPassword = {

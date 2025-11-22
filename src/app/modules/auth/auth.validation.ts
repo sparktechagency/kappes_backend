@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { USER_ROLES } from '../user/user.enums';
 
 const createVerifyEmailZodSchema = z.object({
      body: z.object({
@@ -11,6 +12,7 @@ const createLoginZodSchema = z.object({
      body: z.object({
           email: z.string({ required_error: 'Email is required' }),
           password: z.string({ required_error: 'Password is required' }),
+          role: z.nativeEnum(USER_ROLES).optional(),
      }),
 });
 
