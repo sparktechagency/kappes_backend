@@ -2,6 +2,7 @@ import { FOLDER_NAMES } from '../../../enums/files';
 import auth from '../../middleware/auth';
 import fileUploadHandler from '../../middleware/fileUploadHandler';
 import parseMulitpleFieldsData from '../../middleware/parseMulitpleFieldsData';
+import parseMultipleFilesdata from '../../middleware/parseMultipleFilesdata';
 import validateRequest from '../../middleware/validateRequest';
 import { USER_ROLES } from '../user/user.enums';
 import { ShopController } from './shop.controller';
@@ -18,7 +19,8 @@ router.post(
      '/',
      auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN),
      fileUploadHandler(),
-     parseMulitpleFieldsData(FOLDER_NAMES.LOGO, FOLDER_NAMES.BANNER, FOLDER_NAMES.COVER_PHOTO),
+     parseMulitpleFieldsData(FOLDER_NAMES.LOGO, FOLDER_NAMES.COVER_PHOTO),
+     parseMultipleFilesdata(FOLDER_NAMES.BANNER),
      validateRequest(ShopValidation.createShopZodSchema),
      ShopController.createShop,
 );
@@ -65,8 +67,9 @@ router.patch(
      '/:id',
      auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN),
      fileUploadHandler(),
+     parseMulitpleFieldsData(FOLDER_NAMES.LOGO, FOLDER_NAMES.COVER_PHOTO),
+     parseMultipleFilesdata(FOLDER_NAMES.BANNER),
      validateRequest(ShopValidation.updateShopZodSchema),
-     parseMulitpleFieldsData(FOLDER_NAMES.LOGO, FOLDER_NAMES.BANNER, FOLDER_NAMES.COVER_PHOTO),
      ShopController.updateShopById,
 );
 

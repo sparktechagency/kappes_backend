@@ -111,14 +111,15 @@ const updateShopById = async (id: string, payload: Partial<IShop>, user: IJwtPay
                throw new AppError(StatusCodes.FORBIDDEN, 'Forbidden: You are not authorized to update this shop');
           }
      }
-     console.log({ payload });
      const updatedShop = await Shop.findByIdAndUpdate(id, payload, { new: true });
      if (!updatedShop) {
           if (payload.logo) {
                unlinkFile(payload.logo);
           }
           if (payload.banner) {
-               unlinkFile(payload.banner);
+               payload.banner.forEach((element) => {
+                    unlinkFile(element);
+               });
           }
           if (payload.coverPhoto) {
                unlinkFile(payload.coverPhoto);
@@ -130,7 +131,9 @@ const updateShopById = async (id: string, payload: Partial<IShop>, user: IJwtPay
           unlinkFile(shop.logo);
      }
      if (shop.banner) {
-          unlinkFile(shop.banner);
+          shop.banner.forEach((element) => {
+               unlinkFile(element);
+          });
      }
      if (shop.coverPhoto) {
           unlinkFile(shop.coverPhoto);

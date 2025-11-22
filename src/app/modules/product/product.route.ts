@@ -59,6 +59,7 @@ router.patch('/recommended/:id', auth(USER_ROLES.VENDOR, USER_ROLES.SUPER_ADMIN,
 
 // get all products by province (public endpoint)
 router.get('/province/:province', ProductController.getAllProductsByProvince);
+router.get('/city/:city', ProductController.getAllProductsByCity);
 router.get('/territory/:territory', ProductController.getAllProductsByTerritory);
 
 // get product by shop

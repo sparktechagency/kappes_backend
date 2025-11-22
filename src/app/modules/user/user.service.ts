@@ -314,7 +314,6 @@ const deleteUserByAdmin = async (id: string) => {
 };
 
 const makeAdmin = async (payload: Partial<IUser>) => {
-     // 🏃‍♀️‍➡️
      const isExistUser = await User.findOne({ email: payload.email });
      if (isExistUser) {
           throw new AppError(StatusCodes.BAD_REQUEST, 'User already exists!');

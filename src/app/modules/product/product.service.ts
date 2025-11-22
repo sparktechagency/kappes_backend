@@ -645,6 +645,50 @@ const getAllProductsByTerritory = async (territory: string, query: Record<string
      }
 };
 
+const getAllProductsByCity = async (city: string, query: Record<string, unknown>) => {
+     try {
+          // Step 1: Find all the shops located in the specified city
+          const shopQuery = new QueryBuilder(Shop.find({ 'address.city': city, 'isDeleted': { $ne: true } }), query).search(['name']).filter().sort().paginate().fields();
+
+          const shopsInCity = await shopQuery.modelQuery;
+
+          if (!shopsInCity || shopsInCity.length === 0) {
+               throw new AppError(StatusCodes.NOT_FOUND, `No shops found in the city: ${city}`);
+          }
+
+          // Step 2: Extract the shopIds from the shops
+          const shopIds = shopsInCity.map((shop) => shop._id);
+
+          // Step 3: Fetch all products that belong to the shops in the given city
+          const productQuery = new QueryBuilder(
+               Product.find({ shopId: { $in: shopIds }, isDeleted: { $ne: true } })
+                    .populate('shopId', 'name')
+                    .populate('categoryId', 'name')
+                    .populate('subcategoryId', 'name')
+                    .populate('brandId', 'name')
+                    .populate('product_variant_Details.variantId'),
+               query,
+          )
+               .search(['name', 'description', 'tags'])
+               .filter()
+               .sort()
+               .paginate()
+               .fields();
+
+          const products = await productQuery.modelQuery;
+          const productMeta = await productQuery.countTotal();
+
+          // Step 4: Return the products
+          return {
+               productMeta,
+               products,
+          };
+     } catch (error) {
+          console.error('Error fetching products by city:', error);
+          throw error; // Throw the error for further handling
+     }
+};
+
 export const ProductService = {
      createProduct,
      getProducts,
@@ -657,5 +701,6 @@ export const ProductService = {
      getProductsByShop,
      getAllProductsByProvince,
      getAllProductsByTerritory,
-     getProductsWithWishlist
+     getProductsWithWishlist,
+     getAllProductsByCity
 };

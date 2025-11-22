@@ -40,7 +40,7 @@ export const shopSchema = new Schema<IShop>({
     working_hours: { type: [{ day: String, start: String, end: String }, { _id: false }], required: false },
     logo: { type: String, required: false },
     coverPhoto: { type: String, required: false },
-    banner: { type: String, required: false },
+    banner: { type: [String], required: false },
     reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
     admins: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     followers: [{ type: Schema.Types.ObjectId, ref: 'User' }],

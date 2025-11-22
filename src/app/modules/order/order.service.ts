@@ -162,7 +162,7 @@ const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
                });
                // findbyid and update the user
                await User.findByIdAndUpdate(thisCustomer?.id, { $set: { stripeCustomerId: stripeCustomer.id } });
-               
+
                const stripeSessionData: any = {
                     payment_method_types: ['card'],
                     mode: 'payment',
@@ -473,6 +473,60 @@ const getOrdersByShopId = async (shopId: string, user: IJwtPayload, query: Recor
      return { meta, orders };
 };
 
+// const refundOrder = async (orderId: string, user: IJwtPayload) => {
+//      try {
+//           // Fetch the order with populated payment details
+//           const order = await Order.findById(orderId).populate('payment');
+
+//           if (!order) {
+//                throw new AppError(StatusCodes.NOT_FOUND, 'Order not found.');
+//           }
+
+//           // const payment = await Payment.findOne({ order: orderId, user: user.id, status: { $nin: [PAYMENT_STATUS.UNPAID, PAYMENT_STATUS.REFUNDED], isDeleted: false } });
+//           // CORRECTED QUERY - moved isDeleted outside of status
+//           const payment = await Payment.findOne({
+//                order: orderId,
+//                user: user.id,
+//                status: { $nin: [PAYMENT_STATUS.UNPAID, PAYMENT_STATUS.REFUNDED] },
+//                isDeleted: false, // Now it's a separate condition
+//           });
+//           if (!payment) {
+//                throw new AppError(StatusCodes.BAD_REQUEST, 'Payment for this order is not successful or not found.');
+//           }
+//           // Check if the order payment is completed
+//           if (order.paymentMethod !== PAYMENT_METHOD.COD) {
+//                // Refund logic with Stripe
+//                const refundAmount = Math.round(payment.amount * 100); // Convert to integer (cents)
+//                // Refund logic with Stripe
+//                const refund = await stripe.refunds.create({
+//                     payment_intent: payment.paymentIntent, // Use the saved paymentIntent
+//                     amount: refundAmount, // Refund the full amount (you can modify this if partial refund is needed)
+//                });
+//                console.log('refund', refund);
+//           } else {
+//                // Check if the order needs a refund
+//                if (!order.isNeedRefund) {
+//                     throw new AppError(StatusCodes.BAD_REQUEST, "This order doesn't require a refund.");
+//                }
+//           }
+//           // Update the order's payment status to 'REFUNDED' and save it
+//           order.paymentStatus = PAYMENT_STATUS.REFUNDED;
+//           order.status = ORDER_STATUS.CANCELLED; // Cancel the order if the refund is successful
+//           order.isNeedRefund = false;
+//           await order.save();
+
+//           // update payment status to 'REFUNDED'
+//           payment.status = PAYMENT_STATUS.REFUNDED;
+//           await payment.save();
+
+//           // Respond with success message and refund details
+//           return { message: 'Refund processed successfully' };
+//      } catch (error) {
+//           console.error('Error processing refund:', error);
+//           throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Error processing refund.');
+//      }
+// };
+
 const refundOrder = async (orderId: string, user: IJwtPayload) => {
      try {
           // Fetch the order with populated payment details
@@ -482,40 +536,106 @@ const refundOrder = async (orderId: string, user: IJwtPayload) => {
                throw new AppError(StatusCodes.NOT_FOUND, 'Order not found.');
           }
 
-          const payment = await Payment.findOne({ order: orderId, user: user.id, status: { $nin: [PAYMENT_STATUS.UNPAID, PAYMENT_STATUS.REFUNDED], isDeleted: false } });
+          const payment = await Payment.findOne({
+               order: orderId,
+               user: user.id,
+               status: { $nin: [PAYMENT_STATUS.UNPAID, PAYMENT_STATUS.REFUNDED] },
+               isDeleted: false,
+          });
+
           if (!payment) {
                throw new AppError(StatusCodes.BAD_REQUEST, 'Payment for this order is not successful or not found.');
           }
+
           // Check if the order payment is completed
           if (order.paymentMethod !== PAYMENT_METHOD.COD) {
-               // Refund logic with Stripe
-               const refundAmount = Math.round(payment.amount * 100); // Convert to integer (cents)
-               // Refund logic with Stripe
-               const refund = await stripe.refunds.create({
-                    payment_intent: payment.paymentIntent, // Use the saved paymentIntent
-                    amount: refundAmount, // Refund the full amount (you can modify this if partial refund is needed)
+               // Retrieve payment intent from Stripe
+               const paymentIntent = await stripe.paymentIntents.retrieve(payment.paymentIntent as string);
+               console.log('🚀 ~ refundOrder ~ paymentIntent:', paymentIntent);
+
+               // Get the latest charge to check refund status
+               const chargeId = paymentIntent.latest_charge;
+               let availableToRefund;
+
+               if (chargeId) {
+                    // Retrieve the charge to get accurate refund information
+                    const charge = await stripe.charges.retrieve(chargeId as string);
+                    console.log('🚀 ~ refundOrder ~ charge:', {
+                         amount: charge.amount,
+                         amount_refunded: charge.amount_refunded,
+                         refunded: charge.refunded,
+                    });
+
+                    availableToRefund = charge.amount - charge.amount_refunded;
+               } else {
+                    // Fallback to payment intent amounts
+                    availableToRefund = paymentIntent.amount_received - (paymentIntent.amount_refunded || 0);
+               }
+
+               const requestedRefundAmount = Math.round(payment.amount * 100);
+
+               console.log('🚀 ~ refundOrder ~ amounts:', {
+                    requestedRefundAmount,
+                    availableToRefund,
+                    paymentAmount: payment.amount,
+                    amountReceived: paymentIntent.amount_received,
+                    amountRefunded: paymentIntent.amount_refunded,
                });
-               console.log('refund', refund);
+
+               // Validate refund availability
+               if (availableToRefund <= 0) {
+                    throw new AppError(StatusCodes.BAD_REQUEST, 'No funds available for refund. This payment may have already been fully refunded.');
+               }
+
+               // Check if we can refund the requested amount
+               if (requestedRefundAmount > availableToRefund) {
+                    throw new AppError(
+                         StatusCodes.BAD_REQUEST,
+                         `Refund amount mismatch. Database shows $${payment.amount}, but Stripe has $${(availableToRefund / 100).toFixed(2)} available. Please investigate.`,
+                    );
+               }
+
+               // Process refund using the charge ID if available, otherwise use payment intent
+               const refundParams: any = {
+                    amount: requestedRefundAmount,
+               };
+
+               if (chargeId) {
+                    refundParams.charge = chargeId;
+               } else {
+                    refundParams.payment_intent = payment.paymentIntent;
+               }
+
+               const refund = await stripe.refunds.create(refundParams);
+               console.log('Refund processed successfully:', refund);
           } else {
-               // Check if the order needs a refund
+               // COD payment logic
                if (!order.isNeedRefund) {
                     throw new AppError(StatusCodes.BAD_REQUEST, "This order doesn't require a refund.");
                }
           }
-          // Update the order's payment status to 'REFUNDED' and save it
+
+          // Update order and payment status
           order.paymentStatus = PAYMENT_STATUS.REFUNDED;
-          order.status = ORDER_STATUS.CANCELLED; // Cancel the order if the refund is successful
+          order.status = ORDER_STATUS.CANCELLED;
           order.isNeedRefund = false;
           await order.save();
 
-          // update payment status to 'REFUNDED'
           payment.status = PAYMENT_STATUS.REFUNDED;
           await payment.save();
 
-          // Respond with success message and refund details
           return { message: 'Refund processed successfully' };
      } catch (error) {
           console.error('Error processing refund:', error);
+
+          if (error.type === 'StripeInvalidRequestError') {
+               throw new AppError(StatusCodes.BAD_REQUEST, `Payment provider error: ${error.message}`);
+          }
+
+          if (error instanceof AppError) {
+               throw error;
+          }
+
           throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Error processing refund.');
      }
 };

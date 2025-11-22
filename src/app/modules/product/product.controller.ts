@@ -133,6 +133,16 @@ const getAllProductsByTerritory = catchAsync(async (req: Request, res: Response)
     });
 }); 
 
+const getAllProductsByCity = catchAsync(async (req: Request, res: Response) => {
+    const { city } = req.params;
+    const result = await ProductService.getAllProductsByCity(city as string, req.query);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: 'Products retrieved successfully',
+        data: result
+    });
+});
 
 export const ProductController = {
     createProduct,
@@ -146,5 +156,6 @@ export const ProductController = {
     getProductsByShop,
     getAllProductsByProvince,
     getAllProductsByTerritory,
-    getProductsWithWishlist
+    getProductsWithWishlist,
+    getAllProductsByCity
 }

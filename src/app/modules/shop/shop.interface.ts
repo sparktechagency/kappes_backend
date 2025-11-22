@@ -26,7 +26,7 @@ export interface IShop {
     working_hours?: { day: string; start: string; end: string }[];
     logo?: string;
     coverPhoto?: string;
-    banner?: string;
+    banner?: string[];
     reviews?: Schema.Types.ObjectId[];
     // ..
     admins?: mongoose.Types.ObjectId[];
