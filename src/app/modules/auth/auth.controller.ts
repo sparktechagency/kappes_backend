@@ -56,6 +56,7 @@ const loginUser = catchAsync(async (req, res) => {
                accessToken: result.accessToken,
                refreshToken: result.refreshToken,
                role: result.role,
+               shop: result.shop,
           },
      });
 });
@@ -178,11 +179,11 @@ const googleCallback = (req: Request, res: Response, next: NextFunction) => {
                          maxAge: 31536000000,
                          domain: `.${config.frontend_domain}`,
                     };
-               
+
                     if (config.node_env === 'production') {
                          cookieOptions.sameSite = 'none';
                     }
-               
+
                     res.cookie('accessToken', result.accessToken, cookieOptions);
                     res.cookie('refreshToken', result.refreshToken, cookieOptions);
                     sendResponse(res, {

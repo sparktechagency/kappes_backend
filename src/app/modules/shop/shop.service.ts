@@ -39,7 +39,7 @@ const createShop = async (payload: IShop, user: IJwtPayload, host: string, proto
      // check if user has already a shop
      const existingShopByUser = await Shop.findOne({ owner: new mongoose.Types.ObjectId(user.id) });
      if (existingShopByUser) {
-         throw new AppError(400, 'User already has a shop');
+          throw new AppError(400, 'User already has a shop');
      }
 
      // Create a new shop
@@ -156,7 +156,7 @@ const deleteShopById = async (id: string, user: IJwtPayload) => {
 };
 const getShopsMyShops = async (ownerId: string) => {
      const shopIsActive = await Shop.findOne({
-          owner: ownerId,
+          owner: new mongoose.Types.ObjectId(ownerId),
           isActive: true,
      }).select('isActive name email');
      return shopIsActive;
@@ -400,7 +400,7 @@ const getProductsByShopId = async (shopId: string, query: Record<string, unknown
 };
 
 const getShopAdminsByShopId = async (shopId: string, query: Record<string, unknown>, user: IJwtPayload) => {
-     console.log("🚀 ~ getShopAdminsByShopId ~ user:", user)
+     console.log('🚀 ~ getShopAdminsByShopId ~ user:', user);
      const shopQuery = new QueryBuilder(Shop.find({ _id: shopId }).populate('admins', 'name email').populate('owner', 'name email').select('admins owner name email phone address'), query)
           .search(['name', 'description', 'tags'])
           .filter()
@@ -462,7 +462,6 @@ const createShopAdmin = async (payload: Partial<IUser>, shopId: string, user: IJ
 };
 
 const getShopOverview = async (shopId: string, user: IJwtPayload) => {
-     console.log("🚀 ~ getShopOverview ~ user:", user)
      const shop = await Shop.findById(shopId).populate('owner', 'name email').populate('admins', 'name email').populate('followers', 'name email');
 
      if (!shop) {

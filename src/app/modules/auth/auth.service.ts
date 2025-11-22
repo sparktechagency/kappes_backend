@@ -16,6 +16,7 @@ import { createToken } from '../../../utils/createToken';
 import { USER_ROLES } from '../user/user.enums';
 import { sendNotifications } from '../../../helpers/notificationsHelper';
 import stripe from '../../config/stripe.config';
+import { ShopService } from '../shop/shop.service';
 
 //login
 const loginUserFromDB = async (payload: ILoginData) => {
@@ -107,7 +108,13 @@ const loginUserFromDB = async (payload: ILoginData) => {
      const accessToken = jwtHelper.createToken(jwtData, config.jwt.jwt_secret as Secret, config.jwt.jwt_expire_in as string);
      const refreshToken = jwtHelper.createToken(jwtData, config.jwt.jwt_refresh_secret as string, config.jwt.jwt_refresh_expire_in as string);
 
-     return { accessToken, refreshToken, role: isExistUser.role };
+     // send shop id if role is vendor
+     let shop;
+     if (isExistUser.role === USER_ROLES.VENDOR) {
+          shop = await ShopService.getShopsMyShops(isExistUser._id.toString());
+     }
+
+     return { accessToken, refreshToken, role: isExistUser.role, shop };
 };
 
 //SocialLoginUserFromDB
