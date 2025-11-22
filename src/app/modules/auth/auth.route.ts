@@ -17,11 +17,16 @@ router.post('/dashboard/forget-password', validateRequest(AuthValidation.createF
 
 router.post('/dashboard/reset-password', validateRequest(AuthValidation.createResetPasswordZodSchema), AuthController.resetPasswordByUrl);
 
-router.post('/change-password', auth(USER_ROLES.ADMIN, USER_ROLES.USER, USER_ROLES.SUPER_ADMIN), validateRequest(AuthValidation.createChangePasswordZodSchema), AuthController.changePassword);
+router.post(
+     '/change-password',
+     auth(USER_ROLES.ADMIN, USER_ROLES.USER, USER_ROLES.SUPER_ADMIN, USER_ROLES.VENDOR),
+     validateRequest(AuthValidation.createChangePasswordZodSchema),
+     AuthController.changePassword,
+);
 router.post('/resend-otp', AuthController.resendOtp);
 
-router.get("/google", AuthController.googleAuth);
-router.get("/google/callback", AuthController.googleCallback);
+router.get('/google', AuthController.googleAuth);
+router.get('/google/callback', AuthController.googleCallback);
 // router.get("/facebook", AuthController.facebookAuth);
 // router.get("/facebook/callback", AuthController.facebookCallback);
 
