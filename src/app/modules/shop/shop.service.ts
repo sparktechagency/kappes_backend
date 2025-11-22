@@ -400,8 +400,10 @@ const getProductsByShopId = async (shopId: string, query: Record<string, unknown
 };
 
 const getShopAdminsByShopId = async (shopId: string, query: Record<string, unknown>, user: IJwtPayload) => {
-     console.log('🚀 ~ getShopAdminsByShopId ~ user:', user);
-     const shopQuery = new QueryBuilder(Shop.find({ _id: shopId }).populate('admins', 'name email').populate('owner', 'name email').select('admins owner name email phone address'), query)
+     const shopQuery = new QueryBuilder(
+          Shop.find({ _id: shopId }).populate('admins', 'full_name createdAt email').populate('owner', 'full_name createdAt email').select('admins owner name email phone address'),
+          query,
+     )
           .search(['name', 'description', 'tags'])
           .filter()
           .sort()
