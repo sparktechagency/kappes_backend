@@ -422,44 +422,104 @@ const getShopAdminsByShopId = async (shopId: string, query: Record<string, unkno
 };
 
 const createShopAdmin = async (payload: Partial<IUser>, shopId: string, user: IJwtPayload) => {
+     // use mongoose transaction
      const session = await mongoose.startSession();
-     await session.withTransaction(async () => {
+     session.startTransaction();
+
+     try {
           // check if user exists with the payload.email
           const userExists = await User.findOne({ email: payload.email }).session(session);
           if (userExists) {
                throw new AppError(400, `User already exists so use "/make-shop-admin/:shopId" api`);
           }
+
           // create user
           payload.role = USER_ROLES.SHOP_ADMIN;
           payload.verified = true;
-          const newUser = await User.create([payload], { session });
+          const [newUser] = await User.create([payload], { session });
           if (!newUser) {
                throw new AppError(400, 'User not created');
           }
+
+          // check if shop exists
           const shop = await Shop.findById(new mongoose.Types.ObjectId(shopId)).session(session);
           if (!shop) {
                throw new AppError(404, 'Shop not found');
           }
 
+          // check authorization
           if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
                if (shop.owner.toString() !== user.id && !shop.admins?.some((admin) => admin.toString() === user.id)) {
                     throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to create a shop admin for this shop');
                }
           }
-          shop.admins?.push(newUser[0]._id);
+
+          // add new user to shop admins
+          shop.admins?.push(newUser._id);
           await shop.save({ session });
 
+          // Commit the transaction
+          await session.commitTransaction();
+          session.endSession();
+
+          // send welcome email
           const values = {
-               name: newUser[0].full_name,
-               email: newUser[0].email!,
+               name: newUser.full_name,
+               email: newUser.email!,
                password: payload.password!,
           };
           const createAccountTemplate = emailTemplate.createAdminAccount(values);
           await emailHelper.sendEmail(createAccountTemplate);
+          return newUser;
+     } catch (error) {
+          console.log('🚀 ~ createShopAdmin ~ error:', error);
+          // Abort the transaction on error
+          await session.abortTransaction();
+          session.endSession();
 
-          return newUser[0];
-     });
+          throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to create shop admin');
+     }
 };
+
+// const createShopAdmin = async (payload: Partial<IUser>, shopId: string, user: IJwtPayload) => {
+//      const session = await mongoose.startSession();
+//      await session.withTransaction(async () => {
+//           // check if user exists with the payload.email
+//           const userExists = await User.findOne({ email: payload.email }).session(session);
+//           if (userExists) {
+//                throw new AppError(400, `User already exists so use "/make-shop-admin/:shopId" api`);
+//           }
+//           // create user
+//           payload.role = USER_ROLES.SHOP_ADMIN;
+//           payload.verified = true;
+//           const newUser = await User.create([payload], { session });
+//           if (!newUser) {
+//                throw new AppError(400, 'User not created');
+//           }
+//           const shop = await Shop.findById(new mongoose.Types.ObjectId(shopId)).session(session);
+//           if (!shop) {
+//                throw new AppError(404, 'Shop not found');
+//           }
+
+//           if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
+//                if (shop.owner.toString() !== user.id && !shop.admins?.some((admin) => admin.toString() === user.id)) {
+//                     throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to create a shop admin for this shop');
+//                }
+//           }
+//           shop.admins?.push(newUser[0]._id);
+//           await shop.save({ session });
+
+//           const values = {
+//                name: newUser[0].full_name,
+//                email: newUser[0].email!,
+//                password: payload.password!,
+//           };
+//           const createAccountTemplate = emailTemplate.createAdminAccount(values);
+//           await emailHelper.sendEmail(createAccountTemplate);
+
+//           return newUser[0];
+//      });
+// };
 
 const getShopOverview = async (shopId: string, user: IJwtPayload) => {
      const shop = await Shop.findById(shopId).populate('owner', 'name email').populate('admins', 'name email').populate('followers', 'name email');
