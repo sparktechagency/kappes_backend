@@ -553,7 +553,6 @@ const refundOrder = async (orderId: string, user: IJwtPayload) => {
 
           const payment = await Payment.findOne({
                order: orderId,
-               user: user.id,
                status: { $nin: [PAYMENT_STATUS.UNPAID, PAYMENT_STATUS.REFUNDED] },
                isDeleted: false,
           });
