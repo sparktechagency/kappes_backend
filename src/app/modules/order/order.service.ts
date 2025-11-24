@@ -95,20 +95,20 @@ const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
           if (orderData.paymentMethod === PAYMENT_METHOD.COD) {
                createdOrder = await order.save();
 
-               const transactionId = generateTransactionId();
+               // const transactionId = generateTransactionId(createdOrder._id.toString());
 
-               const payment = new Payment({
-                    user: user.id,
-                    shop: createdOrder.shop,
-                    order: createdOrder._id,
-                    method: orderData.paymentMethod,
-                    transactionId,
-                    amount: createdOrder.finalAmount,
-               });
+               // const payment = new Payment({
+               //      user: user.id,
+               //      shop: createdOrder.shop,
+               //      order: createdOrder._id,
+               //      method: orderData.paymentMethod,
+               //      transactionId,
+               //      amount: createdOrder.finalAmount,
+               // });
 
-               createdOrder.payment = payment._id;
-               await createdOrder.save();
-               await payment.save();
+               // createdOrder.payment = payment._id;
+               // await createdOrder.save();
+               // await payment.save();
 
                // increase the purchase count of the all the proudcts use operatros
                const updatePurchaseCount = await Product.updateMany({ _id: { $in: createdOrder.products.map((item) => item.product) } }, { $inc: { purchaseCount: 1 } });
@@ -343,6 +343,21 @@ const changeOrderStatus = async (orderId: string, status: string, user: IJwtPayl
                                         throw new AppError(StatusCodes.BAD_REQUEST, 'Stripe account not found');
                                    }
                               }
+                         } else {
+                              const transactionId = generateTransactionId(order._id.toString());
+
+                              const payment = new Payment({
+                                   user: user.id,
+                                   shop: order.shop,
+                                   order: order._id,
+                                   method: order.paymentMethod,
+                                   transactionId,
+                                   amount: order.finalAmount,
+                              });
+
+                              order.payment = payment._id;
+                              await order.save();
+                              await payment.save();
                          }
                     }
                     break;

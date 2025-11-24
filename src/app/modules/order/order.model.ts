@@ -4,14 +4,7 @@ import AppError from '../../../errors/AppError';
 import { COUPON_DISCOUNT_TYPE } from '../coupon/coupon.enums';
 import { Coupon } from '../coupon/coupon.model';
 import { Product } from '../product/product.model';
-import {
-     DAY_FOR_DELIVERY_OPTIONS,
-     DELIVERY_OPTIONS,
-     EXTRA_DELIVERY_COST_PERCENT_FOR_DELIVERY_OPTIONS,
-     ORDER_STATUS,
-     PAYMENT_METHOD,
-     PAYMENT_STATUS,
-} from './order.enums';
+import { DAY_FOR_DELIVERY_OPTIONS, DELIVERY_OPTIONS, EXTRA_DELIVERY_COST_PERCENT_FOR_DELIVERY_OPTIONS, ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS } from './order.enums';
 import { IOrder } from './order.interface';
 import { settingsService } from '../settings/settings.service';
 
@@ -131,10 +124,14 @@ orderSchema.pre('validate', async function (next) {
 
      // Step 2: Calculate total amount for products
      for (const item of order.products) {
-          const product = await Product.findById(item.product).populate('shopId');
+          const product = await Product.findById(item.product).populate('shopId').select('basePrice shopId product_variant_Details');
 
           if (!product) {
                return next(new Error(`Product not found!.`));
+          }
+          const itemVariant = product.product_variant_Details.find((variantItem) => variantItem.variantId.toString() === item.variant.toString());
+          if (!itemVariant) {
+               return next(new Error(`Variant not found!.`));
           }
 
           if (shopId && String(shopId) !== String(product.shopId._id)) {
@@ -146,7 +143,7 @@ orderSchema.pre('validate', async function (next) {
 
           const offerPrice = (await product?.calculateOfferPrice()) || 0;
 
-          let productPrice = product.basePrice;
+          let productPrice = itemVariant.variantPrice || product.basePrice;
           if (offerPrice) productPrice = Number(offerPrice);
 
           item.unitPrice = productPrice;
@@ -173,7 +170,7 @@ orderSchema.pre('validate', async function (next) {
      // Step 3: Calculate delivery charge based on shipping address and delivery options
      const shippingAdressLowerCased = order?.shippingAddress?.toLowerCase();
      const shippingDetails = await settingsService.getShippingDetails();
-     let deliveryCharge= shippingDetails.worldWideShipping.cost;
+     let deliveryCharge = shippingDetails.worldWideShipping.cost;
      if (shippingDetails.freeShipping.area.some((area: string) => shippingAdressLowerCased?.includes(area))) {
           deliveryCharge = shippingDetails.freeShipping.cost;
      } else if (shippingDetails.centralShipping.area.some((area: string) => shippingAdressLowerCased?.includes(area))) {
