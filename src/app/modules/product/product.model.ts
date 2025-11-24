@@ -1,4 +1,4 @@
-import mongoose, { model, Schema, Document, Types, Model } from 'mongoose';
+import mongoose, { model, Schema, Model } from 'mongoose';
 import { IProduct, IProductSingleVariant } from './product.interface';
 import { IReview } from '../review/review.interface';
 import { Offered } from '../offered/offered.model';
@@ -20,6 +20,10 @@ const productVariantSchema = new Schema<IProductSingleVariant>(
                type: Number,
                required: true,
                min: 0,
+          },
+          slug: {
+               type: String,
+               required: true,
           },
      },
      {

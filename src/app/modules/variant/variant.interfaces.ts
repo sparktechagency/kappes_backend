@@ -30,6 +30,7 @@ export interface IVariant {
     size?: string; // EU 38, 39, 40; UK 5, 6, 7,XS, S, M, L, XL
     fabric?: string; // Optional for clothing (e.g., Cotton, Silk)
     weight?: number; // Optional weight for products like dumbbells, sports equipment, etc.
+    volume?: number; // Optional weight for products like dumbbells, sports equipment, etc.
     dimensions?: string;// Single, Queen, King for beds
     capacity?: string; // 1L, 2L
     options?: VARIANT_OPTIONS;

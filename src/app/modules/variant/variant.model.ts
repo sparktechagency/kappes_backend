@@ -29,6 +29,7 @@ const variantSchema = new Schema<IVariant & Document>({
     size: { type: String, required: false },
     fabric: { type: String, required: false },
     weight: { type: Number, required: false },
+    volume: { type: Number, required: false },
     dimensions: { type: String, required: false },
     capacity: { type: String, required: false },
     options: { type: String, enum: Object.values(VARIANT_OPTIONS) },

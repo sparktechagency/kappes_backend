@@ -8,6 +8,7 @@ export interface IProductSingleVariant {
      variantId: mongoose.Types.ObjectId | string;
      variantQuantity: number;
      variantPrice: number;
+     slug: string;
 }
 
 export interface IProductSingleVariantByFieldName extends Partial<IVariant> {

@@ -87,6 +87,7 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
                               variantId: isVariantExistSlug._id,
                               variantQuantity: variant.variantQuantity,
                               variantPrice: variant.variantPrice,
+                              slug: variantSlug,
                          } as unknown as IProductSingleVariant;
                     }
 
@@ -101,6 +102,7 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
                          variantId: savedVariant._id,
                          variantQuantity: variant.variantQuantity,
                          variantPrice: variant.variantPrice,
+                         slug: variantSlug,
                     } as unknown as IProductSingleVariant;
                }),
           );
@@ -374,6 +376,7 @@ const updateProduct = async (id: string, payload: Partial<IProduct | ICreateProd
                               variantId: foundVariant._id as unknown as ObjectId,
                               variantQuantity: variant.variantQuantity,
                               variantPrice: variant.variantPrice,
+                              slug: variant.slug,
                          };
                          variantsToUpdate.push(newVariantData);
                     }
@@ -702,5 +705,5 @@ export const ProductService = {
      getAllProductsByProvince,
      getAllProductsByTerritory,
      getProductsWithWishlist,
-     getAllProductsByCity
+     getAllProductsByCity,
 };

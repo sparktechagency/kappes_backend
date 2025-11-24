@@ -5,7 +5,6 @@ import { SubCategory } from './subCategory.model';
 import { ISubCategory } from './subCategory.interface';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { Category } from '../category/category.model'; 
-import { User } from '../user/user.model';
 import { Product } from '../product/product.model';
 import { IJwtPayload } from '../auth/auth.interface';
 import { USER_ROLES } from '../user/user.enums';
