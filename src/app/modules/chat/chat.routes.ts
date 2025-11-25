@@ -8,6 +8,6 @@ const router = express.Router();
 
 router.post('/', auth(USER_ROLES.USER, USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR), validateRequest(ChatValidation.createChatZodSchema), ChatController.createChat);
 router.get('/user', auth(USER_ROLES.USER), ChatController.getChatForUser);
-router.get('/shop/:id', auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR,USER_ROLES.USER), ChatController.getChatForShopAdminOrOwner);
+router.get('/shop/:id', auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR), ChatController.getChatForShopAdminOrOwner);
 
 export const ChatRoutes = router;
