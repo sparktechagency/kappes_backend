@@ -124,6 +124,9 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
           // Create product data object
           const productData = {
                name: payload.name,
+               territory: shop?.address?.territory || '',
+               city: shop?.address?.city || '',
+               province: shop?.address?.province || '',
                description: payload.description,
                basePrice: payload.basePrice,
                images: payload.images,

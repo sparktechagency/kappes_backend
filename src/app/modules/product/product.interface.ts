@@ -8,7 +8,7 @@ export interface IProductSingleVariant {
      variantId: mongoose.Types.ObjectId | string;
      variantQuantity: number;
      variantPrice: number;
-     slug: string;
+     slug?: string;
 }
 
 export interface IProductSingleVariantByFieldName extends Partial<IVariant> {
@@ -18,6 +18,9 @@ export interface IProductSingleVariantByFieldName extends Partial<IVariant> {
 
 export interface IProduct extends mongoose.Document {
      name: string;
+     territory?: string;
+     city?: string;
+     province?: string;
      description: string;
      basePrice: number;
      totalStock: number;
@@ -47,6 +50,9 @@ export interface IProduct extends mongoose.Document {
 
 export interface ICreateProductRequest {
      name: string;
+     territory?: string;
+     city?: string;
+     province?: string;
      description: string;
      basePrice: number;
      weight?: number;

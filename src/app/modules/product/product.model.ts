@@ -23,7 +23,7 @@ const productVariantSchema = new Schema<IProductSingleVariant>(
           },
           slug: {
                type: String,
-               required: true,
+               required: false,
           },
      },
      {
@@ -39,6 +39,15 @@ const productSchema = new Schema<IProduct>(
                trim: true,
                minlength: 2,
                maxlength: 100,
+          },
+          territory: {
+               type: String,
+          },
+          city: {
+               type: String,
+          },
+          province: {
+               type: String,
           },
           description: {
                type: String,
