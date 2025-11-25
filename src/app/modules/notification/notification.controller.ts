@@ -75,6 +75,17 @@ const sendAdminNotification = catchAsync(async (req, res) => {
      });
 });
 
+const deleteNotification = catchAsync(async (req, res) => {
+     const { id } = req.params;
+     const result = await NotificationService.deleteNotificationToDB(id);
+
+     sendResponse(res, {
+          statusCode: StatusCodes.OK,
+          success: true,
+          message: 'Notification Deleted Successfully',
+          data: result,
+     });
+});
 export const NotificationController = {
      adminNotificationFromDB,
      getNotificationFromDB,
@@ -82,4 +93,5 @@ export const NotificationController = {
      adminReadNotification,
      sendAdminNotification,
      readNotificationSingle,
+     deleteNotification
 };

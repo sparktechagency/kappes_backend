@@ -64,7 +64,7 @@ const adminNotificationFromDB = async (userId: string, query: Record<string, unk
 
 // read notifications only for admin
 const adminReadNotificationToDB = async (): Promise<INotification | null> => {
-     const result: any = await Notification.updateMany({ type: 'ADMIN', read: false }, { $set: { read: true } }, { new: true });
+     const result: any = await Notification.updateMany({ type: 'ADMIN', read: false }, { $set: { read: true } });
      return result;
 };
 const adminSendNotificationFromDB = async (payload: any) => {
@@ -126,6 +126,11 @@ const adminSendNotificationFromDB = async (payload: any) => {
      return;
 };
 
+const deleteNotificationToDB = async (id: string): Promise<INotification | null> => {
+     const result: any = await Notification.findByIdAndDelete(id);
+     return result;
+};
+
 export const NotificationService = {
      adminNotificationFromDB,
      getNotificationFromDB,
@@ -133,4 +138,5 @@ export const NotificationService = {
      adminReadNotificationToDB,
      adminSendNotificationFromDB,
      readNotificationSingleToDB,
+     deleteNotificationToDB,
 };
