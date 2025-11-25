@@ -1,7 +1,5 @@
 import { Document, Types } from 'mongoose';
 
-
-
 export interface ISingleContact {
      phone: string;
      email: string;
@@ -19,25 +17,31 @@ export interface ISettings extends Document {
           whatsapp?: string;
           facebook?: string;
           instagram?: string;
-     },
-     shippingDetails :{
-          freeShipping:{
-               area:string[],
-               cost:number
-          },
-          centralShipping:{
-               area:string[],
-               cost:number
-          },
-          countryShipping:{
-               area:string[],
-               cost:number
-          },
-          worldWideShipping:{
-               cost:number
-          },
-          
-     }
+     };
+     messages: {
+          senderName: string;
+          senderEmail: string;
+          message: string;
+          createdAt: Date;
+          phone?: string;
+     }[];
+     shippingDetails: {
+          freeShipping: {
+               area: string[];
+               cost: number;
+          };
+          centralShipping: {
+               area: string[];
+               cost: number;
+          };
+          countryShipping: {
+               area: string[];
+               cost: number;
+          };
+          worldWideShipping: {
+               cost: number;
+          };
+     };
 }
 
 export interface ISocials {
@@ -53,4 +57,3 @@ export interface IContact {
      location: string;
      _id?: Types.ObjectId | string;
 }
-

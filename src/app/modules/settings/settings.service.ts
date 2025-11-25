@@ -3,6 +3,10 @@ import { ISettings, ISingleContact, ISocials } from './settings.interface';
 import Settings from './settings.model';
 import { StatusCodes } from 'http-status-codes';
 import AppError from '../../../errors/AppError';
+import { IBusinessMessage } from '../business/business.enums';
+import { sendNotifications } from '../../../helpers/notificationsHelper';
+import { User } from '../user/user.model';
+import { USER_ROLES } from '../user/user.enums';
 
 const upsertSettings = async (data: Partial<ISettings>): Promise<ISettings> => {
      const existingSettings = await Settings.findOne({});
@@ -149,7 +153,7 @@ const addOrUpdateShippingDetails = async (shippingDetails: any) => {
           throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
      }
      const updatedSettings = await Settings.findOneAndUpdate({ _id: settings._id }, { shippingDetails }, { new: true });
-     return updatedSettings?.shippingDetails;     
+     return updatedSettings?.shippingDetails;
 };
 
 const updatePrivacyPolicy = async (privacyPolicy: string) => {
@@ -174,6 +178,45 @@ const updateTermsOfService = async (termsOfService: string) => {
      return settings.termsOfService;
 };
 
+const getAllMessagesOfSettings = async (query: Record<string, unknown>) => {
+     const settings = await Settings.findOne();
+     if (!settings) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
+     }
+
+     let settingsMessages = settings.messages;
+     // do pagination manually
+     const limit = Number(query.limit) || 10;
+     const page = Number(query.page) || 1;
+     const skip = (page - 1) * limit;
+     settingsMessages = settingsMessages.slice(skip, skip + limit);
+     const meta = {
+          page,
+          limit,
+          total: settingsMessages.length,
+     };
+     return { meta, settingsMessages };
+};
+
+const sendMessageToSettings = async (message: IBusinessMessage) => {
+     const settings = await Settings.findOne();
+     const superAdmin = await User.findOne({ role: USER_ROLES.SUPER_ADMIN });
+     // senderEmail and settings.owner.email same not possibole
+     if (!settings) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
+     }
+     settings.messages.push({ ...message, createdAt: new Date() });
+     await settings.save();
+     // sendnotification
+     await sendNotifications({
+               title: `${message.senderName}`,
+               receiver: superAdmin!._id,
+               message: `Admin ${message.senderName} has sent a message.`,
+               type: 'MESSAGE',
+          });
+     return settings.messages;
+};
+
 export const settingsService = {
      upsertSettings,
      getSettings,
@@ -192,4 +235,6 @@ export const settingsService = {
      addOrUpdateShippingDetails,
      updatePrivacyPolicy,
      updateTermsOfService,
+     getAllMessagesOfSettings,
+     sendMessageToSettings,
 };

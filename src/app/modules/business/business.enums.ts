@@ -7,4 +7,5 @@ export interface IBusinessMessage {
     senderName: string;
     senderEmail: string;
     message: string;
+    phone?: string;
 }

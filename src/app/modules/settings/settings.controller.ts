@@ -170,6 +170,30 @@ const updateTermsOfService = catchAsync(async (req, res): Promise<void> => {
      });
 });
 
+
+
+
+const getAllMessagesOfSettings = catchAsync(async (req, res) => {
+     const result = await settingsService.getAllMessagesOfSettings(req.query);
+     sendResponse(res, {
+          success: true,
+          statusCode: StatusCodes.OK,
+          message: 'Messages fetched successfully',
+          data: result,
+     });
+}); 
+
+const sendMessageToSettings = catchAsync(async (req, res) => {
+     const result = await settingsService.sendMessageToSettings(req.body);
+     sendResponse(res, {
+          success: true,
+          statusCode: StatusCodes.OK,
+          message: 'Message sent successfully',
+          data: result,
+     });
+}); 
+
+
 export const settingsController = {
      getSettings,
      getPrivacyPolicy,
@@ -187,4 +211,6 @@ export const settingsController = {
      addOrUpdateShippingDetails,
      updatePrivacyPolicy,
      updateTermsOfService,
+     getAllMessagesOfSettings,
+     sendMessageToSettings,
 };
