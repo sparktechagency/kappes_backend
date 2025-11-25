@@ -15,10 +15,10 @@ SettingsRouter.get('/', settingsController.getSettings)
      .get('/termsOfService', settingsController.getTermsOfService);
 
 // // get all messages of business by business id 🏃‍♀️‍➡️
-SettingsRouter.get('/messages/:id', auth(USER_ROLES.USER, USER_ROLES.ADMIN, USER_ROLES.VENDOR), settingsController.getAllMessagesOfSettings);
+SettingsRouter.get('/message', auth(USER_ROLES.USER, USER_ROLES.ADMIN, USER_ROLES.VENDOR), settingsController.getAllMessagesOfSettings);
 
 // send message to business
-SettingsRouter.post('/message/:id', validateRequest(settingsSchema.createMessageZodSchema), settingsController.sendMessageToSettings);
+SettingsRouter.post('/message', validateRequest(settingsSchema.createMessageZodSchema), settingsController.sendMessageToSettings);
 
 // patch privacy policy
 SettingsRouter.patch('/privacy-policy', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), settingsController.updatePrivacyPolicy);
