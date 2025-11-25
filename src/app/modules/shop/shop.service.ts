@@ -486,45 +486,36 @@ const createShopAdmin = async (payload: Partial<IUser>, shopId: string, user: IJ
      }
 };
 
-// const createShopAdmin = async (payload: Partial<IUser>, shopId: string, user: IJwtPayload) => {
-//      const session = await mongoose.startSession();
-//      await session.withTransaction(async () => {
-//           // check if user exists with the payload.email
-//           const userExists = await User.findOne({ email: payload.email }).session(session);
-//           if (userExists) {
-//                throw new AppError(400, `User already exists so use "/make-shop-admin/:shopId" api`);
-//           }
-//           // create user
-//           payload.role = USER_ROLES.SHOP_ADMIN;
-//           payload.verified = true;
-//           const newUser = await User.create([payload], { session });
-//           if (!newUser) {
-//                throw new AppError(400, 'User not created');
-//           }
-//           const shop = await Shop.findById(new mongoose.Types.ObjectId(shopId)).session(session);
-//           if (!shop) {
-//                throw new AppError(404, 'Shop not found');
-//           }
+const removeShopAdmin = async (shopId: string, adminId: string, user: IJwtPayload) => {
+     const shop = await Shop.findById(new mongoose.Types.ObjectId(shopId));
+     if (!shop) {
+          throw new AppError(404, 'Shop not found');
+     }
+     const isExistShopAdmin = shop.admins?.some((admin) => admin.toString() === adminId);
+     if (!isExistShopAdmin) {
+          throw new AppError(404, 'Shop admin not found');
+     }
 
-//           if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
-//                if (shop.owner.toString() !== user.id && !shop.admins?.some((admin) => admin.toString() === user.id)) {
-//                     throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to create a shop admin for this shop');
-//                }
-//           }
-//           shop.admins?.push(newUser[0]._id);
-//           await shop.save({ session });
+     if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
+          if (shop.owner.toString() !== user.id && !shop.admins?.some((admin) => admin.toString() === user.id)) {
+               throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to remove a shop admin for this shop');
+          }
+     }
+     const session = await mongoose.startSession();
+     await session.withTransaction(async () => {
+          shop.admins = shop.admins?.filter((admin) => admin.toString() !== adminId);
+          const user = await User.findByIdAndDelete(adminId).session(session);
+          if (!user) {
+               throw new AppError(404, 'User not found');
+          }
+          await shop.save({ session });
 
-//           const values = {
-//                name: newUser[0].full_name,
-//                email: newUser[0].email!,
-//                password: payload.password!,
-//           };
-//           const createAccountTemplate = emailTemplate.createAdminAccount(values);
-//           await emailHelper.sendEmail(createAccountTemplate);
+          await session.commitTransaction();
+          session.endSession();
 
-//           return newUser[0];
-//      });
-// };
+          return shop;
+     });
+};
 
 const getShopOverview = async (shopId: string, user: IJwtPayload) => {
      const shop = await Shop.findById(shopId).populate('owner', 'name email').populate('admins', 'name email').populate('followers', 'name email');
@@ -778,6 +769,7 @@ export const ShopService = {
      getProductsByShopId,
      getShopAdminsByShopId,
      createShopAdmin,
+     removeShopAdmin,
      getShopOverview,
      getShopsByFollower,
      getShopsProvincesListWithProductCount,

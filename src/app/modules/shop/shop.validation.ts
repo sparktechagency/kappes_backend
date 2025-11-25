@@ -72,6 +72,9 @@ const updateShopZodSchema = z.object({
 const makeShopAdminZodSchema = z.object({
     body: z.object({
         userId: objectIdSchema,
+    }),
+    params: z.object({
+        shopId: objectIdSchema,
     })
 })
 

@@ -283,6 +283,18 @@ const createShopAdmin = catchAsync(
     }
   );
 
+const removeShopAdmin = catchAsync(async (req: Request, res: Response) => {
+    const { shopId } = req.params;
+    const { userId } = req.body;
+    const result = await ShopService.removeShopAdmin(shopId,userId,req.user as IJwtPayload);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: 'Shop admin removed successfully',
+        data: result,
+    });
+});
+
 const getShopOverview = catchAsync(async (req: Request, res: Response) => {
     const { shopId } = req.params;
     const result = await ShopService.getShopOverview(shopId,req.user as IJwtPayload);
@@ -351,6 +363,7 @@ export const ShopController = {
     getProductsByShopId,
     getShopAdminsByShopId,
     createShopAdmin,
+    removeShopAdmin,
     getShopOverview,
     getShopsByFollower,
     getShopsProvincesListWithProductCount,
