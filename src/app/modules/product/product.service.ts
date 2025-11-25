@@ -423,6 +423,9 @@ const updateProduct = async (id: string, payload: Partial<IProduct | ICreateProd
                ...(payload.product_variant_Details && {
                     product_variant_Details: product.product_variant_Details,
                }),
+               territory: shop?.address?.territory || '',
+               city: shop?.address?.city || '',
+               province: shop?.address?.province || '',
                slugDetails,
           },
           { new: true },
