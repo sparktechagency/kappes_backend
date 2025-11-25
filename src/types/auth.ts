@@ -8,7 +8,7 @@ export type IVerifyEmail = {
 export type ILoginData = {
      email: string;
      password?: string;
-     role?: USER_ROLES;
+     roles?: USER_ROLES[];
 };
 
 export type IAuthResetPassword = {

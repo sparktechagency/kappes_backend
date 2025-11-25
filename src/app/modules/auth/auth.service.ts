@@ -20,7 +20,7 @@ import { ShopService } from '../shop/shop.service';
 
 //login
 const loginUserFromDB = async (payload: ILoginData) => {
-     const { email, password, role } = payload;
+     const { email, password, roles } = payload;
      if (!password) {
           throw new AppError(StatusCodes.BAD_REQUEST, 'Password is required!');
      }
@@ -30,7 +30,8 @@ const loginUserFromDB = async (payload: ILoginData) => {
      if (!isExistUser) {
           throw new AppError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
      }
-     if (role && role !== isExistUser.role) {
+
+     if (roles && !roles.includes(isExistUser.role)) {
           throw new AppError(StatusCodes.BAD_REQUEST, `User role ${isExistUser.role} doesn't match!`);
      }
      const getAdmin = await User.findOne({ role: USER_ROLES.SUPER_ADMIN });

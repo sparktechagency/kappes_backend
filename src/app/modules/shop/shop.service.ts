@@ -517,6 +517,15 @@ const removeShopAdmin = async (shopId: string, adminId: string, user: IJwtPayloa
      });
 };
 
+const isFollowedShop = async (shopId: string, user: IJwtPayload) => {
+     const shop = await Shop.findById(shopId);
+     if (!shop) {
+          throw new AppError(404, 'Shop not found');
+     }
+     const isFollowed = shop.followers?.some((follower) => follower.toString() === user.id);
+     return {isFollowed};
+};
+
 const getShopOverview = async (shopId: string, user: IJwtPayload) => {
      const shop = await Shop.findById(shopId).populate('owner', 'name email').populate('admins', 'name email').populate('followers', 'name email');
 
@@ -770,6 +779,7 @@ export const ShopService = {
      getShopAdminsByShopId,
      createShopAdmin,
      removeShopAdmin,
+     isFollowedShop,
      getShopOverview,
      getShopsByFollower,
      getShopsProvincesListWithProductCount,
