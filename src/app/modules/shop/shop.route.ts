@@ -32,7 +32,7 @@ router
      .post(validateRequest(ShopValidation.createAdminZodSchema), auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), ShopController.createShopAdmin);
 router
      .patch('/make-shop-admin/:shopId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), validateRequest(ShopValidation.makeShopAdminZodSchema), ShopController.makeShopAdmin)
-     .get('/is-followed-shop/:shopId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), validateRequest(ShopValidation.makeShopAdminZodSchema), ShopController.isFollowedShop)
+     .get('/is-followed-shop/:shopId', auth(USER_ROLES.USER), ShopController.isFollowedShop)
      .delete('/remove-shop-admin/:shopId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), validateRequest(ShopValidation.makeShopAdminZodSchema), ShopController.removeShopAdmin);
 
 // get users shops
