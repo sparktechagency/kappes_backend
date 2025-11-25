@@ -51,7 +51,7 @@ router.get('/overview/:shopId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, U
 // router.patch('/update-revenue/:shopId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), validateRequest(ShopValidation.updateRevenueZodSchema), ShopController.updateRevenue);
 
 // Get followed shops by user or my followed shops
-router.get('/followed/:followerId', auth(USER_ROLES.USER), ShopController.getShopsByFollower);
+router.get('/followed', auth(USER_ROLES.USER), ShopController.getShopsByFollower);
 
 // toggle Follow-unfollow a shop
 router.post('/follow-unfollow/:shopId', auth(USER_ROLES.USER), ShopController.toggleFollowUnfollowShop);
