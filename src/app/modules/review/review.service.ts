@@ -2,109 +2,16 @@ import mongoose from 'mongoose';
 import { IReview } from './review.interface';
 import { Review } from './review.model';
 import { StatusCodes } from 'http-status-codes';
-import { User } from '../user/user.model';
 import AppError from '../../../errors/AppError';
 import { Product } from '../product/product.model';
 import { IJwtPayload } from '../auth/auth.interface';
-import { IProduct } from '../product/product.interface';
 import { Order } from '../order/order.model';
-import { ORDER_STATUS } from '../order/order.enums';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { Shop } from '../shop/shop.model';
 import { USER_ROLES } from '../user/user.enums';
 import { IBusiness } from '../business/business.interface';
 import { Business } from '../business/business.model';
 import unlinkFile from '../../../shared/unlinkFile';
-
-
-// const createProductReviewToDB = async (payload: IReview, user: IJwtPayload): Promise<IReview> => {
-//      console.log({payload});
-//      // Fetch product and check if it exists in one query
-//      const product: IProduct | null = await Product.findById(payload.refferenceId);
-//      if (!product) {
-//           throw new AppError(StatusCodes.NOT_FOUND, 'No Product Found');
-//      }
-
-//      const rating = Number(payload.rating);
-//      if (rating) {
-//           // checking the rating is valid or not;
-//           if (rating < 1 || rating > 5) {
-//                throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid rating value');
-//           }
-//      }
-
-//      // Check if the user has a completed order that includes this product
-//      const completedOrderByProduct = await Order.findOne({
-//           user: user.id,
-//           products: { $elemMatch: { product: product._id } },
-//           status: ORDER_STATUS.COMPLETED,
-//      });
-
-//      if (!completedOrderByProduct) {
-//           throw new AppError(
-//                StatusCodes.UNAUTHORIZED,
-//                'You are not eligible to write a review because you have not purchased this product'
-//           );
-//      }
-
-//      // Check if user already has a review for this product
-//      const existingReview = await Review.findOne({
-//           customer: user.id,
-//           refferenceId: payload.refferenceId,
-//           isDeleted: false
-//      });
-
-//      let result;
-//      let previousRating = 0;
-
-//      if (existingReview) {
-//           // Store the previous rating for recalculation
-//           previousRating = existingReview.rating;
-
-//           // Update the existing review
-//           existingReview.rating = rating;
-//           existingReview.comment = payload.comment;
-//           existingReview.images = payload.images;
-//           // Update any other fields you want to allow updating
-//           result = await existingReview.save();
-//      } else {
-//           // Create new review
-//           result = await Review.create({ ...payload, customer: user.id });
-//      }
-
-//      if (!result) {
-//           throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to process review');
-//      }
-
-//      // Calculate new average rating
-//      let newRating;
-//      let reviewCount = product.totalReviews;
-
-//      if (existingReview) {
-//           // If updating existing review, adjust the average by removing the old rating
-//           const totalRating = (product.avg_rating * reviewCount) - previousRating + rating;
-//           newRating = totalRating / reviewCount;
-//      } else {
-//           // If new review, increment count and calculate new average
-//           reviewCount = product.totalReviews + 1;
-//           newRating = product.avg_rating
-//                ? (product.avg_rating * product.totalReviews + rating) / reviewCount
-//                : rating;
-//      }
-
-//      // Update product's rating and total reviews count
-//      product.avg_rating = newRating;
-//      product.totalReviews = reviewCount;
-
-//      // If it's a new review, add it to the product's reviews array
-//      if (!existingReview) {
-//           product.reviews.push(result._id);
-//      }
-
-//      await product.save();
-
-//      return result;
-// };
 
 const createProductReviewToDB = async (payload: IReview, user: IJwtPayload): Promise<IReview> => {
      const session = await mongoose.startSession();
@@ -123,9 +30,9 @@ const createProductReviewToDB = async (payload: IReview, user: IJwtPayload): Pro
 
           // 3. Check if user purchased the product
           const hasPurchased = await Order.exists({
-               user: user.id,
+               'user': user.id,
                'products.product': product._id,
-               status: ORDER_STATUS.COMPLETED
+               // status: ORDER_STATUS.COMPLETED
           }).session(session);
 
           if (!hasPurchased) {
@@ -136,30 +43,19 @@ const createProductReviewToDB = async (payload: IReview, user: IJwtPayload): Pro
           let review = await Review.findOne({
                customer: user.id,
                refferenceId: payload.refferenceId,
-               isDeleted: false
+               isDeleted: false,
           }).session(session);
 
           // 5. Create or update review
           if (review) {
-               // Save old rating for recalculation
-               const oldRating = review.rating;
-               Object.assign(review, payload);
+               review.rating = rating;
+               review.comment = payload.comment;
+               review.images = payload.images;
                await review.save({ session });
-
-               // Update product rating
-               const totalRating = (product.avg_rating * product.totalReviews) - oldRating + rating;
-               product.avg_rating = totalRating / product.totalReviews;
           } else {
                // Create new review
                const newReview = await Review.create([{ ...payload, customer: user.id }], { session });
                review = newReview[0];
-
-               // Update product with new review
-               const totalReviews = product.totalReviews + 1;
-               const totalRating = (product.avg_rating * product.totalReviews) + rating;
-               product.avg_rating = totalRating / totalReviews;
-               product.totalReviews = totalReviews;
-               product.reviews.push(review._id);
           }
 
           await product.save({ session });
@@ -173,7 +69,7 @@ const createProductReviewToDB = async (payload: IReview, user: IJwtPayload): Pro
 
           // Basic image cleanup
           if (payload.images?.length) {
-               payload.images.forEach(image => {
+               payload.images.forEach((image) => {
                     // Replace with your image deletion logic
                     console.log('Cleaning up image:', image);
                     unlinkFile(image); // Example for local files
@@ -191,22 +87,24 @@ const getProductReviews = async (productId: string, query: Record<string, unknow
      // return { reviews, meta };
 
      const reviewQuery = new QueryBuilder(
-          Review.find({ refferenceId: productId }).populate({
-               path: 'refferenceId',
-               model: 'Product',
-               match: {
-                    isDeleted: false,
-               },
-               select: 'shopId',
-          }).populate({
-               path: 'customer',
-               model: 'User',
-               match: {
-                    isDeleted: false,
-               },
-               select: 'full_name email',
-          }),
-          query
+          Review.find({ refferenceId: productId })
+               .populate({
+                    path: 'refferenceId',
+                    model: 'Product',
+                    match: {
+                         isDeleted: false,
+                    },
+                    select: 'shopId',
+               })
+               .populate({
+                    path: 'customer',
+                    model: 'User',
+                    match: {
+                         isDeleted: false,
+                    },
+                    select: 'full_name email',
+               }),
+          query,
      )
           .paginate()
           .filter()
@@ -238,7 +136,7 @@ const deleteProductReview = async (reviewId: string, user: IJwtPayload) => {
      }
 
      if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
-          if (shop.owner.toString() !== user.id && !shop.admins?.some(admin => admin.toString() === user.id)) {
+          if (shop.owner.toString() !== user.id && !shop.admins?.some((admin) => admin.toString() === user.id)) {
                throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to create a product for this shop');
           }
      }
@@ -247,13 +145,13 @@ const deleteProductReview = async (reviewId: string, user: IJwtPayload) => {
 
      // Recalculate the product's average rating and total reviews count
      const reviewCount = product.totalReviews - 1;
-     const populatedReviews = await Review.find({ '_id': { $in: product.reviews } }).exec();
+     const populatedReviews = await Review.find({ _id: { $in: product.reviews } }).exec();
      const totalRating = populatedReviews.reduce((acc: number, review: IReview) => acc + review.rating, 0);
      const newRating = reviewCount > 0 ? totalRating / reviewCount : 0;
 
      product.totalReviews = reviewCount;
      product.avg_rating = newRating;
-     product.reviews = product.reviews.filter(reviewId => reviewId.toString() !== existingReview._id.toString());
+     product.reviews = product.reviews.filter((reviewId) => reviewId.toString() !== existingReview._id.toString());
 
      await product.save();
 
@@ -261,13 +159,7 @@ const deleteProductReview = async (reviewId: string, user: IJwtPayload) => {
 };
 
 const getAllProductReviewsByVendorAndShopAdmin = async (query: Record<string, unknown>) => {
-     const reviewQuery = new QueryBuilder(
-          Review.find({}),
-          query
-     )
-          .paginate()
-          .filter()
-          .sort();
+     const reviewQuery = new QueryBuilder(Review.find({}), query).paginate().filter().sort();
 
      const reviews = await reviewQuery.modelQuery.lean();
 
@@ -280,18 +172,16 @@ const getAllProductReviewsByVendorAndShopAdmin = async (query: Record<string, un
 };
 
 const getShopProductsReviews = async (shopId: string, query: Record<string, unknown>, user: IJwtPayload) => {
-
      const shop = await Shop.findById(shopId);
      if (!shop) {
           throw new AppError(StatusCodes.NOT_FOUND, 'Shop not found');
      }
 
      if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
-          if (shop.owner.toString() !== user.id && !shop.admins?.some(admin => admin.toString() === user.id)) {
+          if (shop.owner.toString() !== user.id && !shop.admins?.some((admin) => admin.toString() === user.id)) {
                throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to create a product for this shop');
           }
      }
-
 
      const reviewQuery = new QueryBuilder(
           Review.find().populate({
@@ -302,7 +192,7 @@ const getShopProductsReviews = async (shopId: string, query: Record<string, unkn
                },
                select: 'shopId',
           }),
-          query
+          query,
      )
           .paginate()
           .filter()
@@ -326,13 +216,11 @@ const getShopProductsReviews = async (shopId: string, query: Record<string, unkn
           totalPage: Math.ceil(filteredReviews.length / pageSize),
      };
 
-
      return {
           meta,
           result: filteredReviewsPaginated,
      };
 };
-
 
 const createBusinessReview = async (payload: IReview, user: IJwtPayload): Promise<IReview> => {
      const business: IBusiness | null = await Business.findById(payload.refferenceId);
@@ -352,7 +240,7 @@ const createBusinessReview = async (payload: IReview, user: IJwtPayload): Promis
      const existingReview = await Review.findOne({
           customer: user.id,
           refferenceId: payload.refferenceId,
-          isDeleted: false
+          isDeleted: false,
      });
 
      let result;
@@ -382,14 +270,12 @@ const createBusinessReview = async (payload: IReview, user: IJwtPayload): Promis
 
      if (existingReview) {
           // If updating existing review, adjust the average by removing the old rating
-          const totalRating = (business.avg_rating * reviewCount) - previousRating + rating;
+          const totalRating = business.avg_rating * reviewCount - previousRating + rating;
           newRating = totalRating / reviewCount;
      } else {
           // If new review, increment count and calculate new average
           reviewCount = business.totalReviews + 1;
-          newRating = business.avg_rating
-               ? (business.avg_rating * business.totalReviews + rating) / reviewCount
-               : rating;
+          newRating = business.avg_rating ? (business.avg_rating * business.totalReviews + rating) / reviewCount : rating;
      }
 
      business.avg_rating = newRating;
@@ -412,8 +298,6 @@ const createBusinessReview = async (payload: IReview, user: IJwtPayload): Promis
      });
 };
 
-
-
 const toggleApprovedBusinessReviewByOwner = async (reviewId: string, user: IJwtPayload) => {
      console.log({ reviewId });
      const review = await Review.findById(reviewId);
@@ -428,10 +312,7 @@ const toggleApprovedBusinessReviewByOwner = async (reviewId: string, user: IJwtP
      }
 
      if (isExistBusiness.owner.toString() !== user.id.toString()) {
-          throw new AppError(
-               StatusCodes.UNAUTHORIZED,
-               'You are not authorized to toggle approval of this review'
-          );
+          throw new AppError(StatusCodes.UNAUTHORIZED, 'You are not authorized to toggle approval of this review');
      }
 
      review.isApproved = !review.isApproved;
@@ -443,22 +324,24 @@ const toggleApprovedBusinessReviewByOwner = async (reviewId: string, user: IJwtP
 
 const getApprovedBusinessReviews = async (businessId: string, query: Record<string, unknown>) => {
      const reviewQuery = new QueryBuilder(
-          Review.find({ refferenceId: businessId, isApproved: true }).populate({
-               path: 'refferenceId',
-               model: 'Business',
-               match: {
-                    isDeleted: false,
-               },
-               select: 'owner name email',
-          }).populate({
-               path: 'customer',
-               model: 'User',
-               match: {
-                    isDeleted: false,
-               },
-               select: 'full_name email',
-          }),
-          query
+          Review.find({ refferenceId: businessId, isApproved: true })
+               .populate({
+                    path: 'refferenceId',
+                    model: 'Business',
+                    match: {
+                         isDeleted: false,
+                    },
+                    select: 'owner name email',
+               })
+               .populate({
+                    path: 'customer',
+                    model: 'User',
+                    match: {
+                         isDeleted: false,
+                    },
+                    select: 'full_name email',
+               }),
+          query,
      )
           .paginate()
           .filter()
@@ -485,45 +368,52 @@ const deleteBusinessReviewByOwner = async (reviewId: string, user: IJwtPayload) 
           throw new AppError(StatusCodes.NOT_FOUND, 'No Business Found');
      }
      if (isExistBusiness.owner.toString() !== user.id.toString()) {
-          throw new AppError(
-               StatusCodes.UNAUTHORIZED,
-               'You are not authorized to delete this review'
-          );
+          throw new AppError(StatusCodes.UNAUTHORIZED, 'You are not authorized to delete this review');
      }
 
      await Review.updateOne({ _id: reviewId }, { isDeleted: true });
 
      // Recalculate the business's average rating and total reviews count
      const reviewCount = isExistBusiness.totalReviews - 1;
-     const populatedReviews = await Review.find({ '_id': { $in: isExistBusiness.reviews } }).exec();
+     const populatedReviews = await Review.find({ _id: { $in: isExistBusiness.reviews } }).exec();
      const totalRating = populatedReviews.reduce((acc: number, review: IReview) => acc + review.rating, 0);
      const newRating = reviewCount > 0 ? totalRating / reviewCount : 0;
 
      isExistBusiness.totalReviews = reviewCount;
      isExistBusiness.avg_rating = newRating;
-     isExistBusiness.reviews = isExistBusiness.reviews.filter(reviewId => reviewId.toString() !== reviewId.toString());
+     isExistBusiness.reviews = isExistBusiness.reviews.filter((reviewId) => reviewId.toString() !== reviewId.toString());
 
      await isExistBusiness.save();
 
      return existingReview;
 };
 
-
 const getAllBusinessReviewsByOwner = async (user: IJwtPayload) => {
      /**
       * get all the busness of this users
       * and get all the reviews of those busines populating business name and owener full_name,email
       * res as per businesswise array
-      * 
+      *
       */
-     const businesses = await Business.find({ owner: user.id, isDeleted: false }).populate("reviews");
+     const businesses = await Business.find({ owner: user.id, isDeleted: false }).populate('reviews');
      if (!businesses || businesses.length === 0) {
           throw new AppError(StatusCodes.NOT_FOUND, 'No Business Found');
      }
 
      return businesses.map((business: IBusiness) => {
-          return business
+          return business;
      });
 };
 
-export const ReviewService = { createProductReviewToDB, getProductReviews, deleteProductReview, getAllProductReviewsByVendorAndShopAdmin, getShopProductsReviews, createBusinessReview, getApprovedBusinessReviews, deleteBusinessReviewByOwner, toggleApprovedBusinessReviewByOwner, getAllBusinessReviewsByOwner };
+export const ReviewService = {
+     createProductReviewToDB,
+     getProductReviews,
+     deleteProductReview,
+     getAllProductReviewsByVendorAndShopAdmin,
+     getShopProductsReviews,
+     createBusinessReview,
+     getApprovedBusinessReviews,
+     deleteBusinessReviewByOwner,
+     toggleApprovedBusinessReviewByOwner,
+     getAllBusinessReviewsByOwner,
+};

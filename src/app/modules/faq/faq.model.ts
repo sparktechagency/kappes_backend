@@ -11,6 +11,11 @@ const faqSchema = new Schema<IFaq, FaqModel>(
                type: String,
                required: true,
           },
+          type: {
+               type: String,
+               enum: ['for_website', 'for_seller'],
+               required: true,
+          },
      },
      { timestamps: true },
 );

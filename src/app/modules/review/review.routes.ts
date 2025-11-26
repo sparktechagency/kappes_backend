@@ -9,87 +9,45 @@ import { getMultipleFilesPath } from '../../../shared/getFilePath';
 const router = express.Router();
 
 // product related routes
-router.post(
-     '/product',
-     auth(USER_ROLES.USER),
-     fileUploadHandler(), (req: Request, res: Response, next: NextFunction) => {
-          try {
-               if (req.body.data) {
-                    const parsedData = JSON.parse(req.body.data);
-                    // Attach image path or filename to parsed data
-                    if (req.files) {
-                         let image = getMultipleFilesPath(req.files, 'image');
-                         parsedData.images = image;
-                    }
-                    
-                    
-                    // Validate and assign to req.body
-                    let formattedParsedData = ReviewValidation.reviewZodSchema.parse({ body: parsedData });
-                    req.body = formattedParsedData.body;
+router.post('/product', auth(USER_ROLES.USER), fileUploadHandler(), (req: Request, res: Response, next: NextFunction) => {
+     try {
+          if (req.body.data) {
+               const parsedData = JSON.parse(req.body.data);
+               // Attach image path or filename to parsed data
+               if (req.files) {
+                    const image = getMultipleFilesPath(req.files, 'image');
+                    parsedData.images = image;
                }
 
-               // Proceed to controller
-               return ReviewController.createProductReview(req, res, next);
-
-          } catch (error) {
-               next(error); // Pass validation errors to error handler
+               // Validate and assign to req.body
+               const formattedParsedData = ReviewValidation.reviewZodSchema.parse({ body: parsedData });
+               req.body = formattedParsedData.body;
           }
-     },
-);
 
-router.get(
-     '/product/shop/:shopId',
-     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR),
-     ReviewController.getShopProductsReviews,
-);
-router.get(
-     '/product/:productId',
-     ReviewController.getProductReviews,
-);
+          // Proceed to controller
+          return ReviewController.createProductReview(req, res, next);
+     } catch (error) {
+          next(error); // Pass validation errors to error handler
+     }
+});
 
-router.delete(
-     '/product/:reviewId',
-     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR),
-     ReviewController.deleteProductReview,
-);
+router.get('/product/shop/:shopId', auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR), ReviewController.getShopProductsReviews);
+router.get('/product/:productId', ReviewController.getProductReviews);
 
-
-
+router.delete('/product/:reviewId', auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR), ReviewController.deleteProductReview);
 
 // business related routes
-router.post(
-     '/business',
-     validateRequest(ReviewValidation.reviewZodSchema),
-     auth(USER_ROLES.USER),
-     ReviewController.createBusinessReview,
-);
-
-
+router.post('/business', validateRequest(ReviewValidation.reviewZodSchema), auth(USER_ROLES.USER), ReviewController.createBusinessReview);
 
 // toggle approved business review
-router.patch(
-     '/business/:reviewId',
-     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR, USER_ROLES.USER),
-     ReviewController.toggleApprovedBusinessReviewByOwner,
-);
+router.patch('/business/:reviewId', auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR, USER_ROLES.USER), ReviewController.toggleApprovedBusinessReviewByOwner);
 
 // get all unapproved business reviews
-router.get(
-     '/business/owner',
-     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR, USER_ROLES.USER),
-     ReviewController.getAllBusinessReviewsByOwner,
-);
+router.get('/business/owner', auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR, USER_ROLES.USER), ReviewController.getAllBusinessReviewsByOwner);
 
-router.get(
-     '/business/:businessId',
-     ReviewController.getApprovedBusinessReviews,
-);
+router.get('/business/:businessId', ReviewController.getApprovedBusinessReviews);
 
-router.delete(
-     '/business/:reviewId',
-     auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR, USER_ROLES.USER),
-     ReviewController.deleteBusinessReviewByOwner,
-);
+router.delete('/business/:reviewId', auth(USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR, USER_ROLES.USER), ReviewController.deleteBusinessReviewByOwner);
 
 // // shop related routes
 // // Get reviews by shop
@@ -104,6 +62,5 @@ router.delete(
 //         data: result,
 //     });
 // });
-
 
 export const ReviewRoutes = router;

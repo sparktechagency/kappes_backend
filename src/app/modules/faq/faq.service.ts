@@ -3,6 +3,7 @@ import { IFaq } from './faq.interface';
 import { Faq } from './faq.model';
 import mongoose from 'mongoose';
 import AppError from '../../../errors/AppError';
+import QueryBuilder from '../../builder/QueryBuilder';
 
 const createFaqToDB = async (payload: IFaq): Promise<IFaq> => {
      const faq = await Faq.create(payload);
@@ -13,9 +14,15 @@ const createFaqToDB = async (payload: IFaq): Promise<IFaq> => {
      return faq;
 };
 
-const faqsFromDB = async (): Promise<IFaq[]> => {
-     const faqs = await Faq.find({});
-     return faqs;
+const faqsFromDB = async (query: any) => {
+     // const faqs = await Faq.find(query);
+     // return faqs;
+
+     const queryBuilder = new QueryBuilder(Faq.find(), query).paginate().fields().sort().filter();
+     const faqs = await queryBuilder.modelQuery.exec();
+     const meta = await queryBuilder.countTotal();
+
+     return { faqs, meta };
 };
 
 const deleteFaqToDB = async (id: string): Promise<IFaq | undefined> => {

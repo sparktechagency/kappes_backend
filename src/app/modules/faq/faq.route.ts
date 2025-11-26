@@ -9,7 +9,7 @@ const router = express.Router();
 router
      .route('/')
      .post(validateRequest(FaqValidation.createFaqZodSchema), auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), FaqController.createFaq)
-     .get(FaqController.getFaqs);
+     .get(validateRequest(FaqValidation.getFaqZodSchema), FaqController.getFaqs);
 
 router.route('/:id').delete(auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), FaqController.deleteFaq).patch(auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), FaqController.updateFaq);
 

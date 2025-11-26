@@ -1,12 +1,6 @@
 import { model, Schema } from 'mongoose';
 import { IReview, ReviewModel } from './review.interface';
-import { StatusCodes } from 'http-status-codes';
-import AppError from '../../../errors/AppError';
-import { Product } from '../product/product.model';
 import { REVIEW_TYPES } from './review.enums';
-import { Business } from '../business/business.model';
-
-const Service: any = [];
 
 const reviewSchema = new Schema<IReview, ReviewModel>(
      {

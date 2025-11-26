@@ -41,7 +41,7 @@ const deleteFaq = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getFaqs = catchAsync(async (req: Request, res: Response) => {
-     const result = await FaqService.faqsFromDB();
+     const result = await FaqService.faqsFromDB(req.query);
 
      sendResponse(res, {
           statusCode: 200,
