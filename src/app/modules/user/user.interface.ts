@@ -46,6 +46,7 @@ export type IUser = {
      // subscription related
      subscription: Schema.Types.ObjectId | null;
      isSubscribed: boolean;
+     fmcToken?: string;
      stripeCustomerId: string; // for subscription or paying as service taker
 };
 

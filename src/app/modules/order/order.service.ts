@@ -417,6 +417,12 @@ const cancelOrder = async (orderId: string, user: IJwtPayload) => {
           throw new AppError(StatusCodes.NOT_FOUND, 'Order not found');
      }
 
+     if (user.role === USER_ROLES.USER) {
+          if (isExistOrder.user.toString() !== user.id) {
+               throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to update this order');
+          }
+     }
+
      if (isExistOrder.status === ORDER_STATUS.COMPLETED || isExistOrder.status === ORDER_STATUS.CANCELLED) {
           throw new AppError(StatusCodes.BAD_REQUEST, `${isExistOrder.status} Order can't be cancelled`);
      }
@@ -565,6 +571,11 @@ const refundOrder = async (orderId: string, user: IJwtPayload) => {
           if (order.paymentMethod !== PAYMENT_METHOD.COD) {
                // Retrieve payment intent from Stripe
                const paymentIntent = await stripe.paymentIntents.retrieve(payment.paymentIntent as string);
+               console.log('🚀 ~ refundOrder ~ paymentIntent.latest_charge:', paymentIntent.latest_charge);
+               console.log('🚀 ~ refundOrder ~ paymentIntent.amount_received:', paymentIntent.amount_received);
+               console.log('🚀 ~ refundOrder ~ paymentIntent.application_fee_amount:', paymentIntent.application_fee_amount);
+               console.log('🚀 ~ refundOrder ~ paymentIntent.amount_refunded:', paymentIntent.amount_refunded);
+               console.log('🚀 ~ refundOrder ~ paymentIntent.amount_details:', paymentIntent.amount_details);
                console.log('🚀 ~ refundOrder ~ paymentIntent:', paymentIntent);
 
                // Get the latest charge to check refund status

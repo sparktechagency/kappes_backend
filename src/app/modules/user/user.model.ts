@@ -157,6 +157,9 @@ const userSchema = new Schema<IUser, UserModel>(
                type: String,
                default: '',
           },
+          fmcToken: {
+               type: String,
+          },
      },
      { timestamps: true },
 );

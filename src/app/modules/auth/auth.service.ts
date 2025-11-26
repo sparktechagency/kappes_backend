@@ -20,7 +20,7 @@ import { ShopService } from '../shop/shop.service';
 
 //login
 const loginUserFromDB = async (payload: ILoginData) => {
-     const { email, password, roles } = payload;
+     const { email, password, roles, fmcToken } = payload;
      if (!password) {
           throw new AppError(StatusCodes.BAD_REQUEST, 'Password is required!');
      }
@@ -72,7 +72,7 @@ const loginUserFromDB = async (payload: ILoginData) => {
      }
 
      // Update last login to now
-     await User.findByIdAndUpdate(isExistUser._id, { $set: { lastLogin: new Date() } }, { new: true });
+     await User.findByIdAndUpdate(isExistUser._id, { $set: { lastLogin: new Date(), fmcToken: fmcToken || isExistUser.fmcToken } }, { new: true });
 
      // Generate JWT tokens including tokenVersion
      const jwtData = {

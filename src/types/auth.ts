@@ -9,6 +9,7 @@ export type ILoginData = {
      email: string;
      password?: string;
      roles?: USER_ROLES[];
+     fmcToken?: string;
 };
 
 export type IAuthResetPassword = {
