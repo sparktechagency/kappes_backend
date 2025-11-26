@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { BUSINESS_TYPES } from '../../business/business.enums';
 
 export const updateVendorSchema = z.object({
     body: z.object({

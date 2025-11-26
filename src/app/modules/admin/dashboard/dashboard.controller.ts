@@ -6,9 +6,23 @@ import { IJwtPayload } from '../../auth/auth.interface';
 import { DashboardService } from './dashboard.service';
 import pick from '../../../../shared/pick';
 
+
+// export const getOverview = catchAsync(async (req: Request, res: Response) => {
+//      const user = req.user as IJwtPayload;
+//      const result = await DashboardService.getOverview(user);
+
+//      sendResponse(res, {
+//           statusCode: StatusCodes.OK,
+//           success: true,
+//           message: 'Overview retrieved successfully',
+//           data: result,
+//      });
+// });
+
 export const getOverview = catchAsync(async (req: Request, res: Response) => {
      const user = req.user as IJwtPayload;
-     const result = await DashboardService.getOverview(user);
+     const { startDate, endDate } = req.query;
+     const result = await DashboardService.getOverview(user, startDate as string, endDate as string);
 
      sendResponse(res, {
           statusCode: StatusCodes.OK,
