@@ -2,6 +2,11 @@ import { IPayment } from './payment.interface';
 import QueryBuilder from '../../builder/QueryBuilder';
 import mongoose from 'mongoose';
 import { Payment } from './payment.model';
+import { IJwtPayload } from '../auth/auth.interface';
+import { User } from '../user/user.model';
+import AppError from '../../../errors/AppError';
+import { StatusCodes } from 'http-status-codes';
+import stripe from '../../config/stripe.config';
 
 // Create court
 const createPaymentService = async (payload: IPayment) => {
@@ -320,6 +325,22 @@ const deletePaymentDetailByAdminByIdService = async (id: string) => {
   return result;
 };
 
+
+const stripeLoginLink = async (user: IJwtPayload) => {
+  // Get the logged-in user's data (ensure the user is authenticated)
+  const userId = user.id;
+
+  // Retrieve the user's Stripe account information from the database
+  const isExistUser = await User.findById(userId).select("stripeConnectedAccount");
+  if (!isExistUser || !isExistUser.stripeConnectedAccount) {
+    throw new AppError(StatusCodes.NOT_FOUND, "Stripe account not connected");
+  }
+
+  const stripeAccountId = isExistUser.stripeConnectedAccount;
+  const loginLink = await stripe.accounts.createLoginLink(stripeAccountId);
+  return loginLink.url;
+};
+
 export const paymentService = {
   createPaymentService,
   getAllPaymentByUserId,
@@ -328,5 +349,6 @@ export const paymentService = {
   getLast7DaysEarnings,
   getAllPaymentByAdminService,
   getPaymentDetailByAdminByIdService,
-  deletePaymentDetailByAdminByIdService
+  deletePaymentDetailByAdminByIdService,
+  stripeLoginLink
 };

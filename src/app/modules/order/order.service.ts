@@ -336,7 +336,7 @@ const changeOrderStatus = async (orderId: string, status: string, user: IJwtPayl
                                              stripeConnectedAccount: (shop.owner as any).stripeConnectedAccount,
                                              finalAmount: order.finalAmount,
                                              revenue: shop.revenue,
-                                             orderId: (order._id as string).toString(),
+                                             orderId: order._id.toString(),
                                         });
                                         console.log('🚀 ~ changeBookingStatus ~ transfer:', transfer);
                                    } else {
