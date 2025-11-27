@@ -13,6 +13,8 @@ export interface ISettings extends Document {
      support: string;
      termsOfService: string;
      contact: ISingleContact[];
+     banner: string[];
+     logo: string;
      socials: {
           whatsapp?: string;
           facebook?: string;

@@ -7,6 +7,7 @@ import { IBusinessMessage } from '../business/business.enums';
 import { sendNotifications } from '../../../helpers/notificationsHelper';
 import { User } from '../user/user.model';
 import { USER_ROLES } from '../user/user.enums';
+import unlinkFile from '../../../shared/unlinkFile';
 
 const upsertSettings = async (data: Partial<ISettings>): Promise<ISettings> => {
      const existingSettings = await Settings.findOne({});
@@ -209,12 +210,49 @@ const sendMessageToSettings = async (message: IBusinessMessage) => {
      await settings.save();
      // sendnotification
      await sendNotifications({
-               title: `${message.senderName}`,
-               receiver: superAdmin!._id,
-               message: `Admin ${message.senderName} has sent a message.`,
-               type: 'MESSAGE',
-          });
+          title: `${message.senderName}`,
+          receiver: superAdmin!._id,
+          message: `Admin ${message.senderName} has sent a message.`,
+          type: 'MESSAGE',
+     });
      return settings.messages;
+};
+
+const getBannerLogo = async () => {
+     const settings = await Settings.findOne();
+     if (!settings) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
+     }
+     return { banner: settings.banner, logo: settings.logo };
+};
+
+const addOrUpdateBannerLogo = async (payload: { banner?: string[]; logo?: string }) => {
+     const settings = await Settings.findOne();
+     if (!settings) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
+     }
+     try {
+          if (payload.banner) {
+               // unlinke old links
+               if (settings.banner) {
+                    payload.banner.forEach((banner) => {
+                         unlinkFile(banner);
+                    });
+               }
+               settings.banner = payload.banner;
+          }
+          if (payload.logo) {
+               // unlinke old links
+               if (settings.logo) {
+                    unlinkFile(settings.logo);
+               }
+               settings.logo = payload.logo;
+          }
+          await settings.save();
+          return { banner: settings.banner, logo: settings.logo };
+     } catch (error) {
+          console.log('🚀 ~ addOrUpdateBannerLogo ~ error:', error);
+     }
 };
 
 export const settingsService = {
@@ -237,4 +275,6 @@ export const settingsService = {
      updateTermsOfService,
      getAllMessagesOfSettings,
      sendMessageToSettings,
+     getBannerLogo,
+     addOrUpdateBannerLogo,
 };

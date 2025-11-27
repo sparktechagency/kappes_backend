@@ -2,6 +2,7 @@ import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { StatusCodes } from 'http-status-codes';
 import { NotificationService } from './notification.service';
+import { IJwtPayload } from '../auth/auth.interface';
 
 const getNotificationFromDB = catchAsync(async (req, res) => {
      const user: any = req.user;
@@ -86,6 +87,18 @@ const deleteNotification = catchAsync(async (req, res) => {
           data: result,
      });
 });
+
+// my-notifications
+const deleteAllNotification = catchAsync(async (req, res) => {
+     const result = await NotificationService.deleteAllNotificationToDB(req.user as IJwtPayload);
+
+     sendResponse(res, {
+          statusCode: StatusCodes.OK,
+          success: true,
+          message: 'Notification Deleted Successfully',
+          data: result,
+     });
+});
 export const NotificationController = {
      adminNotificationFromDB,
      getNotificationFromDB,
@@ -93,5 +106,6 @@ export const NotificationController = {
      adminReadNotification,
      sendAdminNotification,
      readNotificationSingle,
-     deleteNotification
+     deleteNotification,
+     deleteAllNotification,
 };

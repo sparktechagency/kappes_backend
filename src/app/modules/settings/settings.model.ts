@@ -13,6 +13,8 @@ const settingsSchema = new Schema<ISettings>(
                type: String,
                default: '',
           },
+          banner: { type: [String], required: false },
+          logo: { type: String, required: false },
           aboutUs: {
                type: String,
                default: '',

@@ -4,6 +4,10 @@ import { settingsController } from './settings.controller';
 import auth from '../../middleware/auth';
 import validateRequest from '../../middleware/validateRequest';
 import { settingsSchema } from './settings.validation';
+import fileUploadHandler from '../../middleware/fileUploadHandler';
+import parseMultipleFilesdata from '../../middleware/parseMultipleFilesdata';
+import { FOLDER_NAMES } from '../../../enums/files';
+import parseFileData from '../../middleware/parseFileData';
 
 const SettingsRouter = express.Router();
 
@@ -42,6 +46,18 @@ SettingsRouter.patch(
      auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
      // validateRequest(settingsSchema.updateShippingDetailsSchema),
      settingsController.addOrUpdateShippingDetails,
+);
+
+// Banner CRUD
+SettingsRouter.get('/banner-logo', settingsController.getBannerLogo);
+SettingsRouter.patch(
+     '/banner-logo',
+     auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+     fileUploadHandler(),
+     parseFileData(FOLDER_NAMES.LOGO),
+     parseMultipleFilesdata(FOLDER_NAMES.BANNER),
+     validateRequest(settingsSchema.createOrUpdateBannerSchema),
+     settingsController.addOrUpdateBannerLogo,
 );
 
 export default SettingsRouter;

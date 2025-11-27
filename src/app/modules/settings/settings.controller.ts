@@ -193,6 +193,26 @@ const sendMessageToSettings = catchAsync(async (req, res) => {
      });
 }); 
 
+const addOrUpdateBannerLogo = catchAsync(async (req, res) => {
+     const result = await settingsService.addOrUpdateBannerLogo(req.body);
+     sendResponse(res, {
+          success: true,
+          statusCode: StatusCodes.OK,
+          message: 'Banner Logo added or updated successfully',
+          data: result,
+     });
+}); 
+
+// get banner logo
+const getBannerLogo = catchAsync(async (req, res) => {
+     const result = await settingsService.getBannerLogo();
+     sendResponse(res, {
+          success: true,
+          statusCode: StatusCodes.OK,
+          message: 'Banner Logo fetched successfully',
+          data: result,
+     });
+}); 
 
 export const settingsController = {
      getSettings,
@@ -213,4 +233,6 @@ export const settingsController = {
      updateTermsOfService,
      getAllMessagesOfSettings,
      sendMessageToSettings,
+     addOrUpdateBannerLogo,
+     getBannerLogo,
 };

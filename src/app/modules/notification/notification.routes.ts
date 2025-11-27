@@ -15,5 +15,7 @@ router.patch('/admin', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), Notificat
 router.post('/send-notification', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), NotificationController.sendAdminNotification);
 // delete notification by admin
 router.delete('/admin/:id', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), NotificationController.deleteNotification);
+// my-notifications
+router.delete('/my-notifications', auth(USER_ROLES.USER), NotificationController.deleteAllNotification);
 
 export const NotificationRoutes = router;

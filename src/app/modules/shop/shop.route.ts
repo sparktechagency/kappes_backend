@@ -62,7 +62,7 @@ router.get('/followers/:shopId', ShopController.getFollowersByShop);
 router.get('/location', validateRequest(ShopValidation.getShopsByGeoLocation), ShopController.getShopsByLocation);
 
 // Delete a shop by ID
-router.delete('/:id', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), ShopController.deleteShopById);
+router.delete('/:id', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR), ShopController.deleteShopById);
 
 router.get('/:id', ShopController.getShopById);
 // Update a shop by ID

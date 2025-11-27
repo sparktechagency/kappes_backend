@@ -41,9 +41,15 @@ const createMessageZodSchema = z.object({
      }),
 });
 
+const createOrUpdateBannerSchema = z.object({
+     banner: z.array(z.string({ required_error: 'Banner is required' })).optional(),
+     logo: z.string({ required_error: 'Logo is required' }).optional(),
+});
+
 export const settingsSchema = {
      updateSocialsShcema,
      updateContactShcema,
      updateShippingDetailsSchema,
      createMessageZodSchema,
+     createOrUpdateBannerSchema,
 };

@@ -7,6 +7,8 @@ import { StatusCodes } from 'http-status-codes';
 import { User } from '../user/user.model';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { USER_ROLES } from '../user/user.enums';
+import mongoose from 'mongoose';
+import { IJwtPayload } from '../auth/auth.interface';
 
 // get notifications
 const getNotificationFromDB = async (user: JwtPayload, query: Record<string, unknown>) => {
@@ -131,6 +133,12 @@ const deleteNotificationToDB = async (id: string): Promise<INotification | null>
      return result;
 };
 
+// my-notifications
+const deleteAllNotificationToDB = async (user: IJwtPayload) => {
+     const result: any = await Notification.deleteMany({ receiver: new mongoose.Types.ObjectId(user.id) });
+     return result;
+};
+
 export const NotificationService = {
      adminNotificationFromDB,
      getNotificationFromDB,
@@ -139,4 +147,5 @@ export const NotificationService = {
      adminSendNotificationFromDB,
      readNotificationSingleToDB,
      deleteNotificationToDB,
+     deleteAllNotificationToDB,
 };

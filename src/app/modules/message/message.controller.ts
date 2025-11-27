@@ -24,7 +24,7 @@ const sendMessage = catchAsync(async (req: Request, res: Response) => {
 
 const getMessageByChatId = catchAsync(async (req: Request, res: Response) => {
      const id = new Types.ObjectId(req.params.id);
-     const messages = await MessageService.getMessageByChatIdFromDB(id, req.query);
+     const messages = await MessageService.getMessageByChatIdFromDB(id, req.query,req.user as IJwtPayload);
      sendResponse(res, {
           statusCode: StatusCodes.OK,
           success: true,
