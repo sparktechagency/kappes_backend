@@ -25,11 +25,11 @@ app.use(
           origin: [
                'http://10.10.7.109:3000',
                'http://10.10.7.109:3001',
-               'http://10.10.7.109:3002',
                'http://10.10.7.37:3000',
                'http://10.10.7.37:3001',
                'http://10.10.7.37:3002',
-               'http://10.10.7.37:3003',
+               'https://kappas-admin-dashboard.vercel.app',
+               'https://kappes-ecommerce-webiste.vercel.app',
           ],
           credentials: true,
      }),
