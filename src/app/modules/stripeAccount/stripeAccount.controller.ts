@@ -5,6 +5,7 @@ import stripe from '../../config/stripe.config';
 import { IJwtPayload } from '../auth/auth.interface';
 import { StripeAccount } from './stripeAccount.model';
 import { stripeAccountService } from './stripeAccount.service';
+import { StatusCodes } from 'http-status-codes';
 
 const createStripeAccount = catchAsync(async (req: Request, res: Response) => {
      const result = await stripeAccountService.createConnectedStripeAccount(req.user as IJwtPayload, req.get('host') || '', req.protocol);
@@ -57,9 +58,22 @@ const onConnectedStripeAccountSuccess = catchAsync(async (req: Request, res: Res
      res.send(result);
 });
 
+
+const stripeLoginLink = catchAsync(async (req: Request, res: Response) => {
+     const result = await stripeAccountService.stripeLoginLink(req.user as IJwtPayload);
+
+     sendResponse(res, {
+          success: true,
+          statusCode: StatusCodes.OK,
+          message: 'Successfully get stripe login link',
+          data: result,
+     });
+});
+
 export const stripeAccountController = {
      createStripeAccount,
      successPageAccount,
      refreshAccountConnect,
      onConnectedStripeAccountSuccess,
+     stripeLoginLink,
 };

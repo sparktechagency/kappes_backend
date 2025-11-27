@@ -15,8 +15,6 @@ import { User } from '../user/user.model';
 import { IShop } from './shop.interface';
 import { Shop } from './shop.model';
 import { ORDER_STATUS } from '../order/order.enums';
-import { Wishlist } from '../wishlist/wishlist.model';
-import { Review } from '../review/review.model';
 import { Coupon } from '../coupon/coupon.model';
 
 const createShop = async (payload: IShop, user: IJwtPayload, host: string, protocol: string) => {
@@ -228,7 +226,6 @@ const deleteShopById = async (id: string, user: IJwtPayload) => {
           // Delete all products, orders, and coupons of the shop
           await Promise.all([
                Product.updateMany({ shopId: shop._id }, { isDeleted: true }, { session }),
-               Order.updateMany({ shop: shop._id }, { isDeleted: true }, { session }),
                Coupon.updateMany({ shopId: shop._id }, { isDeleted: true }, { session }),
           ]);
 

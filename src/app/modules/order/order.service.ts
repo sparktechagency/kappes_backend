@@ -571,12 +571,6 @@ const refundOrder = async (orderId: string, user: IJwtPayload) => {
           if (order.paymentMethod !== PAYMENT_METHOD.COD) {
                // Retrieve payment intent from Stripe
                const paymentIntent = await stripe.paymentIntents.retrieve(payment.paymentIntent as string);
-               console.log('🚀 ~ refundOrder ~ paymentIntent.latest_charge:', paymentIntent.latest_charge);
-               console.log('🚀 ~ refundOrder ~ paymentIntent.amount_received:', paymentIntent.amount_received);
-               console.log('🚀 ~ refundOrder ~ paymentIntent.application_fee_amount:', paymentIntent.application_fee_amount);
-               console.log('🚀 ~ refundOrder ~ paymentIntent.amount_refunded:', paymentIntent.amount_refunded);
-               console.log('🚀 ~ refundOrder ~ paymentIntent.amount_details:', paymentIntent.amount_details);
-               console.log('🚀 ~ refundOrder ~ paymentIntent:', paymentIntent);
 
                // Get the latest charge to check refund status
                const chargeId = paymentIntent.latest_charge;
@@ -585,11 +579,6 @@ const refundOrder = async (orderId: string, user: IJwtPayload) => {
                if (chargeId) {
                     // Retrieve the charge to get accurate refund information
                     const charge = await stripe.charges.retrieve(chargeId as string);
-                    console.log('🚀 ~ refundOrder ~ charge:', {
-                         amount: charge.amount,
-                         amount_refunded: charge.amount_refunded,
-                         refunded: charge.refunded,
-                    });
 
                     availableToRefund = charge.amount - charge.amount_refunded;
                } else {
@@ -650,7 +639,7 @@ const refundOrder = async (orderId: string, user: IJwtPayload) => {
           await payment.save();
 
           return { message: 'Refund processed successfully' };
-     } catch (error) {
+     } catch (error: any) {
           console.error('Error processing refund:', error);
 
           if (error.type === 'StripeInvalidRequestError') {

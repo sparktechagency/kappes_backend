@@ -115,7 +115,7 @@ const loginUserFromDB = async (payload: ILoginData) => {
           shop = await ShopService.getShopsMyShops(isExistUser._id.toString());
      }
 
-     return { accessToken, refreshToken, role: isExistUser.role, shop };
+     return { accessToken, refreshToken, role: isExistUser.role, stripeConnectedAccount: isExistUser.stripeConnectedAccount, shop };
 };
 
 //SocialLoginUserFromDB
@@ -207,6 +207,7 @@ const SocialLoginUserFromDB = async (payload: ILoginData) => {
                name: isExistUser.full_name,
           });
      } catch (error) {
+          console.log('🚀 ~ SocialLoginUserFromDB ~ error:', error);
           throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to create Stripe customer');
      }
 
@@ -403,6 +404,7 @@ const resetPasswordByUrl = async (token: string, payload: IAuthResetPassword) =>
      try {
           decodedToken = await verifyToken(token, config.jwt.jwt_secret as Secret);
      } catch (error) {
+          console.log("🚀 ~ resetPasswordByUrl ~ error:", error)
           throw new AppError(StatusCodes.UNAUTHORIZED, 'Invalid or expired token.');
      }
      const { id } = decodedToken;

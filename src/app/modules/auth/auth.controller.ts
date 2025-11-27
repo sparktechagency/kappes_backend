@@ -56,6 +56,7 @@ const loginUser = catchAsync(async (req, res) => {
                accessToken: result.accessToken,
                refreshToken: result.refreshToken,
                role: result.role,
+               stripeConnectedAccount: result.stripeConnectedAccount,
                shop: result.shop,
           },
      });

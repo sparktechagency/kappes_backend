@@ -15,6 +15,7 @@ import { Brand } from '../brand/brand.model';
 import { USER_ROLES } from '../user/user.enums';
 import { IVariant } from '../variant/variant.interfaces';
 import { ObjectId } from 'mongodb';
+import { StripeAccount } from '../stripeAccount/stripeAccount.model';
 
 const createProduct = async (payload: IProduct, user: IJwtPayload) => {
      const session = await mongoose.startSession();
@@ -31,6 +32,12 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
                if (shop.owner.toString() !== user.id && !shop.admins?.some((admin) => admin.toString() === user.id)) {
                     throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to create a product for this shop');
                }
+          }
+
+          // check if shop owner has stripe connected account
+          const hasStripeAccount = await StripeAccount.findOne({ userId: shop.owner, isCompleted: true }, null, { session });
+          if (!hasStripeAccount) {
+               throw new AppError(StatusCodes.NOT_FOUND, 'Stripe account not found');
           }
 
           // Validate category, subcategory, and brand in parallel

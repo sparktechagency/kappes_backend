@@ -114,8 +114,33 @@ const onConnectedStripeAccountSuccess = async (accountId: string) => {
      return html;
 };
 
+
+const stripeLoginLink = async (user: IJwtPayload) => {
+     // Get the logged-in user's data (ensure the user is authenticated)
+     const userId = user.id;
+
+     // // Retrieve the user's Stripe account information from the database
+     // const isExistUser = await User.findById(userId).select("stripeConnectedAccount");
+     // if (!isExistUser || !isExistUser.stripeConnectedAccount) {
+     //   throw new AppError(StatusCodes.NOT_FOUND, "Stripe account not connected");
+     // }
+
+     // const stripeAccountId = isExistUser.stripeConnectedAccount;
+
+     // check if shop owner has stripe connected account
+     const hasStripeAccount = await StripeAccount.findOne({ userId, isCompleted: true });
+     if (!hasStripeAccount) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Stripe account not found');
+     }
+
+     const stripeAccountId = hasStripeAccount.accountId;
+     const loginLink = await stripe.accounts.createLoginLink(stripeAccountId);
+     return loginLink.url;
+};
+
 export const stripeAccountService = {
      createConnectedStripeAccount,
      refreshAccountConnect,
      onConnectedStripeAccountSuccess,
+     stripeLoginLink,
 };
