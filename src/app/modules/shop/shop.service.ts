@@ -14,6 +14,10 @@ import { IUser } from '../user/user.interface';
 import { User } from '../user/user.model';
 import { IShop } from './shop.interface';
 import { Shop } from './shop.model';
+import { ORDER_STATUS } from '../order/order.enums';
+import { Wishlist } from '../wishlist/wishlist.model';
+import { Review } from '../review/review.model';
+import { Coupon } from '../coupon/coupon.model';
 
 const createShop = async (payload: IShop, user: IJwtPayload, host: string, protocol: string) => {
      const { name, email } = payload;
@@ -141,6 +145,64 @@ const updateShopById = async (id: string, payload: Partial<IShop>, user: IJwtPay
 
      return updatedShop;
 };
+// const deleteShopById = async (id: string, user: IJwtPayload) => {
+//      const shop = await Shop.findById(id);
+//      if (!shop) {
+//           throw new AppError(StatusCodes.NOT_FOUND, 'Shop not found');
+//      }
+
+//      if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
+//           if (shop.owner.toString() !== user.id && !shop.admins?.some((admin) => admin.toString() === user.id)) {
+//                throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to delete this shop');
+//           }
+//      }
+
+//      // check if the shop has any running order
+//      const runningOrder = await Order.findOne({ shop: shop._id, status: { $in: [ORDER_STATUS.PENDING, ORDER_STATUS.PROCESSING] } });
+//      if (runningOrder) {
+//           throw new AppError(StatusCodes.FORBIDDEN, 'Shop has running order, you can not delete this shop');
+//      }
+//      const session = await mongoose.startSession();
+//      session.startTransaction();
+//      try {
+//           // delete all products of the shop
+//           await Product.updateMany({ shopId: shop._id }, { isDeleted: true }, { session });
+//           // delete all orders of the shop
+//           await Order.updateMany({ shop: shop._id }, { isDeleted: true }, { session });
+//           // delete all coupons of the shop
+//           await Coupon.updateMany({ shopId: shop._id }, { isDeleted: true }, { session });
+//           // delete shop owner and admins
+//           const shopOwner = await User.findById(shop.owner);
+//           const shopAdmins = await User.find({ _id: { $in: shop.admins }, role: USER_ROLES.SHOP_ADMIN });
+//           if (shopOwner) {
+//                shopOwner.isDeleted = true;
+//                await shopOwner.save({ session });
+//           }
+//           if (shopAdmins) {
+//                shopAdmins.forEach((admin) => {
+//                     admin.isDeleted = true;
+//                     admin.save({ session });
+//                });
+//           }
+//           // make isDeleted true
+//           shop.isDeleted = true;
+//           shop.admins = [];
+//           shop.followers = [];
+//           await shop.save({ session });
+
+//           // Commit the transaction
+//           await session.commitTransaction();
+//           session.endSession();
+//           return shop;
+//      } catch (error) {
+//           console.log('🚀 ~ deleteShopById ~ error:', error);
+//           // Abort the transaction on error
+//           await session.abortTransaction();
+//           session.endSession();
+//           throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to delete shop');
+//      }
+// };
+
 const deleteShopById = async (id: string, user: IJwtPayload) => {
      const shop = await Shop.findById(id);
      if (!shop) {
@@ -152,11 +214,76 @@ const deleteShopById = async (id: string, user: IJwtPayload) => {
                throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to delete this shop');
           }
      }
-     // make isDeleted true
-     shop.isDeleted = true;
-     await shop.save();
-     return shop;
+
+     // Check if the shop has any running orders
+     const runningOrder = await Order.findOne({ shop: shop._id, status: { $in: [ORDER_STATUS.PENDING, ORDER_STATUS.PROCESSING] } });
+     if (runningOrder) {
+          throw new AppError(StatusCodes.FORBIDDEN, 'Shop has running order, you cannot delete this shop');
+     }
+
+     const session = await mongoose.startSession();
+     session.startTransaction();
+
+     try {
+          // Delete all products, orders, and coupons of the shop
+          await Promise.all([
+               Product.updateMany({ shopId: shop._id }, { isDeleted: true }, { session }),
+               Order.updateMany({ shop: shop._id }, { isDeleted: true }, { session }),
+               Coupon.updateMany({ shopId: shop._id }, { isDeleted: true }, { session }),
+          ]);
+
+          // Delete the shop owner and admins (using bulk operations for better performance)
+          const updates: any[] = [];
+
+          if (shop.owner) {
+               const shopOwner = await User.findById(shop.owner);
+               if (shopOwner) {
+                    updates.push({
+                         updateOne: {
+                              filter: { _id: shopOwner._id },
+                              update: { $set: { isDeleted: true } },
+                              session,
+                         },
+                    });
+               }
+          }
+
+          if (shop.admins && shop.admins.length > 0) {
+               const shopAdmins = await User.find({ _id: { $in: shop.admins }, role: USER_ROLES.SHOP_ADMIN });
+               shopAdmins.forEach((admin) => {
+                    updates.push({
+                         updateOne: {
+                              filter: { _id: admin._id },
+                              update: { $set: { isDeleted: true } },
+                              session,
+                         },
+                    });
+               });
+          }
+
+          if (updates.length > 0) {
+               await User.bulkWrite(updates, { session });
+          }
+
+          // Make shop isDeleted true and clean up associated data
+          shop.isDeleted = true;
+          shop.admins = [];
+          shop.followers = [];
+          await shop.save({ session });
+
+          // Commit the transaction
+          await session.commitTransaction();
+          session.endSession();
+          return shop;
+     } catch (error) {
+          console.error('Error during shop deletion transaction:', error);
+          // Abort the transaction on error
+          await session.abortTransaction();
+          session.endSession();
+          throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to delete shop');
+     }
 };
+
 const getShopsMyShops = async (ownerId: string) => {
      const shopIsActive = await Shop.findOne({
           owner: new mongoose.Types.ObjectId(ownerId),
@@ -523,7 +650,7 @@ const isFollowedShop = async (shopId: string, user: IJwtPayload) => {
           throw new AppError(404, 'Shop not found');
      }
      const isFollowed = shop.followers?.some((follower) => follower.toString() === user.id);
-     return {isFollowed};
+     return { isFollowed };
 };
 
 const getShopOverview = async (shopId: string, user: IJwtPayload) => {
