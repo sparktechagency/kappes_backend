@@ -24,8 +24,7 @@ export async function startServer() {
           await connectToDatabase();
           // Create HTTP server
           httpServer = createServer(app);
-          const httpPort = Number(config.port);
-          const socketPort = Number(config.socket_port);
+          const port = Number(config.port);
           const ipAddress = config.ip_address as string;
 
           // Set timeouts
@@ -33,23 +32,21 @@ export async function startServer() {
           httpServer.keepAliveTimeout = 5000;
           httpServer.headersTimeout = 60000;
 
-          // Start HTTP server
-          httpServer.listen(httpPort, ipAddress, () => {
-               logger.info(colors.yellow(`♻️  Application listening on http://${ipAddress}:${httpPort}`));
-          });
-
           // Set up Socket.io server
-          socketServer = new SocketServer({
+          socketServer = new SocketServer(httpServer, {
                cors: {
                     origin: config.allowed_origins || '*',
                },
           });
 
-          socketServer.listen(socketPort);
           socketHelper.socket(socketServer);
-           //@ts-ignore
-           global.io = socketServer;
-          logger.info(colors.yellow(`♻️  Socket is listening on ${ipAddress}:${socketPort}`));
+          //@ts-ignore
+          global.io = socketServer;
+
+          // Start HTTP server with Socket.IO attached
+          httpServer.listen(port, ipAddress, () => {
+               logger.info(colors.yellow(`♻️  Application and Socket.IO listening on http://${ipAddress}:${port}`));
+          });
      } catch (error) {
           logger.error(colors.red('Failed to start server'), error);
           process.exit(1);
