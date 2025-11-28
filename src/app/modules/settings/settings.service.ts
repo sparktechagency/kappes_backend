@@ -235,7 +235,7 @@ const addOrUpdateBannerLogo = async (payload: { banner?: string[]; logo?: string
           if (payload.banner) {
                // unlinke old links
                if (settings.banner) {
-                    payload.banner.forEach((banner) => {
+                    settings.banner.forEach((banner) => {
                          unlinkFile(banner);
                     });
                }
