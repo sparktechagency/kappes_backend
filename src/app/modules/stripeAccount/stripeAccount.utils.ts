@@ -1,4 +1,4 @@
-export const successHTMLstripeConnection = (user: { name: string; email: string; profileImg?: string; dashboardLink: string }) => `
+export const successHTMLstripeConnection = (user: { name: string; email: string; image?: string; dashboardLink: string }) => `
     <div style="
       display: flex;
       align-items: center;
@@ -16,7 +16,7 @@ export const successHTMLstripeConnection = (user: { name: string; email: string;
         box-shadow: 0 6px 18px rgba(0,0,0,0.1);
         text-align: center;
       ">
-        <img src="${user.profileImg}" alt="${user.name}" style="
+        <img src="${user.image}" alt="${user.name}" style="
           width: 80px;
           height: 80px;
           border-radius: 50%;
@@ -48,7 +48,7 @@ export const successHTMLstripeConnection = (user: { name: string; email: string;
           font-weight: 500;
           transition: background 0.3s ease;
         " target="_blank">
-          Go to Stripe Dashboard
+          Go to Dashboard
         </a>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { IJwtPayload } from '../auth/auth.interface';
 import { User } from '../user/user.model';
 import { StripeAccount } from './stripeAccount.model';
 import { successHTMLstripeConnection } from './stripeAccount.utils';
+import config from '../../../config';
 
 const createConnectedStripeAccount = async (user: IJwtPayload, host: string, protocol: string): Promise<any> => {
      const existingAccount = await StripeAccount.findOne({
@@ -97,16 +98,19 @@ const onConnectedStripeAccountSuccess = async (accountId: string) => {
 
      await StripeAccount.updateOne({ accountId }, { isCompleted: true });
 
-     const userUpdate = await User.updateOne({ _id: stripeAccounts.userId._id }, { $set: { stripeConnectedAccount: accountId } });
-     console.log(userUpdate);
+     const userUpdate = await User.findByIdAndUpdate(stripeAccounts.userId._id, { $set: { stripeConnectedAccount: accountId } }, { new: true });
 
-     const user = stripeAccounts.userId as unknown as TPopulatedUser;
+     if (!userUpdate) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'User not found');
+     }
+
+     // const user = stripeAccounts.userId as unknown as TPopulatedUser;
 
      const html = successHTMLstripeConnection({
-          name: user.full_name,
-          email: user.email,
-          profileImg: user.image,
-          dashboardLink: `https://connect.stripe.com/app/express#${accountId}/overview`,
+          name: userUpdate.full_name,
+          email: userUpdate.email,
+          image: `${config.backend_url}${userUpdate.image}`,
+          dashboardLink: `${config.frontend_url_dashboard}/seller/overview`,
      });
 
      // const data = { user: { name: user.full_name } };
