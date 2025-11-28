@@ -14,6 +14,6 @@ stripeAccountRoutes
 
 stripeAccountRoutes.get('/success-account/:accountId', stripeAccountController.onConnectedStripeAccountSuccess);
 
-stripeAccountRoutes.get('/stripe/login-link', auth(USER_ROLES.VENDOR), stripeAccountController.stripeLoginLink);
+stripeAccountRoutes.get('/connected-user/login-link', auth(USER_ROLES.VENDOR), stripeAccountController.stripeLoginLink);
 
 export default stripeAccountRoutes;

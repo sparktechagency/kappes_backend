@@ -1,8 +1,4 @@
-export const successHTMLstripeConnection = (user: {
-    name: string;
-    email: string;
-    profileImg?: string;
-  }) => `
+export const successHTMLstripeConnection = (user: { name: string; email: string; profileImg?: string; dashboardLink: string }) => `
     <div style="
       display: flex;
       align-items: center;
@@ -42,7 +38,7 @@ export const successHTMLstripeConnection = (user: {
         ">
           <strong>Email:</strong> ${user.email}
         </div>
-        <a href="https://dashboard.stripe.com" style="
+        <a href="${user.dashboardLink}" style="
           display: inline-block;
           background-color: #4f46e5;
           color: white;

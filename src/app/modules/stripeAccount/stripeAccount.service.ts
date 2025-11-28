@@ -23,8 +23,8 @@ const createConnectedStripeAccount = async (user: IJwtPayload, host: string, pro
 
           const onboardingLink = await stripe.accountLinks.create({
                account: existingAccount.accountId,
-               refresh_url: `${protocol}://${host}/api/v1/payments/refreshAccountConnect/${existingAccount.accountId}`,
-               return_url: `${protocol}://${host}/api/v1/payments/success-account/${existingAccount.accountId}`,
+               refresh_url: `${protocol}://${host}/api/v1/stripe/refreshAccountConnect/${existingAccount.accountId}`,
+               return_url: `${protocol}://${host}/api/v1/stripe/success-account/${existingAccount.accountId}`,
                type: 'account_onboarding',
           });
           // console.log('onboardingLink-1', onboardingLink);
@@ -51,8 +51,8 @@ const createConnectedStripeAccount = async (user: IJwtPayload, host: string, pro
 
      const onboardingLink = await stripe.accountLinks.create({
           account: account.id,
-          refresh_url: `${protocol}://${host}/api/v1/payments/refreshAccountConnect/${account.id}`,
-          return_url: `${protocol}://${host}/api/v1/payments/success-account/${account.id}`,
+          refresh_url: `${protocol}://${host}/api/v1/stripe/refreshAccountConnect/${account.id}`,
+          return_url: `${protocol}://${host}/api/v1/stripe/success-account/${account.id}`,
           type: 'account_onboarding',
      });
      console.log('onboardingLink-2', onboardingLink);
@@ -106,6 +106,7 @@ const onConnectedStripeAccountSuccess = async (accountId: string) => {
           name: user.full_name,
           email: user.email,
           profileImg: user.image,
+          dashboardLink: `https://connect.stripe.com/app/express#${accountId}/overview`,
      });
 
      // const data = { user: { name: user.full_name } };
@@ -114,8 +115,8 @@ const onConnectedStripeAccountSuccess = async (accountId: string) => {
      return html;
 };
 
-
 const stripeLoginLink = async (user: IJwtPayload) => {
+     console.log('🚀 ~ stripeLoginLink ~ user:', user);
      // Get the logged-in user's data (ensure the user is authenticated)
      const userId = user.id;
 
