@@ -13,7 +13,7 @@ const communityPostSchema = new Schema<ICommunityPost>(
 );
 // remove the likedBy field in responce
 communityPostSchema.set('toJSON', {
-     transform: (doc, ret, options) => {
+     transform: (doc, ret: any, options) => {
           delete ret.likedBy;
           return ret;
      },

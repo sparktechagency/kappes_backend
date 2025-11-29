@@ -583,7 +583,7 @@ const refundOrder = async (orderId: string, user: IJwtPayload) => {
                     availableToRefund = charge.amount - charge.amount_refunded;
                } else {
                     // Fallback to payment intent amounts
-                    availableToRefund = paymentIntent.amount_received - (paymentIntent.amount_refunded || 0);
+                    availableToRefund = paymentIntent.amount_received;
                }
 
                const requestedRefundAmount = Math.round(payment.amount * 100);
@@ -593,7 +593,6 @@ const refundOrder = async (orderId: string, user: IJwtPayload) => {
                     availableToRefund,
                     paymentAmount: payment.amount,
                     amountReceived: paymentIntent.amount_received,
-                    amountRefunded: paymentIntent.amount_refunded,
                });
 
                // Validate refund availability

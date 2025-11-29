@@ -118,10 +118,10 @@ export const generateSlugDetails = async (variants: IProductSingleVariant[]): Pr
 
      // Loop through each variant and extract the fields from their slugs
      variantSlugs.forEach((slug) => {
-          const slugParts = slug.split('-');
+          const slugParts = slug?.split('-');
 
           SLUG_FIELD_ORDER.forEach((field, index) => {
-               if (slugParts[index]) {
+               if (slugParts && slugParts[index]) {
                     const fieldValue = slugParts[index];
 
                     if (!slugDetails[field]) {

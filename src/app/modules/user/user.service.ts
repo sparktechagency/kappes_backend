@@ -363,7 +363,7 @@ const getUserAdminById = async (id: string): Promise<IUser | null> => {
      return user;
 };
 
-const getAllUsers = async (query: Record<string, unknown & { isRecentUsers?: string }>) => {
+const getAllUsers = async (query: any) => {
      if (query.isRecentUsers) {
           console.log(query);
           const now = new Date();
@@ -384,7 +384,7 @@ const getAllUsers = async (query: Record<string, unknown & { isRecentUsers?: str
      };
 };
 
-const getAllAdmins = async (query: Record<string, unknown & { isRecentUsers?: string }>) => {
+const getAllAdmins = async (query: any) => {
      if (query.isRecentUsers) {
           console.log(query);
           const now = new Date();
