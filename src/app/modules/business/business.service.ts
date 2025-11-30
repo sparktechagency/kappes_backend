@@ -198,7 +198,7 @@ const searchBusinesses = async (params: IBusinessSearchParams, userId?: string):
 
 const getAllVerifiedBusinesses = async (query: Record<string, unknown>) => {
      const queryBuilder = new QueryBuilder(Business.find({ verified: true }).populate('owner', 'full_name email'), query).paginate().fields().sort().filter();
-     const businesses = await queryBuilder.modelQuery.exec();
+     const businesses = await queryBuilder.search(['name', 'type', 'email', 'phone', 'description']).modelQuery.exec();
      const meta = await queryBuilder.countTotal();
 
      return { businesses, meta };
