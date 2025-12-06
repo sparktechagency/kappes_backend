@@ -16,7 +16,7 @@ const createCoupon = async (couponData: Partial<ICoupon>, user: IJwtPayload) => 
 
      if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
           if (shop.owner.toString() !== user.id && !shop.admins?.some((admin) => admin.toString() === user.id)) {
-               throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to delete this product');
+               throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to create this coupon');
           }
      }
 
@@ -29,7 +29,7 @@ const createCoupon = async (couponData: Partial<ICoupon>, user: IJwtPayload) => 
 };
 
 const getAllCoupon = async (query: Record<string, unknown>) => {
-     const brandQuery = new QueryBuilder(Coupon.find().populate('shopId', 'name,logo'), query).search(['code']).filter().sort().paginate().fields();
+     const brandQuery = new QueryBuilder(Coupon.find().populate('shopId', 'name logo'), query).search(['code']).filter().sort().paginate().fields();
 
      const result = await brandQuery.modelQuery;
      const meta = await brandQuery.countTotal();
@@ -61,7 +61,7 @@ const updateCoupon = async (payload: Partial<ICoupon>, couponCode: string, user:
 
      if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
           if (shop.owner.toString() !== user.id && !shop.admins?.some((admin) => admin.toString() === user.id)) {
-               throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to delete this product');
+               throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to update this coupon');
           }
      }
 
@@ -120,7 +120,7 @@ const deleteCoupon = async (couponId: string, user: IJwtPayload) => {
 
      if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
           if (shop.owner.toString() !== user.id && !shop.admins?.some((admin) => admin.toString() === user.id)) {
-               throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to delete this product');
+               throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to delete this coupon');
           }
      }
 
@@ -137,17 +137,17 @@ const getAllCouponByShopId = async (shopId: string, user: IJwtPayload) => {
 
      if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
           if (shop.owner.toString() !== user.id && !shop.admins?.some((admin) => admin.toString() === user.id)) {
-               throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to delete this product');
+               throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to get this coupon');
           }
      }
 
-     const coupon = await Coupon.find({ shopId });
+     const coupon = await Coupon.find({ shopId }).populate('shopId', 'name logo');
 
      return coupon;
 };
 
 const getCouponById = async (couponId: string) => {
-     const coupon = await Coupon.findById(couponId).populate('shopId', 'name,logo');
+     const coupon = await Coupon.findById(couponId).populate('shopId', 'name logo');
 
      return coupon;
 };
