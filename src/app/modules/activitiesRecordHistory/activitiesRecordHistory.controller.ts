@@ -2,9 +2,10 @@ import { Request, Response } from 'express';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { activitiesRecordHistoryService } from './activitiesRecordHistory.service';
+import { IJwtPayload } from '../auth/auth.interface';
 
 const createActivitiesRecordHistory = catchAsync(async (req: Request, res: Response) => {
-     const result = await activitiesRecordHistoryService.createActivitiesRecordHistory(req.body);
+     const result = await activitiesRecordHistoryService.createActivitiesRecordHistory(req.body, req.user as IJwtPayload);
 
      sendResponse(res, {
           statusCode: 200,
@@ -36,33 +37,9 @@ const getAllUnpaginatedActivitiesRecordHistorys = catchAsync(async (req: Request
      });
 });
 
-const updateActivitiesRecordHistory = catchAsync(async (req: Request, res: Response) => {
-     const { id } = req.params;
-     const result = await activitiesRecordHistoryService.updateActivitiesRecordHistory(id, req.body);
-
-     sendResponse(res, {
-          statusCode: 200,
-          success: true,
-          message: 'ActivitiesRecordHistory updated successfully',
-          data: result || undefined,
-     });
-});
-
-const deleteActivitiesRecordHistory = catchAsync(async (req: Request, res: Response) => {
-     const { id } = req.params;
-     const result = await activitiesRecordHistoryService.deleteActivitiesRecordHistory(id);
-
-     sendResponse(res, {
-          statusCode: 200,
-          success: true,
-          message: 'ActivitiesRecordHistory deleted successfully',
-          data: result || undefined,
-     });
-});
-
 const hardDeleteActivitiesRecordHistory = catchAsync(async (req: Request, res: Response) => {
      const { id } = req.params;
-     const result = await activitiesRecordHistoryService.hardDeleteActivitiesRecordHistory(id);
+     const result = await activitiesRecordHistoryService.hardDeleteActivitiesRecordHistory(id, req.user as IJwtPayload);
 
      sendResponse(res, {
           statusCode: 200,
@@ -74,7 +51,7 @@ const hardDeleteActivitiesRecordHistory = catchAsync(async (req: Request, res: R
 
 const getActivitiesRecordHistoryById = catchAsync(async (req: Request, res: Response) => {
      const { id } = req.params;
-     const result = await activitiesRecordHistoryService.getActivitiesRecordHistoryById(id);
+     const result = await activitiesRecordHistoryService.getActivitiesRecordHistoryById(id, req.user as IJwtPayload);
 
      sendResponse(res, {
           statusCode: 200,
@@ -82,14 +59,12 @@ const getActivitiesRecordHistoryById = catchAsync(async (req: Request, res: Resp
           message: 'ActivitiesRecordHistory retrieved successfully',
           data: result || undefined,
      });
-});  
+});
 
 export const activitiesRecordHistoryController = {
      createActivitiesRecordHistory,
      getAllActivitiesRecordHistorys,
      getAllUnpaginatedActivitiesRecordHistorys,
-     updateActivitiesRecordHistory,
-     deleteActivitiesRecordHistory,
      hardDeleteActivitiesRecordHistory,
-     getActivitiesRecordHistoryById
+     getActivitiesRecordHistoryById,
 };

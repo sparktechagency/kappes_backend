@@ -1,11 +1,14 @@
+import { ActivitiesRecordHistoryCategoryEnum, HistoryOfModuleEnum } from './activitiesRecordHistory.enums';
+import { Types } from 'mongoose';
+
 export interface IactivitiesRecordHistory {
-     image: string;
-     title: string;
-     description:string;
+     _id?: string;
+     category: ActivitiesRecordHistoryCategoryEnum;
+     historyOfModule: HistoryOfModuleEnum;
+     moduleDocumentId: Types.ObjectId;
+     userId: Types.ObjectId;
      createdAt: Date;
      updatedAt: Date;
-     isDeleted: boolean;
-     deletedAt?: Date;
 }
 
 export type IactivitiesRecordHistoryFilters = {

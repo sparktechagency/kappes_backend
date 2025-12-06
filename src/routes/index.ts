@@ -30,6 +30,7 @@ import { PushNotificationRoutes } from '../app/modules/pushNotification/pushNoti
 import { DashboardRoutes } from '../app/modules/admin/dashboard/dashboard.routes';
 import { WalletRoutes } from '../app/modules/wallet/wallet.route';
 import { chitChatShipmentRoutes } from '../app/modules/third-party-modules/chitChatShipment/chitChatShipment.route';
+import { activitiesRecordHistoryRoutes } from '../app/modules/activitiesRecordHistory/activitiesRecordHistory.route';
 
 const router = express.Router();
 const routes = [
@@ -64,7 +65,7 @@ const routes = [
      {
           path: '/notifications',
           route: NotificationRoutes,
-     }, 
+     },
      {
           path: '/pushNotification',
           route: PushNotificationRoutes,
@@ -160,6 +161,10 @@ const routes = [
      {
           path: '/chitchatShipment',
           route: chitChatShipmentRoutes,
+     },
+     {
+          path: '/activities-record-history',
+          route: activitiesRecordHistoryRoutes,
      },
 ];
 

@@ -1,27 +1,15 @@
 import { Schema, model } from 'mongoose';
 import { IactivitiesRecordHistory } from './activitiesRecordHistory.interface';
+import { ActivitiesRecordHistoryCategoryEnum, HistoryOfModuleEnum } from './activitiesRecordHistory.enums';
 
-const ActivitiesRecordHistorySchema = new Schema<IactivitiesRecordHistory>({
-     image: { type: String, required: true },
-     title: { type: String,required: true },
-     description: { type: String,required: true },
-     isDeleted: { type: Boolean, default: false },
-     deletedAt: { type: Date },
-}, { timestamps: true });
-
-ActivitiesRecordHistorySchema.pre('find', function (next) {
-     this.find({ isDeleted: false });
-     next();
-});
-
-ActivitiesRecordHistorySchema.pre('findOne', function (next) {
-     this.findOne({ isDeleted: false });
-     next();
-});
-
-ActivitiesRecordHistorySchema.pre('aggregate', function (next) {
-     this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
-     next();
-});       
+const ActivitiesRecordHistorySchema = new Schema<IactivitiesRecordHistory>(
+     {
+          category: { type: String, enum: ActivitiesRecordHistoryCategoryEnum, required: true },
+          historyOfModule: { type: String, enum: HistoryOfModuleEnum, required: true },
+          moduleDocumentId: { type: Schema.Types.ObjectId, refPath: 'historyOfModule', required: true },
+          userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+     },
+     { timestamps: true },
+);
 
 export const ActivitiesRecordHistory = model<IactivitiesRecordHistory>('ActivitiesRecordHistory', ActivitiesRecordHistorySchema);
