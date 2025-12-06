@@ -5,7 +5,7 @@ import { ActivitiesRecordHistory } from './activitiesRecordHistory.model';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { IJwtPayload } from '../auth/auth.interface';
 
-const createActivitiesRecordHistory = async (payload: IactivitiesRecordHistory, user: IJwtPayload): Promise<IactivitiesRecordHistory> => {
+const createActivitiesRecordHistory = async (payload: Partial<IactivitiesRecordHistory>, user: IJwtPayload) => {
      const isExistRecord = await ActivitiesRecordHistory.findOne({
           moduleDocumentId: payload.moduleDocumentId,
           historyOfModule: payload.historyOfModule,

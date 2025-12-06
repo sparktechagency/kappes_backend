@@ -22,7 +22,8 @@ import { IOrder } from './order.interface';
 import { Order } from './order.model';
 import { transferToVendor } from './order.utils';
 import { ActivitiesRecordHistory } from '../activitiesRecordHistory/activitiesRecordHistory.model';
-import { HistoryOfModuleEnum } from '../activitiesRecordHistory/activitiesRecordHistory.enums';
+import { ActivitiesRecordHistoryCategoryEnum, HistoryOfModuleEnum } from '../activitiesRecordHistory/activitiesRecordHistory.enums';
+import { activitiesRecordHistoryService } from '../activitiesRecordHistory/activitiesRecordHistory.service';
 
 const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
      try {
@@ -84,6 +85,15 @@ const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
                     }
 
                     orderData.coupon = coupon._id as Types.ObjectId;
+                    // create coupon history
+                    await activitiesRecordHistoryService.createActivitiesRecordHistory(
+                         {
+                              category: ActivitiesRecordHistoryCategoryEnum.COUPON_TRYING_HISTORY,
+                              historyOfModule: HistoryOfModuleEnum.COUPON,
+                              moduleDocumentId: coupon._id,
+                         },
+                         user,
+                    );
                } else {
                     throw new Error('Coupon is not available for now or you have already used it');
                }
