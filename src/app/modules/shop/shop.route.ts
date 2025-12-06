@@ -76,6 +76,9 @@ router.patch(
      ShopController.updateShopById,
 );
 
+// toogle shop is advertised
+router.patch('/toggle-advertise/:shopId', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), validateRequest(ShopValidation.advertiseShopZodSchema), ShopController.toggleAdvertiseShop);
+
 // // Get shops by getShopsByShopCategory
 // router.get('/shopCategory/:category', ShopController.getShopsByShopCategory);
 // // Get chats by shop

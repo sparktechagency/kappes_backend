@@ -25,7 +25,7 @@ const subCategorySchema = new Schema<ISubCategory>(
                enum: ['active', 'inactive'],
                default: 'active',
           },
-          requiredFieldsForVariant: { type: [String], required: true },
+          requiredFieldsForVariant: { type: [String], required: true, minLength: 1 },
           isDeleted: { type: Boolean, default: false },
      },
      {

@@ -81,6 +81,9 @@ const makeShopAdmin = async (shopId: string, tobeAdminId: string, user: IJwtPayl
 };
 
 const getAllShops = async (query: Record<string, unknown>) => {
+     if (query.isAdvertised) {
+          query.isAdvertised = query.isAdvertised === 'true';
+     }
      const shopQuery = new QueryBuilder(Shop.find().populate('owner', 'full_name email').populate('admins', 'full_name email').populate('followers', 'full_name email'), query)
           .search(['name', 'email', 'address.province', 'address.city', 'address.territory'])
           .filter()
@@ -224,10 +227,7 @@ const deleteShopById = async (id: string, user: IJwtPayload) => {
 
      try {
           // Delete all products, orders, and coupons of the shop
-          await Promise.all([
-               Product.updateMany({ shopId: shop._id }, { isDeleted: true }, { session }),
-               Coupon.updateMany({ shopId: shop._id }, { isDeleted: true }, { session }),
-          ]);
+          await Promise.all([Product.updateMany({ shopId: shop._id }, { isDeleted: true }, { session }), Coupon.updateMany({ shopId: shop._id }, { isDeleted: true }, { session })]);
 
           // Delete the shop owner and admins (using bulk operations for better performance)
           const updates: any[] = [];
@@ -873,6 +873,35 @@ const getShopsTerritoryListWithProductCount = async (query: Record<string, unkno
      }
 };
 
+const toggleAdvertiseShop = async (shopId: string, data: { advertisedExpiresAt: string }) => {
+     const isExistShop = await Shop.findById(shopId).select('isAdvertised advertisedAt advertisedExpiresAt');
+
+     if (isExistShop && isExistShop.isAdvertised) {
+          isExistShop.isAdvertised = false;
+          isExistShop.advertisedAt = null;
+          isExistShop.advertisedExpiresAt = null;
+     } else if (isExistShop && !isExistShop.isAdvertised) {
+          // convert string to date from 2025-12-28 to a valid date
+          const advertisedExpiresAt = new Date(data.advertisedExpiresAt);
+          if (isNaN(advertisedExpiresAt.getTime())) {
+               throw new AppError(400, 'advertisedExpiresAt expires at date is invalid');
+          }
+
+          if (!advertisedExpiresAt || advertisedExpiresAt < new Date()) {
+               throw new AppError(400, 'Advertised expires at date is invalid');
+          }
+
+          isExistShop.isAdvertised = true;
+          isExistShop.advertisedAt = new Date();
+          isExistShop.advertisedExpiresAt = new Date(data.advertisedExpiresAt);
+     } else {
+          throw new AppError(404, 'Shop not found');
+     }
+     await isExistShop.save();
+
+     return isExistShop;
+};
+
 // Export the ShopService
 export const ShopService = {
      createShop,
@@ -908,4 +937,5 @@ export const ShopService = {
      getShopsByFollower,
      getShopsProvincesListWithProductCount,
      getShopsTerritoryListWithProductCount,
+     toggleAdvertiseShop,
 };

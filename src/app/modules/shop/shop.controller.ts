@@ -344,6 +344,17 @@ const getShopsTerritoryListWithProductCount = catchAsync(async (req: Request, re
      });
 });
 
+const toggleAdvertiseShop = catchAsync(async (req: Request, res: Response) => {
+     const { shopId } = req.params;
+     const result = await ShopService.toggleAdvertiseShop(shopId, req.body);
+     sendResponse(res, {
+          statusCode: StatusCodes.OK,
+          success: true,
+          message: 'Shops territory with product count retrieved successfully',
+          data: result,
+     });
+});
+
 export const ShopController = {
      createShop,
      makeShopAdmin,
@@ -376,4 +387,5 @@ export const ShopController = {
      getShopsByFollower,
      getShopsProvincesListWithProductCount,
      getShopsTerritoryListWithProductCount,
+     toggleAdvertiseShop,
 };

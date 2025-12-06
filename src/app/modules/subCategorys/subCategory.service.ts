@@ -10,7 +10,10 @@ import { IJwtPayload } from '../auth/auth.interface';
 import { USER_ROLES } from '../user/user.enums';
 // create sub category
 const createSubCategoryToDB = async (payload: ISubCategory, user: IJwtPayload) => {
-     const { name, thumbnail, categoryId } = payload;
+     const { name, thumbnail, categoryId, requiredFieldsForVariant } = payload;
+     if (!requiredFieldsForVariant || requiredFieldsForVariant.length === 0) {
+          throw new AppError(StatusCodes.BAD_REQUEST, 'Required fields for variant is required!');
+     }
      const isExistCategory = await Category.findById(categoryId);
      if (!isExistCategory) {
           unlinkFile(thumbnail);

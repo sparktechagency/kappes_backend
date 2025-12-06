@@ -17,7 +17,7 @@ router.post(
      validateRequest(CategoryValidation.createCategoryZodSchema),
      CategoryController.createCategory,
 );
-router.get('/single/:id', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.USER), CategoryController.getSingleCategory);
+router.get('/single/:id', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.USER, USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR), CategoryController.getSingleCategory);
 router
      .route('/:id')
      .patch(auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), fileUploadHandler(), parseFileData(FOLDER_NAMES.THUMBNAIL), CategoryController.updateCategory);

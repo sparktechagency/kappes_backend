@@ -6,7 +6,7 @@ import AppError from '../../../errors/AppError';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { User } from '../user/user.model';
 import { SubCategory } from '../subCategorys/subCategory.model';
-import { USER_ROLES } from '../user/user.enums'; 
+import { USER_ROLES } from '../user/user.enums';
 import { Product } from '../product/product.model';
 import { IJwtPayload } from '../auth/auth.interface';
 
@@ -22,7 +22,7 @@ const createCategoryToDB = async (payload: ICategory, user: IJwtPayload) => {
           name,
           thumbnail,
           description,
-          createdBy: user.id
+          createdBy: user.id,
      });
 
      const createdCategory = await newCategory.save();
@@ -64,14 +64,8 @@ const updateCategoryToDB = async (id: string, payload: ICategory, user: IJwtPayl
           throw new AppError(StatusCodes.BAD_REQUEST, "Category doesn't exist");
      }
 
-     if (
-          user.role === USER_ROLES.SHOP_ADMIN || user.role === USER_ROLES.VENDOR &&
-          isExistCategory.createdBy.toString() !== user.id
-     ) {
-          throw new AppError(
-               StatusCodes.BAD_REQUEST,
-               'You are not able to update the Category!'
-          );
+     if (user.role === USER_ROLES.SHOP_ADMIN || (user.role === USER_ROLES.VENDOR && isExistCategory.createdBy.toString() !== user.id)) {
+          throw new AppError(StatusCodes.BAD_REQUEST, 'You are not able to update the Category!');
      }
 
      if (payload.thumbnail && isExistCategory?.thumbnail) {
@@ -113,23 +107,16 @@ const updateCategoryStatusToDB = async (id: string, payload: string) => {
 
 // delete category
 const deleteCategoryToDB = async (id: string, user: IJwtPayload) => {
-
-     const product = await Product.findOne({ categoryId: id })
-     if (product) throw new AppError(StatusCodes.BAD_REQUEST, "You can not delete the Category. Because the Category is related to products.");
+     const product = await Product.findOne({ categoryId: id });
+     if (product) throw new AppError(StatusCodes.BAD_REQUEST, 'You can not delete the Category. Because the Category is related to products.');
 
      const isExistCategory = await Category.findById(id);
      if (!isExistCategory) {
           throw new AppError(StatusCodes.BAD_REQUEST, "Category doesn't exist");
      }
 
-     if (
-          user.role === USER_ROLES.SHOP_ADMIN || user.role === USER_ROLES.VENDOR &&
-          isExistCategory.createdBy.toString() !== user.id
-     ) {
-          throw new AppError(
-               StatusCodes.BAD_REQUEST,
-               'You are not able to delete the Category!'
-          );
+     if (user.role === USER_ROLES.SHOP_ADMIN || (user.role === USER_ROLES.VENDOR && isExistCategory.createdBy.toString() !== user.id)) {
+          throw new AppError(StatusCodes.BAD_REQUEST, 'You are not able to delete the Category!');
      }
      // do hard delete
      await Category.findByIdAndDelete(id);
@@ -177,8 +164,6 @@ const getSubcategoryWithCategoryIdFromDB = async (id: string, query: Record<stri
      };
 };
 
-
-
 const getPopularCategorisFromDB = async (query: Record<string, unknown>) => {
      const queryBuilder = new QueryBuilder(Category.find(), query);
      const result = await queryBuilder.fields().filter().paginate().search(['name']).sort().modelQuery.exec();
@@ -189,8 +174,6 @@ const getPopularCategorisFromDB = async (query: Record<string, unknown>) => {
      };
 };
 
-
-
 export const CategoryService = {
      createCategoryToDB,
      getCategoriesFromDB,
@@ -199,5 +182,5 @@ export const CategoryService = {
      updateCategoryStatusToDB,
      getSingleCategoryFromDB,
      getSubcategoryWithCategoryIdFromDB,
-     getPopularCategorisFromDB
+     getPopularCategorisFromDB,
 };
