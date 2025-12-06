@@ -35,6 +35,7 @@ export const createVariantSchema = z.object({
           volume: z.number().positive().min(50, { message: 'Volume must be at least 50 ml' }).optional(),
           dimensions: z.string().optional(),
           capacity: z.string().optional(),
+          description: z.string().optional(),
           options: z.union([z.enum([...(Object.values(VARIANT_OPTIONS) as [string, ...string[]])]), z.string()]).optional(),
      }),
 });

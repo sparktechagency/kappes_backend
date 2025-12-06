@@ -146,6 +146,9 @@ export const updateVariant = async (id: string, data: Partial<IVariant>, user: I
           .populate({ path: 'subCategoryId', select: 'name' }); // Populate subCategoryId's name field
      // If no variant was found, throw an error
      if (!toBeUpdatedVariant) {
+          data?.images?.forEach((element) => {
+               unlinkFile(element);
+          });
           throw new AppError(StatusCodes.NOT_FOUND, 'Variant not found');
      }
 
@@ -157,6 +160,9 @@ export const updateVariant = async (id: string, data: Partial<IVariant>, user: I
 
      const isVariantExistSlug = await Variant.findOne({ slug: variantSlug });
      if (isVariantExistSlug) {
+          data?.images?.forEach((element) => {
+               unlinkFile(element);
+          });
           throw new AppError(StatusCodes.NOT_ACCEPTABLE, `This Variant Already Exists under ${(toBeUpdatedVariant.subCategoryId as any).name} subcategory`);
      }
      toBeUpdatedVariant.set({

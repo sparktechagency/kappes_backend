@@ -1,29 +1,26 @@
-
 import { VariantService } from './variant.service';
-import { variantValidation } from './variant.validation';
 import sendResponse from '../../../shared/sendResponse';
 import { StatusCodes } from 'http-status-codes';
 import catchAsync from '../../../shared/catchAsync';
 import { IJwtPayload } from '../auth/auth.interface';
-import { getMultipleFilesPath } from '../../../shared/getFilePath';
 
 const createVariantController = catchAsync(async (req, res) => {
-     let variantData = req.body;
-     if (req.body.data) {
-          variantData = JSON.parse(req.body.data);
-          // Attach image path or filename to parsed data
-          if (req.files) {
-               const image = getMultipleFilesPath(req.files, 'image');
-               variantData.images = image;
-          }
+     //      let variantData = req.body;
+     //      if (req.body.data) {
+     //           variantData = JSON.parse(req.body.data);
+     //           // Attach image path or filename to parsed data
+     //           if (req.files) {
+     //                const image = getMultipleFilesPath(req.files, 'image');
+     //                variantData.images = image;
+     //           }
 
-          // Validate and assign to req.body
-          const formattedParsedData = variantValidation.createVariantSchema.parse({ body: variantData }); 
-          variantData = formattedParsedData.body;
-     }
-     
-    //  const variantData = req.body;
-     const result = await VariantService.createVariant(variantData, req.user as IJwtPayload);
+     //           // Validate and assign to req.body
+     //           const formattedParsedData = variantValidation.createVariantSchema.parse({ body: variantData });
+     //           variantData = formattedParsedData.body;
+     //      }
+
+     //     //  const variantData = req.body;
+     const result = await VariantService.createVariant(req.body, req.user as IJwtPayload);
      sendResponse(res, {
           success: true,
           statusCode: StatusCodes.OK,
