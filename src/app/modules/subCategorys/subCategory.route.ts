@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.post(
      '/create',
-     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
+     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN),
      fileUploadHandler(),
      parseFileData(FOLDER_NAMES.THUMBNAIL),
      validateRequest(CategoryValidation.createSubCategoryZodSchema),
@@ -21,9 +21,9 @@ router.get('/:id', CategoryController.getSubCategoryReletedToCategory);
 router.get('/single/:id', CategoryController.getSubcategorisById);
 router
      .route('/:id')
-     .patch(auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), fileUploadHandler(), parseFileData(FOLDER_NAMES.THUMBNAIL), CategoryController.updateSubCategory)
-     .delete(auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), CategoryController.deleteSubCategory);
+     .patch(auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), fileUploadHandler(), parseFileData(FOLDER_NAMES.THUMBNAIL), CategoryController.updateSubCategory)
+     .delete(auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), CategoryController.deleteSubCategory);
 
-router.get('/',CategoryController.getSubCategories);
+router.get('/', CategoryController.getSubCategories);
 
 export const SubCategoryRoutes = router;

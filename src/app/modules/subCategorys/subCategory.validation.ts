@@ -6,6 +6,7 @@ const createSubCategoryZodSchema = z.object({
           name: z.string({ required_error: 'Sub category name is required' }),
           categoryId: z.string({ required_error: 'Category id name is required' }),
           description: z.string({ required_error: 'description id name is required' }),
+          requiredFieldsForVariant: z.array(z.string()).optional(),
      }),
 });
 
