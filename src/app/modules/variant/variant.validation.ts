@@ -8,7 +8,7 @@ export const createVariantSchema = z.object({
      body: z.object({
           categoryId: objectIdSchema, // Assuming categoryId is a UUID (change to ObjectId if necessary)
           subCategoryId: objectIdSchema, // Same as categoryId for subCategory
-          images: z.array(z.string()).optional(),
+          image: z.array(z.string()).optional(),
           color: z
                .object({
                     name: z.string().optional(),
@@ -25,17 +25,20 @@ export const createVariantSchema = z.object({
           processor: z.string().optional(),
           graphics_card_type: z.union([z.enum([...(Object.values(GRAPHICS_CARD_TYPE) as [string, ...string[]])]), z.string()]).optional(),
           graphics_card_size: z.union([z.enum([...(Object.values(RAM_OR_STORAGE_OR_GRAPHICS_CARD) as [string, ...string[]])]), z.string()]).optional(),
-          screen_size: z.number().positive().optional(),
+          screen_size: z.string().optional(),
           resolution: z.union([z.enum([...(Object.values(RESOLUTION_TYPE) as [string, ...string[]])]), z.string()]).optional(),
           lens_kit: z.string().optional(),
           material: z.string().optional(),
           size: z.string().optional(),
           fabric: z.string().optional(),
-          weight: z.number().positive().optional(),
-          volume: z.number().positive().min(50, { message: 'Volume must be at least 50 ml' }).optional(),
+          weight: z.string().optional(),
+          volume: z.string().min(50, { message: 'Volume must be at least 50 ml' }).optional(),
           dimensions: z.string().optional(),
+          shape: z.string().optional(),
+          flavour: z.string().optional(),
           capacity: z.string().optional(),
           description: z.string().optional(),
+          identifier: z.string().optional(),
           options: z.union([z.enum([...(Object.values(VARIANT_OPTIONS) as [string, ...string[]])]), z.string()]).optional(),
      }),
 });

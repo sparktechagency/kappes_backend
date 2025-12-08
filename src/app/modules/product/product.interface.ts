@@ -5,7 +5,7 @@ interface ISlugDetails {
 }
 
 export interface IProductSingleVariant {
-     variantId: mongoose.Types.ObjectId | string;
+     variantId: mongoose.Types.ObjectId;
      variantQuantity: number;
      variantPrice: number;
      slug?: string;

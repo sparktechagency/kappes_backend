@@ -11,8 +11,89 @@ import { Product } from '../product/product.model';
 import { IJwtPayload } from '../auth/auth.interface';
 import unlinkFile from '../../../shared/unlinkFile';
 
-// create sub category
-const createVariant = async (payload: IVariant, user: IJwtPayload) => {
+// // create sub category
+// const createVariant = async (payload: IVariant, user: IJwtPayload) => {
+//      const session = await mongoose.startSession(); // Start a session
+
+//      try {
+//           // Start a transaction
+//           session.startTransaction();
+
+//           // Validate Category
+//           const isExistCategory = await Category.findById(payload.categoryId).session(session); // Use session for transaction
+//           if (!isExistCategory) {
+//                payload?.image?.forEach((element) => {
+//                     unlinkFile(element);
+//                });
+//                throw new AppError(StatusCodes.NOT_FOUND, 'Category not found!');
+//           }
+
+//           // Validate SubCategory
+//           const isExistSubCategory = await SubCategory.findOne({ _id: payload.subCategoryId, categoryId: payload.categoryId }).session(session); // Use session for transaction
+//           if (!isExistSubCategory) {
+//                payload?.image?.forEach((element) => {
+//                     unlinkFile(element);
+//                });
+//                throw new AppError(StatusCodes.NOT_FOUND, 'SubCategory not found!');
+//           }
+
+//           // Create a new Variant
+//           const createVariant = new Variant({
+//                ...payload,
+//                createdBy: user.id,
+//           });
+
+//           // Generate slug
+//           const variantSlug = generateSlug(isExistCategory.name, isExistSubCategory.name, payload);
+
+//           // Check if variant with same slug already exists
+//           const isVariantExistSlug = await Variant.findOne({ slug: variantSlug }).session(session); // Use session for transaction
+//           if (isVariantExistSlug) {
+//                payload?.image?.forEach((element) => {
+//                     unlinkFile(element);
+//                });
+//                return isVariantExistSlug;
+//           }
+
+//           // Set the generated slug
+//           createVariant.slug = variantSlug;
+
+//           // Save the variant to the database
+//           await createVariant.save({ session }); // Use session for transaction
+//           if (!createVariant) {
+//                payload?.image?.forEach((element) => {
+//                     unlinkFile(element);
+//                });
+//                throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create Variant');
+//           }
+
+//           // Add the new variant to the subcategory
+//           await SubCategory.findByIdAndUpdate(
+//                payload.subCategoryId,
+//                {
+//                     $push: { variants: createVariant._id },
+//                },
+//                { new: true, session }, // Use session for transaction
+//           );
+
+//           // Commit the transaction
+//           await session.commitTransaction();
+
+//           // End the session
+//           session.endSession();
+
+//           return createVariant;
+//      } catch (error) {
+//           // Abort the transaction on error
+//           await session.abortTransaction();
+//           session.endSession();
+
+//           // Rethrow the error
+//           throw error;
+//      }
+// };
+
+const createVariant = async (payload: IVariant & { price: number; stock: number }, user: IJwtPayload) => {
      const session = await mongoose.startSession(); // Start a session
 
      try {
@@ -22,7 +103,7 @@ const createVariant = async (payload: IVariant, user: IJwtPayload) => {
           // Validate Category
           const isExistCategory = await Category.findById(payload.categoryId).session(session); // Use session for transaction
           if (!isExistCategory) {
-               payload?.images?.forEach((element) => {
+               payload?.image?.forEach((element) => {
                     unlinkFile(element);
                });
                throw new AppError(StatusCodes.NOT_FOUND, 'Category not found!');
@@ -31,7 +112,7 @@ const createVariant = async (payload: IVariant, user: IJwtPayload) => {
           // Validate SubCategory
           const isExistSubCategory = await SubCategory.findOne({ _id: payload.subCategoryId, categoryId: payload.categoryId }).session(session); // Use session for transaction
           if (!isExistSubCategory) {
-               payload?.images?.forEach((element) => {
+               payload?.image?.forEach((element) => {
                     unlinkFile(element);
                });
                throw new AppError(StatusCodes.NOT_FOUND, 'SubCategory not found!');
@@ -46,22 +127,23 @@ const createVariant = async (payload: IVariant, user: IJwtPayload) => {
           // Generate slug
           const variantSlug = generateSlug(isExistCategory.name, isExistSubCategory.name, payload);
 
-          // Check if variant with same slug already exists
-          const isVariantExistSlug = await Variant.findOne({ slug: variantSlug }).session(session); // Use session for transaction
-          if (isVariantExistSlug) {
-               payload?.images?.forEach((element) => {
-                    unlinkFile(element);
-               });
-               return isVariantExistSlug;
-          }
+          // // Check if variant with same slug already exists
+          // const isVariantExistSlug = await Variant.findOne({ slug: variantSlug }).session(session); // Use session for transaction
+          // if (isVariantExistSlug) {
+          //      payload?.image?.forEach((element) => {
+          //           unlinkFile(element);
+          //      });
+          //      return isVariantExistSlug.toObject(); // Convert Mongoose document to plain object to avoid circular reference
+          // }
 
           // Set the generated slug
           createVariant.slug = variantSlug;
 
           // Save the variant to the database
-          await createVariant.save({ session }); // Use session for transaction
+          await createVariant.save({ session });
+
           if (!createVariant) {
-               payload?.images?.forEach((element) => {
+               payload?.image?.forEach((element) => {
                     unlinkFile(element);
                });
                throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create Variant');
@@ -82,7 +164,8 @@ const createVariant = async (payload: IVariant, user: IJwtPayload) => {
           // End the session
           session.endSession();
 
-          return createVariant;
+          // Return a clean response
+          return { ...createVariant.toObject(), price: payload.price, stock: payload.stock };
      } catch (error) {
           // Abort the transaction on error
           await session.abortTransaction();
@@ -146,7 +229,7 @@ export const updateVariant = async (id: string, data: Partial<IVariant>, user: I
           .populate({ path: 'subCategoryId', select: 'name' }); // Populate subCategoryId's name field
      // If no variant was found, throw an error
      if (!toBeUpdatedVariant) {
-          data?.images?.forEach((element) => {
+          data?.image?.forEach((element) => {
                unlinkFile(element);
           });
           throw new AppError(StatusCodes.NOT_FOUND, 'Variant not found');
@@ -160,7 +243,7 @@ export const updateVariant = async (id: string, data: Partial<IVariant>, user: I
 
      const isVariantExistSlug = await Variant.findOne({ slug: variantSlug });
      if (isVariantExistSlug) {
-          data?.images?.forEach((element) => {
+          data?.image?.forEach((element) => {
                unlinkFile(element);
           });
           throw new AppError(StatusCodes.NOT_ACCEPTABLE, `This Variant Already Exists under ${(toBeUpdatedVariant.subCategoryId as any).name} subcategory`);

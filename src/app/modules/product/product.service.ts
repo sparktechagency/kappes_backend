@@ -67,7 +67,9 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
                payload.product_variant_Details.map(async (variant) => {
                     if (variant.variantId) {
                          // If variantId is provided, check if the variant exists
-                         const isExistVariant = await Variant.findOne({ _id: variant.variantId, categoryId: payload.categoryId, subCategoryId: payload.subcategoryId }, null, { session });
+                         const isExistVariant = await Variant.findOne({ _id: variant.variantId, categoryId: payload.categoryId, subCategoryId: payload.subcategoryId, productRef: null }, null, {
+                              session,
+                         });
                          if (!isExistVariant) {
                               throw new AppError(StatusCodes.NOT_FOUND, `Variant not found by id ${variant.variantId}`);
                          }
@@ -88,15 +90,15 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
 
                     const variantSlug = generateSlug(isExistCategory.name, isExistSubCategory.name, variant as IProductSingleVariantByFieldName);
 
-                    const isVariantExistSlug = await Variant.findOne({ slug: variantSlug, categoryId: payload.categoryId, subCategoryId: payload.subcategoryId }, null, { session });
-                    if (isVariantExistSlug) {
-                         return {
-                              variantId: isVariantExistSlug._id,
-                              variantQuantity: variant.variantQuantity,
-                              variantPrice: variant.variantPrice,
-                              slug: variantSlug,
-                         } as unknown as IProductSingleVariant;
-                    }
+                    // const isVariantExistSlug = await Variant.findOne({ slug: variantSlug, categoryId: payload.categoryId, subCategoryId: payload.subcategoryId }, null, { session });
+                    // if (isVariantExistSlug) {
+                    //      return {
+                    //           variantId: isVariantExistSlug._id,
+                    //           variantQuantity: variant.variantQuantity,
+                    //           variantPrice: variant.variantPrice,
+                    //           slug: variantSlug,
+                    //      } as unknown as IProductSingleVariant;
+                    // }
 
                     newVariant.slug = variantSlug;
                     const savedVariant = await newVariant.save({ session });
@@ -154,6 +156,9 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
           await product.validate();
 
           const savedProduct = await product.save({ session });
+
+          // push the product id into the variant.productRef
+          await Variant.updateMany({ _id: { $in: resolvedVariants.map((variant) => variant.variantId) } }, { $set: { productRef: savedProduct._id, expireAt: null } }, { session });
 
           await session.commitTransaction();
           return savedProduct;
@@ -342,7 +347,18 @@ const updateProduct = async (id: string, payload: Partial<IProduct | ICreateProd
                     const existingVariant = product.product_variant_Details.find((v: any) => v.variantId.toString() === variant.variantId.toString());
 
                     if (!existingVariant) {
-                         throw new AppError(StatusCodes.BAD_REQUEST, `Variant with ID ${variant.variantId} not found in product`);
+                         // throw new AppError(StatusCodes.BAD_REQUEST, `Variant with ID ${variant.variantId} not found in product`);
+
+                         // check isExistVariant with productRef null
+                         const isExistVariantInDB = await Variant.findOne({ _id: new mongoose.Types.ObjectId(variant.variantId), productRef: null });
+
+                         if (!isExistVariantInDB) {
+                              throw new AppError(StatusCodes.BAD_REQUEST, `Variant with ID ${variant.variantId} not found in data base`);
+                         }
+
+                         isExistVariantInDB.productRef = new mongoose.Types.ObjectId(id);
+                         isExistVariantInDB.expireAt = null;
+                         await isExistVariantInDB.save();
                     }
 
                     // Update existing variant
@@ -366,6 +382,8 @@ const updateProduct = async (id: string, payload: Partial<IProduct | ICreateProd
                               createdBy: user.id,
                               categoryId: product.categoryId,
                               subCategoryId: product.subcategoryId,
+                              productRef: id,
+                              expireAt: null,
                               slug,
                          });
 

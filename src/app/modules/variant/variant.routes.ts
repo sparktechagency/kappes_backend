@@ -11,7 +11,13 @@ import parseMultipleFilesdata from '../../middleware/parseMultipleFilesdata';
 const router = express.Router();
 
 // router.post("/", auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), validateRequest(variantValidation.createVariantSchema), variantController.createVariantController); // Create a new variant
-router.post('/', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), fileUploadHandler(), parseMultipleFilesdata(FOLDER_NAMES.IMAGES), variantController.createVariantController); // Create a new variant
+router.post(
+     '/',
+     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR),
+     fileUploadHandler(),
+     parseMultipleFilesdata(FOLDER_NAMES.IMAGE),
+     variantController.createVariantController,
+); // Create a new variant
 router.get('/', variantController.getAllVariants); // Create a new variant
 router.get('/single/:id', variantController.getSingleVariantById); // Create a new variant
 router.get('/subcategory/:id', variantController.getVariantsBySubCategoryId); // Create a new variant
@@ -19,7 +25,7 @@ router.get('/variant-subcategory/:id', variantController.getVariantFieldsBySubCa
 router.get('/slug/:slug', variantController.getSingleVariantBySlug); // Create a new variant
 router.patch(
      '/:id',
-     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN),
+     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR),
      parseMultipleFilesdata(FOLDER_NAMES.IMAGES),
      validateRequest(variantValidation.updateVariantSchema),
      variantController.updateVariantController,
