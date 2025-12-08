@@ -39,4 +39,6 @@ export interface IVariant {
      isDeleted?: boolean;
      productRef: mongoose.Types.ObjectId | null;
      expireAt: Date | null;
+     price?: number;
+     stock?: number;
 }

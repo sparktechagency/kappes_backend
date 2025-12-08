@@ -39,6 +39,8 @@ export const createVariantSchema = z.object({
           capacity: z.string().optional(),
           description: z.string().optional(),
           identifier: z.string().optional(),
+          price: z.number().positive().optional(),
+          stock: z.number().positive().optional(),
           options: z.union([z.enum([...(Object.values(VARIANT_OPTIONS) as [string, ...string[]])]), z.string()]).optional(),
      }),
 });

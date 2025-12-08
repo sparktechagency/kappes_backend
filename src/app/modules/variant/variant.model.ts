@@ -35,6 +35,8 @@ const variantSchema = new Schema<IVariant & Document>(
           volume: { type: String, required: false },
           dimensions: { type: String, required: false },
           identifier: { type: String, required: false },
+          price: { type: String, required: false },
+          stock: { type: String, required: false },
           capacity: { type: String, required: false },
           options: { type: String, enum: Object.values(VARIANT_OPTIONS) },
           description: { type: String, required: false },
