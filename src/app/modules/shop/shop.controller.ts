@@ -346,7 +346,7 @@ const getShopsTerritoryListWithProductCount = catchAsync(async (req: Request, re
 
 const toggleAdvertiseShop = catchAsync(async (req: Request, res: Response) => {
      const { shopId } = req.params;
-     const result = await ShopService.toggleAdvertiseShop(shopId, req.body);
+     const result = await ShopService.toggleAdvertiseShop(shopId, req.body, req.user as IJwtPayload);
      sendResponse(res, {
           statusCode: StatusCodes.OK,
           success: true,

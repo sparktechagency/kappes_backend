@@ -31,6 +31,6 @@ router.patch(
      validateRequest(variantValidation.updateVariantSchema),
      variantController.updateVariantController,
 ); // Update variant
-router.delete('/:id', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN), variantController.deleteVariantController); // Delete variant
+router.delete('/:id', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR), variantController.deleteVariantController); // Delete variant
 
 export const VariantRoutes = router;

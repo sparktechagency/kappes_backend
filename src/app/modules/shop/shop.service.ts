@@ -1,3 +1,4 @@
+import stripe from '../../config/stripe.config';
 import { StatusCodes } from 'http-status-codes';
 import mongoose from 'mongoose';
 import AppError from '../../../errors/AppError';
@@ -16,6 +17,8 @@ import { IShop } from './shop.interface';
 import { Shop } from './shop.model';
 import { ORDER_STATUS } from '../order/order.enums';
 import { Coupon } from '../coupon/coupon.model';
+import Settings from '../settings/settings.model';
+import config from '../../../config';
 
 const createShop = async (payload: IShop, user: IJwtPayload, host: string, protocol: string) => {
      const { name, email } = payload;
@@ -873,13 +876,16 @@ const getShopsTerritoryListWithProductCount = async (query: Record<string, unkno
      }
 };
 
-const toggleAdvertiseShop = async (shopId: string, data: { advertisedExpiresAt: string }) => {
+const toggleAdvertiseShop = async (shopId: string, data: { advertisedExpiresAt: string }, user: IJwtPayload) => {
+     const thisCustomer = await User.findById(user.id);
      const isExistShop = await Shop.findById(shopId).select('isAdvertised advertisedAt advertisedExpiresAt');
 
      if (isExistShop && isExistShop.isAdvertised) {
           isExistShop.isAdvertised = false;
           isExistShop.advertisedAt = null;
           isExistShop.advertisedExpiresAt = null;
+          await isExistShop.save();
+          return isExistShop;
      } else if (isExistShop && !isExistShop.isAdvertised) {
           // convert string to date from 2025-12-28 to a valid date
           const advertisedExpiresAt = new Date(data.advertisedExpiresAt);
@@ -895,18 +901,61 @@ const toggleAdvertiseShop = async (shopId: string, data: { advertisedExpiresAt: 
           const millisecondsInDay = 1000 * 60 * 60 * 24;
           const diffInDays = Math.round(Math.abs((advertisedExpiresAt.getTime() - new Date().getTime()) / millisecondsInDay));
 
-          const perDayAdvertiseMentCost = 10;
+          const isExitPerDayAdvertiseMentCost = await Settings.findOne().select('perDayAdvertiseMentCost');
+          const perDayAdvertiseMentCost = isExitPerDayAdvertiseMentCost?.perDayAdvertiseMentCost || 0;
           const costOfAdvertise = diffInDays * perDayAdvertiseMentCost;
 
-          isExistShop.isAdvertised = true;
-          isExistShop.advertisedAt = new Date();
-          isExistShop.advertisedExpiresAt = new Date(data.advertisedExpiresAt);
+          const stripeCustomer = await stripe.customers.create({
+               name: thisCustomer?.full_name,
+               email: thisCustomer?.email,
+          });
+          // findbyid and update the user
+          await User.findByIdAndUpdate(thisCustomer?.id, { $set: { stripeCustomerId: stripeCustomer.id } });
+
+          const stripeSessionData: any = {
+               payment_method_types: ['card'],
+               mode: 'payment',
+               success_url: config.stripe.success_url,
+               cancel_url: config.stripe.cancel_url,
+               line_items: [
+                    {
+                         price_data: {
+                              currency: 'cad',
+                              product_data: {
+                                   name: 'Amount',
+                                   description: `order from ${thisCustomer?.full_name || 'seller'}`,
+                              },
+                              unit_amount: Math.round(costOfAdvertise! * 100),
+                         },
+                         quantity: 1,
+                    },
+               ],
+               shipping_address_collection: {
+                    allowed_countries: ['US', 'CA', 'GB', 'BD'],
+               },
+               metadata: {
+                    isAdvertised: 'true',
+                    advertisedExpiresAt: data.advertisedExpiresAt,
+                    shopId: isExistShop._id.toString(),
+               },
+          };
+          try {
+               const session = await stripe.checkout.sessions.create(stripeSessionData);
+               console.log({
+                    url: session.url,
+               });
+               const result = { url: session.url };
+               return result;
+          } catch (error) {
+               console.log({ error });
+          }
+
+          // isExistShop.isAdvertised = true;
+          // isExistShop.advertisedAt = new Date();
+          // isExistShop.advertisedExpiresAt = new Date(data.advertisedExpiresAt);
      } else {
           throw new AppError(404, 'Shop not found');
      }
-     await isExistShop.save();
-
-     return isExistShop;
 };
 
 // Export the ShopService

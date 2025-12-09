@@ -10,6 +10,8 @@ import mongoose from 'mongoose';
 import { Product } from '../product/product.model';
 import { IJwtPayload } from '../auth/auth.interface';
 import unlinkFile from '../../../shared/unlinkFile';
+import { Order } from '../order/order.model';
+import { ORDER_STATUS } from '../order/order.enums';
 
 const createVariant = async (payload: IVariant, user: IJwtPayload) => {
      const session = await mongoose.startSession(); // Start a session
@@ -141,6 +143,7 @@ export const getSingleVariantBySlugFromDB = async (slug: string) => {
 
 // Update Variant
 export const updateVariant = async (id: string, data: Partial<IVariant>, user: IJwtPayload) => {
+     console.log('🚀 ~ updateVariant ~ data:', data);
      // Find and update the variant
      const toBeUpdatedVariant = await Variant.findOne({ _id: id, categoryId: data.categoryId, subCategoryId: data.subCategoryId })
           .populate({ path: 'categoryId', select: 'name' }) // Populate categoryId's name field
@@ -153,6 +156,11 @@ export const updateVariant = async (id: string, data: Partial<IVariant>, user: I
           throw new AppError(StatusCodes.NOT_FOUND, 'Variant not found');
      }
 
+     if (data.image && toBeUpdatedVariant.image) {
+          toBeUpdatedVariant.image?.forEach((element) => {
+               unlinkFile(element);
+          });
+     }
      // Update the variant with the new slug and the provided data
      toBeUpdatedVariant.set({
           ...data,
@@ -165,6 +173,7 @@ export const updateVariant = async (id: string, data: Partial<IVariant>, user: I
      });
      // Save the updated variant
      await toBeUpdatedVariant.save();
+     console.log('🚀 ~ updateVariant ~ toBeUpdatedVariant:', toBeUpdatedVariant);
      return toBeUpdatedVariant;
 };
 
@@ -176,11 +185,27 @@ export const deleteVariant = async (id: string, user: IJwtPayload) => {
      if (!deletedVariant) {
           throw new AppError(StatusCodes.NOT_FOUND, 'Variant not found');
      }
+     if (deletedVariant.createdBy.toString() !== user.id) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'You are not authorised to delte');
+     }
 
-     // Check if the variant is related to any product by variantId
-     const product = await Product.findOne({ 'product_variant_Details.variantId': id });
-     if (product) {
-          throw new AppError(StatusCodes.BAD_REQUEST, 'You cannot delete the variant because it is associated with a product.');
+     // // Check if the variant is related to any product by variantId
+     // const product = await Product.findOne({ 'product_variant_Details.variantId': id });
+     // if (product) {
+     //      throw new AppError(StatusCodes.BAD_REQUEST, 'You cannot delete the variant because it is associated with a product.');
+     // }
+
+     // check if any running order available
+     // check if any running order available
+     const isOrderExistForThisVariant = await Order.findOne({
+          'products.variant': new mongoose.Types.ObjectId(id), // Check for the variant
+          'status': { $in: [ORDER_STATUS.CANCELLED, ORDER_STATUS.PROCESSING] }, // Match order status
+     });
+
+     console.log('🚀 ~ deleteVariant ~ isOrderExistForThisVariant:', isOrderExistForThisVariant);
+
+     if (isOrderExistForThisVariant) {
+          throw new AppError(StatusCodes.BAD_REQUEST, 'You cannot delete the variant because it is associated with a running order.');
      }
 
      deletedVariant.set({
