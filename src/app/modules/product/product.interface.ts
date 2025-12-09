@@ -36,6 +36,7 @@ export interface IProduct extends mongoose.Document {
      shopId: mongoose.Types.ObjectId;
      subcategoryId: mongoose.Types.ObjectId;
      brandId: mongoose.Types.ObjectId;
+     brandName?: string;
      createdBy: mongoose.Types.ObjectId;
      reviews: mongoose.Types.ObjectId[];
      totalReviews: number;
