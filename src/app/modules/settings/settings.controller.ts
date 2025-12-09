@@ -50,6 +50,15 @@ const getSupport = catchAsync(async (req, res): Promise<void> => {
           data: privacy,
      });
 });
+const getPerDayAdvertiseMentCost = catchAsync(async (req, res): Promise<void> => {
+     const privacy = await settingsService.getPerDayAdvertiseMentCost();
+     sendResponse(res, {
+          statusCode: StatusCodes.OK,
+          success: true,
+          message: 'Support retrieved successfully',
+          data: privacy,
+     });
+});
 const getAboutUs = catchAsync(async (req, res): Promise<void> => {
      const privacy = await settingsService.getAboutUs();
      sendResponse(res, {
@@ -82,6 +91,16 @@ const getContact = catchAsync(async (req, res): Promise<void> => {
 
 const addContact = catchAsync(async (req, res): Promise<void> => {
      const privacy = await settingsService.addContact(req.body);
+     sendResponse(res, {
+          statusCode: StatusCodes.OK,
+          success: true,
+          message: 'Contact added successfully',
+          data: privacy,
+     });
+});
+
+const updatePerDayAdvertiseMentCost = catchAsync(async (req, res): Promise<void> => {
+     const privacy = await settingsService.updatePerDayAdvertiseMentCost(req.body);
      sendResponse(res, {
           statusCode: StatusCodes.OK,
           success: true,
@@ -128,7 +147,7 @@ const addOrUpdateSocials = catchAsync(async (req, res): Promise<void> => {
           message: 'Socials added or updated successfully',
           data: privacy,
      });
-});  
+});
 
 const getShippingDetails = catchAsync(async (req, res): Promise<void> => {
      const privacy = await settingsService.getShippingDetails();
@@ -170,9 +189,6 @@ const updateTermsOfService = catchAsync(async (req, res): Promise<void> => {
      });
 });
 
-
-
-
 const getAllMessagesOfSettings = catchAsync(async (req, res) => {
      const result = await settingsService.getAllMessagesOfSettings(req.query);
      sendResponse(res, {
@@ -181,7 +197,7 @@ const getAllMessagesOfSettings = catchAsync(async (req, res) => {
           message: 'Messages fetched successfully',
           data: result,
      });
-}); 
+});
 
 const sendMessageToSettings = catchAsync(async (req, res) => {
      const result = await settingsService.sendMessageToSettings(req.body);
@@ -191,7 +207,7 @@ const sendMessageToSettings = catchAsync(async (req, res) => {
           message: 'Message sent successfully',
           data: result,
      });
-}); 
+});
 
 const addOrUpdateBannerLogo = catchAsync(async (req, res) => {
      const result = await settingsService.addOrUpdateBannerLogo(req.body);
@@ -201,7 +217,7 @@ const addOrUpdateBannerLogo = catchAsync(async (req, res) => {
           message: 'Banner Logo added or updated successfully',
           data: result,
      });
-}); 
+});
 
 // get banner logo
 const getBannerLogo = catchAsync(async (req, res) => {
@@ -212,13 +228,15 @@ const getBannerLogo = catchAsync(async (req, res) => {
           message: 'Banner Logo fetched successfully',
           data: result,
      });
-}); 
+});
 
 export const settingsController = {
      getSettings,
      getPrivacyPolicy,
      getAboutUs,
      getSupport,
+     getPerDayAdvertiseMentCost,
+     updatePerDayAdvertiseMentCost,
      addSetting,
      getTermsOfService,
      getContact,

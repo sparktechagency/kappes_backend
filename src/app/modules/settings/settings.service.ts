@@ -47,6 +47,18 @@ const getSupport = async () => {
      }
      return settings.support;
 };
+const getPerDayAdvertiseMentCost = async () => {
+     const settings: any = await Settings.findOne();
+
+     if (!settings) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
+     }
+     if (!settings.perDayAdvertiseMentCost) {
+          settings.perDayAdvertiseMentCost = 10;
+          await settings.save();
+     }
+     return settings.perDayAdvertiseMentCost;
+};
 const getPrivacyPolicy = async () => {
      const settings: any = await Settings.findOne();
 
@@ -94,6 +106,17 @@ const addContact = async (contact: ISingleContact) => {
      settings.contact.push(contact);
      await settings.save();
      return settings.contact;
+};
+
+const updatePerDayAdvertiseMentCost = async (cost: number) => {
+     const settings: any = await Settings.findOne();
+
+     if (!settings) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
+     }
+     settings.perDayAdvertiseMentCost = cost;
+     await settings.save();
+     return settings.perDayAdvertiseMentCost;
 };
 
 const updateContact = async (contactId: string, contact: ISingleContact) => {
@@ -261,6 +284,8 @@ export const settingsService = {
      getPrivacyPolicy,
      // getAccountDelete,
      getSupport,
+     getPerDayAdvertiseMentCost,
+     updatePerDayAdvertiseMentCost,
      getTermsOfService,
      getAboutUs,
      getContact,

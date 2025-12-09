@@ -116,9 +116,23 @@ const advertiseShopZodSchema = z.object({
      params: z.object({
           shopId: objectIdSchema,
      }),
-     body: z.object({
-          advertisedExpiresAt: z.string().optional(),
-     }),
+     body: z
+          .object({
+               advertisedExpiresAt: z.string().optional(),
+          })
+          .superRefine((body, ctx) => {
+               if (body.advertisedExpiresAt) {
+                    // Regex to match the 'yyyy-mm-dd' format
+                    const regex = /^\d{4}-\d{2}-\d{2}$/;
+                    if (!regex.test(body.advertisedExpiresAt)) {
+                         ctx.addIssue({
+                              path: ['advertisedExpiresAt'],
+                              message: 'advertisedExpiresAt must be in the format yyyy-mm-dd',
+                              code: z.ZodIssueCode.custom,
+                         });
+                    }
+               }
+          }),
 });
 
 export const ShopValidation = {

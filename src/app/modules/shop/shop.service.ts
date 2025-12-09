@@ -891,6 +891,13 @@ const toggleAdvertiseShop = async (shopId: string, data: { advertisedExpiresAt: 
                throw new AppError(400, 'Advertised expires at date is invalid');
           }
 
+          // calculate day count
+          const millisecondsInDay = 1000 * 60 * 60 * 24;
+          const diffInDays = Math.round(Math.abs((advertisedExpiresAt.getTime() - new Date().getTime()) / millisecondsInDay));
+
+          const perDayAdvertiseMentCost = 10;
+          const costOfAdvertise = diffInDays * perDayAdvertiseMentCost;
+
           isExistShop.isAdvertised = true;
           isExistShop.advertisedAt = new Date();
           isExistShop.advertisedExpiresAt = new Date(data.advertisedExpiresAt);

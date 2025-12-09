@@ -12,6 +12,7 @@ export interface ISettings extends Document {
      aboutUs: string;
      support: string;
      termsOfService: string;
+     perDayAdvertiseMentCost: number;
      contact: ISingleContact[];
      banner: string[];
      logo: string;
