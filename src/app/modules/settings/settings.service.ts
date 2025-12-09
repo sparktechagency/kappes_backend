@@ -53,10 +53,6 @@ const getPerDayAdvertiseMentCost = async () => {
      if (!settings) {
           throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
      }
-     if (!settings.perDayAdvertiseMentCost) {
-          settings.perDayAdvertiseMentCost = 10;
-          await settings.save();
-     }
      return settings.perDayAdvertiseMentCost;
 };
 const getPrivacyPolicy = async () => {
@@ -108,13 +104,13 @@ const addContact = async (contact: ISingleContact) => {
      return settings.contact;
 };
 
-const updatePerDayAdvertiseMentCost = async (cost: number) => {
+const updatePerDayAdvertiseMentCost = async (payload: { cost: number }) => {
      const settings: any = await Settings.findOne();
 
      if (!settings) {
           throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
      }
-     settings.perDayAdvertiseMentCost = cost;
+     settings.perDayAdvertiseMentCost = payload.cost;
      await settings.save();
      return settings.perDayAdvertiseMentCost;
 };

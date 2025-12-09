@@ -16,7 +16,7 @@ SettingsRouter.get('/', settingsController.getSettings)
      .get('/privacy-policy', settingsController.getPrivacyPolicy)
      .get('/aboutus', settingsController.getAboutUs)
      .get('/support', settingsController.getSupport)
-     .get('/per-day-advertise-ment-cost', settingsController.getPerDayAdvertiseMentCost)
+     .get('/per-day-advertisement-cost', settingsController.getPerDayAdvertiseMentCost)
      .get('/termsOfService', settingsController.getTermsOfService);
 
 // // get all messages of business by business id 🏃‍♀️‍➡️
@@ -30,7 +30,7 @@ SettingsRouter.patch('/privacy-policy', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_
 // patch terms of service
 SettingsRouter.patch('/termsOfService', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), settingsController.updateTermsOfService);
 // getPerDayAdvertiseMentCost
-SettingsRouter.patch('/per-day-advertise-ment-cost', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), settingsController.updatePerDayAdvertiseMentCost);
+SettingsRouter.patch('/per-day-advertisement-cost', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), settingsController.updatePerDayAdvertiseMentCost);
 
 // Contact CRUD
 SettingsRouter.get('/contact', settingsController.getContact);

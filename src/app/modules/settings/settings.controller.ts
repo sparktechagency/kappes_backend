@@ -55,7 +55,7 @@ const getPerDayAdvertiseMentCost = catchAsync(async (req, res): Promise<void> =>
      sendResponse(res, {
           statusCode: StatusCodes.OK,
           success: true,
-          message: 'Support retrieved successfully',
+          message: 'per-day-advertisement-cost retrieved successfully',
           data: privacy,
      });
 });
@@ -104,7 +104,7 @@ const updatePerDayAdvertiseMentCost = catchAsync(async (req, res): Promise<void>
      sendResponse(res, {
           statusCode: StatusCodes.OK,
           success: true,
-          message: 'Contact added successfully',
+          message: 'per-day-advertisement-cost added successfully',
           data: privacy,
      });
 });
