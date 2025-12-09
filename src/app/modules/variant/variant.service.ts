@@ -155,23 +155,16 @@ export const updateVariant = async (id: string, data: Partial<IVariant>, user: I
 
      // Update the variant with the new slug and the provided data
      toBeUpdatedVariant.set({
-          ...data, // Apply the incoming data
+          ...data,
+          image: data.image || toBeUpdatedVariant.image, // Apply the incoming data
      });
      const variantSlug = generateSlug((toBeUpdatedVariant.categoryId as any).name, (toBeUpdatedVariant.subCategoryId as any).name, toBeUpdatedVariant);
 
-     const isVariantExistSlug = await Variant.findOne({ slug: variantSlug });
-     if (isVariantExistSlug) {
-          data?.image?.forEach((element) => {
-               unlinkFile(element);
-          });
-          throw new AppError(StatusCodes.NOT_ACCEPTABLE, `This Variant Already Exists under ${(toBeUpdatedVariant.subCategoryId as any).name} subcategory`);
-     }
      toBeUpdatedVariant.set({
           slug: variantSlug,
      });
      // Save the updated variant
      await toBeUpdatedVariant.save();
-
      return toBeUpdatedVariant;
 };
 

@@ -26,7 +26,8 @@ router.get('/slug/:slug', variantController.getSingleVariantBySlug); // Create a
 router.patch(
      '/:id',
      auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR),
-     parseMultipleFilesdata(FOLDER_NAMES.IMAGES),
+     fileUploadHandler(),
+     parseMultipleFilesdata(FOLDER_NAMES.IMAGE),
      validateRequest(variantValidation.updateVariantSchema),
      variantController.updateVariantController,
 ); // Update variant
