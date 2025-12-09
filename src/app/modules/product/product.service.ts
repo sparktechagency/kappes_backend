@@ -56,7 +56,9 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
                throw new AppError(StatusCodes.NOT_FOUND, 'Brand not found');
           }
 
-          payload.brandName = isExistBrand.name;
+          if (!payload.brandName) {
+               payload.brandName = isExistBrand.name;
+          }
 
           // Validate variants
           if (!payload.product_variant_Details || payload.product_variant_Details.length === 0) {
