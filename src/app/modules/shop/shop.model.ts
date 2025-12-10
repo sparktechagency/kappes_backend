@@ -41,6 +41,7 @@ export const shopSchema = new Schema<IShop>(
           logo: { type: String, required: false },
           coverPhoto: { type: String, required: false },
           banner: { type: [String], required: false },
+          advertisement_banner: { type: [String], required: false },
           reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
           admins: [{ type: Schema.Types.ObjectId, ref: 'User' }],
           followers: [{ type: Schema.Types.ObjectId, ref: 'User' }],

@@ -880,7 +880,7 @@ const toggleAdvertiseShop = async (shopId: string, data: { advertisedExpiresAt: 
      const thisCustomer = await User.findById(user.id);
      const isExistShop = await Shop.findById(shopId).select('isAdvertised advertisedAt advertisedExpiresAt');
 
-     if (isExistShop && isExistShop.isAdvertised) {
+     if (isExistShop && isExistShop.isAdvertised && user.role !== USER_ROLES.VENDOR) {
           isExistShop.isAdvertised = false;
           isExistShop.advertisedAt = null;
           isExistShop.advertisedExpiresAt = null;

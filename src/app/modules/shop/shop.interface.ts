@@ -27,6 +27,7 @@ export interface IShop {
      logo?: string;
      coverPhoto?: string;
      banner?: string[];
+     advertisement_banner?: string[];
      reviews?: Schema.Types.ObjectId[];
      // ..
      admins?: mongoose.Types.ObjectId[];
