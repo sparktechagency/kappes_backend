@@ -15,7 +15,6 @@ export default {
      port: process.env.PORT,
      stripe_secret_key: process.env.STRIPE_SECRET_KYE,
      bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
-     socket_port: process.env.SOCKET_PORT,
      allowed_origins: process.env.ALLOWED_ORIGINS,
      firebase_service_account: process.env.FIREBASE_SERVICE_ACCOUNT,
      firebase_service_account_key: process.env.FIREBASE_SERVICE_ACCOUNT_KEY,

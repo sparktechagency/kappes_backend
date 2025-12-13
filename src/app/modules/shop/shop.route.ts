@@ -72,8 +72,17 @@ router.patch(
      fileUploadHandler(),
      parseMulitpleFieldsData(FOLDER_NAMES.LOGO, FOLDER_NAMES.COVER_PHOTO),
      parseMultipleFilesdata(FOLDER_NAMES.BANNER),
+     parseMultipleFilesdata(FOLDER_NAMES.ADVERTISEMENT_BANNER),
      validateRequest(ShopValidation.updateShopZodSchema),
      ShopController.updateShopById,
+);
+
+// toogle shop is advertised
+router.patch(
+     '/toggle-advertise/:shopId',
+     auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR),
+     validateRequest(ShopValidation.advertiseShopZodSchema),
+     ShopController.toggleAdvertiseShop,
 );
 
 // // Get shops by getShopsByShopCategory

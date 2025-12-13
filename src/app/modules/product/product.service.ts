@@ -13,7 +13,6 @@ import { Category } from '../category/category.model';
 import { SubCategory } from '../subCategorys/subCategory.model';
 import { Brand } from '../brand/brand.model';
 import { USER_ROLES } from '../user/user.enums';
-import { IVariant } from '../variant/variant.interfaces';
 import { ObjectId } from 'mongodb';
 import { StripeAccount } from '../stripeAccount/stripeAccount.model';
 
@@ -57,6 +56,10 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
                throw new AppError(StatusCodes.NOT_FOUND, 'Brand not found');
           }
 
+          if (!payload.brandName) {
+               payload.brandName = isExistBrand.name;
+          }
+
           // Validate variants
           if (!payload.product_variant_Details || payload.product_variant_Details.length === 0) {
                throw new AppError(StatusCodes.BAD_REQUEST, 'At least one variant is required');
@@ -67,7 +70,9 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
                payload.product_variant_Details.map(async (variant) => {
                     if (variant.variantId) {
                          // If variantId is provided, check if the variant exists
-                         const isExistVariant = await Variant.findOne({ _id: variant.variantId, categoryId: payload.categoryId, subCategoryId: payload.subcategoryId }, null, { session });
+                         const isExistVariant = await Variant.findOne({ _id: variant.variantId, categoryId: payload.categoryId, subCategoryId: payload.subcategoryId, productRef: null }, null, {
+                              session,
+                         });
                          if (!isExistVariant) {
                               throw new AppError(StatusCodes.NOT_FOUND, `Variant not found by id ${variant.variantId}`);
                          }
@@ -88,15 +93,15 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
 
                     const variantSlug = generateSlug(isExistCategory.name, isExistSubCategory.name, variant as IProductSingleVariantByFieldName);
 
-                    const isVariantExistSlug = await Variant.findOne({ slug: variantSlug, categoryId: payload.categoryId, subCategoryId: payload.subcategoryId }, null, { session });
-                    if (isVariantExistSlug) {
-                         return {
-                              variantId: isVariantExistSlug._id,
-                              variantQuantity: variant.variantQuantity,
-                              variantPrice: variant.variantPrice,
-                              slug: variantSlug,
-                         } as unknown as IProductSingleVariant;
-                    }
+                    // const isVariantExistSlug = await Variant.findOne({ slug: variantSlug, categoryId: payload.categoryId, subCategoryId: payload.subcategoryId }, null, { session });
+                    // if (isVariantExistSlug) {
+                    //      return {
+                    //           variantId: isVariantExistSlug._id,
+                    //           variantQuantity: variant.variantQuantity,
+                    //           variantPrice: variant.variantPrice,
+                    //           slug: variantSlug,
+                    //      } as unknown as IProductSingleVariant;
+                    // }
 
                     newVariant.slug = variantSlug;
                     const savedVariant = await newVariant.save({ session });
@@ -154,6 +159,9 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
           await product.validate();
 
           const savedProduct = await product.save({ session });
+
+          // push the product id into the variant.productRef
+          await Variant.updateMany({ _id: { $in: resolvedVariants.map((variant) => variant.variantId) } }, { $set: { productRef: savedProduct._id, expireAt: null } }, { session });
 
           await session.commitTransaction();
           return savedProduct;
@@ -306,148 +314,170 @@ const getProductById = async (id: string) => {
      return product;
 };
 
-/* v1 */
+// /* v1 */
+
 const updateProduct = async (id: string, payload: Partial<IProduct | ICreateProductRequest | any>, user: IJwtPayload) => {
-     const product: any = await Product.findById(id).populate('shopId', 'owner admins').populate('categoryId', 'name').populate('subcategoryId', 'name');
+     // Start a session for the transaction
+     const session = await mongoose.startSession();
+     session.startTransaction();
 
-     if (!product) {
-          throw new AppError(StatusCodes.NOT_FOUND, 'Product not found');
-     }
+     try {
+          const product: any = await Product.findById(id).populate('shopId', 'owner admins').populate('categoryId', 'name').populate('subcategoryId', 'name').session(session); // Pass session to query
 
-     const shop = await Shop.findById(product.shopId);
-     if (!shop) {
-          throw new AppError(StatusCodes.NOT_FOUND, 'Shop not found');
-     }
-
-     // Check if user has permission to update the product
-     if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
-          if (shop.owner.toString() !== user.id && !shop.admins?.some((admin) => admin.toString() === user.id)) {
-               throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to update this product');
+          if (!product) {
+               throw new AppError(StatusCodes.NOT_FOUND, 'Product not found');
           }
-     }
-     // Initialize slugDetails as an empty object if not provided in payload
-     const slugDetails = product.slugDetails || {};
 
-     // Handle variant updates if payload contains product_variant_Details
-     if (payload.product_variant_Details && Array.isArray(payload.product_variant_Details)) {
+          const shop = await Shop.findById(product.shopId).session(session);
+          if (!shop) {
+               throw new AppError(StatusCodes.NOT_FOUND, 'Shop not found');
+          }
+
+          // Check if user has permission to update the product
+          if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
+               if (shop.owner.toString() !== user.id && !shop.admins?.some((admin) => admin.toString() === user.id)) {
+                    throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to update this product');
+               }
+          }
+
+          const slugDetails = product.slugDetails || {};
           const variantsToUpdate: IProductSingleVariant[] = [];
           let totalStock = 0;
 
-          for (const variant of payload.product_variant_Details) {
-               // Case (i): If variantId is provided
-               const isVariantId = 'variantId' in variant;
+          // Handle variant updates if payload contains product_variant_Details
+          if (payload.product_variant_Details && Array.isArray(payload.product_variant_Details)) {
+               for (const variant of payload.product_variant_Details) {
+                    if (variant.variantId) {
+                         let existingVariant = product.product_variant_Details.find((v: any) => v?.variantId?.toString() === variant?.variantId?.toString());
 
-               if (isVariantId) {
-                    // Check if variant exists in the product
-                    const existingVariant = product.product_variant_Details.find((v: any) => v.variantId.toString() === variant.variantId.toString());
+                         if (!existingVariant) {
+                              existingVariant = await Variant.findOne({
+                                   _id: new mongoose.Types.ObjectId(variant.variantId),
+                                   productRef: { $in: [null, new mongoose.Types.ObjectId(id)] },
+                              }).session(session);
 
-                    if (!existingVariant) {
-                         throw new AppError(StatusCodes.BAD_REQUEST, `Variant with ID ${variant.variantId} not found in product`);
-                    }
+                              if (!existingVariant) {
+                                   throw new AppError(StatusCodes.BAD_REQUEST, `Variant with ID ${variant.variantId} not found in data base`);
+                              }
 
-                    // Update existing variant
-                    existingVariant.variantQuantity = variant.variantQuantity;
-                    existingVariant.variantPrice = variant.variantPrice;
-                    variantsToUpdate.push(existingVariant);
-                    totalStock += variant.variantQuantity;
-               }
-               // Case (ii): If variant fields are provided (without variantId)
-               else {
-                    // Create slug from variant fields
-                    const slug = generateSlug(product.categoryId.name, product.subcategoryId.name, variant as IProductSingleVariantByFieldName);
+                              existingVariant.productRef = new mongoose.Types.ObjectId(id);
+                              existingVariant.expireAt = null;
+                              await existingVariant.save({ session }); // Pass session to save
+                         }
 
-                    // Find variant by slug
-                    let foundVariant = (await Variant.findOne({ slug })) as IVariant;
-
-                    if (!foundVariant) {
-                         // If variant doesn't exist, create a new variant
-                         const newVariant = new Variant({
-                              ...variant,
-                              createdBy: user.id,
-                              categoryId: product.categoryId,
-                              subCategoryId: product.subcategoryId,
-                              slug,
-                         });
-
-                         foundVariant = await newVariant.save();
-                    }
-
-                    // Check if the variant already exists in the product's variants array
-                    const existingVariantIndex = product.product_variant_Details.findIndex((v: any) => v.variantId.toString() === foundVariant._id!.toString());
-
-                    if (existingVariantIndex !== -1) {
-                         // If the variant exists, only update the quantity and price
-                         product.product_variant_Details[existingVariantIndex].variantQuantity = variant.variantQuantity;
-                         product.product_variant_Details[existingVariantIndex].variantPrice = variant.variantPrice;
-                         variantsToUpdate.push(product.product_variant_Details[existingVariantIndex]);
-                    } else {
-                         // If the variant doesn't exist, add the new variant
+                         if (!existingVariant) {
+                              throw new AppError(StatusCodes.BAD_REQUEST, `Variant with ID ${variant.variantId} not found in data base`);
+                         }
                          const newVariantData: IProductSingleVariant = {
-                              variantId: foundVariant._id as unknown as ObjectId,
+                              variantId: existingVariant.variantId || (existingVariant?._id as unknown as ObjectId),
+                              slug: existingVariant.slug,
                               variantQuantity: variant.variantQuantity,
                               variantPrice: variant.variantPrice,
-                              slug: variant.slug,
                          };
                          variantsToUpdate.push(newVariantData);
+                         totalStock += variant.variantQuantity;
+                    } else {
+                         throw new AppError(StatusCodes.BAD_REQUEST, 'Variant ID is required');
+                         const slug = generateSlug(product.categoryId.name, product.subcategoryId.name, variant as IProductSingleVariantByFieldName);
+                         let foundVariant = await Variant.findOne({ slug }).session(session);
+
+                         if (!foundVariant) {
+                              const newVariant = new Variant({
+                                   ...variant,
+                                   createdBy: user.id,
+                                   categoryId: product.categoryId,
+                                   subCategoryId: product.subcategoryId,
+                                   productRef: id,
+                                   expireAt: null,
+                                   slug,
+                              });
+                              foundVariant = await newVariant.save({ session }); // Pass session to save
+                         }
+
+                         if (!foundVariant) {
+                              throw new AppError(StatusCodes.BAD_REQUEST, `Variant with slug ${slug} not found in data base`);
+                         }
+
+                         const existingVariantIndex = product.product_variant_Details.findIndex((v: any) => v.variantId.toString() === foundVariant?._id!.toString());
+                         if (existingVariantIndex !== -1) {
+                              product.product_variant_Details[existingVariantIndex].variantQuantity = variant.variantQuantity;
+                              product.product_variant_Details[existingVariantIndex].variantPrice = variant.variantPrice;
+                              variantsToUpdate.push(product.product_variant_Details[existingVariantIndex]);
+                         } else {
+                              const newVariantData: IProductSingleVariant = {
+                                   variantId: foundVariant?._id as unknown as ObjectId,
+                                   slug: foundVariant?.slug,
+                                   variantQuantity: variant.variantQuantity,
+                                   variantPrice: variant.variantPrice,
+                              };
+                              variantsToUpdate.push(newVariantData);
+                         }
+                         totalStock += variant.variantQuantity;
                     }
-                    totalStock += variant.variantQuantity;
+
+                    // Update slugDetails based on the new or updated variant fields
+                    const variantSlug = generateSlug(product.categoryId.name, product.subcategoryId.name, variant as IProductSingleVariantByFieldName);
+                    const slugParts = variantSlug.split('-');
+                    SLUG_FIELD_ORDER.forEach((field, index) => {
+                         if (slugParts[index]) {
+                              const fieldValue = slugParts[index];
+                              if (!slugDetails[field]) {
+                                   slugDetails[field] = [];
+                              }
+                              if (!slugDetails[field].includes(fieldValue)) {
+                                   slugDetails[field].push(fieldValue);
+                              }
+                         }
+                    });
                }
-               // Now update the slugDetails based on the new or updated variant fields
-               const variantSlug = generateSlug(product.categoryId.name, product.subcategoryId.name, variant as IProductSingleVariantByFieldName);
-               const slugParts = variantSlug.split('-');
-               SLUG_FIELD_ORDER.forEach((field, index) => {
-                    if (slugParts[index]) {
-                         const fieldValue = slugParts[index];
 
-                         // Initialize the field if it doesn't exist in slugDetails
-                         if (!slugDetails[field]) {
-                              slugDetails[field] = [];
-                         }
-
-                         // Add the value to slugDetails if it doesn't already exist
-                         if (!slugDetails[field].includes(fieldValue)) {
-                              slugDetails[field].push(fieldValue);
-                         }
-                    }
-               });
+               product.product_variant_Details = variantsToUpdate;
+               payload.totalStock = totalStock;
           }
 
-          // Update product's variant details and total stock
-          product.product_variant_Details = variantsToUpdate;
-          payload.totalStock = totalStock;
+          if (payload.images) {
+               product.images = payload.images;
+          }
+
+          const updatedProduct = await Product.findByIdAndUpdate(
+               id,
+               {
+                    ...payload,
+                    ...(payload.product_variant_Details && {
+                         product_variant_Details: product.product_variant_Details,
+                    }),
+                    territory: shop?.address?.territory || '',
+                    city: shop?.address?.city || '',
+                    province: shop?.address?.province || '',
+                    slugDetails,
+               },
+               { new: true, session },
+          );
+
+          if (!updatedProduct) {
+               throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to update product');
+          }
+
+          // Commit the transaction if everything is successful
+          await session.commitTransaction();
+          session.endSession();
+
+          console.log('🚀 ~ updateProduct ~ updatedProduct:', JSON.stringify(updatedProduct));
+          return updatedProduct;
+     } catch (error) {
+          console.log('🚀 ~ updateProduct ~ error:', error);
+          // Abort the transaction if any error occurs
+          await session.abortTransaction();
+          session.endSession();
+
+          // Handle image cleanup if product was not updated successfully
+          if (payload.images) {
+               payload.images.forEach((image: any) => unlinkFile(image));
+          }
+
+          // Rethrow the error after transaction abort
+          throw error;
      }
-
-     // Handle image updates if images are provided in the payload
-     if (payload.images) {
-          product.images = payload.images;
-     }
-
-     // Update the product in the database
-     const updatedProduct = await Product.findByIdAndUpdate(
-          id,
-          {
-               ...payload,
-               ...(payload.product_variant_Details && {
-                    product_variant_Details: product.product_variant_Details,
-               }),
-               territory: shop?.address?.territory || '',
-               city: shop?.address?.city || '',
-               province: shop?.address?.province || '',
-               slugDetails,
-          },
-          { new: true },
-     );
-
-     if (!updatedProduct) {
-          throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to update product');
-     }
-
-     // Handle image cleanup if product was not updated successfully
-     if (payload.images && !updatedProduct) {
-          payload.images.forEach((image: any) => unlinkFile(image));
-     }
-
-     return updatedProduct;
 };
 
 const deleteProduct = async (id: string, user: IJwtPayload) => {

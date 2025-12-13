@@ -15,6 +15,7 @@ const settingsSchema = new Schema<ISettings>(
           },
           banner: { type: [String], required: false },
           logo: { type: String, required: false },
+          perDayAdvertiseMentCost: { type: Number, required: false },
           aboutUs: {
                type: String,
                default: '',

@@ -122,6 +122,10 @@ const productSchema = new Schema<IProduct>(
                ref: 'Brand',
                required: true,
           },
+          brandName: {
+               type: String,
+               required: false,
+          },
           createdBy: {
                type: Schema.Types.ObjectId,
                ref: 'User',

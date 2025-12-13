@@ -16,6 +16,8 @@ import { Wallet } from '../wallet/wallet.model';
 import { TransferType } from './stripeAccount.interface';
 import { CategoryService } from '../category/category.service';
 import { clearCart } from '../cart/cart.service';
+import mongoose from 'mongoose';
+import { Shop } from '../shop/shop.model';
 
 const webhookHandler = async (req: Request, res: Response): Promise<void> => {
      console.log('Webhook received');
@@ -81,8 +83,15 @@ const handlePaymentSucceeded = async (session: Stripe.Checkout.Session) => {
                user,
                shop,
                amount,
+               isAdvertised,
+               advertisedExpiresAt,
+               shopId,
                // extra field for payments gatewayResponse,transactionId,status,order
           }: any = session.metadata;
+
+          if (isAdvertised.toLowerCase() === 'true') {
+               return handleAdvertisePayment(advertisedExpiresAt, shopId);
+          }
 
           // Parsing the 'products' metadata, as it was previously stringified before sending to Stripe
           const productsParsed = JSON.parse(products);
@@ -123,7 +132,7 @@ const handlePaymentSucceeded = async (session: Stripe.Checkout.Session) => {
                transactionId: session.id,
                paymentIntent,
                // amount
-               amount:newOrder.finalAmount,
+               amount: newOrder.finalAmount,
                gatewayResponse: session,
                // extra field for payments gatewayResponse,transactionId,status,order
           });
@@ -146,6 +155,15 @@ const handlePaymentSucceeded = async (session: Stripe.Checkout.Session) => {
           return newPayment;
      } catch (error) {
           console.error('Error in handlePaymentSucceeded:', error);
+     }
+};
+
+// Function for handling a successful payment
+const handleAdvertisePayment = async (advertisedExpiresAt: string, shopId: string) => {
+     try {
+          await Shop.updateOne({ _id: new mongoose.Types.ObjectId(shopId) }, { isAdvertised: true, advertisedExpiresAt: new Date(advertisedExpiresAt), advertisedAt: new Date() });
+     } catch (error) {
+          console.error('Error in handleAdvertisePayment:', error);
      }
 };
 

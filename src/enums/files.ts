@@ -6,6 +6,7 @@ export enum FOLDER_NAMES {
      INSURANCE = 'insurance',
      PERMITS = 'permits',
      BANNER = 'banner',
+     ADVERTISEMENT_BANNER = 'advertisement_banner',
      LOGO = 'logo',
      AUDIO = 'audio',
      VIDEO = 'video',

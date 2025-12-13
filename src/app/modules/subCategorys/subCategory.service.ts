@@ -4,15 +4,19 @@ import AppError from '../../../errors/AppError';
 import { SubCategory } from './subCategory.model';
 import { ISubCategory } from './subCategory.interface';
 import QueryBuilder from '../../builder/QueryBuilder';
-import { Category } from '../category/category.model'; 
+import { Category } from '../category/category.model';
 import { Product } from '../product/product.model';
 import { IJwtPayload } from '../auth/auth.interface';
 import { USER_ROLES } from '../user/user.enums';
 // create sub category
 const createSubCategoryToDB = async (payload: ISubCategory, user: IJwtPayload) => {
-     const { name, thumbnail, categoryId } = payload;
+     const { name, thumbnail, categoryId, requiredFieldsForVariant } = payload;
+     if (!requiredFieldsForVariant || requiredFieldsForVariant.length === 0) {
+          throw new AppError(StatusCodes.BAD_REQUEST, 'Required fields for variant is required!');
+     }
      const isExistCategory = await Category.findById(categoryId);
      if (!isExistCategory) {
+          unlinkFile(thumbnail);
           throw new AppError(StatusCodes.NOT_FOUND, 'Category not found!');
      }
      const isSubCategoryExistName = await SubCategory.findOne({ name: name });
@@ -38,7 +42,7 @@ const createSubCategoryToDB = async (payload: ISubCategory, user: IJwtPayload) =
 };
 // get sub category
 const getCategoriesFromDB = async (query: Record<string, unknown>) => {
-     const queryBuilder = new QueryBuilder(SubCategory.find({}).populate("categoryId", "name"), query);
+     const queryBuilder = new QueryBuilder(SubCategory.find({}).populate('categoryId', 'name'), query);
      const subCategorys = await queryBuilder.fields().filter().paginate().search(['name']).sort().modelQuery.exec();
      const meta = await queryBuilder.countTotal();
      return {
@@ -54,14 +58,8 @@ const updateSubCategoryToDB = async (id: string, payload: ISubCategory, user: IJ
           throw new AppError(StatusCodes.BAD_REQUEST, "SubCategory doesn't exist");
      }
 
-     if (
-          user.role === USER_ROLES.SHOP_ADMIN || user.role === USER_ROLES.VENDOR &&
-          isExistSubCategory.createdBy.toString() !== user.id
-     ) {
-          throw new AppError(
-               StatusCodes.BAD_REQUEST,
-               'You are not able to update the SubCategory!'
-          );
+     if (user.role === USER_ROLES.SHOP_ADMIN || (user.role === USER_ROLES.VENDOR && isExistSubCategory.createdBy.toString() !== user.id)) {
+          throw new AppError(StatusCodes.BAD_REQUEST, 'You are not able to update the SubCategory!');
      }
 
      if (payload.thumbnail && isExistSubCategory.thumbnail) {
@@ -80,21 +78,15 @@ const updateSubCategoryToDB = async (id: string, payload: ISubCategory, user: IJ
 };
 
 const deleteSubCategoryToDB = async (id: string, user: IJwtPayload) => {
-     const product = await Product.findOne({ subcategoryId: id })
-     if (product) throw new AppError(StatusCodes.BAD_REQUEST, "You can not delete the subcategory. Because the subcategory is related to products.");
+     const product = await Product.findOne({ subcategoryId: id });
+     if (product) throw new AppError(StatusCodes.BAD_REQUEST, 'You can not delete the subcategory. Because the subcategory is related to products.');
 
      const isExistSubCategory = await SubCategory.findById(id);
      if (!isExistSubCategory) {
           throw new AppError(StatusCodes.BAD_REQUEST, "SubCategory doesn't exist");
      }
-     if (
-          user.role === USER_ROLES.SHOP_ADMIN || user.role === USER_ROLES.VENDOR &&
-          isExistSubCategory.createdBy.toString() !== user.id
-     ) {
-          throw new AppError(
-               StatusCodes.BAD_REQUEST,
-               'You are not able to delete the Category!'
-          );
+     if (user.role === USER_ROLES.SHOP_ADMIN || (user.role === USER_ROLES.VENDOR && isExistSubCategory.createdBy.toString() !== user.id)) {
+          throw new AppError(StatusCodes.BAD_REQUEST, 'You are not able to delete the Category!');
      }
      isExistSubCategory.set({ isDeleted: true });
      // Save the updated variant
@@ -126,16 +118,15 @@ const updateSubCategoryStatusToDB = async (id: string, payload: string) => {
      return updateCategory;
 };
 const getSubCategoryReletedToCategory = async (id: string) => {
-     const result = await SubCategory.find({ categoryId: id }).populate("categoryId", "name");
+     const result = await SubCategory.find({ categoryId: id }).populate('categoryId', 'name');
      if (!result || result.length === 0) {
           throw new AppError(StatusCodes.NOT_FOUND, 'No subcategory found for this category!');
      }
      return result;
 };
 
-
 const getSubCategoryDetails = async (id: string) => {
-     const result = await SubCategory.findById(id).populate("categoryId", "name");
+     const result = await SubCategory.findById(id).populate('categoryId', 'name');
      if (!result) {
           throw new AppError(StatusCodes.NOT_FOUND, 'SubCategory not found');
      }

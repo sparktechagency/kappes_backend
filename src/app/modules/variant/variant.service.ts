@@ -10,8 +10,9 @@ import mongoose from 'mongoose';
 import { Product } from '../product/product.model';
 import { IJwtPayload } from '../auth/auth.interface';
 import unlinkFile from '../../../shared/unlinkFile';
+import { Order } from '../order/order.model';
+import { ORDER_STATUS } from '../order/order.enums';
 
-// create sub category
 const createVariant = async (payload: IVariant, user: IJwtPayload) => {
      const session = await mongoose.startSession(); // Start a session
 
@@ -22,7 +23,7 @@ const createVariant = async (payload: IVariant, user: IJwtPayload) => {
           // Validate Category
           const isExistCategory = await Category.findById(payload.categoryId).session(session); // Use session for transaction
           if (!isExistCategory) {
-               payload?.images?.forEach((element) => {
+               payload?.image?.forEach((element) => {
                     unlinkFile(element);
                });
                throw new AppError(StatusCodes.NOT_FOUND, 'Category not found!');
@@ -31,7 +32,7 @@ const createVariant = async (payload: IVariant, user: IJwtPayload) => {
           // Validate SubCategory
           const isExistSubCategory = await SubCategory.findOne({ _id: payload.subCategoryId, categoryId: payload.categoryId }).session(session); // Use session for transaction
           if (!isExistSubCategory) {
-               payload?.images?.forEach((element) => {
+               payload?.image?.forEach((element) => {
                     unlinkFile(element);
                });
                throw new AppError(StatusCodes.NOT_FOUND, 'SubCategory not found!');
@@ -46,22 +47,23 @@ const createVariant = async (payload: IVariant, user: IJwtPayload) => {
           // Generate slug
           const variantSlug = generateSlug(isExistCategory.name, isExistSubCategory.name, payload);
 
-          // Check if variant with same slug already exists
-          const isVariantExistSlug = await Variant.findOne({ slug: variantSlug }).session(session); // Use session for transaction
-          if (isVariantExistSlug) {
-               payload?.images?.forEach((element) => {
-                    unlinkFile(element);
-               });
-               return isVariantExistSlug;
-          }
+          // // Check if variant with same slug already exists
+          // const isVariantExistSlug = await Variant.findOne({ slug: variantSlug }).session(session); // Use session for transaction
+          // if (isVariantExistSlug) {
+          //      payload?.image?.forEach((element) => {
+          //           unlinkFile(element);
+          //      });
+          //      return isVariantExistSlug.toObject(); // Convert Mongoose document to plain object to avoid circular reference
+          // }
 
           // Set the generated slug
           createVariant.slug = variantSlug;
 
           // Save the variant to the database
-          await createVariant.save({ session }); // Use session for transaction
+          await createVariant.save({ session });
+
           if (!createVariant) {
-               payload?.images?.forEach((element) => {
+               payload?.image?.forEach((element) => {
                     unlinkFile(element);
                });
                throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create Variant');
@@ -82,6 +84,7 @@ const createVariant = async (payload: IVariant, user: IJwtPayload) => {
           // End the session
           session.endSession();
 
+          // Return a clean response
           return createVariant;
      } catch (error) {
           // Abort the transaction on error
@@ -101,7 +104,7 @@ export const getAllVariantsFromDB = async (query: Record<string, unknown>) => {
           ]),
           query,
      );
-     const result = await variantQuery.fields().sort().paginate().filter().search(['slug']).modelQuery;
+     const result = await variantQuery.fields().sort().paginate().filter().search(['slug', 'color', 'identifier']).modelQuery;
      const meta = await variantQuery.countTotal();
      return {
           meta,
@@ -140,31 +143,37 @@ export const getSingleVariantBySlugFromDB = async (slug: string) => {
 
 // Update Variant
 export const updateVariant = async (id: string, data: Partial<IVariant>, user: IJwtPayload) => {
+     console.log('🚀 ~ updateVariant ~ data:', data);
      // Find and update the variant
      const toBeUpdatedVariant = await Variant.findOne({ _id: id, categoryId: data.categoryId, subCategoryId: data.subCategoryId })
           .populate({ path: 'categoryId', select: 'name' }) // Populate categoryId's name field
           .populate({ path: 'subCategoryId', select: 'name' }); // Populate subCategoryId's name field
      // If no variant was found, throw an error
      if (!toBeUpdatedVariant) {
+          data?.image?.forEach((element) => {
+               unlinkFile(element);
+          });
           throw new AppError(StatusCodes.NOT_FOUND, 'Variant not found');
      }
 
+     if (data.image && toBeUpdatedVariant.image) {
+          toBeUpdatedVariant.image?.forEach((element) => {
+               unlinkFile(element);
+          });
+     }
      // Update the variant with the new slug and the provided data
      toBeUpdatedVariant.set({
-          ...data, // Apply the incoming data
+          ...data,
+          image: data.image || toBeUpdatedVariant.image, // Apply the incoming data
      });
      const variantSlug = generateSlug((toBeUpdatedVariant.categoryId as any).name, (toBeUpdatedVariant.subCategoryId as any).name, toBeUpdatedVariant);
 
-     const isVariantExistSlug = await Variant.findOne({ slug: variantSlug });
-     if (isVariantExistSlug) {
-          throw new AppError(StatusCodes.NOT_ACCEPTABLE, `This Variant Already Exists under ${(toBeUpdatedVariant.subCategoryId as any).name} subcategory`);
-     }
      toBeUpdatedVariant.set({
           slug: variantSlug,
      });
      // Save the updated variant
      await toBeUpdatedVariant.save();
-
+     console.log('🚀 ~ updateVariant ~ toBeUpdatedVariant:', toBeUpdatedVariant);
      return toBeUpdatedVariant;
 };
 
@@ -176,11 +185,27 @@ export const deleteVariant = async (id: string, user: IJwtPayload) => {
      if (!deletedVariant) {
           throw new AppError(StatusCodes.NOT_FOUND, 'Variant not found');
      }
+     if (deletedVariant.createdBy.toString() !== user.id) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'You are not authorised to delte');
+     }
 
-     // Check if the variant is related to any product by variantId
-     const product = await Product.findOne({ 'product_variant_Details.variantId': id });
-     if (product) {
-          throw new AppError(StatusCodes.BAD_REQUEST, 'You cannot delete the variant because it is associated with a product.');
+     // // Check if the variant is related to any product by variantId
+     // const product = await Product.findOne({ 'product_variant_Details.variantId': id });
+     // if (product) {
+     //      throw new AppError(StatusCodes.BAD_REQUEST, 'You cannot delete the variant because it is associated with a product.');
+     // }
+
+     // check if any running order available
+     // check if any running order available
+     const isOrderExistForThisVariant = await Order.findOne({
+          'products.variant': new mongoose.Types.ObjectId(id), // Check for the variant
+          'status': { $in: [ORDER_STATUS.CANCELLED, ORDER_STATUS.PROCESSING] }, // Match order status
+     });
+
+     console.log('🚀 ~ deleteVariant ~ isOrderExistForThisVariant:', isOrderExistForThisVariant);
+
+     if (isOrderExistForThisVariant) {
+          throw new AppError(StatusCodes.BAD_REQUEST, 'You cannot delete the variant because it is associated with a running order.');
      }
 
      deletedVariant.set({

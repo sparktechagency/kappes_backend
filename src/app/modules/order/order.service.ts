@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import { Types } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import config from '../../../config';
 import AppError from '../../../errors/AppError';
 import { emailHelper } from '../../../helpers/emailHelper';
@@ -21,6 +21,9 @@ import { ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS } from './order.enums';
 import { IOrder } from './order.interface';
 import { Order } from './order.model';
 import { transferToVendor } from './order.utils';
+import { ActivitiesRecordHistory } from '../activitiesRecordHistory/activitiesRecordHistory.model';
+import { ActivitiesRecordHistoryCategoryEnum, HistoryOfModuleEnum } from '../activitiesRecordHistory/activitiesRecordHistory.enums';
+import { activitiesRecordHistoryService } from '../activitiesRecordHistory/activitiesRecordHistory.service';
 
 const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
      try {
@@ -64,7 +67,12 @@ const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
           // Handle coupon and update orderData
           if (orderData.coupon) {
                const coupon = await Coupon.findOne({ code: orderData.coupon, shopId: orderData.shop });
-               if (coupon) {
+               const hasUsedCoupon = await ActivitiesRecordHistory.findOne({
+                    historyOfModule: HistoryOfModuleEnum.COUPON,
+                    moduleDocumentId: new mongoose.Types.ObjectId(coupon?._id),
+                    userId: user.id,
+               });
+               if (coupon && !hasUsedCoupon) {
                     const currentDate = new Date();
 
                     // Check if the coupon is within the valid date range
@@ -77,8 +85,17 @@ const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
                     }
 
                     orderData.coupon = coupon._id as Types.ObjectId;
+                    // create coupon history
+                    await activitiesRecordHistoryService.createActivitiesRecordHistory(
+                         {
+                              category: ActivitiesRecordHistoryCategoryEnum.COUPON_TRYING_HISTORY,
+                              historyOfModule: HistoryOfModuleEnum.COUPON,
+                              moduleDocumentId: coupon._id,
+                         },
+                         user,
+                    );
                } else {
-                    throw new Error('Invalid coupon code. and coupon is not available for this shop');
+                    throw new Error('Coupon is not available for now or you have already used it');
                }
           }
 
@@ -171,7 +188,7 @@ const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
                     line_items: [
                          {
                               price_data: {
-                                   currency: 'usd',
+                                   currency: 'cad',
                                    product_data: {
                                         name: 'Amount',
                                         description: `order from ${thisCustomer?.full_name || 'seller'}`,

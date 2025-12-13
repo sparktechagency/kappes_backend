@@ -13,16 +13,19 @@ const subCategorySchema = new Schema<ISubCategory>(
                required: true,
           },
           createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-          variants: [{
-               type: Schema.Types.ObjectId,
-               ref: 'Variant',
-               required: true,
-          }],
+          variants: [
+               {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Variant',
+                    required: true,
+               },
+          ],
           status: {
                type: String,
                enum: ['active', 'inactive'],
                default: 'active',
           },
+          requiredFieldsForVariant: { type: [String], required: true, minLength: 1 },
           isDeleted: { type: Boolean, default: false },
      },
      {

@@ -37,7 +37,7 @@ export async function transferToVendor({
 
      const transfer = await stripe.transfers.create({
           amount: Math.round(shopOwnerRevenue * 100), // in cents
-          currency: 'usd',
+          currency: 'cad',
           destination: stripeConnectedAccount,
           metadata: {
                orderId,
@@ -58,7 +58,7 @@ export async function transferToVendorAtWithdraw({
 }) {
      const transfer = await stripe.transfers.create({
           amount: Math.round(amount * 100), // in cents
-          currency: 'usd',
+          currency: 'cad',
           destination: stripeConnectedAccount,
           metadata: {
                walletId,
@@ -82,7 +82,7 @@ export async function createPayout({
      try {
           const payout = await stripe.payouts.create({
                amount: Math.round(amount * 100), // in cents
-               currency: 'usd',
+               currency: 'cad',
                destination: stripeConnectedAccount,
                metadata: {
                     orderId,

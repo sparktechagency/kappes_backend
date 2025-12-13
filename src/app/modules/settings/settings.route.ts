@@ -16,6 +16,7 @@ SettingsRouter.get('/', settingsController.getSettings)
      .get('/privacy-policy', settingsController.getPrivacyPolicy)
      .get('/aboutus', settingsController.getAboutUs)
      .get('/support', settingsController.getSupport)
+     .get('/per-day-advertisement-cost', settingsController.getPerDayAdvertiseMentCost)
      .get('/termsOfService', settingsController.getTermsOfService);
 
 // // get all messages of business by business id 🏃‍♀️‍➡️
@@ -28,6 +29,8 @@ SettingsRouter.post('/message', validateRequest(settingsSchema.createMessageZodS
 SettingsRouter.patch('/privacy-policy', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), settingsController.updatePrivacyPolicy);
 // patch terms of service
 SettingsRouter.patch('/termsOfService', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), settingsController.updateTermsOfService);
+// getPerDayAdvertiseMentCost
+SettingsRouter.patch('/per-day-advertisement-cost', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), settingsController.updatePerDayAdvertiseMentCost);
 
 // Contact CRUD
 SettingsRouter.get('/contact', settingsController.getContact);
