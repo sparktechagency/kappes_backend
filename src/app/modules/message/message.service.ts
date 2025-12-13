@@ -85,7 +85,7 @@ const getMessageByChatIdFromDB = async (id: Types.ObjectId, query: Record<string
           }
      }
      const queryBuilder = new QueryBuilder(Message.find({ chatId: id }).sort({ createdAt: -1 }), query);
-     const messages = await queryBuilder.modelQuery.exec();
+     const messages = await queryBuilder.paginate().modelQuery.exec();
      const meta = await queryBuilder.countTotal();
      if (!messages.length) {
           throw new AppError(StatusCodes.NOT_FOUND, 'Messages not found');
