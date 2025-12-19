@@ -1,5 +1,4 @@
 import { Schema, model } from 'mongoose';
-import { IchitChatShipment } from './chitChatShipment.interface';
 import {
      chitChatShipment_order_store,
      chitChatShipment_package_contents,
@@ -9,8 +8,9 @@ import {
      chitChatShipment_value_currency,
      chitChatShipment_weight_unit,
 } from './chitChatShipment.enum';
+import { IChitChatShipment } from './chitChatShipment.interface';
 
-const ChitChatShipmentSchema = new Schema<IchitChatShipment>(
+const ChitChatShipmentSchema = new Schema<IChitChatShipment>(
      {
           name: {
                type: String,
@@ -142,7 +142,13 @@ const ChitChatShipmentSchema = new Schema<IchitChatShipment>(
           isDeleted: { type: Boolean, default: false },
           deletedAt: { type: Date },
      },
-     { timestamps: true },
+
+     {
+          timestamps: true,
+          toJSON: {
+               virtuals: true,
+          },
+     },
 );
 
 ChitChatShipmentSchema.pre('find', function (next) {
@@ -160,4 +166,4 @@ ChitChatShipmentSchema.pre('aggregate', function (next) {
      next();
 });
 
-export const ChitChatShipment = model<IchitChatShipment>('ChitChatShipment', ChitChatShipmentSchema);
+export const ChitChatShipment = model<IChitChatShipment>('ChitChatShipment', ChitChatShipmentSchema);
