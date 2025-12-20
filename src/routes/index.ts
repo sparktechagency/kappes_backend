@@ -159,7 +159,7 @@ const routes = [
           route: VariantFieldRoutes,
      },
      {
-          path: '/chitchatShipment',
+          path: '/chit-chat-shipments',
           route: chitChatShipmentRoutes,
      },
      {

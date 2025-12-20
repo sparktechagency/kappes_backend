@@ -1,0 +1,268 @@
+{
+  "info": {
+    "_postman_id": "your-postman-collection-id",
+    "name": "ChitChat Shipment API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "your-exporter-id"
+  },
+  "item": [
+    {
+      "name": "List Shipments",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/chit-chat-shipments",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "chit-chat-shipments"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1",
+              "description": "Page number (optional)"
+            },
+            {
+              "key": "limit",
+              "value": "10",
+              "description": "Items per page (optional)"
+            }
+          ]
+        },
+        "description": "Get a list of shipments with optional pagination"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Shipment",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"John Doe\",\n  \"address_1\": \"123 Main St\",\n  \"city\": \"New York\",\n  \"postal_code\": \"10001\",\n  \"country_code\": \"US\",\n  \"email\": \"john@example.com\",\n  \"phone\": \"+1234567890\",\n  \"package_type\": \"parcel\",\n  \"package_contents\": \"merchandise\",\n  \"weight\": 1.5,\n  \"weight_unit\": \"kg\",\n  \"size_x\": 10,\n  \"size_y\": 15,\n  \"size_z\": 5,\n  \"size_unit\": \"cm\",\n  \"value\": \"100.00\",\n  \"value_currency\": \"USD\",\n  \"line_items\": [\n    {\n      \"description\": \"Sample Product\",\n      \"quantity\": 1,\n      \"value_amount\": \"100.00\",\n      \"currency_code\": \"USD\",\n      \"hs_tariff_code\": \"123456\",\n      \"sku_code\": \"SKU123\",\n      \"origin_country\": \"US\",\n      \"weight\": 1.5,\n      \"weight_unit\": \"kg\"\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/chit-chat-shipments",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "chit-chat-shipments"]
+        },
+        "description": "Create a new shipment"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Shipment",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/chit-chat-shipments/{{shipment_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "chit-chat-shipments", "{{shipment_id}}"]
+        },
+        "description": "Get details of a specific shipment"
+      },
+      "response": []
+    },
+    {
+      "name": "Update Shipment",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"description\": \"Updated description\",\n  \"value\": \"150.00\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/chit-chat-shipments/{{shipment_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "chit-chat-shipments", "{{shipment_id}}"]
+        },
+        "description": "Update a specific shipment"
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Shipment",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/chit-chat-shipments/{{shipment_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "chit-chat-shipments", "{{shipment_id}}"]
+        },
+        "description": "Delete a specific shipment"
+      },
+      "response": []
+    },
+    {
+      "name": "Buy Shipment",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/chit-chat-shipments/{{shipment_id}}/buy",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "chit-chat-shipments", "{{shipment_id}}", "buy"]
+        },
+        "description": "Purchase a shipping label for a shipment"
+      },
+      "response": []
+    },
+    {
+      "name": "Cancel Shipment",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/chit-chat-shipments/{{shipment_id}}/cancel",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "chit-chat-shipments", "{{shipment_id}}", "cancel"]
+        },
+        "description": "Cancel a shipment"
+      },
+      "response": []
+    },
+    {
+      "name": "Print Shipment",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/chit-chat-shipments/{{shipment_id}}/print",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "chit-chat-shipments", "{{shipment_id}}", "print"]
+        },
+        "description": "Print a shipping label"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Shipment Label",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/chit-chat-shipments/{{shipment_id}}/label",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "chit-chat-shipments", "{{shipment_id}}", "label"]
+        },
+        "description": "Get a shipping label"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Shipment Tracking",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/v1/chit-chat-shipments/{{shipment_id}}/tracking",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "chit-chat-shipments", "{{shipment_id}}", "tracking"]
+        },
+        "description": "Get tracking information for a shipment"
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{auth_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string",
+      "description": "Base URL of your API"
+    },
+    {
+      "key": "auth_token",
+      "value": "your_jwt_token_here",
+      "type": "string",
+      "description": "JWT token for authentication"
+    },
+    {
+      "key": "shipment_id",
+      "value": "shipment_id_here",
+      "type": "string",
+      "description": "Shipment ID for testing"
+    }
+  ]
+}
