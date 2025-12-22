@@ -48,6 +48,9 @@ const createShipment = async (payload: IChitChatShipment): Promise<IShipmentStat
           const response = await axios.post(`${API_BASE_URL}/clients/${CLIENT_ID}/shipments`, payload, { headers: getAuthHeaders() });
           return response.data;
      } catch (error) {
+          console.log('**************************************************');
+          console.log('🚀 ~ createShipment ~ error?.response?.data:', error);
+
           return handleApiError(error, 'Failed to create shipment');
      }
 };
