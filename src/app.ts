@@ -38,6 +38,8 @@ app.use(
                'https://api.thecanuckmall.com',
                'https://dashboard.thecanuckmall.ca',
                'https://dashboard.thecanuckmall.com',
+               'https://maintenance.thecanuckmall.ca',
+               'https://maintenance.thecanuckmall.com',
                'https://kappas-admin-dashboard.vercel.app',
                'https://kappes-ecommerce-webiste.vercel.app',
           ],
