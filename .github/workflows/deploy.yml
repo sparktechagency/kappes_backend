@@ -20,6 +20,10 @@ jobs:
                       ls -ld ~/.ssh || echo ".ssh directory does not exist"
                       ls -al ~/.ssh || echo "No contents in .ssh"
 
+               - name: Debug SSH Key
+                 run: |
+                      echo "${{ secrets.VPS_SSH_KEY }}" | head -n 10  # Print the first 10 lines to verify the SSH key format
+
                - name: Setup SSH Key
                  run: |
                       # Create .ssh directory if it doesn't exist on the GitHub runner
