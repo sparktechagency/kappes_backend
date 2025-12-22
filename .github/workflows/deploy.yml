@@ -17,32 +17,40 @@ jobs:
                  run: |
                       echo "Home directory: $HOME"
                       echo "Current user: $(whoami)"
-                      ls -ld ~/.ssh
-                      ls -al ~/.ssh  # List contents of .ssh if it exists
+                      ls -ld ~/.ssh || echo ".ssh directory does not exist"
+                      ls -al ~/.ssh || echo "No contents in .ssh"
 
                - name: Setup SSH Key
                  run: |
+                      # Create .ssh directory if it doesn't exist on the GitHub runner
                       mkdir -p ~/.ssh
+
+                      # Write the SSH key from GitHub secrets into the file
                       echo "${{ secrets.VPS_SSH_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
+
+                      # Set the correct permissions for the SSH key
                       chmod 600 ~/.ssh/id_rsa
+
+                      # Add VPS host to known hosts to avoid SSH prompt
                       ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
 
                - name: Deploy to VPS using tmux
                  run: |
+                      # SSH into your VPS and perform the deployment
                       ssh -i ~/.ssh/id_rsa ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
-                        # Ensure we are in the correct directory for the backend
+                        # Ensure we are in the correct directory for the backend on the VPS
                         cd /home/ubuntu/kappes_backend
 
-                        # Pull latest code from Git
+                        # Pull the latest code from Git
                         echo "Pulling latest code..."
                         git pull origin main
 
-                        # Install dependencies (if needed)
+                        # Install dependencies if needed
                         echo "Installing dependencies..."
                         npm install
 
-                        # Build the app (frontend build)
-                        echo "Building app (if needed)..."
+                        # Build the app (if needed)
+                        echo "Building app..."
                         npm run build
 
                         # Restart the backend server inside the tmux session
