@@ -44,7 +44,7 @@ export async function startServer() {
           global.io = socketServer;
 
           // Start HTTP server with Socket.IO attached
-          httpServer.listen(port, ipAddress, () => {
+          httpServer.listen(port, '0.0.0.0', () => {
                logger.info(colors.yellow(`♻️  Application and Socket.IO listening on http://${ipAddress}:${port}`));
           });
      } catch (error) {
