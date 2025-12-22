@@ -13,6 +13,13 @@ jobs:
                - name: Checkout Code
                  uses: actions/checkout@v3
 
+               - name: Debug environment and permissions
+                 run: |
+                      echo "Home directory: $HOME"
+                      echo "Current user: $(whoami)"
+                      ls -ld ~/.ssh
+                      ls -al ~/.ssh  # List contents of .ssh if it exists
+
                - name: Setup SSH Key
                  run: |
                       mkdir -p ~/.ssh
