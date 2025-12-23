@@ -145,5 +145,4 @@ export const chitChatShipmentController = {
      printShipment,
      getShipmentLabel,
      getShipmentTracking,
-     buyShipment,
 };
