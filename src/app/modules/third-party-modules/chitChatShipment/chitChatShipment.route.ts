@@ -19,14 +19,21 @@ router.get(
 router.post(
      '/',
      auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN, USER_ROLES.USER),
-     validateRequest(chitChatShipmentValidation.createChitChatShipmentZodSchema),
+     // validateRequest(chitChatShipmentValidation.createChitChatShipmentZodSchema),
      chitChatShipmentController.createShipment,
+);
+
+router.post(
+     '/buy',
+     auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN, USER_ROLES.USER),
+     // validateRequest(chitChatShipmentValidation.createChitChatShipmentZodSchema),
+     chitChatShipmentController.buyShipment,
 );
 
 // Get a single shipment by ID
 router.get(
      '/:shipmentId',
-     auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN, USER_ROLES.USER),
+     // auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN, USER_ROLES.USER),
      validateRequest(chitChatShipmentValidation.getChitChatShipmentZodSchema),
      chitChatShipmentController.getShipment,
 );
@@ -48,12 +55,12 @@ router.delete(
 );
 
 // Buy a shipping label for a shipment
-router.post(
-     '/:shipmentId/buy',
-     auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN, USER_ROLES.USER),
-     validateRequest(chitChatShipmentValidation.buyChitChatShipmentZodSchema),
-     chitChatShipmentController.buyShipment,
-);
+// router.post(
+//      '/:shipmentId/buy',
+//      auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN, USER_ROLES.USER),
+//      validateRequest(chitChatShipmentValidation.buyChitChatShipmentZodSchema),
+//      chitChatShipmentController.buyShipment,
+// );
 
 // Cancel a shipment
 router.post(

@@ -16,6 +16,16 @@ const createShipment = catchAsync(async (req: Request, res: Response) => {
 });
 
 // List all shipments with optional filters
+const buyShipment = catchAsync(async (req: Request, res: Response) => {
+     const result = await chitChatShipmentService.buyShipment();
+     sendResponse(res, {
+          statusCode: 200,
+          success: true,
+          message: 'Shipments finaly successfully',
+          data: result,
+     });
+});
+
 const listShipments = catchAsync(async (req: Request, res: Response) => {
      const result = await chitChatShipmentService.listShipments(req.query);
      sendResponse(res, {
@@ -63,16 +73,16 @@ const deleteShipment = catchAsync(async (req: Request, res: Response) => {
 });
 
 // Buy a shipping label for a shipment
-const buyShipment = catchAsync(async (req: Request, res: Response) => {
-     const { shipmentId } = req.params;
-     const result = await chitChatShipmentService.buyShipment(shipmentId);
-     sendResponse(res, {
-          statusCode: 200,
-          success: true,
-          message: 'Shipping label purchased successfully',
-          data: result,
-     });
-});
+// const buyShipment = catchAsync(async (req: Request, res: Response) => {
+//      const { shipmentId } = req.params;
+//      const result = await chitChatShipmentService.buyShipment(shipmentId);
+//      sendResponse(res, {
+//           statusCode: 200,
+//           success: true,
+//           message: 'Shipping label purchased successfully',
+//           data: result,
+//      });
+// });
 
 // Cancel a shipment
 const cancelShipment = catchAsync(async (req: Request, res: Response) => {
@@ -135,4 +145,5 @@ export const chitChatShipmentController = {
      printShipment,
      getShipmentLabel,
      getShipmentTracking,
+     buyShipment,
 };
