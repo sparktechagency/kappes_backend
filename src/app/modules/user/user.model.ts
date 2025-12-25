@@ -81,7 +81,10 @@ const userSchema = new Schema<IUser, UserModel>(
                                    Object.prototype.hasOwnProperty.call(value, 'territory') ||
                                    Object.prototype.hasOwnProperty.call(value, 'city') ||
                                    Object.prototype.hasOwnProperty.call(value, 'country') ||
-                                   Object.prototype.hasOwnProperty.call(value, 'detail_address')
+                                   Object.prototype.hasOwnProperty.call(value, 'detail_address') ||
+                                   Object.prototype.hasOwnProperty.call(value, 'provinceCode')||
+                                   Object.prototype.hasOwnProperty.call(value, 'postalCode')||
+                                   Object.prototype.hasOwnProperty.call(value, 'countryCode')
                               );
                          }
                          return false; // Invalid if not a string or object with optional fields
@@ -160,6 +163,7 @@ const userSchema = new Schema<IUser, UserModel>(
           fmcToken: {
                type: String,
           },
+          
      },
      { timestamps: true },
 );

@@ -21,14 +21,18 @@ export type IUser = {
      joinDate: Date;
      isDeleted: boolean;
      address?:
-          | {
-                 province: string;
-                 territory: string;
-                 city: string;
-                 country?: string;
-                 detail_address?: string;
-            }
-          | string;
+     | {
+          province: string;
+          territory: string;
+          city: string;
+          country?: string;
+          detail_address?: string;
+//sakib
+          provinceCode: string;
+          postalCode: string;
+          countryCode: string;
+     }
+     | string;
      business_informations: Schema.Types.ObjectId[];
      lastLogin: Date;
      tokenVersion: number;

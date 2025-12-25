@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { IVariant } from '../variant/variant.interfaces';
+import { ChitChatsPackageType, ChitChatsSizeUnit, WeightUnit } from '../shipping/shipping.types';
 interface ISlugDetails {
      [key: string]: string[]; // The key is the field name (e.g., 'color', 'size'), and the value is an array of strings
 }
@@ -45,6 +46,15 @@ export interface IProduct extends mongoose.Document {
      deletedAt: Date;
      isRecommended: boolean;
      slugDetails: ISlugDetails;
+
+     //sakib
+     weightUnit?: WeightUnit | string;
+     length?: number;        // in inches
+     width?: number;         // in inches
+     height?: number;        // in inches
+     sizeUnit?: ChitChatsSizeUnit | string;
+     packageType?: ChitChatsPackageType | string;
+     //
 
      calculateOfferPrice(): Promise<number | null>;
 }
