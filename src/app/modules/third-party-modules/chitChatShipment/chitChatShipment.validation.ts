@@ -112,8 +112,8 @@ const createChitChatShipmentZodSchema = z.object({
 
 const getAllChitChatShipmentsZodSchema = z.object({
      query: z.object({
-          page: z.number().optional(),
-          limit: z.number().optional(),
+          page: z.string().optional(),
+          limit: z.string().optional(),
           batch_id: z.string().optional(),
           package_type: z.string().optional(),
           from_date: z.string().optional(),
@@ -188,6 +188,9 @@ const deleteChitChatShipmentZodSchema = z.object({
 const buyChitChatShipmentZodSchema = z.object({
      params: z.object({
           shipmentId: z.string({ required_error: 'Shipment ID is required' }),
+     }),
+     body: z.object({
+          postage_type: z.nativeEnum(chitChatShipment_postage_type),
      }),
 });
 

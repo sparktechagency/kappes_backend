@@ -7,7 +7,6 @@ import {
      IShipmentStatus,
      IShipmentListResponse,
      IUpdateShipmentRequest,
-     IShipmentBuyResponse,
      ICancelShipmentResponse,
      IPrintShipmentResponse,
      ILabelResponse,
@@ -15,13 +14,14 @@ import {
      IShipmentFilters,
 } from './chitChatShipment.interface';
 import AppError from '../../../../errors/AppError';
+import { chitChatShipment_postage_type } from './chitChatShipment.enum';
 
 const API_BASE_URL = 'https://chitchats.com/api/v1';
 const CLIENT_ID = config.chitchat.client_id;
 // console.log('client id', CLIENT_ID);
 
 const getAuthHeaders = () => ({
-     'Authorization': `Bearer ${config.chitchat.access_token}`,
+     'Authorization': `${config.chitchat.access_token}`,
      'Content-Type': 'application/json',
      'Accept': 'application/json',
 });
@@ -45,106 +45,19 @@ const handleApiError = (error: unknown, defaultMessage: string): never => {
 
 // Create a new shipment
 const createShipment = async (payload: any): Promise<any> => {
-     // console.log('payload =>', payload);
-
-     console.log('route hit hoise!!');
      try {
-          const payload = {
-               name: 'John Smith', // required
-               address_1: '21000 Hacienda BLVD', // required
-               // address_2: 'Building B Apartment G06',
-               city: 'California City', // required
-               province_code: 'CA',
-               postal_code: '93505',
-               country_code: 'US', // required
-               phone: '415-555-0110',
-               package_contents: 'merchandise', // ***
-               description: 'Hand made bracelet',
-               value: '84.99', // required
-               value_currency: 'usd', // required
-               // order_id: '',
-               // order_store: '',
-               package_type: 'parcel', // required
-               weight_unit: 'g', // required
-               weight: 250, // required
-               size_unit: 'cm', // required
-               size_x: 10, // required
-               size_y: 5, // required
-               size_z: 2, // required
-               insurance_requested: true,
-               signature_requested: false,
-               // vat_reference: '',
-               // duties_paid_requested: false,
-               postage_type: 'chit_chats_us_edge',
-               cheapest_postage_type_requested: 'no',
-               // tracking_number: '',
-               ship_date: '2025-12-24',
-               line_items: [
-                    {
-                         quantity: 1,
-                         description: 'Hand made bracelet',
-                         value_amount: '84.49',
-                         currency_code: 'usd',
-                         hs_tariff_code: '7117199000',
-                         sku_code: null,
-                         origin_country: 'CN',
-                         weight: 250,
-                         weight_unit: 'g',
-                         manufacturer_contact: 'Shenzhen Artisan Jewelry Co.',
-                         manufacturer_street: '88 Innovation Rd.',
-                         manufacturer_street_2: 'Building 5',
-                         manufacturer_city: 'Shenzhen',
-                         manufacturer_postal_code: '518000',
-                         manufacturer_province_code: 'GD',
-                         manufacturer_country_code: 'CN',
-                    },
-               ],
-          };
-
-          // const response = await axios.post(`${API_BASE_URL}/clients/${CLIENT_ID}/shipments`, payload, { headers: getAuthHeaders() });
-
-          const response = await axios.post(`https://chitchats.com/api/v1/clients/918456/shipments`, payload, {
-               headers: {
-                    'Authorization': `7c493995183240718d2fd067b62fc3dd`,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-               },
-          });
-          console.log('response =>>>>>>>>>>>>>>', response.data);
+          const response = await axios.post(`${API_BASE_URL}/clients/${CLIENT_ID}/shipments`, payload, { headers: getAuthHeaders() });
           return response.data;
-
-          // POST /shipments/{shipment_id}/purchase
      } catch (error: any) {
-          console.log('🚀 ~ createShipment ~ error.response:', error.response);
-          console.log('🚀 ~ createShipment ~ error.response.data:', error.response.data);
-          console.log('🚀 ~ createShipment ~ error.response.data.error:', error.response.data.error);
           return handleApiError(error, 'Failed to create shipment');
      }
 };
 
-// List all shipments with optional filters
-const buyShipment = async (): Promise<any> => {
-     console.log('hit hoise buy shipment!!');
-     const payload = {
-          postage_type: 'chit_chats_us_edge',
-     };
-     try {
-          const response = await axios.patch(`https://chitchats.com/api/v1/clients/918456/shipments/Z4G2F3J1K2/buy`, payload, {
-               headers: {
-                    'Authorization': `7c493995183240718d2fd067b62fc3dd`,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-               },
-          });
-          console.log('response =>>>>>>>>>>>>>>', response.data);
-          return response.data;
-     } catch (error: any) {
-          console.log('error =>>>>>>>>>>', error.response.data.error);
-          return handleApiError(error, 'Failed to fetch shipments');
-     }
-};
-
 const listShipments = async (filters?: IShipmentFilters): Promise<IShipmentListResponse> => {
+     if (filters?.page || filters?.limit) {
+          filters.page = Number(filters.page);
+          filters.limit = Number(filters.limit);
+     }
      try {
           const response = await axios.get(`${API_BASE_URL}/clients/${CLIENT_ID}/shipments`, {
                params: filters,
@@ -159,14 +72,9 @@ const listShipments = async (filters?: IShipmentFilters): Promise<IShipmentListR
 // Get a single shipment by ID
 const getShipment = async (shipmentId: string): Promise<any> => {
      try {
-          const response = await axios.get(`https://chitchats.com/api/v1/clients/918456/shipments/Z4G2F3J1K2`, {
-               headers: {
-                    'Authorization': `7c493995183240718d2fd067b62fc3dd`,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-               },
+          const response = await axios.get(`${API_BASE_URL}/clients/${CLIENT_ID}/shipments/${shipmentId}`, {
+               headers: getAuthHeaders(),
           });
-          console.log('response =>>>>>>>>>>>>>>', response.data.rates);
           return response.data;
      } catch (error) {
           return handleApiError(error, `Failed to fetch shipment ${shipmentId}`);
@@ -193,15 +101,22 @@ const deleteShipment = async (shipmentId: string): Promise<{ success: boolean }>
      }
 };
 
-// Buy a shipping label for a shipment
-// const buyShipment = async (shipmentId: string): Promise<IShipmentBuyResponse> => {
-//      try {
-//           const response = await axios.post(`${API_BASE_URL}/clients/${CLIENT_ID}/shipments/${shipmentId}/buy`, {}, { headers: getAuthHeaders() });
-//           return response.data;
-//      } catch (error) {
-//           return handleApiError(error, `Failed to buy label for shipment ${shipmentId}`);
-//      }
-// };
+// List all shipments with optional filters
+const buyShipment = async (
+     shipmentId: string,
+     payload: {
+          postage_type: chitChatShipment_postage_type;
+     },
+): Promise<any> => {
+     try {
+          const response = await axios.patch(`${API_BASE_URL}/clients/${CLIENT_ID}/shipments/${shipmentId}/buy`, payload, {
+               headers: getAuthHeaders(),
+          });
+          return response.data;
+     } catch (error: any) {
+          throw new AppError(StatusCodes.BAD_REQUEST, error.response.data.error.message);
+     }
+};
 
 // Cancel a shipment
 const cancelShipment = async (shipmentId: string): Promise<ICancelShipmentResponse> => {
@@ -209,7 +124,17 @@ const cancelShipment = async (shipmentId: string): Promise<ICancelShipmentRespon
           const response = await axios.post(`${API_BASE_URL}/clients/${CLIENT_ID}/shipments/${shipmentId}/cancel`, {}, { headers: getAuthHeaders() });
           return response.data;
      } catch (error) {
-          return handleApiError(error, `Failed to cancel shipment ${shipmentId}`);
+          throw new AppError(StatusCodes.BAD_REQUEST, error?.response?.data?.error?.message);
+     }
+};
+
+// Cancel a shipment
+const refundShipment = async (shipmentId: string): Promise<ICancelShipmentResponse> => {
+     try {
+          const response = await axios.post(`${API_BASE_URL}/clients/${CLIENT_ID}/shipments/${shipmentId}/refund`, {}, { headers: getAuthHeaders() });
+          return response.data;
+     } catch (error) {
+          throw new AppError(StatusCodes.BAD_REQUEST, error?.response?.data?.error?.message);
      }
 };
 
@@ -239,10 +164,10 @@ const getShipmentLabel = async (shipmentId: string, format: string = 'PDF'): Pro
 // Get tracking information for a shipment
 const getShipmentTracking = async (shipmentId: string): Promise<ITrackingResponse> => {
      try {
-          const response = await axios.get(`${API_BASE_URL}/clients/${CLIENT_ID}/shipments/${shipmentId}/tracking`, { headers: getAuthHeaders() });
-          return response.data;
+          const response = await axios.get(`${API_BASE_URL}/clients/${CLIENT_ID}/shipments/${shipmentId}`, { headers: getAuthHeaders() });
+          return response.data?.shipment?.tracking_url;
      } catch (error) {
-          return handleApiError(error, `Failed to get tracking for shipment ${shipmentId}`);
+          throw new AppError(StatusCodes.BAD_REQUEST, error?.response?.data?.error?.message);
      }
 };
 
@@ -253,8 +178,8 @@ export const chitChatShipmentService = {
      updateShipment,
      deleteShipment,
      buyShipment,
-     // buyShipment,
      cancelShipment,
+     refundShipment,
      printShipment,
      getShipmentLabel,
      getShipmentTracking,

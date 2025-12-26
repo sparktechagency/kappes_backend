@@ -250,6 +250,7 @@ export interface IShipmentFilters {
      updated_at_min?: string;
      updated_at_max?: string;
      limit?: number;
+     page?: number;
      offset?: number;
 }
 

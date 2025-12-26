@@ -17,11 +17,11 @@ const createShipment = catchAsync(async (req: Request, res: Response) => {
 
 // List all shipments with optional filters
 const buyShipment = catchAsync(async (req: Request, res: Response) => {
-     const result = await chitChatShipmentService.buyShipment();
+     const result = await chitChatShipmentService.buyShipment(req.params.shipmentId, req.body);
      sendResponse(res, {
           statusCode: 200,
           success: true,
-          message: 'Shipments finaly successfully',
+          message: 'Shipments finally successfully',
           data: result,
      });
 });
@@ -64,6 +64,18 @@ const updateShipment = catchAsync(async (req: Request, res: Response) => {
 const deleteShipment = catchAsync(async (req: Request, res: Response) => {
      const { shipmentId } = req.params;
      await chitChatShipmentService.deleteShipment(shipmentId);
+     sendResponse(res, {
+          statusCode: 200,
+          success: true,
+          message: 'Shipment deleted successfully',
+          data: null,
+     });
+});
+
+// Delete a shipment
+const refundShipment = catchAsync(async (req: Request, res: Response) => {
+     const { shipmentId } = req.params;
+     await chitChatShipmentService.refundShipment(shipmentId);
      sendResponse(res, {
           statusCode: 200,
           success: true,
@@ -142,6 +154,7 @@ export const chitChatShipmentController = {
      deleteShipment,
      buyShipment,
      cancelShipment,
+     refundShipment,
      printShipment,
      getShipmentLabel,
      getShipmentTracking,
