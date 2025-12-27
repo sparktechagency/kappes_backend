@@ -10,6 +10,14 @@ export const createUserZodSchema = z.object({
           profile: z.string().optional(),
           store_name: z.string().optional(),
           store_category: objectIdSchema.optional(),
+
+          // chitchat
+          name: z.string().optional(),
+          address_1: z.string().optional(),
+          city: z.string().optional(),
+          province_code: z.string().optional(),
+          postal_code: z.string().optional(),
+          country_code: z.string().optional(),
      }),
 });
 
@@ -32,6 +40,12 @@ const updateUserZodSchema = z.object({
           email: z.string().email('Invalid email address').optional(),
           password: z.string().optional(),
           image: z.string().optional(),
+          name: z.string().optional(),
+          address_1: z.string().optional(),
+          city: z.string().optional(),
+          province_code: z.string().optional(),
+          postal_code: z.string().optional(),
+          country_code: z.string().optional(),
      }),
 });
 
@@ -44,20 +58,21 @@ const updateUserByIdZodSchema = z.object({
 });
 
 const makeAdminZodSchema = z.object({
-     body: z.object({
-          role: z.nativeEnum(USER_ROLES),
-          email: z.string().email('Invalid email address'),
-          full_name: z.string(),
-          password: z.string(),
-     })
-     .superRefine((data, ctx) => {
-          if (data.role !== USER_ROLES.ADMIN) {
-               ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    message: `role must be ${USER_ROLES.ADMIN}`,
-               });
-          }
-     }),
+     body: z
+          .object({
+               role: z.nativeEnum(USER_ROLES),
+               email: z.string().email('Invalid email address'),
+               full_name: z.string(),
+               password: z.string(),
+          })
+          .superRefine((data, ctx) => {
+               if (data.role !== USER_ROLES.ADMIN) {
+                    ctx.addIssue({
+                         code: z.ZodIssueCode.custom,
+                         message: `role must be ${USER_ROLES.ADMIN}`,
+                    });
+               }
+          }),
 });
 
 export type ISellerUserZod = z.infer<typeof createUserZodSchema>;
@@ -65,5 +80,5 @@ export const UserValidation = {
      createUserZodSchema,
      updateUserZodSchema,
      updateUserByIdZodSchema,
-     makeAdminZodSchema
+     makeAdminZodSchema,
 };

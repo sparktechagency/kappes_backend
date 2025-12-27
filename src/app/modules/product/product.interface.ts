@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { IVariant } from '../variant/variant.interfaces';
+import { chitChatShipment_package_type, chitChatShipment_size_unit, chitChatShipment_weight_unit } from '../third-party-modules/chitChatShipment/chitChatShipment.enum';
 interface ISlugDetails {
      [key: string]: string[]; // The key is the field name (e.g., 'color', 'size'), and the value is an array of strings
 }
@@ -26,7 +27,7 @@ export interface IProduct extends mongoose.Document {
      totalStock: number;
      images: string[];
      isFeatured: boolean;
-     weight?: number;
+     weight: number;
      tags: string[];
      avg_rating: number;
      //  .....
@@ -46,6 +47,20 @@ export interface IProduct extends mongoose.Document {
      isRecommended: boolean;
      slugDetails: ISlugDetails;
 
+     // chitchat shipment fields
+
+     package_type?: chitChatShipment_package_type;
+     weight_unit?: chitChatShipment_weight_unit;
+     size_unit?: chitChatShipment_size_unit;
+     size_x?: number;
+     size_y?: number;
+     size_z?: number;
+     manufacturer_contact?: string;
+     manufacturer_street?: string;
+     manufacturer_city?: string;
+     manufacturer_postal_code?: string;
+     manufacturer_province_code?: string;
+
      calculateOfferPrice(): Promise<number | null>;
 }
 
@@ -56,7 +71,7 @@ export interface ICreateProductRequest {
      province?: string;
      description: string;
      basePrice: number;
-     weight?: number;
+     weight: number;
      tags: string[];
      categoryId: mongoose.Types.ObjectId;
      subcategoryId: mongoose.Types.ObjectId;

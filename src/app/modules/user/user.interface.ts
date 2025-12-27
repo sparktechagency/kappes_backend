@@ -48,6 +48,15 @@ export type IUser = {
      isSubscribed: boolean;
      fmcToken?: string;
      stripeCustomerId: string; // for subscription or paying as service taker
+
+     // chit chat
+
+     name?: string;
+     address_1?: string;
+     city?: string;
+     province_code?: string;
+     postal_code?: string;
+     country_code?: string;
 };
 
 export type UserModel = {

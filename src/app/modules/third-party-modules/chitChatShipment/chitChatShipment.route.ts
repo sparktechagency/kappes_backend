@@ -17,7 +17,7 @@ router.get(
 router.post(
      '/',
 
-     // validateRequest(chitChatShipmentValidation.createChitChatShipmentZodSchema),
+     validateRequest(chitChatShipmentValidation.createChitChatShipmentZodSchema),
      chitChatShipmentController.createShipment,
 );
 

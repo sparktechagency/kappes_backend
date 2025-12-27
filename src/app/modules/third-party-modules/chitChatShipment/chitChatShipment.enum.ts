@@ -1,20 +1,20 @@
 export enum chitChatShipment_package_type {
-     card = 'Postcard',
-     letter = 'Letter',
-     envelope = 'Flat Envelope',
-     thick_envelope = 'Thick Envelope',
-     parcel = 'Parcel',
-     flat_rate_envelope = 'USPS Letter Flat Rate Envelope',
-     flat_rate_legal_envelope = 'USPS Legal Flat Rate Envelope',
-     flat_rate_padded_envelope = 'USPS Padded Flat Rate Envelope',
-     flat_rate_gift_card_envelope = 'USPS Gift Card Flat Rate Envelope',
-     flat_rate_window_envelope = 'USPS Window Flat Rate Envelope',
-     flat_rate_cardboard_envelope = 'USPS Cardboard Flat Rate Envelope',
-     small_flat_rate_envelope = 'USPS Small Flat Rate Envelope',
-     small_flat_rate_box = 'USPS Small Flat Rate Box',
-     medium_flat_rate_box_1 = 'USPS Medium Flat Rate Box - 1',
-     medium_flat_rate_box_2 = 'USPS Medium Flat Rate Box - 2',
-     large_flat_rate_box = 'USPS Large Flat Rate Box',
+     card = 'card',
+     letter = 'letter',
+     envelope = 'envelope',
+     thick_envelope = 'thick_envelope',
+     parcel = 'parcel',
+     flat_rate_envelope = 'flat_rate_envelope',
+     flat_rate_legal_envelope = 'flat_rate_legal_envelope',
+     flat_rate_padded_envelope = 'flat_rate_padded_envelope',
+     flat_rate_gift_card_envelope = 'flat_rate_gift_card_envelope',
+     flat_rate_window_envelope = 'flat_rate_window_envelope',
+     flat_rate_cardboard_envelope = 'flat_rate_cardboard_envelope',
+     small_flat_rate_envelope = 'small_flat_rate_envelope',
+     small_flat_rate_box = 'small_flat_rate_box',
+     medium_flat_rate_box_1 = 'medium_flat_rate_box_1',
+     medium_flat_rate_box_2 = 'medium_flat_rate_box_2',
+     large_flat_rate_box = 'large_flat_rate_box',
 }
 
 export enum chitChatShipment_weight_unit {
@@ -79,6 +79,11 @@ export enum chitChatShipment_order_store {
      squarespace = 'squarespace',
      woocommerce = 'woocommerce',
      other = 'other',
+}
+
+export enum chitchat_cheapest_postage_type_requested {
+     yes = 'yes',
+     no = 'no',
 }
 
 export enum chitChatShipment_status {

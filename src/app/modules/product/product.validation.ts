@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { IProductSingleVariant, IProductSingleVariantByFieldName } from './product.interface';
 import { objectIdSchema } from '../user/user.validation';
 import { GRAPHICS_CARD_TYPE, NETWOR_TYPE, OS_TYPE, PROCESSOR_TYPE, RAM_OR_STORAGE_OR_GRAPHICS_CARD, RESOLUTION_TYPE, STORAGE_TYPE, VARIANT_OPTIONS } from '../variant/variant.enums';
+import { chitChatShipment_package_type, chitChatShipment_weight_unit } from '../third-party-modules/chitChatShipment/chitChatShipment.enum';
 
 const productVariantSchema = z.object({
      variantId: objectIdSchema,
@@ -31,7 +31,7 @@ export const productVariantByFieldNameSchema = z.object({
      material: z.string().optional(),
      size: z.string().optional(),
      fabric: z.string().optional(),
-     weight: z.number().positive().optional(),
+     weight: z.number().min(0, 'Weight must be non-negative').optional(),
      dimensions: z.string().optional(),
      capacity: z.string().optional(),
      options: z.enum(Object.values(VARIANT_OPTIONS) as [string, ...string[]]).optional(),
@@ -52,7 +52,19 @@ const createProductZodSchema = z.object({
           brandId: objectIdSchema,
           brandName: z.string().optional(),
           product_variant_Details: z.array(z.union([productVariantSchema, productVariantByFieldNameSchema])).min(1, 'At least one variant is required'),
-          weight: z.number().optional(),
+          weight: z.number().min(0, 'Weight must be non-negative'),
+
+          package_type: z.nativeEnum(chitChatShipment_package_type).optional(),
+          weight_unit: z.nativeEnum(chitChatShipment_weight_unit).optional(),
+          size_unit: z.string().optional(),
+          size_x: z.number().min(0).optional(),
+          size_y: z.number().min(0).optional(),
+          size_z: z.number().min(0).optional(),
+          manufacturer_contact: z.string().min(1).optional(),
+          manufacturer_street: z.string().min(1).optional(),
+          manufacturer_city: z.string().min(1).optional(),
+          manufacturer_postal_code: z.string().min(1).optional(),
+          manufacturer_province_code: z.string().min(1).optional(),
      }),
 });
 

@@ -7,6 +7,7 @@ import { Product } from '../product/product.model';
 import { DAY_FOR_DELIVERY_OPTIONS, DELIVERY_OPTIONS, EXTRA_DELIVERY_COST_PERCENT_FOR_DELIVERY_OPTIONS, ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS } from './order.enums';
 import { IOrder } from './order.interface';
 import { settingsService } from '../settings/settings.service';
+import { chitchat_cheapest_postage_type_requested } from '../third-party-modules/chitChatShipment/chitChatShipment.enum';
 
 const orderSchema = new Schema<IOrder>(
      {
@@ -106,6 +107,16 @@ const orderSchema = new Schema<IOrder>(
           isNeedRefund: {
                type: Boolean,
                default: false,
+          },
+
+          cheapest_postage_type_requested: {
+               type: String,
+               enum: Object.values(chitchat_cheapest_postage_type_requested),
+               default: chitchat_cheapest_postage_type_requested.yes,
+          },
+          ship_date: {
+               type: String,
+               default: null,
           },
      },
      {
@@ -211,10 +222,13 @@ orderSchema.pre('validate', async function (next) {
 orderSchema.pre('save', function (next) {
      if (this.deliveryOptions === DELIVERY_OPTIONS.EXPRESS) {
           this.deliveryDate = new Date(Date.now() + Number(DAY_FOR_DELIVERY_OPTIONS.EXPRESS) * 24 * 60 * 60 * 1000);
+          this.ship_date = this.deliveryDate.toISOString().split('T')[0];
      } else if (this.deliveryOptions === DELIVERY_OPTIONS.OVERNIGHT) {
           this.deliveryDate = new Date(Date.now() + Number(DAY_FOR_DELIVERY_OPTIONS.OVERNIGHT) * 24 * 60 * 60 * 1000);
+          this.ship_date = this.deliveryDate.toISOString().split('T')[0];
      } else {
           this.deliveryDate = new Date(Date.now() + Number(DAY_FOR_DELIVERY_OPTIONS.STANDARD) * 24 * 60 * 60 * 1000);
+          this.ship_date = this.deliveryDate.toISOString().split('T')[0];
      }
      next();
 });

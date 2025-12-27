@@ -32,6 +32,9 @@ export const createOrderSchema = z.object({
                     invalid_type_error: 'Invalid delivery options',
                })
                .optional(),
+
+          cheapest_postage_type_requested: z.boolean().optional(),
+          ship_date: z.string().optional(),
      }),
 });
 

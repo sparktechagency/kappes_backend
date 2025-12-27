@@ -2,6 +2,7 @@ import mongoose, { model, Schema, Model } from 'mongoose';
 import { IProduct, IProductSingleVariant } from './product.interface';
 import { IReview } from '../review/review.interface';
 import { Offered } from '../offered/offered.model';
+import { chitChatShipment_package_type, chitChatShipment_size_unit, chitChatShipment_weight_unit } from '../third-party-modules/chitChatShipment/chitChatShipment.enum';
 
 const productVariantSchema = new Schema<IProductSingleVariant>(
      {
@@ -77,6 +78,7 @@ const productSchema = new Schema<IProduct>(
           },
           weight: {
                type: Number,
+               required: true,
                min: 0,
           },
           tags: [
@@ -160,6 +162,46 @@ const productSchema = new Schema<IProduct>(
                type: Map,
                of: [String], // An array of strings for each dynamic field
                default: {},
+          },
+          package_type: {
+               type: String,
+               enum: Object.values(chitChatShipment_package_type),
+               default: chitChatShipment_package_type.parcel,
+          },
+          weight_unit: {
+               type: String,
+               enum: Object.values(chitChatShipment_weight_unit),
+               default: chitChatShipment_weight_unit.gram,
+          },
+          size_unit: {
+               type: String,
+               enum: Object.values(chitChatShipment_size_unit),
+               default: chitChatShipment_size_unit.centimeter,
+          },
+          size_x: {
+               type: Number,
+          },
+          size_y: {
+               type: Number,
+          },
+          size_z: {
+               type: Number,
+          },
+
+          manufacturer_contact: {
+               type: String,
+          },
+          manufacturer_street: {
+               type: String,
+          },
+          manufacturer_city: {
+               type: String,
+          },
+          manufacturer_postal_code: {
+               type: String,
+          },
+          manufacturer_province_code: {
+               type: String,
           },
      },
      {

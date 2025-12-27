@@ -160,6 +160,14 @@ const userSchema = new Schema<IUser, UserModel>(
           fmcToken: {
                type: String,
           },
+
+          // chitchat
+          name: { type: String },
+          address_1: { type: String },
+          city: { type: String },
+          province_code: { type: String },
+          postal_code: { type: String },
+          country_code: { type: String },
      },
      { timestamps: true },
 );
@@ -214,6 +222,10 @@ userSchema.pre('save', async function (next) {
      // Only hash the password if it's set (i.e., not null or empty)
      if (this.password && this.isModified('password')) {
           this.password = await bcrypt.hash(this.password, Number(config.bcrypt_salt_rounds));
+     }
+
+     if (this.full_name) {
+          this.name = this.full_name;
      }
      next();
 });
