@@ -65,6 +65,8 @@ const createProductZodSchema = z.object({
           manufacturer_city: z.string().min(1).optional(),
           manufacturer_postal_code: z.string().min(1).optional(),
           manufacturer_province_code: z.string().min(1).optional(),
+          hs_tariff_code: z.string().optional(),
+          origin_country: z.string().optional(),
      }),
 });
 

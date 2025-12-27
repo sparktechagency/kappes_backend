@@ -2,6 +2,8 @@ import express from 'express';
 import { chitChatShipmentController } from './chitChatShipment.controller';
 import { chitChatShipmentValidation } from './chitChatShipment.validation';
 import validateRequest from '../../../middleware/validateRequest';
+import auth from '../../../middleware/auth';
+import { USER_ROLES } from '../../user/user.enums';
 
 const router = express.Router();
 
@@ -20,7 +22,7 @@ router.post(
      validateRequest(chitChatShipmentValidation.createChitChatShipmentZodSchema),
      chitChatShipmentController.createShipment,
 );
-
+router.post('/cart/shipment', validateRequest(chitChatShipmentValidation.createChitChatShipmentByCartZodSchema), auth(USER_ROLES.USER), chitChatShipmentController.createShipmentFromCart);
 router.post(
      '/buy/:shipmentId',
 

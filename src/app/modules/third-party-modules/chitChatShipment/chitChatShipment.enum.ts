@@ -42,6 +42,7 @@ export enum chitChatShipment_package_contents {
 export enum chitChatShipment_value_currency {
      usd = 'usd',
      cad = 'cad',
+     CAD = 'CAD',
 }
 export enum chitChatShipment_postage_type {
      unknown = 'unknown',
@@ -98,4 +99,46 @@ export enum chitChatShipment_status {
      delivered = 'delivered', // Shipment resolved as delivered.
      exception = 'exception', // Shipment resolved as exception meaning that there may have been a problem delivering the shipment.
      voided = 'voided', // Shipment resolved as voided because a postage refund was requested.
+}
+
+// src/app/modules/third-party-modules/chitChatShipment/chitChatShipment.interface.ts
+
+export interface ILineItem {
+     quantity: number;
+     description: string;
+     value_amount: string;
+     currency_code: string;
+     hs_tariff_code: string;
+     origin_country: string;
+     weight: number;
+     weight_unit: string;
+     manufacturer_contact: string;
+     manufacturer_street: string;
+     manufacturer_city: string;
+     manufacturer_postal_code: string;
+     manufacturer_province_code: string;
+     size_x: number;
+     size_y: number;
+     size_z: number;
+     // manufacturer_country_code?: string;
+}
+
+export interface IchitchatsCreateShipment {
+     name: string;
+     address_1: string;
+     city: string;
+     province_code: string;
+     postal_code: string;
+     country_code: string;
+     phone: string;
+     package_type: string;
+     weight_unit: string;
+     weight: number;
+     size_unit: string;
+     size_x: number;
+     size_y: number;
+     size_z: number;
+     cheapest_postage_type_requested: string;
+     ship_date: string;
+     line_items: ILineItem[];
 }

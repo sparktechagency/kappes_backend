@@ -1,6 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import stripe from '../app/config/stripe.config';
 import AppError from '../errors/AppError';
+import { chitChatShipment_value_currency } from '../app/modules/third-party-modules/chitChatShipment/chitChatShipment.enum';
 
 export const createSubscriptionPackage = async (payload: any) => {
      // Create Product in Stripe
@@ -39,7 +40,7 @@ export const createSubscriptionPackage = async (payload: any) => {
      const price = await stripe.prices.create({
           product: subscription.id,
           unit_amount: Number(payload.price) * 100, // in cents
-          currency: 'cad', // or your chosen currency
+          currency: chitChatShipment_value_currency.cad, // or your chosen currency
           recurring: { interval, interval_count: intervalCount },
      });
 
@@ -53,7 +54,7 @@ export const createSubscriptionPackage = async (payload: any) => {
 export const createPaymentIntent = async (payload: any) => {
      const paymentIntent = await stripe.paymentIntents.create({
           amount: payload.amount * 100,
-          currency: 'cad',
+          currency: chitChatShipment_value_currency.cad,
           automatic_payment_methods: {
                enabled: true,
           },

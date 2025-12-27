@@ -203,6 +203,13 @@ const productSchema = new Schema<IProduct>(
           manufacturer_province_code: {
                type: String,
           },
+
+          hs_tariff_code: {
+               type: String,
+          },
+          origin_country: {
+               type: String,
+          },
      },
      {
           timestamps: true,

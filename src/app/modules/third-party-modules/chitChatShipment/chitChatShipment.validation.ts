@@ -222,6 +222,24 @@ const getChitChatShipmentTrackingZodSchema = z.object({
      }),
 });
 
+const createChitChatShipmentByCartZodSchema = z.object({
+     body: z
+          .object({
+               ship_date: z.string(),
+          })
+          .superRefine((data, ctx) => {
+               if (data.ship_date) {
+                    const date = new Date(data.ship_date);
+                    if (date.toISOString().split('T')[0] !== data.ship_date || date < new Date()) {
+                         ctx.addIssue({
+                              code: z.ZodIssueCode.custom,
+                              message: 'Ship date must be today or a date in the future in the format of YYYY-MM-DD',
+                         });
+                    }
+               }
+          }),
+});
+
 export const chitChatShipmentValidation = {
      createChitChatShipmentZodSchema,
      getAllChitChatShipmentsZodSchema,
@@ -233,4 +251,5 @@ export const chitChatShipmentValidation = {
      printChitChatShipmentZodSchema,
      getChitChatShipmentLabelZodSchema,
      getChitChatShipmentTrackingZodSchema,
+     createChitChatShipmentByCartZodSchema,
 };

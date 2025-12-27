@@ -19,6 +19,7 @@ import { ORDER_STATUS } from '../order/order.enums';
 import { Coupon } from '../coupon/coupon.model';
 import Settings from '../settings/settings.model';
 import config from '../../../config';
+import { chitChatShipment_value_currency } from '../third-party-modules/chitChatShipment/chitChatShipment.enum';
 
 const createShop = async (payload: IShop, user: IJwtPayload, host: string, protocol: string) => {
      const { name, email } = payload;
@@ -920,7 +921,7 @@ const toggleAdvertiseShop = async (shopId: string, data: { advertisedExpiresAt: 
                line_items: [
                     {
                          price_data: {
-                              currency: 'cad',
+                              currency: chitChatShipment_value_currency.cad,
                               product_data: {
                                    name: 'Amount',
                                    description: `order from ${thisCustomer?.full_name || 'seller'}`,

@@ -3,6 +3,8 @@ import { Request, Response } from 'express';
 import catchAsync from '../../../../shared/catchAsync';
 import sendResponse from '../../../../shared/sendResponse';
 import { chitChatShipmentService } from './chitChatShipment.service';
+import { IJwtPayload } from '../../auth/auth.interface';
+import { StatusCodes } from 'http-status-codes';
 
 // Create a new shipment
 const createShipment = catchAsync(async (req: Request, res: Response) => {
@@ -146,6 +148,19 @@ const getShipmentTracking = catchAsync(async (req: Request, res: Response) => {
      });
 });
 
+// Create a new shipment from user's cart
+const createShipmentFromCart = catchAsync(async (req: Request, res: Response) => {
+     const userId = (req.user as IJwtPayload)?.id;
+     const result = await chitChatShipmentService.createShipmentFromCart(userId, req.body);
+
+     sendResponse(res, {
+          statusCode: StatusCodes.CREATED,
+          success: true,
+          message: 'Shipment created successfully from cart',
+          data: result,
+     });
+});
+
 export const chitChatShipmentController = {
      createShipment,
      listShipments,
@@ -158,4 +173,5 @@ export const chitChatShipmentController = {
      printShipment,
      getShipmentLabel,
      getShipmentTracking,
+     createShipmentFromCart,
 };

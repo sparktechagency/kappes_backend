@@ -24,6 +24,7 @@ import { transferToVendor } from './order.utils';
 import { ActivitiesRecordHistory } from '../activitiesRecordHistory/activitiesRecordHistory.model';
 import { ActivitiesRecordHistoryCategoryEnum, HistoryOfModuleEnum } from '../activitiesRecordHistory/activitiesRecordHistory.enums';
 import { activitiesRecordHistoryService } from '../activitiesRecordHistory/activitiesRecordHistory.service';
+import { chitChatShipment_value_currency } from '../third-party-modules/chitChatShipment/chitChatShipment.enum';
 
 const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
      try {
@@ -188,7 +189,7 @@ const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
                     line_items: [
                          {
                               price_data: {
-                                   currency: 'cad',
+                                   currency: chitChatShipment_value_currency.cad,
                                    product_data: {
                                         name: 'Amount',
                                         description: `order from ${thisCustomer?.full_name || 'seller'}`,

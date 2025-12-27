@@ -1,3 +1,4 @@
+import { chitChatShipment_value_currency } from '../app/modules/third-party-modules/chitChatShipment/chitChatShipment.enum';
 import { IContact, ICreateAccount, IHelpContact, IResetPassword, IResetPasswordByEmail } from '../types/emailTamplate';
 
 const createAccount = (values: ICreateAccount) => {
@@ -239,7 +240,7 @@ const orderInvoice = (values: { name: string; email: string; order: any }) => {
      const formatPrice = (price: number) => {
           return new Intl.NumberFormat('en-US', {
                style: 'currency',
-               currency: 'CAD',
+               currency: chitChatShipment_value_currency.CAD,
           }).format(price);
      };
 

@@ -14,7 +14,19 @@ import {
      IShipmentFilters,
 } from './chitChatShipment.interface';
 import AppError from '../../../../errors/AppError';
-import { chitChatShipment_postage_type } from './chitChatShipment.enum';
+import {
+     chitchat_cheapest_postage_type_requested,
+     chitChatShipment_postage_type,
+     chitChatShipment_size_unit,
+     chitChatShipment_value_currency,
+     chitChatShipment_weight_unit,
+     IchitchatsCreateShipment,
+     ILineItem,
+} from './chitChatShipment.enum';
+import { getCart } from '../../cart/cart.service';
+import { User } from '../../user/user.model';
+import { IProduct } from '../../product/product.interface';
+import { IVariant } from '../../variant/variant.interfaces';
 
 const API_BASE_URL = 'https://chitchats.com/api/v1';
 const CLIENT_ID = config.chitchat.client_id;
@@ -123,7 +135,7 @@ const cancelShipment = async (shipmentId: string): Promise<ICancelShipmentRespon
      try {
           const response = await axios.post(`${API_BASE_URL}/clients/${CLIENT_ID}/shipments/${shipmentId}/cancel`, {}, { headers: getAuthHeaders() });
           return response.data;
-     } catch (error) {
+     } catch (error: any) {
           throw new AppError(StatusCodes.BAD_REQUEST, error?.response?.data?.error?.message);
      }
 };
@@ -133,7 +145,7 @@ const refundShipment = async (shipmentId: string): Promise<ICancelShipmentRespon
      try {
           const response = await axios.post(`${API_BASE_URL}/clients/${CLIENT_ID}/shipments/${shipmentId}/refund`, {}, { headers: getAuthHeaders() });
           return response.data;
-     } catch (error) {
+     } catch (error: any) {
           throw new AppError(StatusCodes.BAD_REQUEST, error?.response?.data?.error?.message);
      }
 };
@@ -166,9 +178,108 @@ const getShipmentTracking = async (shipmentId: string): Promise<ITrackingRespons
      try {
           const response = await axios.get(`${API_BASE_URL}/clients/${CLIENT_ID}/shipments/${shipmentId}`, { headers: getAuthHeaders() });
           return response.data?.shipment?.tracking_url;
-     } catch (error) {
+     } catch (error: any) {
           throw new AppError(StatusCodes.BAD_REQUEST, error?.response?.data?.error?.message);
      }
+};
+
+export const createShipmentFromCart = async (userId: string | any, payload: { ship_date: string }): Promise<any> => {
+     // Get user's cart
+     const cart = await getCart(userId.toString());
+
+     if (!cart || cart.items.length === 0) {
+          throw new AppError(StatusCodes.BAD_REQUEST, 'Cart is empty');
+     }
+
+     // Transform cart items to shipment items
+     const shipmentItems: ILineItem[] = cart.items.map((item) => {
+          if (!item.productId || !item.variantId) {
+               throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid cart item');
+          }
+
+          const product = item.productId as IProduct;
+          const variant = item.variantId as IVariant;
+
+          return {
+               description: product.name.toString(),
+               quantity: Number(item.variantQuantity),
+               weight: Number(variant.weight) || 0.1,
+               weight_unit: product.weight_unit?.toString() || chitChatShipment_weight_unit.gram,
+               value_amount: variant.price?.toString() || '0',
+               currency_code: chitChatShipment_value_currency.usd,
+               hs_tariff_code: product.hs_tariff_code?.toString() || '',
+               origin_country: product.origin_country?.toString() || 'CA',
+               manufacturer_contact: product.manufacturer_contact?.toString() || '',
+               manufacturer_street: product.manufacturer_street?.toString() || '',
+               manufacturer_city: product.manufacturer_city?.toString() || '',
+               manufacturer_postal_code: product.manufacturer_postal_code?.toString() || '',
+               manufacturer_province_code: product.manufacturer_province_code?.toString() || '',
+               size_x: Number(product.size_x) || 0,
+               size_y: Number(product.size_y) || 0,
+               size_z: Number(product.size_z) || 0,
+          };
+     });
+
+     // Get user details
+     const user = await User.findById(userId).select('name email phone address_1 address_2 city province_code postal_code country_code').lean();
+     if (!user) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'User not found');
+     }
+
+     const weight_unit = shipmentItems.reduce((acc, item) => {
+          if (acc && item.weight_unit !== acc) {
+               throw new AppError(StatusCodes.BAD_REQUEST, 'Shipment items have different weight units');
+          }
+          return item.weight_unit;
+     }, '');
+
+     const size_x = shipmentItems.reduce((acc, item) => {
+          if (acc && item.size_x !== acc) {
+               throw new AppError(StatusCodes.BAD_REQUEST, 'Shipment items have different size_x values');
+          }
+          return item.size_x;
+     }, 0);
+
+     const size_y = shipmentItems.reduce((acc, item) => {
+          if (acc && item.size_y !== acc) {
+               throw new AppError(StatusCodes.BAD_REQUEST, 'Shipment items have different size_y values');
+          }
+          return item.size_y;
+     }, 0);
+
+     const size_z = shipmentItems.reduce((acc, item) => {
+          if (acc && item.size_z !== acc) {
+               throw new AppError(StatusCodes.BAD_REQUEST, 'Shipment items have different size_z values');
+          }
+          return item.size_z;
+     }, 0);
+
+     const weight = shipmentItems.reduce((acc, item) => acc + item.weight, 0);
+
+     // Prepare shipment payload
+     const shipmentPayload: IchitchatsCreateShipment = {
+          name: user.name?.toString() || 'Customer',
+          address_1: user.address_1?.toString() || '',
+          city: user.city?.toString() || '',
+          province_code: user.province_code?.toString() || '',
+          postal_code: user.postal_code?.toString() || '',
+          country_code: user.country_code?.toString() || 'CA',
+          phone: user.phone?.toString() || '',
+          line_items: shipmentItems,
+          package_type: 'parcel',
+          weight,
+          weight_unit,
+          size_x,
+          size_y,
+          size_z,
+          size_unit: chitChatShipment_size_unit.centimeter, // from product
+          cheapest_postage_type_requested: chitchat_cheapest_postage_type_requested.yes, // from frontend
+          ship_date: payload.ship_date, // need to be from frontend
+     };
+
+     // Create shipment
+     const shipment = await createShipment(shipmentPayload);
+     return shipment;
 };
 
 export const chitChatShipmentService = {
@@ -183,4 +294,5 @@ export const chitChatShipmentService = {
      printShipment,
      getShipmentLabel,
      getShipmentTracking,
+     createShipmentFromCart,
 };

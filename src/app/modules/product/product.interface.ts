@@ -60,6 +60,8 @@ export interface IProduct extends mongoose.Document {
      manufacturer_city?: string;
      manufacturer_postal_code?: string;
      manufacturer_province_code?: string;
+     hs_tariff_code?: string;
+     origin_country?: string;
 
      calculateOfferPrice(): Promise<number | null>;
 }
