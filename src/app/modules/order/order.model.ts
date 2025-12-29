@@ -4,10 +4,11 @@ import AppError from '../../../errors/AppError';
 import { COUPON_DISCOUNT_TYPE } from '../coupon/coupon.enums';
 import { Coupon } from '../coupon/coupon.model';
 import { Product } from '../product/product.model';
-import { DAY_FOR_DELIVERY_OPTIONS, DELIVERY_OPTIONS, EXTRA_DELIVERY_COST_PERCENT_FOR_DELIVERY_OPTIONS, ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS } from './order.enums';
+import { DAY_FOR_DELIVERY_OPTIONS, DELIVERY_OPTIONS, DeliveryPlatformEnum, EXTRA_DELIVERY_COST_PERCENT_FOR_DELIVERY_OPTIONS, ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS } from './order.enums';
 import { IOrder } from './order.interface';
 import { settingsService } from '../settings/settings.service';
-import { chitchat_cheapest_postage_type_requested } from '../third-party-modules/chitChatShipment/chitChatShipment.enum';
+import { chitchat_cheapest_postage_type_requested, chitChatShipment_postage_type } from '../third-party-modules/chitChatShipment/chitChatShipment.enum';
+import { chitChatShipmentService } from '../third-party-modules/chitChatShipment/chitChatShipment.service';
 
 const orderSchema = new Schema<IOrder>(
      {
@@ -118,6 +119,19 @@ const orderSchema = new Schema<IOrder>(
                type: String,
                default: null,
           },
+          chitchats_shipping_id: {
+               type: String,
+               default: null,
+          },
+          chitchats_postage_type: {
+               type: String,
+               enum: Object.values(chitChatShipment_postage_type),
+          },
+
+          deliveryPlatForm: {
+               type: String,
+               enum: Object.values(DeliveryPlatformEnum),
+          },
      },
      {
           timestamps: true,
@@ -126,7 +140,7 @@ const orderSchema = new Schema<IOrder>(
 
 // Pre-save hook to calculate total, discount, delivery charge, and final price
 orderSchema.pre('validate', async function (next) {
-     const order = this;
+     const order: IOrder = this as IOrder;
 
      // Step 1: Initialize total amount
      let totalAmount = 0;
@@ -178,41 +192,55 @@ orderSchema.pre('validate', async function (next) {
           }
      }
 
-     // Step 3: Calculate delivery charge based on shipping address and delivery options
-     const shippingAdressLowerCased = order?.shippingAddress?.toLowerCase();
-     const shippingDetails = await settingsService.getShippingDetails();
-     let deliveryCharge = shippingDetails.worldWideShipping.cost;
-     if (shippingDetails.freeShipping.area.some((area: string) => shippingAdressLowerCased?.includes(area))) {
-          deliveryCharge = shippingDetails.freeShipping.cost;
-     } else if (shippingDetails.centralShipping.area.some((area: string) => shippingAdressLowerCased?.includes(area))) {
-          deliveryCharge = shippingDetails.centralShipping.cost;
-     } else if (shippingDetails.countryShipping.area.some((area: string) => shippingAdressLowerCased?.includes(area))) {
-          deliveryCharge = shippingDetails.countryShipping.cost;
-     }
-     if (!deliveryCharge) {
-          throw new AppError(StatusCodes.BAD_REQUEST, `Delivery charge not found for ${shippingAdressLowerCased}`);
-     }
-     // let deliveryCharge = SHIPPING_COST.WORLD_WIDE;
-     // if (FREE_SHIPPING_CHARGE_AREA.some((area) => shippingAdressLowerCased?.includes(area))) {
-     //      deliveryCharge = SHIPPING_COST.FREE;
-     // } else if (CENTRAL_SHIPPING_AREA.some((area) => shippingAdressLowerCased?.includes(area))) {
-     //      deliveryCharge = SHIPPING_COST.CENTRAL;
-     // } else if (COUNTRY_SHIPPING_AREA.some((area) => shippingAdressLowerCased?.includes(area))) {
-     //      deliveryCharge = SHIPPING_COST.COUNTRY;
+     // // Step 3: Calculate delivery charge based on shipping address and delivery options
+     // const shippingAdressLowerCased = order?.shippingAddress?.toLowerCase();
+     // const shippingDetails = await settingsService.getShippingDetails();
+
+     // let deliveryCharge = shippingDetails.worldWideShipping.cost;
+     // if (shippingDetails.freeShipping.area.some((area: string) => shippingAdressLowerCased?.includes(area))) {
+     //      deliveryCharge = shippingDetails.freeShipping.cost;
+     // } else if (shippingDetails.centralShipping.area.some((area: string) => shippingAdressLowerCased?.includes(area))) {
+     //      deliveryCharge = shippingDetails.centralShipping.cost;
+     // } else if (shippingDetails.countryShipping.area.some((area: string) => shippingAdressLowerCased?.includes(area))) {
+     //      deliveryCharge = shippingDetails.countryShipping.cost;
      // }
-     // Additional delivery cost based on delivery options
-     if (order.deliveryOptions === DELIVERY_OPTIONS.EXPRESS) {
-          deliveryCharge += (deliveryCharge * EXTRA_DELIVERY_COST_PERCENT_FOR_DELIVERY_OPTIONS.EXPRESS) / 100;
-     } else if (order.deliveryOptions === DELIVERY_OPTIONS.OVERNIGHT) {
-          deliveryCharge += (deliveryCharge * EXTRA_DELIVERY_COST_PERCENT_FOR_DELIVERY_OPTIONS.OVERNIGHT) / 100;
-     } else {
-          deliveryCharge += (deliveryCharge * EXTRA_DELIVERY_COST_PERCENT_FOR_DELIVERY_OPTIONS.STANDARD) / 100;
+     // if (!deliveryCharge) {
+     //      throw new AppError(StatusCodes.BAD_REQUEST, `Delivery charge not found for ${shippingAdressLowerCased}`);
+     // }
+
+     // // Additional delivery cost based on delivery options
+     // if (order.deliveryOptions === DELIVERY_OPTIONS.EXPRESS) {
+     //      deliveryCharge += (deliveryCharge * EXTRA_DELIVERY_COST_PERCENT_FOR_DELIVERY_OPTIONS.EXPRESS) / 100;
+     // } else if (order.deliveryOptions === DELIVERY_OPTIONS.OVERNIGHT) {
+     //      deliveryCharge += (deliveryCharge * EXTRA_DELIVERY_COST_PERCENT_FOR_DELIVERY_OPTIONS.OVERNIGHT) / 100;
+     // } else {
+     //      deliveryCharge += (deliveryCharge * EXTRA_DELIVERY_COST_PERCENT_FOR_DELIVERY_OPTIONS.STANDARD) / 100;
+     // }
+
+     // get delivery charge from chitchat shipment
+     let deliveryCharge = 0;
+     if (order.deliveryPlatForm == DeliveryPlatformEnum.CHITCHAT) {
+          if (order.chitchats_postage_type) {
+               await chitChatShipmentService.buyShipment(order.chitchats_shipping_id!, {
+                    postage_type: order.chitchats_postage_type!,
+               });
+               const shipmentDetails = await chitChatShipmentService.getShipment(order.chitchats_shipping_id!);
+               const chitChatsDeliveryCharge = shipmentDetails?.shipment?.rates.find((rate: any) => {
+                    if (rate.postage_type === order.chitchats_postage_type) {
+                         return rate.payment_amount;
+                    }
+               });
+               deliveryCharge = Number(chitChatsDeliveryCharge);
+          } else {
+               throw new AppError(StatusCodes.BAD_REQUEST, 'Chitchat postage type is required for Chitchat delivery platform');
+          }
+     } else if (order.deliveryPlatForm == DeliveryPlatformEnum.SHIPSTATION) {
+          throw new AppError(StatusCodes.BAD_REQUEST, 'shipstation is not implemented yet');
      }
 
      order.totalAmount = totalAmount;
      order.discount = finalDiscount;
-     order.deliveryCharge = deliveryCharge;
-     order.finalAmount = totalAmount - finalDiscount + deliveryCharge;
+     order.finalAmount = totalAmount - finalDiscount + deliveryCharge!;
      //@ts-ignore
      order.shop = shopId;
      next();

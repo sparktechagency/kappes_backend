@@ -60,6 +60,8 @@ export const shopSchema = new Schema<IShop>(
           isAdvertised: { type: Boolean, default: false },
           advertisedAt: { type: Date, default: null },
           advertisedExpiresAt: { type: Date, default: null },
+          chitchats_client_id: { type: String },
+          chitchats_access_token: { type: String },
      },
      { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );

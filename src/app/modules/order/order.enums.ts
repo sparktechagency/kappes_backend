@@ -5,6 +5,12 @@ export enum ORDER_STATUS {
      CANCELLED = 'Cancelled',
 }
 
+export enum DeliveryPlatformEnum {
+     CHITCHAT = 'ChitChat',
+     SHIPSTATION = 'Shipstation',
+     OTHER = 'Other',
+}
+
 export enum DELIVERY_OPTIONS {
      STANDARD = 'Standard', // 5 days delivery
      EXPRESS = 'Express', // 2 days delivery

@@ -1,6 +1,6 @@
 import { Document, Types } from 'mongoose';
-import { DELIVERY_OPTIONS, ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS } from './order.enums';
-import { chitchat_cheapest_postage_type_requested } from '../third-party-modules/chitChatShipment/chitChatShipment.enum';
+import { DELIVERY_OPTIONS, DeliveryPlatformEnum, ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS } from './order.enums';
+import { chitchat_cheapest_postage_type_requested, chitChatShipment_postage_type } from '../third-party-modules/chitChatShipment/chitChatShipment.enum';
 
 export interface IOrderProduct {
      product: Types.ObjectId;
@@ -31,4 +31,7 @@ export interface IOrder extends Document {
      isNeedRefund: boolean;
      cheapest_postage_type_requested?: chitchat_cheapest_postage_type_requested;
      ship_date?: string; //yyyy-mm-dd format
+     chitchats_shipping_id?: string;
+     chitchats_postage_type?: chitChatShipment_postage_type;
+     deliveryPlatForm?: DeliveryPlatformEnum;
 }

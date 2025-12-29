@@ -13,6 +13,7 @@ import {
 const createChitChatShipmentZodSchema = z.object({
      body: z
           .object({
+               shopId: z.string(),
                name: z.string({ required_error: 'Name is required' }),
                address_1: z.string({ required_error: 'Address 1 is required' }),
                address_2: z.string().optional(),
@@ -112,6 +113,7 @@ const createChitChatShipmentZodSchema = z.object({
 
 const getAllChitChatShipmentsZodSchema = z.object({
      query: z.object({
+          shopId: z.string(),
           page: z.string().optional(),
           limit: z.string().optional(),
           batch_id: z.string().optional(),
@@ -121,12 +123,18 @@ const getAllChitChatShipmentsZodSchema = z.object({
           q: z.string().optional(), // searchTerm
           status: z.nativeEnum(chitChatShipment_status).optional(),
      }),
+     body: z.object({
+          shopId: z.string(),
+     }),
 });
 
 // Schema for getting a single shipment
 const getChitChatShipmentZodSchema = z.object({
      params: z.object({
           shipmentId: z.string({ required_error: 'Shipment ID is required' }),
+     }),
+     body: z.object({
+          shopId: z.string(),
      }),
 });
 
@@ -136,6 +144,7 @@ const updateChitChatShipmentZodSchema = z.object({
           shipmentId: z.string({ required_error: 'Shipment ID is required' }),
      }),
      body: z.object({
+          shopId: z.string(),
           name: z.string().optional(),
           address_1: z.string().optional(),
           address_2: z.string().optional(),
@@ -182,6 +191,9 @@ const deleteChitChatShipmentZodSchema = z.object({
      params: z.object({
           shipmentId: z.string({ required_error: 'Shipment ID is required' }),
      }),
+     body: z.object({
+          shopId: z.string(),
+     }),
 });
 
 // Schema for buying a shipment
@@ -190,6 +202,7 @@ const buyChitChatShipmentZodSchema = z.object({
           shipmentId: z.string({ required_error: 'Shipment ID is required' }),
      }),
      body: z.object({
+          shopId: z.string(),
           postage_type: z.nativeEnum(chitChatShipment_postage_type),
      }),
 });
@@ -199,12 +212,18 @@ const cancelChitChatShipmentZodSchema = z.object({
      params: z.object({
           shipmentId: z.string({ required_error: 'Shipment ID is required' }),
      }),
+     body: z.object({
+          shopId: z.string(),
+     }),
 });
 
 // Schema for printing a shipment
 const printChitChatShipmentZodSchema = z.object({
      params: z.object({
           shipmentId: z.string({ required_error: 'Shipment ID is required' }),
+     }),
+     body: z.object({
+          shopId: z.string(),
      }),
 });
 
@@ -213,12 +232,18 @@ const getChitChatShipmentLabelZodSchema = z.object({
      params: z.object({
           shipmentId: z.string({ required_error: 'Shipment ID is required' }),
      }),
+     body: z.object({
+          shopId: z.string(),
+     }),
 });
 
 // Schema for getting shipment tracking
 const getChitChatShipmentTrackingZodSchema = z.object({
      params: z.object({
           shipmentId: z.string({ required_error: 'Shipment ID is required' }),
+     }),
+     body: z.object({
+          shopId: z.string(),
      }),
 });
 

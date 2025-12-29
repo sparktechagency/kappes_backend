@@ -46,6 +46,8 @@ const updateUserZodSchema = z.object({
           province_code: z.string().optional(),
           postal_code: z.string().optional(),
           country_code: z.string().optional(),
+          chitchats_client_id: z.string().optional(),
+          chitchats_access_token: z.string().optional(),
      }),
 });
 

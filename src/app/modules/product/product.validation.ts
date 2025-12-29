@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { objectIdSchema } from '../user/user.validation';
 import { GRAPHICS_CARD_TYPE, NETWOR_TYPE, OS_TYPE, PROCESSOR_TYPE, RAM_OR_STORAGE_OR_GRAPHICS_CARD, RESOLUTION_TYPE, STORAGE_TYPE, VARIANT_OPTIONS } from '../variant/variant.enums';
 import { chitChatShipment_package_type, chitChatShipment_weight_unit } from '../third-party-modules/chitChatShipment/chitChatShipment.enum';
+import { DeliveryPlatformEnum } from '../order/order.enums';
 
 const productVariantSchema = z.object({
      variantId: objectIdSchema,
@@ -40,34 +41,65 @@ export const productVariantByFieldNameSchema = z.object({
 });
 
 const createProductZodSchema = z.object({
-     body: z.object({
-          name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name must not exceed 100 characters'),
-          description: z.string().min(10, 'Description must be at least 10 characters'),
-          basePrice: z.number().min(0, 'Price must be non-negative'),
-          images: z.array(z.string()).min(1, 'At least one image is required').optional(),
-          tags: z.array(z.string()).min(1, 'At least one tag is required'),
-          categoryId: objectIdSchema,
-          subcategoryId: objectIdSchema,
-          shopId: objectIdSchema,
-          brandId: objectIdSchema,
-          brandName: z.string().optional(),
-          product_variant_Details: z.array(z.union([productVariantSchema, productVariantByFieldNameSchema])).min(1, 'At least one variant is required'),
-          weight: z.number().min(0, 'Weight must be non-negative'),
-
-          package_type: z.nativeEnum(chitChatShipment_package_type).optional(),
-          weight_unit: z.nativeEnum(chitChatShipment_weight_unit).optional(),
-          size_unit: z.string().optional(),
-          size_x: z.number().min(0).optional(),
-          size_y: z.number().min(0).optional(),
-          size_z: z.number().min(0).optional(),
-          manufacturer_contact: z.string().min(1).optional(),
-          manufacturer_street: z.string().min(1).optional(),
-          manufacturer_city: z.string().min(1).optional(),
-          manufacturer_postal_code: z.string().min(1).optional(),
-          manufacturer_province_code: z.string().min(1).optional(),
-          hs_tariff_code: z.string().optional(),
-          origin_country: z.string().optional(),
-     }),
+     body: z
+          .object({
+               name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name must not exceed 100 characters'),
+               description: z.string().min(10, 'Description must be at least 10 characters'),
+               basePrice: z.number().min(0, 'Price must be non-negative'),
+               images: z.array(z.string()).min(1, 'At least one image is required').optional(),
+               tags: z.array(z.string()).min(1, 'At least one tag is required'),
+               categoryId: objectIdSchema,
+               subcategoryId: objectIdSchema,
+               shopId: objectIdSchema,
+               brandId: objectIdSchema,
+               brandName: z.string().optional(),
+               product_variant_Details: z.array(z.union([productVariantSchema, productVariantByFieldNameSchema])).min(1, 'At least one variant is required'),
+               deliveryPlatForm: z.nativeEnum(DeliveryPlatformEnum),
+               weight: z.number().min(0, 'Weight must be non-negative'),
+               package_type: z.nativeEnum(chitChatShipment_package_type).optional(),
+               weight_unit: z.nativeEnum(chitChatShipment_weight_unit).optional(),
+               size_unit: z.string().optional(),
+               size_x: z.number().min(0).optional(),
+               size_y: z.number().min(0).optional(),
+               size_z: z.number().min(0).optional(),
+               manufacturer_contact: z.string().min(1).optional(),
+               manufacturer_street: z.string().min(1).optional(),
+               manufacturer_city: z.string().min(1).optional(),
+               manufacturer_postal_code: z.string().min(1).optional(),
+               manufacturer_province_code: z.string().min(1).optional(),
+               hs_tariff_code: z.string().optional(),
+               origin_country: z.string().optional(),
+          })
+          .superRefine((data, ctx) => {
+               if (data.weight_unit && data.weight_unit !== chitChatShipment_weight_unit.gram) {
+                    ctx.addIssue({
+                         code: z.ZodIssueCode.custom,
+                         message: 'weight_unit must be gram (g) for shipping calculation',
+                    });
+               }
+               if (data.deliveryPlatForm && data.deliveryPlatForm == DeliveryPlatformEnum.CHITCHAT) {
+                    if (
+                         !data.weight ||
+                         !data.weight_unit ||
+                         !data.package_type ||
+                         !data.size_x ||
+                         !data.size_y ||
+                         !data.size_z ||
+                         !data.manufacturer_contact ||
+                         !data.manufacturer_street ||
+                         !data.manufacturer_city ||
+                         !data.manufacturer_postal_code ||
+                         !data.manufacturer_province_code ||
+                         !data.hs_tariff_code ||
+                         !data.origin_country
+                    ) {
+                         ctx.addIssue({
+                              code: z.ZodIssueCode.custom,
+                              message: 'For CHITCHAT delivery, all manufacturer details, dimensions, and customs information are required',
+                         });
+                    }
+               }
+          }),
 });
 
 const updateProductZodSchema = createProductZodSchema.deepPartial();
