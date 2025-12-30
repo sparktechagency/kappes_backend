@@ -10,6 +10,7 @@
           "lint:fix": "eslint src/**/*.ts --fix",
           "format": "prettier . --write",
           "seed:admin": "ts-node src/seed/seedAdmin.ts",
+          "seed:settings": "ts-node src/seed/seedSettings.ts",
           "seed:variant": "ts-node src/seed/seedVariantFields.ts",
           "build": "tsc",
           "stripe": "stripe listen --forward-to=http://172.31.19.162:7001/api/v1/stripe/webhook",
