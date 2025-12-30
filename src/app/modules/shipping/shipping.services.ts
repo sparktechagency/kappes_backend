@@ -1,16 +1,16 @@
 import { IJwtPayload } from "../auth/auth.interface";
 import { Buffer } from 'buffer';
 import { ShippingKeys } from "./shipping.model";
-import { CarrierCode, ChitChatsPackageType, ChitChatsShippingOption, ChitChatsShippingPayload, ChitChatsShippingResponse, ChitChatsSizeUnit, ChitChatsWeightUnit, PackageCode, ShippingOption, ShipStationOrderPayload, ShipStationOrderResponse, WeightUnit } from "./shipping.types";
+import { CarrierCode, ChitChatsPackageType, ChitChatsShippingOption, ChitChatsShippingPayload, ChitChatsShippingResponse, ChitChatsSizeUnit, ChitChatsWeightUnit, PackageCode, ShippingOption, ShipStationOrderPayload, ShipStationOrderResponse, ShipStationOrderStatus, WeightUnit } from "./shipping.types";
 import AppError from "../../../errors/AppError";
-import { deleteChitChatsShipment, getCarrierName, getChitChatsServiceName, handleAxiosError, validateChitChatsPayload } from "./shipping.utils";
+import { deleteChitChatsShipment, getCarrierName, getChitChatsServiceName, getShipStationAuth, handleAxiosError, validateChitChatsPayload } from "./shipping.utils";
 import axios, { AxiosError, AxiosResponse } from "axios";
+
 const getListOrders = async (query: any) => { console.log(query); };
 const createOrder = async (payload: any, user: IJwtPayload) => { console.log(payload, user); };
 const createLabelForOrder = async (payload: any, user: IJwtPayload) => { console.log(payload, user); };
 const getCarriers = async (query: any) => { console.log(query); };
 const getListServices = async (query: any) => { console.log(query); };
-
 
 
 const getShipStationOrderCost = async (
@@ -358,6 +358,182 @@ const getChitChatsShippingCost = async (
     }
 };
 
+const createShipStationOrder = async (user: any, order: any) => {
+
+    // 1️⃣ Fetch ShipStation credentials
+    const shipKeys = await ShippingKeys.findOne({
+        user: user.id,
+        type: "ship-station",
+    });
+
+    if (!shipKeys) {
+        throw new AppError(404, "No ShipStation keys found for this shop owner");
+    }
+
+    const { shipstation_api_key, shipstation_api_secret } = shipKeys;
+
+    if (!shipstation_api_key || !shipstation_api_secret) {
+        throw new AppError(400, "ShipStation API credentials missing");
+    }
+
+    // 2️⃣ Auth header
+    const auth = getShipStationAuth(
+        shipstation_api_key,
+        shipstation_api_secret
+    );
+
+    // 3️⃣ Calculate total weight
+    const totalWeight = order.products.reduce(
+        (sum: number, p: any) => sum + (p.weight * p.quantity),
+        0
+    );
+
+    // 4️⃣ Format address (VERY IMPORTANT)
+    const formatAddress = (addr: any) => ({
+        name: addr.name || user.name,
+        street1: addr.addressLine1,
+        street2: addr.addressLine2 || "",
+        city: addr.city,
+        state: addr.state,
+        postalCode: addr.postalCode,
+        country: addr.country || "BD",
+        phone: addr.phone || user.phone,
+    });
+
+    // 5️⃣ Create ShipStation Order
+    const orderRes = await axios.post(
+        "https://ssapi.shipstation.com/orders/createorder",
+        {
+            orderNumber: order._id.toString(),
+            orderDate: new Date(),
+            orderStatus: "awaiting_shipment",
+
+            billTo: formatAddress(order.shippingAddress),
+            shipTo: formatAddress(order.shippingAddress),
+
+            items: order.products.map((item: any) => ({
+                name: item.name,
+                quantity: item.quantity,
+                unitPrice: item.unitPrice,
+                weight: {
+                    value: item.weight,
+                    units: "kilograms",
+                },
+            })),
+
+            amountPaid: order.totalAmount,
+        },
+        {
+            headers: {
+                Authorization: auth,
+                "Content-Type": "application/json",
+            },
+        }
+    );
+
+    const shipStationOrderId = orderRes.data.orderId;
+
+    // 6️⃣ Create Shipping Label
+    const labelRes = await axios.post(
+        "https://ssapi.shipstation.com/shipments/createlabel",
+        {
+            orderId: shipStationOrderId,
+            carrierCode: order.carrierCode || "fedex",
+            serviceCode: order.serviceCode || "fedex_ground",
+            packageCode: "package",
+            shipDate: new Date(),
+
+            weight: {
+                value: totalWeight,
+                units: "kilograms",
+            },
+        },
+        {
+            headers: {
+                Authorization: auth,
+                "Content-Type": "application/json",
+            },
+        }
+    );
+
+    // 7️⃣ Return ONLY what you need
+    return {
+        shipStationOrderId,
+        shipmentId: labelRes.data.shipmentId,
+        trackingNumber: labelRes.data.trackingNumber,
+        labelUrl: labelRes.data.labelDownload?.href,
+        carrierCode: labelRes.data.carrierCode,
+        serviceCode: labelRes.data.serviceCode,
+    };
+}
+
+const getShipStationOrderStatus = async (
+    userId: string,
+    shipStationOrderId: number
+): Promise<ShipStationOrderStatus> => {
+
+    // 1️⃣ Get ShipStation credentials
+    const shipKeys = await ShippingKeys.findOne({
+        user: userId,
+        type: "ship-station",
+    });
+
+    if (!shipKeys) {
+        throw new AppError(404, "ShipStation credentials not found");
+    }
+
+    const { shipstation_api_key, shipstation_api_secret } = shipKeys;
+
+    if (!shipstation_api_key || !shipstation_api_secret) {
+        throw new AppError(404, 'ShipStation API credentials not configured');
+    }
+
+    const auth = getShipStationAuth(
+        shipstation_api_key,
+        shipstation_api_secret
+    );
+
+    // 2️⃣ Fetch order info
+    const orderRes = await axios.get(
+        "https://ssapi.shipstation.com/orders/getorder",
+        {
+            params: { orderId: shipStationOrderId },
+            headers: {
+                Authorization: auth,
+            },
+        }
+    );
+
+    const order = orderRes.data;
+
+    // 3️⃣ Fetch shipment info (if exists)
+    let shipmentStatus = undefined;
+    let trackingNumber = undefined;
+    let carrierCode = undefined;
+    let serviceCode = undefined;
+
+    if (order.shipments?.length > 0) {
+        const shipment = order.shipments[0];
+
+        shipmentStatus = shipment.shipmentStatus;
+        trackingNumber = shipment.trackingNumber;
+        carrierCode = shipment.carrierCode;
+        serviceCode = shipment.serviceCode;
+    }
+
+    // 4️⃣ Normalize & return
+    return {
+        orderId: order.orderId,
+        orderStatus: order.orderStatus,
+        shipmentStatus,
+        trackingNumber,
+        carrierCode,
+        serviceCode,
+    };
+};
+
+// const refandOrderPaymentToCustomer = async (orderId: string) => {  console.log(orderId); };
+
 export const ShippingService = {
     getListOrders,
     createOrder,
@@ -365,5 +541,7 @@ export const ShippingService = {
     getCarriers,
     getListServices,
     getShipStationOrderCost,
-    getChitChatsShippingCost
+    getChitChatsShippingCost,
+    createShipStationOrder,
+    getShipStationOrderStatus
 }

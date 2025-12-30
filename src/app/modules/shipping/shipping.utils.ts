@@ -2,7 +2,7 @@
 
 import axios, { AxiosError } from "axios";
 import { ChitChatsShippingPayload } from "./shipping.types";
-
+import { Buffer } from 'buffer';
 /**
  * Get human-readable service names for Chit Chats postage types
  */
@@ -139,3 +139,11 @@ export const handleAxiosError = (error: AxiosError): string => {
         return error.message || 'Failed to make request to Chit Chats API';
     }
 };
+
+export function getShipStationAuth(apiKey: string, apiSecret: string) {
+  const token = Buffer
+    .from(`${apiKey}:${apiSecret}`)
+    .toString('base64');
+
+  return `Basic ${token}`;
+}

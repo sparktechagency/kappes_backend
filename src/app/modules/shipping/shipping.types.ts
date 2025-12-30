@@ -190,3 +190,11 @@ export interface ChitChatsErrorResponse {
     message?: string;
 }
 
+export interface ShipStationOrderStatus {
+  orderId: number;
+  orderStatus: string;
+  trackingNumber?: string;
+  carrierCode?: string;
+  serviceCode?: string;
+  shipmentStatus?: string;
+}

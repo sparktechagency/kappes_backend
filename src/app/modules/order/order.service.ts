@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { StatusCodes } from 'http-status-codes';
 import mongoose, { Types } from 'mongoose';
 import config from '../../../config';
@@ -204,7 +205,7 @@ const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
                     metadata: {
                          products: JSON.stringify(orderData.products), // only array are allowed TO PASS as metadata
                          coupon: orderData.coupon?.toString(),
-                         shippingAddress: orderData.shippingAddress,
+                         shippingAddress: JSON.stringify(orderData.shippingAddress),
                          paymentMethod: orderData.paymentMethod,
                          user: user.id,
                          shop: orderData.shop,

@@ -1,7 +1,8 @@
+/* eslint-disable no-async-promise-executor */
 import PDFDocument from 'pdfkit';
 import axios from 'axios';
 import { IOrder } from '../app/modules/order/order.interface';
-
+import { Buffer } from 'buffer';
 /**
  * Generates a PDF invoice for an order.
  * @param {IOrder} order - The order object to generate the invoice for.
@@ -17,7 +18,7 @@ export const generateOrderInvoicePDF = async (order: IOrder): Promise<Buffer> =>
 
             const doc = new PDFDocument({ margin: 50 });
             const buffers: Buffer[] = [];
-            //@ts-ignore
+   
             doc.on('data', (chunk) => buffers.push(chunk));
             doc.on('end', () => resolve(Buffer.concat(buffers)));
             doc.on('error', (err: Error) => reject(err));
@@ -41,9 +42,9 @@ export const generateOrderInvoicePDF = async (order: IOrder): Promise<Buffer> =>
             doc.fontSize(11).fillColor('#000000').text(`Invoice ID: ${order._id}`);
             doc.text(`Order Date: ${(order.createdAt as Date).toLocaleDateString()}`);
             doc.moveDown(0.5);
-            //@ts-ignore
+
             doc.text(`Customer Id: ${order.user}`);
-            doc.text(`Shipping Address: ${order.shippingAddress}`);
+            doc.text(`Shipping Address: ${order.shippingAddress.addressLine1}, ${order.shippingAddress.city}, ${order.shippingAddress.state}, ${order.shippingAddress.postalCode}`);
             doc.moveDown(1);
 
             // Payment Details with graphical design
@@ -71,10 +72,10 @@ export const generateOrderInvoicePDF = async (order: IOrder): Promise<Buffer> =>
 
             // Order Products (Normal text, not bold)
             order.products.forEach((item) => {
-                //@ts-ignore
+
                 const productName = String(item.product) || 'Unknown Product';
                 const quantity = item.quantity;
-                //@ts-ignore
+
                 const price = item.unitPrice * quantity || 0;
 
                 doc.fontSize(11).fillColor('#000000').text(productName, 50, currentY, { width: 130, align: 'left' });

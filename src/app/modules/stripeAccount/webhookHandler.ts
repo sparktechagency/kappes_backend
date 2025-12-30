@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response } from 'express';
 import Stripe from 'stripe';
 import stripe from '../../config/stripe.config';
@@ -11,10 +12,10 @@ import { StatusCodes } from 'http-status-codes';
 import { Order } from '../order/order.model';
 import { PAYMENT_STATUS } from '../order/order.enums';
 import { Payment } from '../payment/payment.model';
-import { paymentService } from '../payment/payment.service';
+// import { paymentService } from '../payment/payment.service';
 import { Wallet } from '../wallet/wallet.model';
 import { TransferType } from './stripeAccount.interface';
-import { CategoryService } from '../category/category.service';
+// import { CategoryService } from '../category/category.service';
 import { clearCart } from '../cart/cart.service';
 import mongoose from 'mongoose';
 import { Shop } from '../shop/shop.model';
@@ -114,7 +115,7 @@ const handlePaymentSucceeded = async (session: Stripe.Checkout.Session) => {
           const newOrder = await Order.create({
                products: productsParsed,
                coupon,
-               shippingAddress,
+               shippingAddress: JSON.parse(shippingAddress),
                paymentMethod,
                paymentStatus: PAYMENT_STATUS.PAID,
                shop,

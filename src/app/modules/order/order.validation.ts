@@ -12,7 +12,31 @@ const orderProductSchema = z.object({
      }),
      quantity: z.number().int().positive('Quantity must be a positive number'),
 });
+const shippingAddressSchema = z.object({
+  name: z.string().optional(),
 
+  addressLine1: z.string({
+    required_error: "Address line 1 is required",
+  }),
+
+  addressLine2: z.string().optional(),
+
+  city: z.string({
+    required_error: "City is required",
+  }),
+
+  state: z.string({
+    required_error: "State is required",
+  }),
+
+  postalCode: z.string({
+    required_error: "Postal code is required",
+  }),
+
+  country: z.string().default("BD"),
+
+  phone: z.string().optional(),
+});
 // Validation schema for creating an order
 export const createOrderSchema = z.object({
      body: z.object({
@@ -21,7 +45,7 @@ export const createOrderSchema = z.object({
           }),
           products: z.array(orderProductSchema).min(1, 'At least one product is required'),
           coupon: z.string().optional().nullable(),
-          shippingAddress: z.string(),
+          shippingAddress: shippingAddressSchema,
           paymentMethod: z.nativeEnum(PAYMENT_METHOD, {
                required_error: 'Payment method is required',
                invalid_type_error: 'Invalid payment method',

@@ -41,6 +41,10 @@ const orderSchema = new Schema<IOrder>(
                          type: Number,
                          required: true,
                     },
+                    weight: {
+                         type: Number,
+                         min: 0,
+                    },
                },
           ],
           deliveryOptions: {
@@ -81,9 +85,16 @@ const orderSchema = new Schema<IOrder>(
                default: ORDER_STATUS.PENDING,
           },
           shippingAddress: {
-               type: String,
-               required: true,
+               name: {type: String,trim: true},
+               addressLine1: {type: String,required: true,trim: true},
+               addressLine2: {type: String,trim: true},
+               city: {type: String,required: true,trim: true},
+               state: {type: String,required: true,trim: true},
+               postalCode: {type: String,required: true,trim: true},
+               country: {type: String,default: "BD",trim: true},
+               phone: {type: String,trim: true},
           },
+          
           paymentMethod: {
                type: String,
                enum: PAYMENT_METHOD,
@@ -137,7 +148,6 @@ orderSchema.pre('validate', async function (next) {
           if (shopId && String(shopId) !== String(product.shopId._id)) {
                return next(new Error('Products must be from the same shop.'));
           }
-
           //@ts-ignore
           shopId = product.shopId._id;
 

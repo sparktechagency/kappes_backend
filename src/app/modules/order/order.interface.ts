@@ -8,7 +8,23 @@ export interface IOrderProduct {
      unitPrice: number;
 }
 
+export interface IShippingAddress {
+     toLowerCase: any;
+     name?: string;
+
+     addressLine1: string;
+     addressLine2?: string;
+
+     city: string;
+     state: string;
+     postalCode: string;
+
+     country?: string;
+     phone?: string;
+}
+
 export interface IOrder extends Document {
+     _id: Types.ObjectId;
      user: Types.ObjectId;
      shop: Types.ObjectId;
      products: IOrderProduct[];
@@ -21,7 +37,7 @@ export interface IOrder extends Document {
      finalAmount: number;
      isPaymentTransferdToVendor: boolean;
      status: ORDER_STATUS;
-     shippingAddress: string;
+     shippingAddress: IShippingAddress;
      paymentMethod: PAYMENT_METHOD;
      paymentStatus: PAYMENT_STATUS;
      createdAt?: Date;
