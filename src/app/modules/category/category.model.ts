@@ -5,6 +5,7 @@ const categorySchema = new Schema<ICategory>(
      {
           name: { type: String, required: true, unique: true },
           thumbnail: { type: String, required: true },
+          image: { type: [String], required: false },
           createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
           subCategory: {
                type: [Schema.Types.ObjectId],

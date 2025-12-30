@@ -7,6 +7,7 @@ import auth from '../../middleware/auth';
 import fileUploadHandler from '../../middleware/fileUploadHandler';
 import parseFileData from '../../middleware/parseFileData';
 import { FOLDER_NAMES } from '../../../enums/files';
+import parseMultipleFilesdata from '../../middleware/parseMultipleFilesdata';
 const router = express.Router();
 
 router.post(
@@ -14,13 +15,20 @@ router.post(
      auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN),
      fileUploadHandler(),
      parseFileData(FOLDER_NAMES.THUMBNAIL),
+     parseMultipleFilesdata(FOLDER_NAMES.IMAGE),
      validateRequest(CategoryValidation.createCategoryZodSchema),
      CategoryController.createCategory,
 );
 router.get('/single/:id', auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.USER, USER_ROLES.SHOP_ADMIN, USER_ROLES.VENDOR), CategoryController.getSingleCategory);
 router
      .route('/:id')
-     .patch(auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN), fileUploadHandler(), parseFileData(FOLDER_NAMES.THUMBNAIL), CategoryController.updateCategory);
+     .patch(
+          auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.ADMIN, USER_ROLES.VENDOR, USER_ROLES.SHOP_ADMIN),
+          fileUploadHandler(),
+          parseFileData(FOLDER_NAMES.THUMBNAIL),
+          parseMultipleFilesdata(FOLDER_NAMES.IMAGE),
+          CategoryController.updateCategory,
+     );
 router
      .route('/:id')
      .put(

@@ -8,6 +8,7 @@ export interface ISubCategory {
 export interface ICategory {
      name: string;
      thumbnail: string;
+     image?: string[];
      subCategory: ISubCategory[] | [];
      description: string;
      status: string;
