@@ -60,6 +60,88 @@ const createUserToDB = async (payload: IUser): Promise<IUser> => {
      return createUser;
 };
 
+// const createSellerUserToDB = async (payload: ISellerUser, host: string, protocol: string) => {
+//      const session = await mongoose.startSession();
+//      session.startTransaction();
+
+//      try {
+//           // Check if the email already exists
+//           const user = await User.isExistUserByEmail(payload.email);
+//           if (user) {
+//                throw new AppError(StatusCodes.CONFLICT, 'Email already exists');
+//           }
+
+//           // Set role and create the user
+//           payload.role = USER_ROLES.VENDOR;
+//           const createUser = await User.create([payload], { session }); // Pass session to ensure the operation is part of the transaction
+//           if (!createUser) {
+//                throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create user');
+//           }
+
+//           // Send email (keeping it outside transaction for now, email sending is outside DB scope)
+//           const otp = generateOTP(4);
+//           const values = {
+//                name: createUser[0].full_name,
+//                otp: otp,
+//                email: createUser[0].email!,
+//           };
+//           const createAccountTemplate = emailTemplate.createAccount(values);
+//           emailHelper.sendEmail(createAccountTemplate);
+
+//           // Save authentication data in DB
+//           const authentication = {
+//                oneTimeCode: otp,
+//                expireAt: new Date(Date.now() + Number(config.otp.otpExpiryTimeInMin) * 60000),
+//           };
+//           await User.findOneAndUpdate({ _id: createUser[0]._id }, { $set: { authentication } }, { session });
+
+//           // Create Stripe customer
+//           let stripeCustomer;
+//           try {
+//                stripeCustomer = await stripe.customers.create({
+//                     email: createUser[0].email,
+//                     name: createUser[0].full_name,
+//                });
+//           } catch (error) {
+//                console.log('🚀 ~ createSellerUserToDB ~ error:', error);
+//                throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to create Stripe customer');
+//           }
+
+//           createUser[0].stripeCustomerId = stripeCustomer.id;
+//           await User.findOneAndUpdate({ _id: createUser[0]._id }, { $set: { authentication, stripeCustomerId: stripeCustomer.id } }, { session });
+
+//           // Now create the shop
+//           const shop = await Shop.create(
+//                [
+//                     {
+//                          name: payload.store_name,
+//                          categories: [new mongoose.Types.ObjectId(payload.store_category)],
+//                          owner: createUser[0]._id,
+//                          email: createUser[0].email,
+//                          phone: createUser[0].phone,
+//                     },
+//                ],
+//                { session },
+//           );
+
+//           // Commit the transaction if all operations are successful
+//           await session.commitTransaction();
+//           session.endSession();
+
+//           const stripe_account_onboarding_url = await stripeAccountService.createConnectedStripeAccount(user, host, protocol);
+
+//           return { createUser: createUser[0], shop, stripe_account_onboarding_url };
+//      } catch (error) {
+//           console.log('🚀 ~ createSellerUserToDB ~ error:', error);
+//           // If any operation fails, abort the transaction
+//           await session.abortTransaction();
+//           session.endSession();
+//           throw error; // Rethrow the error to be handled outside
+//      }
+// };
+
+// create Businessman
+
 const createSellerUserToDB = async (payload: ISellerUser, host: string, protocol: string) => {
      const session = await mongoose.startSession();
      session.startTransaction();
@@ -134,13 +216,14 @@ const createSellerUserToDB = async (payload: ISellerUser, host: string, protocol
      } catch (error) {
           console.log('🚀 ~ createSellerUserToDB ~ error:', error);
           // If any operation fails, abort the transaction
-          await session.abortTransaction();
+          if (session.inTransaction()) {
+               await session.abortTransaction();
+          }
           session.endSession();
           throw error; // Rethrow the error to be handled outside
      }
 };
 
-// create Businessman
 const createVendorToDB = async (payload: IUser): Promise<IUser> => {
      //set role
      payload.role = USER_ROLES.VENDOR;
