@@ -353,7 +353,7 @@ const changeOrderStatus = async (orderId: string, status: string, user: IJwtPayl
                                              stripeConnectedAccount: (shop.owner as any).stripeConnectedAccount,
                                              finalAmount: order.finalAmount,
                                              revenue: shop.revenue,
-                                             orderId: order._id.toString(),
+                                             orderId: (order._id as any).toString(),
                                         });
                                         console.log('🚀 ~ changeBookingStatus ~ transfer:', transfer);
                                    } else {
@@ -361,7 +361,7 @@ const changeOrderStatus = async (orderId: string, status: string, user: IJwtPayl
                                    }
                               }
                          } else {
-                              const transactionId = generateTransactionId(order._id.toString());
+                              const transactionId = generateTransactionId((order._id as any).toString());
 
                               const payment = new Payment({
                                    user: user.id,
