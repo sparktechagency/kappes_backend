@@ -12,7 +12,7 @@
           "seed:admin": "ts-node src/seed/seedAdmin.ts",
           "seed:variant": "ts-node src/seed/seedVariantFields.ts",
           "build": "tsc",
-          "stripe": "stripe listen --forward-to=http://10.10.7.103:7001/api/v1/stripe/webhook",
+          "stripe": "stripe listen --forward-to=http://172.31.19.162:7001/api/v1/stripe/webhook",
           "dev:stripe": "concurrently \"ts-node-dev --respawn --transpile-only src/server.ts\" \"npm run stripe\""
      },
      "keywords": [],
