@@ -31,6 +31,8 @@ SettingsRouter.patch(
      validateRequest(settingsSchema.updateIsUnderMaintenanceSchema),
      settingsController.updateIsUnderMaintenance,
 );
+// get isUnderMainteneance
+SettingsRouter.get('/is-under-maintenance', settingsController.getIsUnderMaintenance);
 // patch privacy policy
 SettingsRouter.patch('/privacy-policy', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), settingsController.updatePrivacyPolicy);
 // patch terms of service

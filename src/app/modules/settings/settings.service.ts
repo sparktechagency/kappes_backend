@@ -307,6 +307,16 @@ const updateIsUnderMaintenance = async (payload: { status?: boolean; endAt?: str
      return { isUnderMaintenance: settings.isUnderMaintenance };
 };
 
+const getIsUnderMaintenance = async () => {
+     const settings = await Settings.findOne();
+
+     if (!settings) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
+     }
+
+     return { isUnderMaintenance: settings.isUnderMaintenance };
+};
+
 export const settingsService = {
      upsertSettings,
      getSettings,
@@ -332,4 +342,5 @@ export const settingsService = {
      getBannerLogo,
      addOrUpdateBannerLogo,
      updateIsUnderMaintenance,
+     getIsUnderMaintenance,
 };
