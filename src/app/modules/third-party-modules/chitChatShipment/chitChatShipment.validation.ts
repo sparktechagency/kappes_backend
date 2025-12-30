@@ -113,7 +113,6 @@ const createChitChatShipmentZodSchema = z.object({
 
 const getAllChitChatShipmentsZodSchema = z.object({
      query: z.object({
-          shopId: z.string(),
           page: z.string().optional(),
           limit: z.string().optional(),
           batch_id: z.string().optional(),

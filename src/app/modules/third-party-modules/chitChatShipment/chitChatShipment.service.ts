@@ -39,23 +39,6 @@ const API_BASE_URL = 'https://chitchats.com/api/v1';
 //      'Accept': 'application/json',
 // });
 
-// Add proper error handling and return types
-const handleApiError = (error: unknown, defaultMessage: string): never => {
-     if (axios.isAxiosError(error)) {
-          const axiosError = error as AxiosError;
-          if (axiosError.response) {
-               const status = axiosError.response.status;
-               const data = axiosError.response.data as { message?: string; errors?: any };
-
-               throw new AppError(status, data?.message || defaultMessage, data?.errors || undefined);
-          } else if (axiosError.request) {
-               throw new AppError(StatusCodes.REQUEST_TIMEOUT, 'No response received from ChitChats API');
-          }
-     }
-
-     throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, defaultMessage);
-};
-
 // Create a new shipment
 const createShipment = async (payload: any, shopId: string): Promise<any> => {
      const shop = await Shop.findById(shopId).select('chitchats_client_id chitchats_access_token');
@@ -63,15 +46,16 @@ const createShipment = async (payload: any, shopId: string): Promise<any> => {
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
      const getAuthHeaders = () => ({
-          'Authorization': `Bearer ${shop.chitchats_access_token}`,
+          'Authorization': shop.chitchats_access_token,
           'Content-Type': 'application/json',
           'Accept': 'application/json',
      });
+
      try {
           const response = await axios.post(`${API_BASE_URL}/clients/${shop.chitchats_client_id}/shipments`, payload, { headers: getAuthHeaders() });
           return response.data;
      } catch (error: any) {
-          return handleApiError(error, 'Failed to create shipment');
+          throw new AppError(StatusCodes.BAD_REQUEST, error?.response?.data?.error?.message);
      }
 };
 
@@ -85,7 +69,7 @@ const listShipments = async (filters?: IShipmentFilters, shopId?: string): Promi
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
      const getAuthHeaders = () => ({
-          'Authorization': `Bearer ${shop.chitchats_access_token}`,
+          'Authorization': shop.chitchats_access_token,
           'Content-Type': 'application/json',
           'Accept': 'application/json',
      });
@@ -95,8 +79,8 @@ const listShipments = async (filters?: IShipmentFilters, shopId?: string): Promi
                headers: getAuthHeaders(),
           });
           return response.data;
-     } catch (error) {
-          return handleApiError(error, 'Failed to fetch shipments');
+     } catch (error: any) {
+          throw new AppError(StatusCodes.BAD_REQUEST, error?.response?.data?.error?.message);
      }
 };
 
@@ -107,7 +91,7 @@ const getShipment = async (shipmentId: string, shopId?: string): Promise<any> =>
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
      const getAuthHeaders = () => ({
-          'Authorization': `Bearer ${shop.chitchats_access_token}`,
+          'Authorization': shop.chitchats_access_token,
           'Content-Type': 'application/json',
           'Accept': 'application/json',
      });
@@ -116,8 +100,8 @@ const getShipment = async (shipmentId: string, shopId?: string): Promise<any> =>
                headers: getAuthHeaders(),
           });
           return response.data;
-     } catch (error) {
-          return handleApiError(error, `Failed to fetch shipment ${shipmentId}`);
+     } catch (error: any) {
+          throw new AppError(StatusCodes.BAD_REQUEST, error?.response?.data?.error?.message);
      }
 };
 
@@ -128,15 +112,15 @@ const updateShipment = async (shipmentId: string, updates: IUpdateShipmentReques
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
      const getAuthHeaders = () => ({
-          'Authorization': `Bearer ${shop.chitchats_access_token}`,
+          'Authorization': shop.chitchats_access_token,
           'Content-Type': 'application/json',
           'Accept': 'application/json',
      });
      try {
           const response = await axios.patch(`${API_BASE_URL}/clients/${shop.chitchats_client_id}/shipments/${shipmentId}`, updates, { headers: getAuthHeaders() });
           return response.data;
-     } catch (error) {
-          return handleApiError(error, `Failed to update shipment ${shipmentId}`);
+     } catch (error: any) {
+          throw new AppError(StatusCodes.BAD_REQUEST, error?.response?.data?.error?.message);
      }
 };
 
@@ -147,15 +131,15 @@ const deleteShipment = async (shipmentId: string, shopId?: string): Promise<{ su
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
      const getAuthHeaders = () => ({
-          'Authorization': `Bearer ${shop.chitchats_access_token}`,
+          'Authorization': shop.chitchats_access_token,
           'Content-Type': 'application/json',
           'Accept': 'application/json',
      });
      try {
           await axios.delete(`${API_BASE_URL}/clients/${shop.chitchats_client_id}/shipments/${shipmentId}`, { headers: getAuthHeaders() });
           return { success: true };
-     } catch (error) {
-          return handleApiError(error, `Failed to delete shipment ${shipmentId}`);
+     } catch (error: any) {
+          throw new AppError(StatusCodes.BAD_REQUEST, error?.response?.data?.error?.message);
      }
 };
 
@@ -172,7 +156,7 @@ const buyShipment = async (
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
      const getAuthHeaders = () => ({
-          'Authorization': `Bearer ${shop.chitchats_access_token}`,
+          'Authorization': shop.chitchats_access_token,
           'Content-Type': 'application/json',
           'Accept': 'application/json',
      });
@@ -182,7 +166,7 @@ const buyShipment = async (
           });
           return response.data;
      } catch (error: any) {
-          throw new AppError(StatusCodes.BAD_REQUEST, error.response.data.error.message);
+          throw new AppError(StatusCodes.BAD_REQUEST, error?.response?.data?.error?.message);
      }
 };
 
@@ -193,7 +177,7 @@ const cancelShipment = async (shipmentId: string, shopId?: string): Promise<ICan
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
      const getAuthHeaders = () => ({
-          'Authorization': `Bearer ${shop.chitchats_access_token}`,
+          'Authorization': shop.chitchats_access_token,
           'Content-Type': 'application/json',
           'Accept': 'application/json',
      });
@@ -212,7 +196,7 @@ const refundShipment = async (shipmentId: string, shopId?: string): Promise<ICan
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
      const getAuthHeaders = () => ({
-          'Authorization': `Bearer ${shop.chitchats_access_token}`,
+          'Authorization': shop.chitchats_access_token,
           'Content-Type': 'application/json',
           'Accept': 'application/json',
      });
@@ -231,15 +215,15 @@ const printShipment = async (shipmentId: string, format: 'PDF' | 'PNG' | 'ZPL' =
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
      const getAuthHeaders = () => ({
-          'Authorization': `Bearer ${shop.chitchats_access_token}`,
+          'Authorization': shop.chitchats_access_token,
           'Content-Type': 'application/json',
           'Accept': 'application/json',
      });
      try {
           const response = await axios.post(`${API_BASE_URL}/clients/${shop.chitchats_client_id}/shipments/${shipmentId}/print`, { format }, { headers: getAuthHeaders() });
           return response.data;
-     } catch (error) {
-          return handleApiError(error, `Failed to print label for shipment ${shipmentId}`);
+     } catch (error: any) {
+          throw new AppError(StatusCodes.BAD_REQUEST, error?.response?.data?.error?.message);
      }
 };
 
@@ -250,7 +234,7 @@ const getShipmentLabel = async (shipmentId: string, format: string = 'PDF', shop
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
      const getAuthHeaders = () => ({
-          'Authorization': `Bearer ${shop.chitchats_access_token}`,
+          'Authorization': shop.chitchats_access_token,
           'Content-Type': 'application/json',
           'Accept': 'application/json',
      });
@@ -260,8 +244,8 @@ const getShipmentLabel = async (shipmentId: string, format: string = 'PDF', shop
                headers: getAuthHeaders(),
           });
           return response.data;
-     } catch (error) {
-          return handleApiError(error, `Failed to get label for shipment ${shipmentId}`);
+     } catch (error: any) {
+          throw new AppError(StatusCodes.BAD_REQUEST, error?.response?.data?.error?.message);
      }
 };
 
@@ -272,7 +256,7 @@ const getShipmentTracking = async (shipmentId: string, shopId?: string): Promise
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
      const getAuthHeaders = () => ({
-          'Authorization': `Bearer ${shop.chitchats_access_token}`,
+          'Authorization': shop.chitchats_access_token,
           'Content-Type': 'application/json',
           'Accept': 'application/json',
      });

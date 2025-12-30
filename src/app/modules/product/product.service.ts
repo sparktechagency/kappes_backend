@@ -26,6 +26,9 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
           if (!shop) {
                throw new AppError(StatusCodes.NOT_FOUND, 'Shop not found');
           }
+          if (!shop.chitchats_client_id || !shop.chitchats_access_token) {
+               throw new AppError(StatusCodes.NOT_FOUND, 'Shop not found');
+          }
 
           if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
                if (shop.owner.toString() !== user.id && !shop.admins?.some((admin) => admin.toString() === user.id)) {
