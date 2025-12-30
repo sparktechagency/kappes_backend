@@ -273,6 +273,39 @@ const addOrUpdateBannerLogo = async (payload: { banner?: string[]; logo?: string
           console.log('🚀 ~ addOrUpdateBannerLogo ~ error:', error);
      }
 };
+const updateIsUnderMaintenance = async (payload: { status?: boolean; endAt?: string | Date }) => {
+     const settings = await Settings.findOne();
+
+     if (!settings) {
+          throw new AppError(StatusCodes.NOT_FOUND, 'Settings not found');
+     }
+
+     // Validate and convert endAt to Date if provided
+     if (payload.endAt) {
+          const endAtDate = new Date(payload.endAt);
+          if (isNaN(endAtDate.getTime())) {
+               throw new AppError(StatusCodes.BAD_REQUEST, 'Invalid endAt date');
+          }
+          // endAtDate must be of future
+          if (endAtDate.getTime() < Date.now()) {
+               throw new AppError(StatusCodes.BAD_REQUEST, 'endAt date must be of future');
+          }
+          payload.endAt = endAtDate;
+     }
+
+     // Update the settings
+     if (typeof payload.status !== 'undefined') {
+          settings.isUnderMaintenance.status = payload.status;
+     }
+
+     if (payload.endAt) {
+          settings.isUnderMaintenance.endAt = payload.endAt as Date;
+     }
+
+     await settings.save();
+
+     return { isUnderMaintenance: settings.isUnderMaintenance };
+};
 
 export const settingsService = {
      upsertSettings,
@@ -298,4 +331,5 @@ export const settingsService = {
      sendMessageToSettings,
      getBannerLogo,
      addOrUpdateBannerLogo,
+     updateIsUnderMaintenance,
 };

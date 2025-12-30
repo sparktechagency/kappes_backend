@@ -230,6 +230,17 @@ const getBannerLogo = catchAsync(async (req, res) => {
      });
 });
 
+const updateIsUnderMaintenance = catchAsync(async (req, res) => {
+     const result = await settingsService.updateIsUnderMaintenance(req.body);
+
+     sendResponse(res, {
+          success: true,
+          statusCode: StatusCodes.OK,
+          message: 'Is Under Maintenance updated successfully',
+          data: result,
+     });
+});
+
 export const settingsController = {
      getSettings,
      getPrivacyPolicy,
@@ -253,4 +264,5 @@ export const settingsController = {
      sendMessageToSettings,
      addOrUpdateBannerLogo,
      getBannerLogo,
+     updateIsUnderMaintenance,
 };

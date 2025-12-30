@@ -24,7 +24,13 @@ SettingsRouter.get('/message', auth(USER_ROLES.USER, USER_ROLES.ADMIN, USER_ROLE
 
 // send message to business
 SettingsRouter.post('/message', validateRequest(settingsSchema.createMessageZodSchema), settingsController.sendMessageToSettings);
-
+// patch isUnderMaintenance
+SettingsRouter.patch(
+     '/is-under-maintenance',
+     auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN),
+     validateRequest(settingsSchema.updateIsUnderMaintenanceSchema),
+     settingsController.updateIsUnderMaintenance,
+);
 // patch privacy policy
 SettingsRouter.patch('/privacy-policy', auth(USER_ROLES.ADMIN, USER_ROLES.SUPER_ADMIN), settingsController.updatePrivacyPolicy);
 // patch terms of service

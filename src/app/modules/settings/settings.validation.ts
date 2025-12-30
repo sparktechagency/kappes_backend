@@ -46,10 +46,18 @@ const createOrUpdateBannerSchema = z.object({
      logo: z.string({ required_error: 'Logo is required' }).optional(),
 });
 
+const updateIsUnderMaintenanceSchema = z.object({
+     body: z.object({
+          isUnderMaintenance: z.boolean().optional(),
+          endAt: z.string().optional(),
+     }),
+});
+
 export const settingsSchema = {
      updateSocialsShcema,
      updateContactShcema,
      updateShippingDetailsSchema,
      createMessageZodSchema,
      createOrUpdateBannerSchema,
+     updateIsUnderMaintenanceSchema,
 };

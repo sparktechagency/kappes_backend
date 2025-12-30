@@ -16,6 +16,10 @@ const settingsSchema = new Schema<ISettings>(
           banner: { type: [String], required: false },
           logo: { type: String, required: false },
           perDayAdvertiseMentCost: { type: Number, required: false },
+          isUnderMaintenance: {
+               status: { type: Boolean, required: false },
+               endAt: { type: Date, required: false },
+          },
           aboutUs: {
                type: String,
                default: '',

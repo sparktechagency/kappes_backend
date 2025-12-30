@@ -15,6 +15,10 @@ export interface ISettings extends Document {
      perDayAdvertiseMentCost: number;
      contact: ISingleContact[];
      banner: string[];
+     isUnderMaintenance: {
+          status?: boolean;
+          endAt?: Date;
+     };
      logo: string;
      socials: {
           whatsapp?: string;
