@@ -72,6 +72,12 @@ const updateCategoryToDB = async (id: string, payload: ICategory, user: IJwtPayl
           unlinkFile(isExistCategory?.thumbnail);
      }
 
+     if (payload.image && isExistCategory?.image) {
+          isExistCategory.image.forEach((img: string) => {
+               unlinkFile(img);
+          });
+     }
+
      const updateCategory = await Category.findByIdAndUpdate(id, payload, {
           new: true,
      });
