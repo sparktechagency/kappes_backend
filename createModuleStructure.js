@@ -3,7 +3,7 @@ import path from 'path';
 
 // Function to create the module structure
 function createModuleStructure(moduleName) {
-     const modulePath = path.join(path.dirname("__dirname"), 'src', 'app', 'modules', moduleName);
+     const modulePath = path.join(path.dirname('__dirname'), 'src', 'app', 'modules', moduleName);
 
      // Check if the module already exists
      if (fs.existsSync(modulePath)) {
@@ -341,4 +341,4 @@ function capitalize(str) {
 }
 
 // Example usage: Create a new module called 'sliderImage'
-createModuleStructure('activitiesRecordHistory');
+createModuleStructure('Province');
