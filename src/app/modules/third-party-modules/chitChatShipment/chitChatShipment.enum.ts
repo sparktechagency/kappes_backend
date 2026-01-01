@@ -1,20 +1,20 @@
 export enum chitChatShipment_package_type {
-     card = 'Postcard',
-     letter = 'Letter',
-     envelope = 'Flat Envelope',
-     thick_envelope = 'Thick Envelope',
-     parcel = 'Parcel',
-     flat_rate_envelope = 'USPS Letter Flat Rate Envelope',
-     flat_rate_legal_envelope = 'USPS Legal Flat Rate Envelope',
-     flat_rate_padded_envelope = 'USPS Padded Flat Rate Envelope',
-     flat_rate_gift_card_envelope = 'USPS Gift Card Flat Rate Envelope',
-     flat_rate_window_envelope = 'USPS Window Flat Rate Envelope',
-     flat_rate_cardboard_envelope = 'USPS Cardboard Flat Rate Envelope',
-     small_flat_rate_envelope = 'USPS Small Flat Rate Envelope',
-     small_flat_rate_box = 'USPS Small Flat Rate Box',
-     medium_flat_rate_box_1 = 'USPS Medium Flat Rate Box - 1',
-     medium_flat_rate_box_2 = 'USPS Medium Flat Rate Box - 2',
-     large_flat_rate_box = 'USPS Large Flat Rate Box',
+     card = 'card',
+     letter = 'letter',
+     envelope = 'envelope',
+     thick_envelope = 'thick_envelope',
+     parcel = 'parcel',
+     flat_rate_envelope = 'flat_rate_envelope',
+     flat_rate_legal_envelope = 'flat_rate_legal_envelope',
+     flat_rate_padded_envelope = 'flat_rate_padded_envelope',
+     flat_rate_gift_card_envelope = 'flat_rate_gift_card_envelope',
+     flat_rate_window_envelope = 'flat_rate_window_envelope',
+     flat_rate_cardboard_envelope = 'flat_rate_cardboard_envelope',
+     small_flat_rate_envelope = 'small_flat_rate_envelope',
+     small_flat_rate_box = 'small_flat_rate_box',
+     medium_flat_rate_box_1 = 'medium_flat_rate_box_1',
+     medium_flat_rate_box_2 = 'medium_flat_rate_box_2',
+     large_flat_rate_box = 'large_flat_rate_box',
 }
 
 export enum chitChatShipment_weight_unit {
@@ -42,30 +42,31 @@ export enum chitChatShipment_package_contents {
 export enum chitChatShipment_value_currency {
      usd = 'usd',
      cad = 'cad',
+     CAD = 'CAD',
 }
 export enum chitChatShipment_postage_type {
      unknown = 'unknown',
      // unknown = 'Use when you wish to view rates before buying postage',
-     chit_chats_us_edge = 'Chit Chats U.S. Edge',
-     chit_chats_us_select = 'Chit Chats U.S. Select',
-     chit_chats_us_slim = 'Chit Chats U.S. Slim',
-     canada_post_tracked_packet_usa = 'Canada Post Tracked Packet™ – USA',
-     canada_post_expedited_parcel_usa = 'Canada Post Expedited Parcel™ – USA',
-     usps_express = 'USPS Priority Mail Express®',
-     usps_first = 'USPS First-Class Mail®',
-     usps_ground_advantage = 'USPS Ground Advantage®',
-     usps_library_mail = 'USPS Library Mail',
-     usps_media_mail = 'USPS Media Mail®',
-     usps_priority = 'USPS Priority Mail®',
-     usps_other = 'USPS Other Mail Class',
-     chit_chats_canada_tracked = 'Chit Chats Canada Tracked',
-     chit_chats_select = 'Chit Chats Select',
-     chit_chats_slim = 'Chit Chats Slim',
-     chit_chats_international_tracked = 'Chit Chats International Tracked',
-     usps_express_mail_international = 'USPS Priority Mail Express International®',
-     usps_first_class_mail_international = 'USPS First-Class Mail International',
-     usps_first_class_package_international_service = 'USPS First-Class Package International Service®',
-     usps_priority_mail_international = 'USPS Priority Mail International®',
+     chit_chats_us_edge = 'chit_chats_us_edge',
+     chit_chats_us_select = 'chit_chats_us_select',
+     chit_chats_us_slim = 'chit_chats_us_slim',
+     canada_post_tracked_packet_usa = 'canada_post_tracked_packet_usa',
+     canada_post_expedited_parcel_usa = 'canada_post_expedited_parcel_usa',
+     usps_express = 'usps_express',
+     usps_first = 'usps_first',
+     usps_ground_advantage = 'usps_ground_advantage',
+     usps_library_mail = 'usps_library_mail',
+     usps_media_mail = 'usps_media_mail',
+     usps_priority = 'usps_priority',
+     usps_other = 'usps_other',
+     chit_chats_canada_tracked = 'chit_chats_canada_tracked',
+     chit_chats_select = 'chit_chats_select',
+     chit_chats_slim = 'chit_chats_slim',
+     chit_chats_international_tracked = 'chit_chats_international_tracked',
+     usps_express_mail_international = 'usps_express_mail_international',
+     usps_first_class_mail_international = 'usps_first_class_mail_international',
+     usps_first_class_package_international_service = 'usps_first_class_package_international_service',
+     usps_priority_mail_international = 'usps_priority_mail_international',
 }
 
 export enum chitChatShipment_order_store {
@@ -81,6 +82,11 @@ export enum chitChatShipment_order_store {
      other = 'other',
 }
 
+export enum chitchat_cheapest_postage_type_requested {
+     yes = 'yes',
+     no = 'no',
+}
+
 export enum chitChatShipment_status {
      canceled = 'canceled', // Shipment has been canceled to prevent delivery and will either be held at a branch or returned to the client.
      pending = 'pending', // Shipment is in the process of being created by the client. Shipments in this state cannot be received by Chat Chats.
@@ -93,4 +99,46 @@ export enum chitChatShipment_status {
      delivered = 'delivered', // Shipment resolved as delivered.
      exception = 'exception', // Shipment resolved as exception meaning that there may have been a problem delivering the shipment.
      voided = 'voided', // Shipment resolved as voided because a postage refund was requested.
+}
+
+// src/app/modules/third-party-modules/chitChatShipment/chitChatShipment.interface.ts
+
+export interface ILineItem {
+     quantity: number;
+     description: string;
+     value_amount: string;
+     currency_code: string;
+     hs_tariff_code: string;
+     origin_country: string;
+     weight: number;
+     weight_unit: string;
+     manufacturer_contact: string;
+     manufacturer_street: string;
+     manufacturer_city: string;
+     manufacturer_postal_code: string;
+     manufacturer_province_code: string;
+     size_x: number;
+     size_y: number;
+     size_z: number;
+     // manufacturer_country_code?: string;
+}
+
+export interface IchitchatsCreateShipment {
+     name: string;
+     address_1: string;
+     city: string;
+     province_code: string;
+     postal_code: string;
+     country_code: string;
+     phone: string;
+     package_type: string;
+     weight_unit: string;
+     weight: number;
+     size_unit: string;
+     size_x: number;
+     size_y: number;
+     size_z: number;
+     cheapest_postage_type_requested: string;
+     ship_date: string;
+     line_items: ILineItem[];
 }

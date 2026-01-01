@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { IProductSingleVariant, IProductSingleVariantByFieldName } from './product.interface';
 import { objectIdSchema } from '../user/user.validation';
 import { GRAPHICS_CARD_TYPE, NETWOR_TYPE, OS_TYPE, PROCESSOR_TYPE, RAM_OR_STORAGE_OR_GRAPHICS_CARD, RESOLUTION_TYPE, STORAGE_TYPE, VARIANT_OPTIONS } from '../variant/variant.enums';
 
@@ -53,6 +52,24 @@ const createProductZodSchema = z.object({
           brandName: z.string().optional(),
           product_variant_Details: z.array(z.union([productVariantSchema, productVariantByFieldNameSchema])).min(1, 'At least one variant is required'),
           weight: z.number().optional(),
+
+          // chitchats
+          chitchats_weight_unit: z.string(),
+          chitchats_weight: z.number(),
+          chitchats_size_unit: z.string(),
+          chitchats_size_x: z.number(),
+          chitchats_size_y: z.number(),
+          chitchats_size_z: z.number(),
+          chitchats_manufacturer_contact: z.string(),
+          chitchats_manufacturer_street: z.string(),
+          chitchats_manufacturer_city: z.string(),
+          chitchats_manufacturer_postal_code: z.string(),
+          chitchats_manufacturer_province_code: z.string(),
+          chitchats_description: z.string(),
+          chitchats_value_amount: z.string(),
+          chitchats_currency_code: z.string(),
+          chitchats_hs_tariff_code: z.string(),
+          chitchats_origin_country: z.string(),
      }),
 });
 

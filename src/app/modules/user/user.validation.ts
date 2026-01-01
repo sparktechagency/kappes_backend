@@ -10,6 +10,13 @@ export const createUserZodSchema = z.object({
           profile: z.string().optional(),
           store_name: z.string().optional(),
           store_category: objectIdSchema.optional(),
+          chitchat_name: z.string().optional(),
+          chitchat_address_1: z.string().optional(),
+          chitchat_city: z.string().optional(),
+          chitchat_province_code: z.string().optional(),
+          chitchat_postal_code: z.string().optional(),
+          chitchat_country_code: z.string().optional(),
+          chitchat_phone: z.string().optional(),
      }),
 });
 
@@ -44,20 +51,21 @@ const updateUserByIdZodSchema = z.object({
 });
 
 const makeAdminZodSchema = z.object({
-     body: z.object({
-          role: z.nativeEnum(USER_ROLES),
-          email: z.string().email('Invalid email address'),
-          full_name: z.string(),
-          password: z.string(),
-     })
-     .superRefine((data, ctx) => {
-          if (data.role !== USER_ROLES.ADMIN) {
-               ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    message: `role must be ${USER_ROLES.ADMIN}`,
-               });
-          }
-     }),
+     body: z
+          .object({
+               role: z.nativeEnum(USER_ROLES),
+               email: z.string().email('Invalid email address'),
+               full_name: z.string(),
+               password: z.string(),
+          })
+          .superRefine((data, ctx) => {
+               if (data.role !== USER_ROLES.ADMIN) {
+                    ctx.addIssue({
+                         code: z.ZodIssueCode.custom,
+                         message: `role must be ${USER_ROLES.ADMIN}`,
+                    });
+               }
+          }),
 });
 
 export type ISellerUserZod = z.infer<typeof createUserZodSchema>;
@@ -65,5 +73,5 @@ export const UserValidation = {
      createUserZodSchema,
      updateUserZodSchema,
      updateUserByIdZodSchema,
-     makeAdminZodSchema
+     makeAdminZodSchema,
 };

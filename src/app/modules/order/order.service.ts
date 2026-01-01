@@ -32,6 +32,18 @@ const createOrder = async (orderData: Partial<IOrder>, user: IJwtPayload) => {
                throw new AppError(StatusCodes.NOT_FOUND, 'User or Stripe Customer ID not found');
           }
 
+          if (
+               !thisCustomer.chitchat_name ||
+               !thisCustomer.chitchat_address_1 ||
+               !thisCustomer.chitchat_city ||
+               !thisCustomer.chitchat_province_code ||
+               !thisCustomer.chitchat_postal_code ||
+               !thisCustomer.chitchat_country_code ||
+               !thisCustomer.chitchat_phone
+          ) {
+               throw new AppError(StatusCodes.NOT_FOUND, 'User missing ChitChat details');
+          }
+
           if (orderData.products) {
                for (const item of orderData.products) {
                     // Validate product and variant

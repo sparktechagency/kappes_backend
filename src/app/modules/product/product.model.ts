@@ -161,6 +161,79 @@ const productSchema = new Schema<IProduct>(
                of: [String], // An array of strings for each dynamic field
                default: {},
           },
+
+          chitchats_weight_unit: {
+               type: String,
+               enum: ['g'],
+               default: 'g',
+               required: true,
+          },
+          chitchats_weight: {
+               type: Number,
+               default: 0,
+               required: true,
+          },
+          chitchats_size_unit: {
+               type: String,
+               enum: ['cm'],
+               default: 'cm',
+               required: true,
+          },
+          chitchats_size_x: {
+               type: Number,
+               default: 0,
+               required: true,
+          },
+          chitchats_size_y: {
+               type: Number,
+               default: 0,
+               required: true,
+          },
+          chitchats_size_z: {
+               type: Number,
+               default: 0,
+               required: true,
+          },
+          chitchats_manufacturer_contact: {
+               type: String,
+               required: true,
+          },
+          chitchats_manufacturer_street: {
+               type: String,
+               required: true,
+          },
+          chitchats_manufacturer_city: {
+               type: String,
+               required: true,
+          },
+          chitchats_manufacturer_postal_code: {
+               type: String,
+               required: true,
+          },
+          chitchats_manufacturer_province_code: {
+               type: String,
+               required: true,
+          },
+          chitchats_description: {
+               type: String,
+               required: true,
+          },
+          chitchats_value_amount: {
+               type: String,
+               required: true,
+          },
+          chitchats_currency_code: {
+               type: String,
+               required: true,
+          },
+          chitchats_hs_tariff_code: {
+               type: String,
+               required: true,
+          },
+          chitchats_origin_country: {
+               type: String,
+               required: true,
+          },
      },
      {
           timestamps: true,
@@ -191,6 +264,15 @@ productSchema.virtual('variants', {
 
 // Pre-save middleware to update totalStock
 productSchema.pre<IProduct>('save', function (next) {
+     // if (this.description) {
+     //      this.chitchats_description = this.description;
+     // }
+     // if (this.basePrice) {
+     //      this.chitchats_value_amount = this.basePrice.toString();
+     // }
+     // if (this.weight) {
+     //      this.chitchats_weight = this.weight;
+     // }
      if (this.isModified('product_variant_Details')) {
           const totalStock = this.product_variant_Details.reduce((sum: number, variant: IProductSingleVariant) => sum + variant.variantQuantity, 0);
           this.totalStock = totalStock;

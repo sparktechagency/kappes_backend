@@ -47,6 +47,24 @@ export interface IProduct extends mongoose.Document {
      slugDetails: ISlugDetails;
 
      calculateOfferPrice(): Promise<number | null>;
+
+     // chitchats
+     chitchats_weight_unit: 'g';
+     chitchats_weight: number;
+     chitchats_size_unit: 'cm';
+     chitchats_size_x: number;
+     chitchats_size_y: number;
+     chitchats_size_z: number;
+     chitchats_manufacturer_contact: string;
+     chitchats_manufacturer_street: string;
+     chitchats_manufacturer_city: string;
+     chitchats_manufacturer_postal_code: string;
+     chitchats_manufacturer_province_code: string;
+     chitchats_description: string; // description
+     chitchats_value_amount: string; // base rate
+     chitchats_currency_code: string;
+     chitchats_hs_tariff_code: string;
+     chitchats_origin_country: string;
 }
 
 export interface ICreateProductRequest {

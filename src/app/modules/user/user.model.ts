@@ -160,6 +160,15 @@ const userSchema = new Schema<IUser, UserModel>(
           fmcToken: {
                type: String,
           },
+
+          // chitchat
+          chitchat_name: { type: String },
+          chitchat_address_1: { type: String },
+          chitchat_city: { type: String },
+          chitchat_province_code: { type: String },
+          chitchat_postal_code: { type: String },
+          chitchat_country_code: { type: String },
+          chitchat_phone: { type: String },
      },
      { timestamps: true },
 );
@@ -209,8 +218,16 @@ userSchema.pre('save', async function (next) {
           throw new AppError(StatusCodes.BAD_REQUEST, 'Email already exists!');
      }
 
-     // this.password = await bcrypt.hash(this.password, Number(config.bcrypt_salt_rounds));
-
+     // chitchat_name chitchat_address_1 chitchat_city chitchat_province_code  chitchat_postal_code chitchat_country_code chitchat_phone
+     if (this.full_name) {
+          this.chitchat_name = this.full_name;
+     }
+     if (this.address && typeof this.address === 'string') {
+          this.chitchat_address_1 = this.address;
+     }
+     if (this.phone && typeof this.phone === 'string') {
+          this.chitchat_phone = this.phone;
+     }
      // Only hash the password if it's set (i.e., not null or empty)
      if (this.password && this.isModified('password')) {
           this.password = await bcrypt.hash(this.password, Number(config.bcrypt_salt_rounds));

@@ -3,10 +3,13 @@ import { Request, Response } from 'express';
 import catchAsync from '../../../../shared/catchAsync';
 import sendResponse from '../../../../shared/sendResponse';
 import { chitChatShipmentService } from './chitChatShipment.service';
+import { StatusCodes } from 'http-status-codes';
+// import { IJwtPayload } from '../../auth/auth.interface';
+// import { StatusCodes } from 'http-status-codes';
 
 // Create a new shipment
 const createShipment = catchAsync(async (req: Request, res: Response) => {
-     const result = await chitChatShipmentService.createShipment(req.body);
+     const result = await chitChatShipmentService.createShipment(req.body, req.body.shopId);
      sendResponse(res, {
           statusCode: 201,
           success: true,
@@ -17,17 +20,17 @@ const createShipment = catchAsync(async (req: Request, res: Response) => {
 
 // List all shipments with optional filters
 const buyShipment = catchAsync(async (req: Request, res: Response) => {
-     const result = await chitChatShipmentService.buyShipment();
+     const result = await chitChatShipmentService.buyShipment(req.params.shipmentId, req.body, req.body.shopId);
      sendResponse(res, {
           statusCode: 200,
           success: true,
-          message: 'Shipments finaly successfully',
+          message: 'Shipments finally successfully',
           data: result,
      });
 });
 
 const listShipments = catchAsync(async (req: Request, res: Response) => {
-     const result = await chitChatShipmentService.listShipments(req.query);
+     const result = await chitChatShipmentService.listShipments(req.query, req.body.shopId);
      sendResponse(res, {
           statusCode: 200,
           success: true,
@@ -39,7 +42,7 @@ const listShipments = catchAsync(async (req: Request, res: Response) => {
 // Get a single shipment by ID
 const getShipment = catchAsync(async (req: Request, res: Response) => {
      const { shipmentId } = req.params;
-     const result = await chitChatShipmentService.getShipment(shipmentId);
+     const result = await chitChatShipmentService.getShipment(shipmentId, req.body.shopId);
      sendResponse(res, {
           statusCode: 200,
           success: true,
@@ -48,22 +51,34 @@ const getShipment = catchAsync(async (req: Request, res: Response) => {
      });
 });
 
-// Update a shipment
-const updateShipment = catchAsync(async (req: Request, res: Response) => {
-     const { shipmentId } = req.params;
-     const result = await chitChatShipmentService.updateShipment(shipmentId, req.body);
-     sendResponse(res, {
-          statusCode: 200,
-          success: true,
-          message: 'Shipment updated successfully',
-          data: result,
-     });
-});
+// // Update a shipment
+// const updateShipment = catchAsync(async (req: Request, res: Response) => {
+//      const { shipmentId } = req.params;
+//      const result = await chitChatShipmentService.updateShipment(shipmentId, req.body, req.body.shopId);
+//      sendResponse(res, {
+//           statusCode: 200,
+//           success: true,
+//           message: 'Shipment updated successfully',
+//           data: result,
+//      });
+// });
 
 // Delete a shipment
 const deleteShipment = catchAsync(async (req: Request, res: Response) => {
      const { shipmentId } = req.params;
-     await chitChatShipmentService.deleteShipment(shipmentId);
+     await chitChatShipmentService.deleteShipment(shipmentId, req.body.shopId);
+     sendResponse(res, {
+          statusCode: 200,
+          success: true,
+          message: 'Shipment deleted successfully',
+          data: null,
+     });
+});
+
+// Delete a shipment
+const refundShipment = catchAsync(async (req: Request, res: Response) => {
+     const { shipmentId } = req.params;
+     await chitChatShipmentService.refundShipment(shipmentId, req.body.shopId);
      sendResponse(res, {
           statusCode: 200,
           success: true,
@@ -87,7 +102,7 @@ const deleteShipment = catchAsync(async (req: Request, res: Response) => {
 // Cancel a shipment
 const cancelShipment = catchAsync(async (req: Request, res: Response) => {
      const { shipmentId } = req.params;
-     const result = await chitChatShipmentService.cancelShipment(shipmentId);
+     const result = await chitChatShipmentService.cancelShipment(shipmentId, req.body.shopId);
      sendResponse(res, {
           statusCode: 200,
           success: true,
@@ -100,7 +115,7 @@ const cancelShipment = catchAsync(async (req: Request, res: Response) => {
 const printShipment = catchAsync(async (req: Request, res: Response) => {
      const { shipmentId } = req.params;
      const { format = 'PDF' } = req.body;
-     const result = await chitChatShipmentService.printShipment(shipmentId, format);
+     const result = await chitChatShipmentService.printShipment(shipmentId, format, req.body.shopId);
      sendResponse(res, {
           statusCode: 200,
           success: true,
@@ -113,7 +128,7 @@ const printShipment = catchAsync(async (req: Request, res: Response) => {
 const getShipmentLabel = catchAsync(async (req: Request, res: Response) => {
      const { shipmentId } = req.params;
      const { format = 'PDF' } = req.query;
-     const result = await chitChatShipmentService.getShipmentLabel(shipmentId, format as string);
+     const result = await chitChatShipmentService.getShipmentLabel(shipmentId, format as string, req.body.shopId);
      sendResponse(res, {
           statusCode: 200,
           success: true,
@@ -125,7 +140,7 @@ const getShipmentLabel = catchAsync(async (req: Request, res: Response) => {
 // Get tracking information for a shipment
 const getShipmentTracking = catchAsync(async (req: Request, res: Response) => {
      const { shipmentId } = req.params;
-     const result = await chitChatShipmentService.getShipmentTracking(shipmentId);
+     const result = await chitChatShipmentService.getShipmentTracking(shipmentId, req.body.shopId);
      sendResponse(res, {
           statusCode: 200,
           success: true,
@@ -134,15 +149,42 @@ const getShipmentTracking = catchAsync(async (req: Request, res: Response) => {
      });
 });
 
+// // Create a new shipment from user's cart
+// const createShipmentFromCart = catchAsync(async (req: Request, res: Response) => {
+//      const userId = (req.user as IJwtPayload)?.id;
+//      const result = await chitChatShipmentService.createShipmentFromCart(userId, req.body);
+
+//      sendResponse(res, {
+//           statusCode: StatusCodes.CREATED,
+//           success: true,
+//           message: 'Shipment created successfully from cart',
+//           data: result,
+//      });
+// });
+
+const createShippingKeys = catchAsync(async (req: Request, res: Response) => {
+     const result = await chitChatShipmentService.createShippingKeys(req.body);
+
+     sendResponse(res, {
+          statusCode: StatusCodes.CREATED,
+          success: true,
+          message: 'Shipping keys created successfully',
+          data: result,
+     });
+});
+
 export const chitChatShipmentController = {
      createShipment,
      listShipments,
      getShipment,
-     updateShipment,
+     // updateShipment,
      deleteShipment,
      buyShipment,
      cancelShipment,
+     refundShipment,
      printShipment,
      getShipmentLabel,
      getShipmentTracking,
+     // createShipmentFromCart,
+     createShippingKeys,
 };
