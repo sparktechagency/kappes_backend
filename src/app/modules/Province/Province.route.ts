@@ -3,7 +3,6 @@ import { ProvinceController } from './Province.controller';
 import auth from '../../middleware/auth';
 import { USER_ROLES } from '../user/user.enums';
 import fileUploadHandler from '../../middleware/fileUploadHandler';
-import parseFileData from '../../middleware/parseFileData';
 import { FOLDER_NAMES } from '../../../enums/files';
 import validateRequest from '../../middleware/validateRequest';
 import { ProvinceValidation } from './Province.validation';

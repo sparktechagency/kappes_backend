@@ -31,6 +31,7 @@ import { DashboardRoutes } from '../app/modules/admin/dashboard/dashboard.routes
 import { WalletRoutes } from '../app/modules/wallet/wallet.route';
 import { chitChatShipmentRoutes } from '../app/modules/third-party-modules/chitChatShipment/chitChatShipment.route';
 import { activitiesRecordHistoryRoutes } from '../app/modules/activitiesRecordHistory/activitiesRecordHistory.route';
+import { ProvinceRoutes } from '../app/modules/Province/Province.route';
 
 const router = express.Router();
 const routes = [
@@ -165,6 +166,10 @@ const routes = [
      {
           path: '/activities-record-history',
           route: activitiesRecordHistoryRoutes,
+     },
+     {
+          path: '/province',
+          route: ProvinceRoutes,
      },
 ];
 

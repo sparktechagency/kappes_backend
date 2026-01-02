@@ -11,17 +11,24 @@ import { Product } from '../product/product.model';
 import { IJwtPayload } from '../auth/auth.interface';
 
 const createCategoryToDB = async (payload: ICategory, user: IJwtPayload) => {
-     const { name, thumbnail, description } = payload;
+     const { name, thumbnail, description, image } = payload;
      const isExistName = await Category.findOne({ name });
 
      if (isExistName) {
           unlinkFile(thumbnail);
+          if (image && Array.isArray(image)) {
+               image.forEach((element) => {
+                    unlinkFile(element);
+               });
+          }
+
           throw new AppError(StatusCodes.NOT_ACCEPTABLE, 'This Category Name Already Exists');
      }
      const newCategory = new Category({
           name,
           thumbnail,
           description,
+          image,
           createdBy: user.id,
      });
 
@@ -29,6 +36,12 @@ const createCategoryToDB = async (payload: ICategory, user: IJwtPayload) => {
 
      if (!createdCategory) {
           unlinkFile(thumbnail);
+
+          if (image && Array.isArray(image)) {
+               image.forEach((img: string) => {
+                    unlinkFile(img);
+               });
+          }
           throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to create Category');
      }
 
@@ -83,7 +96,16 @@ const updateCategoryToDB = async (id: string, payload: ICategory, user: IJwtPayl
      });
 
      if (!updateCategory) {
-          throw new AppError(StatusCodes.BAD_REQUEST, 'Faield to update category!');
+          if (payload.thumbnail) {
+               unlinkFile(payload?.thumbnail);
+          }
+
+          if (payload.image && Array.isArray(payload.image)) {
+               payload.image.forEach((img: string) => {
+                    unlinkFile(img);
+               });
+          }
+          throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to update category!');
      }
      return updateCategory;
 };
@@ -106,7 +128,7 @@ const updateCategoryStatusToDB = async (id: string, payload: string) => {
      );
 
      if (!updateCategory) {
-          throw new AppError(StatusCodes.BAD_REQUEST, 'Faield to update category!');
+          throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to update category status!');
      }
      return updateCategory;
 };
@@ -128,6 +150,12 @@ const deleteCategoryToDB = async (id: string, user: IJwtPayload) => {
      await Category.findByIdAndDelete(id);
      // remove pic
      unlinkFile(isExistCategory?.thumbnail);
+
+     if (isExistCategory?.image && Array.isArray(isExistCategory.image)) {
+          isExistCategory.image.forEach((img: string) => {
+               unlinkFile(img);
+          });
+     }
 
      return isExistCategory;
 };
