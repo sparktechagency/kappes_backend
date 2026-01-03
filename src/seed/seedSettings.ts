@@ -27,7 +27,7 @@ const seedDefaultSettings = async () => {
                messages: [],
                contact: [
                     {
-                         phone: '08123456789',
+                         phone: '+18048861624',
                          email: 'info@example.com',
                          location: 'Jakarta',
                     },
