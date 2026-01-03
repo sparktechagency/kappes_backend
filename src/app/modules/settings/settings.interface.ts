@@ -17,7 +17,7 @@ export interface ISettings extends Document {
      banner: string[];
      isUnderMaintenance: {
           status?: boolean;
-          endAt?: Date;
+          endAt?: Date | null;
      };
      logo: string;
      socials: {

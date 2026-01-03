@@ -273,7 +273,7 @@ const addOrUpdateBannerLogo = async (payload: { banner?: string[]; logo?: string
           console.log('🚀 ~ addOrUpdateBannerLogo ~ error:', error);
      }
 };
-const updateIsUnderMaintenance = async (payload: { status?: boolean; endAt?: string | Date }) => {
+const updateIsUnderMaintenance = async (payload: { isUnderMaintenance?: boolean; endAt?: string | Date }) => {
      const settings = await Settings.findOne();
 
      if (!settings) {
@@ -290,17 +290,13 @@ const updateIsUnderMaintenance = async (payload: { status?: boolean; endAt?: str
           if (endAtDate.getTime() < Date.now()) {
                throw new AppError(StatusCodes.BAD_REQUEST, 'endAt date must be of future');
           }
-          payload.endAt = endAtDate;
+          settings.isUnderMaintenance.endAt = payload.endAt as Date;
+     } else {
+          settings.isUnderMaintenance.endAt = null;
      }
 
      // Update the settings
-     if (typeof payload.status !== 'undefined') {
-          settings.isUnderMaintenance.status = payload.status;
-     }
-
-     if (payload.endAt) {
-          settings.isUnderMaintenance.endAt = payload.endAt as Date;
-     }
+     settings.isUnderMaintenance.status = payload.isUnderMaintenance;
 
      await settings.save();
 
