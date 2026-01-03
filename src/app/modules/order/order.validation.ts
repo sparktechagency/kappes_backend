@@ -1,6 +1,7 @@
 import { Types } from 'mongoose';
 import { z } from 'zod';
 import { DELIVERY_OPTIONS, ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS } from './order.enums';
+import { chitChatShipment_postage_type } from '../third-party-modules/chitChatShipment/chitChatShipment.enum';
 
 // Validation schema for order product
 const orderProductSchema = z.object({
@@ -26,6 +27,11 @@ export const createOrderSchema = z.object({
                required_error: 'Payment method is required',
                invalid_type_error: 'Invalid payment method',
           }),
+          chitchats_postage_type: z.nativeEnum(chitChatShipment_postage_type, {
+               required_error: 'Chitchats postage type is required',
+               invalid_type_error: 'Invalid chitchats postage type',
+          }),
+          chitchats_shipping_id: z.string(),
           deliveryOptions: z
                .nativeEnum(DELIVERY_OPTIONS, {
                     required_error: 'Delivery options are required',

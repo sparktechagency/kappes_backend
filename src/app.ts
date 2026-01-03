@@ -50,8 +50,8 @@ app.use(
 );
 // app.post('/api/v1/stripe/webhook', express.raw({ type: 'application/json' }), handleStripeWebhook);
 app.post('/api/v1/stripe/webhook', express.raw({ type: 'application/json' }), webhookHandler);
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 
 //file retrieve
 app.use(express.static('uploads'));

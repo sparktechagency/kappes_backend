@@ -1,5 +1,6 @@
 import { Document, Types } from 'mongoose';
 import { DELIVERY_OPTIONS, ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS } from './order.enums';
+import { chitChatShipment_postage_type } from '../third-party-modules/chitChatShipment/chitChatShipment.enum';
 
 export interface IOrderProduct {
      product: Types.ObjectId;
@@ -28,4 +29,8 @@ export interface IOrder extends Document {
      updatedAt?: Date;
      payment?: Types.ObjectId;
      isNeedRefund: boolean;
+
+     // chitchats
+     chitchats_postage_type: chitChatShipment_postage_type;
+     chitchats_shipping_id: string;
 }
