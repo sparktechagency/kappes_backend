@@ -7,7 +7,7 @@ export interface ISubCategory {
      categoryId: Types.ObjectId;
      createdBy: Types.ObjectId;
      variants?: Types.ObjectId[];
-     requiredFieldsForVariant: string[];
+     requiredFieldsForVariant?: string[];
      status: string;
      isDeleted: boolean;
 }
