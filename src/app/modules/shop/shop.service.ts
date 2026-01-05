@@ -18,7 +18,7 @@ import { Shop } from './shop.model';
 import { ORDER_STATUS } from '../order/order.enums';
 import { Coupon } from '../coupon/coupon.model';
 import Settings from '../settings/settings.model';
-import config from '../../../config';model';
+import config from '../../../config';
 
 const createShop = async (payload: IShop, user: IJwtPayload, host: string, protocol: string) => {
      const { name, email } = payload;
