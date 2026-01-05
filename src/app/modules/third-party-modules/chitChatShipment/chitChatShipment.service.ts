@@ -28,8 +28,7 @@ import {
 // import { IProduct } from '../../product/product.interface';
 // import { IVariant } from '../../variant/variant.interfaces';
 // import { ICartItem } from '../../cart/cart.interface';
-import { ShippingKeys } from './shipping.model';
-
+import { Shop } from '../../shop/shop.model';
 const API_BASE_URL = 'https://chitchats.com/api/v1';
 // const CLIENT_ID = config.chitchat.client_id;
 // // console.log('client id', CLIENT_ID);
@@ -41,14 +40,19 @@ const API_BASE_URL = 'https://chitchats.com/api/v1';
 // });
 
 const createShippingKeys = async (payload: { shopId: string; chitchats_client_id: string; chitchats_access_token: string }) => {
-     const result = await ShippingKeys.create(payload);
+     // const result = await Shop.create(payload);
+     const result = await Shop.findOneAndUpdate(
+          { _id: payload.shopId },
+          { isChitChatsEnabled: true, chitchats_client_id: payload.chitchats_client_id, chitchats_access_token: payload.chitchats_access_token },
+          { new: true },
+     );
      return result;
 };
 
 // Create a new shipment
 const createShipment = async (payload: IChitChats_CreateShipmentBody, shopId: string) => {
      // const shop = await Shop.findById(shopId).select('chitchats_client_id chitchats_access_token');
-     const shop = await ShippingKeys.findOne({ shopId }).select('chitchats_client_id chitchats_access_token');
+     const shop = await Shop.findOne({ shopId }).select('chitchats_client_id chitchats_access_token');
      if (!shop || !shop.chitchats_client_id || !shop.chitchats_access_token) {
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
@@ -127,7 +131,7 @@ const listShipments = async (filters?: IShipmentFilters, shopId?: string) => {
           filters.limit = Number(filters.limit);
      }
      // const shop = await Shop.findById(shopId).select('chitchats_client_id chitchats_access_token');
-     const shop = await ShippingKeys.findOne({ shopId }).select('chitchats_client_id chitchats_access_token');
+     const shop = await Shop.findOne({ shopId }).select('chitchats_client_id chitchats_access_token');
      if (!shop || !shop.chitchats_client_id || !shop.chitchats_access_token) {
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
@@ -150,7 +154,7 @@ const listShipments = async (filters?: IShipmentFilters, shopId?: string) => {
 // Get a single shipment by ID
 const getShipment = async (shipmentId: string, shopId?: string) => {
      // const shop = await Shop.findById(shopId).select('chitchats_client_id chitchats_access_token');
-     const shop = await ShippingKeys.findOne({ shopId }).select('chitchats_client_id chitchats_access_token');
+     const shop = await Shop.findOne({ shopId }).select('chitchats_client_id chitchats_access_token');
      if (!shop || !shop.chitchats_client_id || !shop.chitchats_access_token) {
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
@@ -172,7 +176,7 @@ const getShipment = async (shipmentId: string, shopId?: string) => {
 // Delete a shipment
 const deleteShipment = async (shipmentId: string, shopId?: string) => {
      // const shop = await Shop.findById(shopId).select('chitchats_client_id chitchats_access_token');
-     const shop = await ShippingKeys.findOne({ shopId }).select('chitchats_client_id chitchats_access_token');
+     const shop = await Shop.findOne({ shopId }).select('chitchats_client_id chitchats_access_token');
      if (!shop || !shop.chitchats_client_id || !shop.chitchats_access_token) {
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
@@ -198,7 +202,7 @@ const buyShipment = async (
      shopId?: string,
 ) => {
      // const shop = await Shop.findById(shopId).select('chitchats_client_id chitchats_access_token');
-     const shop = await ShippingKeys.findOne({ shopId }).select('chitchats_client_id chitchats_access_token');
+     const shop = await Shop.findOne({ shopId }).select('chitchats_client_id chitchats_access_token');
      if (!shop || !shop.chitchats_client_id || !shop.chitchats_access_token) {
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
@@ -220,7 +224,7 @@ const buyShipment = async (
 // Cancel a shipment
 const cancelShipment = async (shipmentId: string, shopId?: string) => {
      // const shop = await Shop.findById(shopId).select('chitchats_client_id chitchats_access_token');
-     const shop = await ShippingKeys.findOne({ shopId }).select('chitchats_client_id chitchats_access_token');
+     const shop = await Shop.findOne({ shopId }).select('chitchats_client_id chitchats_access_token');
      if (!shop || !shop.chitchats_client_id || !shop.chitchats_access_token) {
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
@@ -240,7 +244,7 @@ const cancelShipment = async (shipmentId: string, shopId?: string) => {
 // Cancel a shipment
 const refundShipment = async (shipmentId: string, shopId?: string) => {
      // const shop = await Shop.findById(shopId).select('chitchats_client_id chitchats_access_token');
-     const shop = await ShippingKeys.findOne({ shopId }).select('chitchats_client_id chitchats_access_token');
+     const shop = await Shop.findOne({ shopId }).select('chitchats_client_id chitchats_access_token');
      if (!shop || !shop.chitchats_client_id || !shop.chitchats_access_token) {
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
@@ -260,7 +264,7 @@ const refundShipment = async (shipmentId: string, shopId?: string) => {
 // Print a shipping label
 const printShipment = async (shipmentId: string, format: 'PDF' | 'PNG' | 'ZPL' = 'PDF', shopId?: string) => {
      // const shop = await Shop.findById(shopId).select('chitchats_client_id chitchats_access_token');
-     const shop = await ShippingKeys.findOne({ shopId }).select('chitchats_client_id chitchats_access_token');
+     const shop = await Shop.findOne({ shopId }).select('chitchats_client_id chitchats_access_token');
      if (!shop || !shop.chitchats_client_id || !shop.chitchats_access_token) {
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
@@ -280,7 +284,7 @@ const printShipment = async (shipmentId: string, format: 'PDF' | 'PNG' | 'ZPL' =
 // Get a shipping label
 const getShipmentLabel = async (shipmentId: string, format: string = 'PDF', shopId?: string) => {
      // const shop = await Shop.findById(shopId).select('chitchats_client_id chitchats_access_token');
-     const shop = await ShippingKeys.findOne({ shopId }).select('chitchats_client_id chitchats_access_token');
+     const shop = await Shop.findOne({ shopId }).select('chitchats_client_id chitchats_access_token');
      if (!shop || !shop.chitchats_client_id || !shop.chitchats_access_token) {
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
@@ -303,7 +307,7 @@ const getShipmentLabel = async (shipmentId: string, format: string = 'PDF', shop
 // Get tracking information for a shipment
 const getShipmentTracking = async (shipmentId: string, shopId?: string) => {
      // const shop = await Shop.findById(shopId).select('chitchats_client_id chitchats_access_token');
-     const shop = await ShippingKeys.findOne({ shopId }).select('chitchats_client_id chitchats_access_token');
+     const shop = await Shop.findOne({ shopId }).select('chitchats_client_id chitchats_access_token');
      if (!shop || !shop.chitchats_client_id || !shop.chitchats_access_token) {
           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
      }
@@ -324,7 +328,7 @@ const getShipmentTracking = async (shipmentId: string, shopId?: string) => {
 // // Update a shipment
 // const updateShipment = async (shipmentId: string, updates: IUpdateShipmentRequest, shopId?: string) => {
 // const shop = await Shop.findById(shopId).select('chitchats_client_id chitchats_access_token');
-// const shop = await ShippingKeys.findOne({shopId}).select('chitchats_client_id chitchats_access_token');
+// const shop = await Shop.findOne({shopId}).select('chitchats_client_id chitchats_access_token');
 //      if (!shop || !shop.chitchats_client_id || !shop.chitchats_access_token) {
 //           throw new AppError(StatusCodes.BAD_REQUEST, 'ChitChats client ID or access token not found for this shop');
 //      }

@@ -97,6 +97,9 @@ const createVariant = async (payload: IVariant, user: IJwtPayload) => {
 };
 
 export const getAllVariantsFromDB = async (query: Record<string, unknown>) => {
+     if (query.productRef && query.productRef == 'null') {
+          query.productRef = null;
+     }
      const variantQuery = new QueryBuilder(
           Variant.find().populate([
                { path: 'categoryId', select: 'name' }, // Only populate the "name" field of categoryId

@@ -48,4 +48,7 @@ export interface IShop {
      isAdvertised: boolean;
      advertisedAt?: Date | null;
      advertisedExpiresAt?: Date | null;
+     isChitChatsEnabled: boolean;
+     chitchats_access_token?: string;
+     chitchats_client_id?: string;
 }

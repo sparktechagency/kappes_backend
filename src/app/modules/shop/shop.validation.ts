@@ -84,6 +84,9 @@ const updateShopZodSchema = z.object({
                     autoAcceptOrders: z.boolean().optional(),
                })
                .optional(),
+          isChitChatsEnabled: z.boolean().optional(),
+          chitchats_access_token: z.string().optional(),
+          chitchats_client_id: z.string().optional(),
      }),
 });
 

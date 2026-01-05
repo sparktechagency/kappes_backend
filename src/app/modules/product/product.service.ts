@@ -27,6 +27,10 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
                throw new AppError(StatusCodes.NOT_FOUND, 'Shop not found');
           }
 
+          if (!shop.chitchats_client_id || !shop.chitchats_access_token) {
+               throw new AppError(StatusCodes.NOT_FOUND, 'Chitchats keys not found');
+          }
+
           if (user.role === USER_ROLES.VENDOR || user.role === USER_ROLES.SHOP_ADMIN) {
                if (shop.owner.toString() !== user.id && !shop.admins?.some((admin) => admin.toString() === user.id)) {
                     throw new AppError(StatusCodes.FORBIDDEN, 'You are not authorized to create a product for this shop');
@@ -135,6 +139,7 @@ const createProduct = async (payload: IProduct, user: IJwtPayload) => {
 
           // Create product data object
           const productData = {
+               ...payload,
                name: payload.name,
                territory: shop?.address?.territory || '',
                city: shop?.address?.city || '',

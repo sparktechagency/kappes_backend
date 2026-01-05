@@ -18,7 +18,7 @@ import { Shop } from './shop.model';
 import { ORDER_STATUS } from '../order/order.enums';
 import { Coupon } from '../coupon/coupon.model';
 import Settings from '../settings/settings.model';
-import config from '../../../config';
+import config from '../../../config';model';
 
 const createShop = async (payload: IShop, user: IJwtPayload, host: string, protocol: string) => {
      const { name, email } = payload;
@@ -103,10 +103,14 @@ const getAllShops = async (query: Record<string, unknown>) => {
      };
 };
 const getShopById = async (id: string) => {
-     const shop = await Shop.findById(id).populate('owner', 'name email').populate('admins', 'name email').populate('followers', 'name email');
+     const shop = await Shop.findById(id).populate('owner', 'name email').lean().populate('admins', 'name email').lean().populate('followers', 'name email').lean();
      if (!shop) {
           throw new AppError(StatusCodes.NOT_FOUND, 'Shop not found');
      }
+     // const shopShippingKeys = await ShippingKeys.findOne({ shopId: id }).select('+chitchats_client_id +chitchats_access_token');
+     // if (!shopShippingKeys) {
+     // }
+     // return { ...shop, chitchats_client_id: shopShippingKeys?.chitchats_client_id, chitchats_access_token: shopShippingKeys?.chitchats_access_token };
      return shop;
 };
 const updateShopById = async (id: string, payload: Partial<IShop>, user: IJwtPayload) => {
