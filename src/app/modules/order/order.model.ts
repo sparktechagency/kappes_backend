@@ -4,9 +4,8 @@ import AppError from '../../../errors/AppError';
 import { COUPON_DISCOUNT_TYPE } from '../coupon/coupon.enums';
 import { Coupon } from '../coupon/coupon.model';
 import { Product } from '../product/product.model';
-import { DAY_FOR_DELIVERY_OPTIONS, DELIVERY_OPTIONS, EXTRA_DELIVERY_COST_PERCENT_FOR_DELIVERY_OPTIONS, ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS } from './order.enums';
+import { DAY_FOR_DELIVERY_OPTIONS, DELIVERY_OPTIONS, ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS } from './order.enums';
 import { IOrder } from './order.interface';
-import { settingsService } from '../settings/settings.service';
 import { chitChatShipment_postage_type } from '../third-party-modules/chitChatShipment/chitChatShipment.enum';
 import { chitChatShipmentService } from '../third-party-modules/chitChatShipment/chitChatShipment.service';
 
@@ -209,10 +208,14 @@ orderSchema.pre('validate', async function (next) {
 
      // get delivery charge from chitchat shipment
 
-     await chitChatShipmentService.buyShipment(order.chitchats_shipping_id!, {
-          postage_type: order.chitchats_postage_type!,
-     });
-     const shipmentDetails = await chitChatShipmentService.getShipment(order.chitchats_shipping_id!);
+     await chitChatShipmentService.buyShipment(
+          order.chitchats_shipping_id!,
+          {
+               postage_type: order.chitchats_postage_type!,
+          },
+          order.shop!.toString(),
+     );
+     const shipmentDetails = await chitChatShipmentService.getShipment(order.chitchats_shipping_id!, order.shop!.toString());
      const chitChatsDeliveryCharge = shipmentDetails?.shipment?.rates.find((rate: any) => {
           if (rate.postage_type === order.chitchats_postage_type) {
                return rate.payment_amount;
